@@ -1,4 +1,4 @@
-package objects;
+package managers.space;
 
 public class Space {
 

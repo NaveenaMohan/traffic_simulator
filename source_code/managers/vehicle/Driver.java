@@ -1,4 +1,6 @@
-package objects;
+package managers.vehicle;
+
+import managers.globalconfig.DriverBehavior;
 
 /**
  * Created by naveena on 09/02/15.

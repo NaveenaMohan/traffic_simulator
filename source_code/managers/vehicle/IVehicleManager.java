@@ -1,6 +1,6 @@
 package managers.vehicle;
 
-import objects.Space;
+import managers.space.Space;
 
 public interface IVehicleManager {
 

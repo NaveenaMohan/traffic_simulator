@@ -1,4 +1,8 @@
-package objects;
+package managers.vehicle;
+
+import managers.globalconfig.ClimaticCondition;
+import managers.runit.RUnit;
+import managers.space.Space;
 
 /**
  * Created by naveena on 08/02/15.

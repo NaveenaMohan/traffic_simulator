@@ -1,4 +1,4 @@
-package objects;
+package managers.globalconfig;
 
 /**
  * Created by naveena on 08/02/15.

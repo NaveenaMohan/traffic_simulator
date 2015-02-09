@@ -1,7 +1,7 @@
 package managers.vehiclefactory;
 
-import objects.RUnit;
-import objects.Vehicle;
+import managers.runit.RUnit;
+import managers.vehicle.Vehicle;
 
 /**
  * Created by naveena on 08/02/15.

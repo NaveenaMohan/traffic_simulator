@@ -1,8 +1,8 @@
 package managers.roadnetwork;
 
-import objects.DirectionSignType;
-import objects.RUnit;
-import objects.TrafficLight;
+import managers.runit.DirectionSignType;
+import managers.runit.RUnit;
+import managers.runit.TrafficLight;
 
 import java.util.List;
 

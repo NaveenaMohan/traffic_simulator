@@ -1,4 +1,4 @@
-package objects;
+package managers.vehicle;
 
 /**
  * Created by naveena on 08/02/15.

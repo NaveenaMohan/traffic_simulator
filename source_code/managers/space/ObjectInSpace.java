@@ -1,4 +1,6 @@
-package objects;
+package managers.space;
+
+import managers.vehicle.Vehicle;
 
 /**
  * Created by naveena on 08/02/15.

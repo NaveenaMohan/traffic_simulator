@@ -1,7 +1,6 @@
 package managers.globalconfig;
 
-import objects.DriverBehaviorType;
-import objects.VehicleType;
+import managers.vehicle.VehicleType;
 
 import java.util.Map;
 

@@ -1,4 +1,6 @@
-package objects;
+package managers.runit;
+
+import managers.vehiclefactory.VehicleFactory;
 
 import java.util.ArrayList;
 import java.util.List;
