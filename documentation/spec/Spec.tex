@@ -1,0 +1,104 @@
+\documentclass[11pt]{article}
+
+
+\usepackage{latexsym}
+\usepackage{hyperref} 
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{geometry}
+
+\geometry{margin=1in}
+
+\begin{document}
+
+%\pagenumbering{gobble}
+
+\begin{figure}[t]
+\includegraphics[width=4cm]{KCLlogo}
+\centering
+\end{figure}
+
+
+\title{A simulation engine for testing traffic management policies}
+
+\maketitle
+
+A simulation engine for testing different traffic management policies by allowing the User i.e. a Traffic engineer to configure the following input configurations to demonstrate and generate reports for various traffic behaviour. 
+\begin{itemize}
+	\item Building any kind of road network with customized parameters that includes different road types, lanes, traffic lights, traffic signs, etc.
+	\item Configurable traffic pattern options contributed by different vehicle types including emergency vehicles, traffic density for various vehicle types, traffic lights synchronization, driver behaviour, climatic conditions etc.
+\end{itemize}
+
+\section{User Interface Specification}	
+A blank designing area would be available to sketch the required road networks with components contributing to traffic variations. A tool panel with buttons and sliders would be in aid to construct the above. Once the required road network with traffic components and configurations are decided, the global actions can be used to start/stop the simulations and also generate reports for the simulated time. Following options should be available in the UI to design and configure the required road network and traffic pattern.
+	
+	\subsection{Global Options as Buttons}
+		\begin{itemize}
+			\item Play, Pause and Stop: To simulate real time traffic for the configured road design and parameters.
+			\item Speed Up and Slow Down: To control the speed of the simulation.
+			\item Generate Report: Generate reports for the inputted road design and traffic pattern reflecting Avg-Min-Max values for journey time in different routes, congestion rate, speed and idle time for various vehicle types.
+			\item Upload Background Map image: To facilitate the easy drawing of roads and configuring elements over them.
+			\item Export Configuration: Export the current simulation configurations to a cvs file for future import and simulation.
+			\item Import Configuration: Import a cvs file with any previous simulation configuration to avoid the redesigning of the road infrastructure with configurations.
+	\end{itemize}
+
+	\subsection{Road Infrastructure Configurationally Parameters (as Buttons)}
+		\begin{itemize}
+			\item Single Lane: Sketch or design a single lane road with the traffic flowing in the direction of the drawing action.
+			\item Double Lane: Sketch or design a double lane road with the traffic flowing in the direction of the drawing action
+			\item Zebra Crossing with Traffic Light: Provision a zebra crossing for pedestrians to cross the road by adhering to the corresponding traffic light.
+			\item Blockages: Provision temporary or permanent obstruction or deviation to the traffic flow at required places.
+			\item Traffic Sign Boards :  Provision STOP, SPEED LIMIT ,LOCATION DIRECTION (Left, Right and Straight) and WELCOME LOCATION signs at required places to alter the traffic flow.
+			\item Vehicle Factory Entry Points : Entry points in the road networks for creation of vehicles of multiple types.
+	\end{itemize}
+
+	\subsection{Traffic Pattern Configurational Parameters}
+		\begin{itemize}
+			\item Weather: Common weather condition buttons that maps to preconfigured variations in visibility and slipperiness . A slider option would also be available as an advanced option to configure the weather conditions from normal to slippery that maps internally to varying degree of visibility and slipperiness.
+			\item Traffic Density for Vehicle Types: Slider option to control the traffic density contributed by various vehicles types like cars, trucks, buses and emergency vehicles.
+			\item Driver Behavior: A double slider option to configure the traffic behaviour contributed by drivers who belong to cautious, normal and reckless categories.
+			\item Traffic Light Synchronisation Input: Input light configurations for the pre-configured traffic lights with no of rows equivalents to the no of traffic lights and boundary range of the lights reflecting the change of traffic light cycle.
+			\item Location/Destination Density:  To add location/destination density for vehicles of different types. If the parameter is not configured, random destination behaviour is chosen.
+	\end{itemize}	
+
+	\subsection{Road, Vehicle and Traffic Light Behaviours}
+		\begin{itemize}
+			\item A vehicle starts and exits at points in the networks which is random unless it is preconfigured with decision points at junctions.
+			\item A vehicle’s velocity is determined by the current traffic density, weather condition, speed limit boards and driver’s behaviour.
+			\item A vehicle’s default lane should be left unless its course directs a right turn at a junction soon ahead or it requires to overtake an immediate vehicle ahead.
+			\item If there is no requirement to take a right turn or no immediate vehicle ahead, the default behaviour of the vehicle should be to shift to the left lane.
+			\item A vehicle continues to move ahead on a current lane in the road unless it is obstructed by another vehicle or junction or zebra crossing or STOP sign or traffic light with RED light ahead. It also should also give priority to emergency vehicles by adjusting the lane or allowing the vehicle to overtake.
+			\item A vehicle should resume its course in the corresponding lane after its obstructed/stopped if the following conditions are satisfied.
+				\begin{itemize}
+					\item Zebra Crossing: When the traffic light turns GREEN.
+					\item Stopped due to vehicle ahead: When the vehicle ahead starts moving.
+					\item Traffic Lights:  When the traffic light turns GREEN.
+					\item STOP Sign : ????
+				\end{itemize}
+			\item Junction rules are applied with random probability distribution of available routes from that particular point unless weighted decision points are pre-configured.
+			\item Each tick of simulation should update all parts of the simulation network and is mandatory for the transition to the next state.
+			\item Time granularity of each simulation is “N” seconds.
+	\end{itemize}	
+
+	\subsection{Limitations}
+		\begin{itemize}
+			\item Lanes restricted to single and double lanes.
+			\item Zebra Crossing with mandatory traffic lights.
+	\end{itemize}	
+
+	\subsection{Doubts}
+		\begin{itemize}
+			\item Visibility and decision making (deceleration).
+			\item Detecting the intersection and roundabouts in visualization and sketching.
+			\item Width of road.
+			\item Time of configurations. Initialize and run simulation ??? Or allow components to be added in between and monitor the difference????
+			\item Bridge
+			\item U turn
+			\item Traffic Light Synchronisation Input Method
+			\item Road decision points input
+			\item Simulation granularity
+			\item Behavior seeing STOP Signs
+			\item Blockages in Single lane????
+	\end{itemize}	
+	
+\end{document}
