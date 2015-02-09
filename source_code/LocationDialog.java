@@ -1,41 +1,28 @@
-package ui;
-
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Dialog.ModalityType;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 
-
-public class DestinationDialog extends JDialog {
-
+public class LocationDialog extends JDialog {
 	private JTextField textField;
 
-	public DestinationDialog() {
+	public LocationDialog() {
 
         initUI();
     }
 	
 	public final void initUI() {
 
-        ImageIcon icon = new ImageIcon("/Users/somya/Desktop/Destination.png");
+        ImageIcon icon = new ImageIcon(Traffic_Simulator.class.getResource("Location.png"));
         getContentPane().setLayout(null);
         JLabel label = new JLabel(icon);
         label.setBounds(49, 22, 200, 75);
         label.setAlignmentX(0.5f);
         getContentPane().add(label);
 
-        JLabel name = new JLabel("Enter Destination Name: ");
-        name.setBounds(58, 126, 191, 15);
+        JLabel name = new JLabel("Enter Location Name: ");
+        name.setBounds(71, 125, 162, 15);
         name.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 13));
         name.setAlignmentX(0.5f);
         getContentPane().add(name);
