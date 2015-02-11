@@ -1,7 +1,11 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class Traffic_Simulator {
@@ -35,6 +39,7 @@ public class Traffic_Simulator {
      * Initialize the contents of the frame.
      */
     private void initialize() {
+
         trafficSimulatorFrame = new JFrame();
         trafficSimulatorFrame.getContentPane().setBounds(new Rectangle(10000, 10000, 0, 0));
         trafficSimulatorFrame.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 20));
@@ -219,6 +224,14 @@ public class Traffic_Simulator {
         simulationConfigPanel.setBounds(523, 6, 756, 74);
         trafficSimulatorFrame.getContentPane().add(simulationConfigPanel);
         simulationConfigPanel.setLayout(null);
+
+        JTextArea txtrSimulation = new JTextArea();
+        txtrSimulation.setBounds(345, 29, 146, 23);
+        trafficSimulatorFrame.getContentPane().add(txtrSimulation);
+        txtrSimulation.setText("SIMULATION");
+        txtrSimulation.setForeground(Color.WHITE);
+        txtrSimulation.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 20));
+        txtrSimulation.setBackground(Color.GRAY);
 
         JButton playButton = new JButton();
         playButton.setToolTipText("Play");
@@ -457,13 +470,64 @@ public class Traffic_Simulator {
         trafficLightConfigLbl.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 15));
         trafficLightConfigPanel.add(trafficLightConfigLbl);
 
-        JTextArea txtrSimulation = new JTextArea();
-        txtrSimulation.setBounds(345, 29, 146, 23);
-        trafficSimulatorFrame.getContentPane().add(txtrSimulation);
-        txtrSimulation.setText("SIMULATION");
-        txtrSimulation.setForeground(Color.WHITE);
-        txtrSimulation.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 20));
-        txtrSimulation.setBackground(Color.GRAY);
-        
+        final JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setBounds(18, 50, 754, 191);
+        final JTable table = new JTable();
+        table.setForeground(new Color(0, 0, 0));
+        table.setBackground(new Color(248, 248, 255));
+        table.setCellSelectionEnabled(true);
+        //TODO Remove Hard coded data
+        Object[][] data = {
+                {"1", false, false, false, false, false, false, false, false, false, false},
+                {"2", false, false, false, false, false, false, false, false, false, false},
+                {"3", false, false, false, false, false, false, false, false, false, false},
+                {"4", false, false, false, false, false, false, false, false, false, false},
+                {"5", false, false, false, false, false, false, false, false, false, false},
+                {"6", false, false, false, false, false, false, false, false, false, false},
+                {"7", false, false, false, false, false, false, false, false, false, false},
+                {"8", false, false, false, false, false, false, false, false, false, false},
+                {"9", false, false, false, false, false, false, false, false, false, false},
+                {"10", false, false, false, false, false, false, false, false, false, false}};
+        String[] cols = {"TL ID", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10"};
+
+        final DefaultTableModel model = new DefaultTableModel(data, cols) {
+            private static final long serialVersionUID = 1L;
+
+            @SuppressWarnings("unchecked")
+            public Class getColumnClass(int column) { //cells can be checked or unchecked
+                return getValueAt(0, column).getClass();
+            }
+        };
+
+
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent arg0) {
+                for (int i = 1; i <= (table.getColumnCount() - 1); i++) {
+                    table.getColumnModel().getColumn(i).setCellRenderer(new TableCellRenderer()); //call to the TableCellRenderer function to change the colour of the cell
+                }
+                scrollPane.validate();
+                scrollPane.repaint();
+
+            }
+
+        });
+        table.setModel(model);
+        scrollPane.setViewportView(table);
+        trafficLightConfigPanel.add(scrollPane);
+    }
+
+    @SuppressWarnings("serial")
+    private static class TableCellRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            if (table.getValueAt(row, column).equals(true)) {
+                comp.setBackground(Color.GREEN);
+            } else
+                comp.setBackground(Color.RED);
+            return comp;
+        }
     }
 }
