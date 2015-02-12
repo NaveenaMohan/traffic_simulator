@@ -16,6 +16,11 @@ public class VehicleFactory {
     private VehicleDensity vehicleDensity;
     private List<Route> routes;
 
+    public VehicleFactory(RUnit rUnit) {
+        this.rUnit = rUnit;
+        addVehicle(rUnit);
+    }
+
     public RUnit getrUnit() {
         return rUnit;
     }
@@ -24,8 +29,9 @@ public class VehicleFactory {
         this.rUnit = rUnit;
     }
 
-    public Vehicle addVehicle() {
-        return null;
+    public Vehicle addVehicle(RUnit rUnit) {
+        Vehicle vehicle=new Vehicle(rUnit);
+        return vehicle;
     }
 
     public VehicleDensity getVehicleDensity() {

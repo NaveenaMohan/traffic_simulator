@@ -22,6 +22,18 @@ public class RUnit {
     private ZebraCrossing zebraCrossing;
     private Blockage blockage;
 
+    public RUnit(int id, int x, int y ) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+    }
+
+    public RUnit(int id, List<RUnit> prevsRUnitList, List<RUnit> nextRUnitList) {
+        this.id = id;
+        this.prevsRUnitList = prevsRUnitList;
+        this.nextRUnitList = nextRUnitList;
+    }
+
     public int getX() {
         return x;
     }

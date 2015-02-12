@@ -16,6 +16,10 @@ public class Vehicle {
     private String destination;
     private ClimaticCondition climaticCondition;
 
+    public Vehicle(RUnit rUnit) { //needed to add the RUnit of the vehicleFactory to the Vehicle
+        this.rUnit = rUnit;
+    }
+
     public RUnit getrUnit() {
         return rUnit;
     }
@@ -65,6 +69,9 @@ public class Vehicle {
     }
 
     public void move(Space space) {
+
+        if(this.rUnit.getNextRUnitList().size()>0)
+            this.rUnit = this.rUnit.getNextRUnitList().get(0);
 
     }
 }
