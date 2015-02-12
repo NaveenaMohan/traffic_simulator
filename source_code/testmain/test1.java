@@ -1,19 +1,16 @@
-package maintest;
+package testmain;
 
-import com.sun.xml.internal.ws.api.pipe.Engine;
 import dataAndStructures.DataAndStructures;
 import engine.SimEngine;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
 import managers.vehiclefactory.VehicleFactoryManager;
 
-
 /**
- * Created by Guera_000 on 12/02/2015.
+ * Created by Fabians on 12/02/2015.
  */
-public class Test {
+public class test1 {
     public static void main(String[] args) {
-
 
         RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
         VehicleFactoryManager vehicleFactoryManager=new VehicleFactoryManager();
@@ -24,5 +21,4 @@ public class Test {
         SimEngine engine = new SimEngine(dataAndStructures);
         engine.Play();
     }
-
 }
