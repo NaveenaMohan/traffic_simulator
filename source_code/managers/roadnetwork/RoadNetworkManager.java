@@ -13,6 +13,10 @@ public class RoadNetworkManager implements IRoadNetworkManager {
 
     private RoadNetwork roadNetwork;
 
+    public RoadNetwork getRoadNetwork() {
+        return roadNetwork;
+    }
+
     public RoadNetworkManager(RoadNetwork roadNetwork) {
         this.roadNetwork = roadNetwork;
     }

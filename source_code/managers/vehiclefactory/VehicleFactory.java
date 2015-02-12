@@ -28,7 +28,7 @@ public class VehicleFactory{
         this.rUnit = rUnit;
     }
 
-    public Vehicle addVehicle(RUnit rUnit) {
+    public Vehicle addVehicle() {
         Vehicle vehicle=new Vehicle(rUnit);
         return vehicle;
     }
