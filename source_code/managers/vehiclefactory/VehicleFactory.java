@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by naveena on 09/02/15.
  */
-public class VehicleFactory {
+public class VehicleFactory{
 
     private RUnit rUnit;
     private VehicleDensity vehicleDensity;
@@ -18,7 +18,6 @@ public class VehicleFactory {
 
     public VehicleFactory(RUnit rUnit) {
         this.rUnit = rUnit;
-        addVehicle(rUnit);
     }
 
     public RUnit getrUnit() {
