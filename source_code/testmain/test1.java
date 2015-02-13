@@ -15,7 +15,7 @@ public class test1 {
 
         RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
         VehicleFactoryManager vehicleFactoryManager=new VehicleFactoryManager();
-        GlobalConfigManager globalConfigManager= new GlobalConfigManager(1);
+        GlobalConfigManager globalConfigManager= new GlobalConfigManager(100);
 
         vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRoadNetwork().getrUnitHashtable().get("0"));
 

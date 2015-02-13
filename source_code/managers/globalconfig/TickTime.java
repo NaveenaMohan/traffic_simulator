@@ -5,17 +5,17 @@ package managers.globalconfig;
  */
 public class TickTime {
     private int ratio;
-    private int currentTick;
+    private Long currentTick;
 
     public void incrementTick(){
         currentTick+=1;
     }
     public TickTime(int ratio) {
         this.ratio = ratio;
-        currentTick=0;
+        currentTick=0L;
     }
 
-    public int getCurrentTick() {
+    public Long getCurrentTick() {
         return currentTick;
     }
 

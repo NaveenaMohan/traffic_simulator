@@ -35,32 +35,40 @@ public class VehicleFactory{
     public Vehicle addVehicle(VehicleType vehicleType, Driver driver, String destination, ISpaceManager spaceManager) {
         //vehicle factory creates vehicles, it sets their driver and objectInSpace
 
-        //create object in space based on the vehicle type
 
+
+        //create object in space based on the vehicle type
         ObjectInSpace objectInSpace;
         switch(vehicleType)
         {
             case car:
-                objectInSpace = spaceManager.createVehicleSpace(rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,2,2,null);
+                objectInSpace = new ObjectInSpace(rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,2,2,null);
                 break;
             case emergency:
-                objectInSpace = spaceManager.createVehicleSpace(rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,2,2,null);
+                objectInSpace = new ObjectInSpace(rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,2,2,null);
                 break;
             case heavyLoad:
-                objectInSpace = spaceManager.createVehicleSpace(rUnit.getX(), rUnit.getY(), rUnit.getZ(), 4,4,4,null);
+                objectInSpace = new ObjectInSpace(rUnit.getX(), rUnit.getY(), rUnit.getZ(), 4,4,4,null);
                 break;
             default:
-                objectInSpace = spaceManager.createVehicleSpace(rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,2,2,null);
+                objectInSpace = new ObjectInSpace(rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,2,2,null);
         }
 
-        Vehicle vehicle=new Vehicle(rUnit,//vehicle starting point
-                driver,
-                100,//maximum speed
-                vehicleType,
-                destination,
-                objectInSpace
-                );
-        return vehicle;
+        //only add the new vehicle if it fits in the space outside the factory
+        if(spaceManager.checkFit(objectInSpace)) {
+            spaceManager.addObjectToSpace(objectInSpace);
+            Vehicle vehicle = new Vehicle(rUnit,//vehicle starting point
+                    driver,
+                    100,//maximum speed
+                    vehicleType,
+                    destination,
+                    objectInSpace
+            );
+
+            return vehicle;
+        }
+
+        return null;//return null if vehicle creation was not possible
     }
 
 }

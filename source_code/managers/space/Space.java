@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Space {
 
-    List<ObjectInSpace> objects = new ArrayList<ObjectInSpace>();
+    private List<ObjectInSpace> objects = new ArrayList<ObjectInSpace>();
 
     public void addObject(ObjectInSpace objectInSpace) {
         objects.add(objectInSpace);
@@ -17,5 +17,9 @@ public class Space {
 
     public boolean checkObjectFit(ObjectInSpace objectInSpace, int x, int y, int z, VehicleDirection direction) {
         return true;
+    }
+
+    public  List<ObjectInSpace> getObjects(){
+        return objects;
     }
 }

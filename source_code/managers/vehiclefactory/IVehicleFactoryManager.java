@@ -2,6 +2,7 @@ package managers.vehiclefactory;
 
 import managers.globalconfig.ClimaticCondition;
 import managers.globalconfig.GlobalConfigManager;
+import managers.globalconfig.IGlobalConfigManager;
 import managers.globalconfig.VehicleDensity;
 import managers.runit.RUnit;
 import managers.space.ISpaceManager;
@@ -15,5 +16,5 @@ public interface IVehicleFactoryManager {
 
     void addVehicleFactory(RUnit rUnit);
 
-    Vehicle createVehicle(Long time, GlobalConfigManager globalConfigManager, ISpaceManager spaceManager);
+    Vehicle createVehicle(IGlobalConfigManager globalConfigManager, ISpaceManager spaceManager);
 }

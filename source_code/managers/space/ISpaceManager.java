@@ -1,14 +1,17 @@
 package managers.space;
 
+import java.util.List;
+
 /**
  * Created by naveena on 08/02/15.
  */
 public interface ISpaceManager {
 
-    ObjectInSpace createVehicleSpace(int x, int y, int z, int width, int height, int length, VehicleDirection vehicleDirection);
+    void addObjectToSpace(ObjectInSpace objectInSpace);
 
     void removeObject(ObjectInSpace object);
 
-    boolean checkTick(int x, int y, VehicleDirection vehicleDirection, int width, int height);
+    boolean checkFit(ObjectInSpace objectInSpace);
 
+    public List<ObjectInSpace> getObjects();
 }

@@ -2,6 +2,7 @@ package managers.vehiclefactory;
 
 import managers.globalconfig.ClimaticCondition;
 import managers.globalconfig.GlobalConfigManager;
+import managers.globalconfig.IGlobalConfigManager;
 import managers.globalconfig.VehicleDensity;
 import managers.runit.RUnit;
 import managers.space.ISpaceManager;
@@ -25,7 +26,7 @@ public class VehicleFactoryManager implements IVehicleFactoryManager {
     }
 
     @Override
-    public Vehicle createVehicle(Long time,GlobalConfigManager globalConfigManager, ISpaceManager spaceManager) {
+    public Vehicle createVehicle(IGlobalConfigManager globalConfigManager, ISpaceManager spaceManager) {
         //create vehicle is consulting globalConfig to look at destinations, driver behaviour, climatic conditions, etc...
 
         return vehicleFactoryList.get(0).addVehicle(VehicleType.car,//vehicle Type

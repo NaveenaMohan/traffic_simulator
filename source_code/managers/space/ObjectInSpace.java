@@ -2,6 +2,8 @@ package managers.space;
 
 import managers.vehicle.Vehicle;
 
+import java.awt.*;
+
 /**
  * Created by naveena on 08/02/15.
  */
@@ -81,5 +83,10 @@ public class ObjectInSpace {
         this.direction = direction;
     }
 
+
+    public Rectangle getBounds() {
+        //this must be changed in the future if we implement direction as well
+        return new Rectangle(x, y, width, height);
+    }
 
 }

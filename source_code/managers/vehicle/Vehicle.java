@@ -2,6 +2,7 @@ package managers.vehicle;
 
 import managers.globalconfig.ClimaticCondition;
 import managers.runit.RUnit;
+import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
 import managers.space.Space;
 
@@ -66,12 +67,20 @@ public class Vehicle implements IVehicleManager {
         this.destination = destination;
     }
 
-    public void move(Space space, Long time, ClimaticCondition climaticCondition) {
+    public void move(ISpaceManager spaceManager, Long time, ClimaticCondition climaticCondition) {
 
+        //if there is anywhere to go - if there is a next
         if(this.rUnit.getNextRUnitList().size()>0) {
 
-            this.rUnit = this.rUnit.getNextRUnitList().get(0);
+            //if you fit there
+            if(spaceManager.checkFit(objectInSpace)) {
+                //progress to the next rUnit
+                this.rUnit = this.rUnit.getNextRUnitList().get(0);
 
+                //adjust your position in space
+                objectInSpace.setX(rUnit.getX());
+                objectInSpace.setY(rUnit.getY());
+            }
         }
 
     }

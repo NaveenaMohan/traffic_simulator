@@ -36,7 +36,7 @@ public class GlobalConfigManager implements IGlobalConfigManager {
     }
 
     @Override
-    public int getCurrentSecond() {
+    public Long getCurrentSecond() {
         return (tickTime.getCurrentTick()/tickTime.getRatio());
     }
 
