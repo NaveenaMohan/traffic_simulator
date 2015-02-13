@@ -4,6 +4,7 @@ import managers.globalconfig.ClimaticCondition;
 import managers.globalconfig.Route;
 import managers.globalconfig.VehicleDensity;
 import managers.runit.RUnit;
+import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
 import managers.space.SpaceManager;
 import managers.vehicle.Driver;
@@ -31,7 +32,7 @@ public class VehicleFactory{
         this.rUnit = rUnit;
     }
 
-    public Vehicle addVehicle(VehicleType vehicleType, Driver driver, String destination, SpaceManager spaceManager) {
+    public Vehicle addVehicle(VehicleType vehicleType, Driver driver, String destination, ISpaceManager spaceManager) {
         //vehicle factory creates vehicles, it sets their driver and objectInSpace
 
         //create object in space based on the vehicle type

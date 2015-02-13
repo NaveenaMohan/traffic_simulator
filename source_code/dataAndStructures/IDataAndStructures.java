@@ -3,6 +3,7 @@ package dataAndStructures;
 import managers.globalconfig.DriverBehaviorType;
 import managers.globalconfig.IGlobalConfigManager;
 import managers.roadnetwork.IRoadNetworkManager;
+import managers.space.ISpaceManager;
 import managers.vehicle.IVehicleManager;
 import managers.vehicle.VehicleType;
 import managers.vehiclefactory.IVehicleFactoryManager;
@@ -19,4 +20,5 @@ public interface IDataAndStructures {
     public IVehicleFactoryManager getVehicleFactoryManager();
     public List<IVehicleManager> getVehicles();
     public IGlobalConfigManager getGlobalConfigManager();
+    public ISpaceManager getSpaceManager();
 }

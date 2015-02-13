@@ -38,9 +38,11 @@ private int maxCars = 3;
 
     @Override
     public void actionPerformed(ActionEvent e) {
-//call ticktime.incerementTick
+
+        dataAndStructures.getGlobalConfigManager().incrementTick();//adds one to tick with every action performed
+
         if(dataAndStructures.getVehicles().size() <= maxCars) {
-            dataAndStructures.getVehicles().add(dataAndStructures.getVehicleFactoryManager().createVehicle(null, null));
+            dataAndStructures.getVehicles().add(dataAndStructures.getVehicleFactoryManager().createVehicle(null, null, dataAndStructures.getSpaceManager()));
         }
         for(IVehicleManager vehicle : dataAndStructures.getVehicles())
         {

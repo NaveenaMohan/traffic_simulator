@@ -25,7 +25,7 @@ public class VehicleFactoryManager implements IVehicleFactoryManager {
     }
 
     @Override
-    public Vehicle createVehicle(Long time,GlobalConfigManager globalConfigManager, SpaceManager spaceManager) {
+    public Vehicle createVehicle(Long time,GlobalConfigManager globalConfigManager, ISpaceManager spaceManager) {
         //create vehicle is consulting globalConfig to look at destinations, driver behaviour, climatic conditions, etc...
 
         return vehicleFactoryList.get(0).addVehicle(VehicleType.car,//vehicle Type

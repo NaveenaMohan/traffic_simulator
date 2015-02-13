@@ -71,7 +71,7 @@ public class Vehicle implements IVehicleManager {
         if(this.rUnit.getNextRUnitList().size()>0) {
 
             this.rUnit = this.rUnit.getNextRUnitList().get(0);
-            this.objectInSpace.setX();
+
         }
 
     }
