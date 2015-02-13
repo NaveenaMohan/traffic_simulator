@@ -2,6 +2,7 @@ package testmain;
 
 import dataAndStructures.DataAndStructures;
 import engine.SimEngine;
+import managers.globalconfig.GlobalConfigManager;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
 import managers.vehiclefactory.VehicleFactoryManager;
@@ -14,9 +15,11 @@ public class test1 {
 
         RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
         VehicleFactoryManager vehicleFactoryManager=new VehicleFactoryManager();
+        GlobalConfigManager globalConfigManager= new GlobalConfigManager(1);
 
         vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRoadNetwork().getrUnitHashtable().get("0"));
-        DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager);
+
+        DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
 
 
 
