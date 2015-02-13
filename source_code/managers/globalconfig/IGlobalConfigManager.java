@@ -18,4 +18,8 @@ public interface IGlobalConfigManager {
     void addOrUpdateDestinationDensity(String destination, double density);
 
     void getSecond(Long tick);
+
+    //get driver Beh of type DriverBehaviour
+    //get ClimaticConditions
+    //and all the others suchas route, vehicle density
 }

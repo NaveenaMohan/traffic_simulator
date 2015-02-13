@@ -2,6 +2,7 @@ package managers.vehicle;
 
 import managers.globalconfig.ClimaticCondition;
 import managers.runit.RUnit;
+import managers.space.ObjectInSpace;
 import managers.space.Space;
 
 /**
@@ -14,10 +15,15 @@ public class Vehicle implements IVehicleManager {
     private int maxSpeedLimit;
     private VehicleType vehicleType;
     private String destination;
-    private ClimaticCondition climaticCondition;
+    private ObjectInSpace objectInSpace;
 
-    public Vehicle(RUnit rUnit) { //needed to add the RUnit of the vehicleFactory to the Vehicle
+    public Vehicle(RUnit rUnit, Driver driver, int maxSpeedLimit, VehicleType vehicleType, String destination, ObjectInSpace objectInSpace) {
         this.rUnit = rUnit;
+        this.driver = driver;
+        this.maxSpeedLimit = maxSpeedLimit;
+        this.vehicleType = vehicleType;
+        this.destination = destination;
+        this.objectInSpace = objectInSpace;
     }
 
     public RUnit getrUnit() {
@@ -60,18 +66,13 @@ public class Vehicle implements IVehicleManager {
         this.destination = destination;
     }
 
-    public ClimaticCondition getClimaticCondition() {
-        return climaticCondition;
-    }
+    public void move(Space space, Long time, ClimaticCondition climaticCondition) {
 
-    public void setClimaticCondition(ClimaticCondition climaticCondition) {
-        this.climaticCondition = climaticCondition;
-    }
+        if(this.rUnit.getNextRUnitList().size()>0) {
 
-    public void move(Space space) {
-
-        if(this.rUnit.getNextRUnitList().size()>0)
             this.rUnit = this.rUnit.getNextRUnitList().get(0);
+            this.objectInSpace.setX();
+        }
 
     }
 

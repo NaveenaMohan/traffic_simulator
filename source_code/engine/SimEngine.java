@@ -38,14 +38,16 @@ private int maxCars = 3;
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+//call ticktime.incerementTick
         if(dataAndStructures.getVehicles().size() <= maxCars) {
-            dataAndStructures.getVehicles().add(dataAndStructures.getVehicleFactoryManager().createVehicle(null));
+            dataAndStructures.getVehicles().add(dataAndStructures.getVehicleFactoryManager().createVehicle(null, null));
         }
         for(IVehicleManager vehicle : dataAndStructures.getVehicles())
         {
 
-            vehicle.move(null);
+            vehicle.move(null, //space
+                    null,//time
+                    null);//climatic condition
             System.out.println("Vehicle: " + vehicle + " currentRUnit: " + vehicle.getVehicle().getrUnit().getId() +
             " x: " + vehicle.getVehicle().getrUnit().getX() + " y: " + vehicle.getVehicle().getrUnit().getY());
         }

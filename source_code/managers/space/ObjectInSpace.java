@@ -14,8 +14,16 @@ public class ObjectInSpace {
     private int height;
     private int length;
     private VehicleDirection direction;
-    private int newAttribute;
-    private Vehicle vehicle;
+
+    public ObjectInSpace(int x, int y, int z, int width, int height, int length, VehicleDirection direction) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.width = width;
+        this.height = height;
+        this.length = length;
+        this.direction = direction;
+    }
 
     public int getX() {
         return x;
@@ -73,19 +81,5 @@ public class ObjectInSpace {
         this.direction = direction;
     }
 
-    public int getNewAttribute() {
-        return newAttribute;
-    }
 
-    public void setNewAttribute(int newAttribute) {
-        this.newAttribute = newAttribute;
-    }
-
-    public Vehicle getVehicle() {
-        return vehicle;
-    }
-
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
-    }
 }

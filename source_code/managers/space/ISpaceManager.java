@@ -5,7 +5,7 @@ package managers.space;
  */
 public interface ISpaceManager {
 
-    ObjectInSpace createVehicleSpace(int x, int y, int width, int height);
+    ObjectInSpace createVehicleSpace(int x, int y, int z, int width, int height, int length, VehicleDirection vehicleDirection);
 
     void removeObject(ObjectInSpace object);
 

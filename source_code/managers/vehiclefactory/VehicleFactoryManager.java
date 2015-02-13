@@ -1,7 +1,13 @@
 package managers.vehiclefactory;
 
+import managers.globalconfig.ClimaticCondition;
+import managers.globalconfig.GlobalConfigManager;
+import managers.globalconfig.VehicleDensity;
 import managers.runit.RUnit;
+import managers.space.ISpaceManager;
+import managers.space.SpaceManager;
 import managers.vehicle.Vehicle;
+import managers.vehicle.VehicleType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,19 +19,18 @@ public class VehicleFactoryManager implements IVehicleFactoryManager {
 
     private List<VehicleFactory> vehicleFactoryList = new ArrayList<VehicleFactory>();
 
-    public VehicleFactoryManager() {
-        //hardcoding vehicle factory - to be deleted
-
-    }
-
     @Override
     public void addVehicleFactory(RUnit rUnit) {
         vehicleFactoryList.add(new VehicleFactory(rUnit));
     }
 
     @Override
-    public Vehicle createVehicle(Long tick) {
-        //at the moment create one vehicle on every tick
-        return vehicleFactoryList.get(0).addVehicle();
+    public Vehicle createVehicle(Long time,GlobalConfigManager globalConfigManager, SpaceManager spaceManager) {
+        //create vehicle is consulting globalConfig to look at destinations, driver behaviour, climatic conditions, etc...
+
+        return vehicleFactoryList.get(0).addVehicle(VehicleType.car,//vehicle Type
+                null,//driver
+                null,//destination
+                spaceManager);
     }
 }
