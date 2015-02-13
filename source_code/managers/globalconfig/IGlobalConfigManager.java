@@ -16,4 +16,6 @@ public interface IGlobalConfigManager {
     void addOrUpdateDriverBehavior(Map<DriverBehaviorType, Double> driverBehaviorTypeMap);
 
     void addOrUpdateDestinationDensity(String destination, double density);
+
+    void getSecond(Long tick);
 }

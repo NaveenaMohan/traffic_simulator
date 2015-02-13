@@ -8,4 +8,6 @@ public interface IVehicleManager {
 
     boolean isVisible(int minX, int maxX, int minY, int maxY);
 
+    Vehicle getVehicle();
+
 }

@@ -18,6 +18,8 @@ public class test1 {
         vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRoadNetwork().getrUnitHashtable().get("0"));
         DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager);
 
+
+
         SimEngine engine = new SimEngine(dataAndStructures);
         engine.Play();
     }

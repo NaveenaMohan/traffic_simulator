@@ -7,7 +7,7 @@ import managers.space.Space;
 /**
  * Created by naveena on 08/02/15.
  */
-public class Vehicle {
+public class Vehicle implements IVehicleManager {
 
     private RUnit rUnit;
     private Driver driver;
@@ -73,5 +73,15 @@ public class Vehicle {
         if(this.rUnit.getNextRUnitList().size()>0)
             this.rUnit = this.rUnit.getNextRUnitList().get(0);
 
+    }
+
+    @Override
+    public boolean isVisible(int minX, int maxX, int minY, int maxY) {
+        return false;
+    }
+
+    @Override
+    public Vehicle getVehicle() {
+        return this;
     }
 }
