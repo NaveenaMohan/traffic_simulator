@@ -8,6 +8,13 @@ import java.util.Map;
  * Created by Fabians on 13/02/2015.
  */
 public class GlobalConfigManager implements IGlobalConfigManager {
+
+    private TickTime tickTime;
+
+    public GlobalConfigManager(int tickRatio) {
+        tickTime=new TickTime(tickRatio);
+    }
+
     @Override
     public void addOrUpdateVehicleDensity(Map<VehicleType, Double> vehicleDensityMap, int VehicleCount) {
 
@@ -29,7 +36,12 @@ public class GlobalConfigManager implements IGlobalConfigManager {
     }
 
     @Override
-    public void getSecond(Long tick) {
+    public int getCurrentSecond() {
+        return (tickTime.getCurrentTick()/tickTime.getRatio());
+    }
 
+    @Override
+    public void incrementTick() {
+        tickTime.incrementTick();
     }
 }

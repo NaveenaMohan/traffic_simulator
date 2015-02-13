@@ -17,5 +17,7 @@ public interface IGlobalConfigManager {
 
     void addOrUpdateDestinationDensity(String destination, double density);
 
-    void getSecond(Long tick);
+    int getCurrentSecond();
+
+    void incrementTick();
 }

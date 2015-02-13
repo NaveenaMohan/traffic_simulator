@@ -18,17 +18,22 @@ public class DataAndStructures implements IDataAndStructures {
     private IVehicleFactoryManager vehicleFactoryManager;
     private IGlobalConfigManager globalConfigManager;
 
-    //add to constructor GlobalConfigManager
-    public DataAndStructures(IRoadNetworkManager roadNetworkManager, IVehicleFactoryManager vehicleFactoryManager) {
+    public DataAndStructures(IRoadNetworkManager roadNetworkManager, IVehicleFactoryManager vehicleFactoryManager, IGlobalConfigManager globalConfigManager) {
         this.roadNetworkManager = roadNetworkManager;
         this.vehicleFactoryManager = vehicleFactoryManager;
+        this.globalConfigManager = globalConfigManager;
     }
 
     @Override
-     public IRoadNetworkManager getRoadNetworkManager() {
+    public IRoadNetworkManager getRoadNetworkManager() {
         return roadNetworkManager;
     }
-//function to return GLobalConfig Manager
+
+    @Override
+    public IGlobalConfigManager getGlobalConfigManager() {
+        return globalConfigManager;
+    }
+
     @Override
     public IVehicleFactoryManager getVehicleFactoryManager() {
         return vehicleFactoryManager;
