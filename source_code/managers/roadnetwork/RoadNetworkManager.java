@@ -41,6 +41,8 @@ public class RoadNetworkManager implements IRoadNetworkManager {
 
     @Override
     public boolean addTrafficLight(RUnit rUnit) {
+        //some UI logic
+        //rUnit.setTrafficLight(trafficMGMT.addLight(cycle));
         return false;
     }
 

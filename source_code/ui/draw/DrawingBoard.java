@@ -35,7 +35,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
         addMouseMotionListener(new MouseMotionHandler());
 
         //TODO Change Image File Location
-        Image image = getToolkit().getImage("/Users/naveena/Downloads/img.jpg");
+        Image image = getToolkit().getImage("C:/Users/Fabians/traffic_simulator/source_code/road.png");
 
         MediaTracker mt = new MediaTracker(this);
         mt.addImage(image, 1);
@@ -75,7 +75,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
         //Move Vehicles on RUnits on UI
 
         Graphics2D g2d = (Graphics2D) g;
-        Image image = getToolkit().getImage("/Users/naveena/Downloads/car.png");
+        Image image = getToolkit().getImage("C:/Users/Fabians/traffic_simulator/source_code/car.png");
         for (ObjectInSpace objectInSpace : simEngine.getDataAndStructures().getSpaceManager().getObjects()) {
             g2d.drawImage(image, objectInSpace.getX(), objectInSpace.getY(), this);
         }
