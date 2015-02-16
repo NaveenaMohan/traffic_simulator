@@ -21,6 +21,7 @@ public class RUnit {
     private TrafficSign trafficSign;
     private ZebraCrossing zebraCrossing;
     private Blockage blockage;
+    private TrafficLight trafficLight;
 
     public RUnit(int id, int x, int y ) {
         this.id = id;
@@ -124,5 +125,13 @@ public class RUnit {
 
     public VehicleFactory addVehicleFactory() {
         return null;
+    }
+
+    public TrafficLight getTrafficLight() {
+        return trafficLight;
+    }
+
+    public void setTrafficLight(TrafficLight trafficLight) {
+        this.trafficLight = trafficLight;
     }
 }

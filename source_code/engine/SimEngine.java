@@ -1,49 +1,36 @@
 package engine;
 
 import dataAndStructures.DataAndStructures;
-import managers.roadnetwork.IRoadNetworkManager;
-import managers.roadnetwork.RoadNetworkManager;
 import managers.space.ObjectInSpace;
 import managers.vehicle.IVehicleManager;
-import managers.vehicle.Vehicle;
-import managers.vehiclefactory.IVehicleFactoryManager;
-import managers.vehiclefactory.VehicleFactory;
-import managers.vehiclefactory.VehicleFactoryManager;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Fabians on 12/02/2015.
  */
-public class SimEngine extends JFrame implements ActionListener {
+public class SimEngine {
 
 
     private Timer timer;
     private DataAndStructures dataAndStructures;
     private Long previousSecond=0L;//use this to make a move every second
 
-private int maxCars = 20;
+    private int maxCars = 20;
 
     public SimEngine(DataAndStructures dataAndStructures) {
         this.dataAndStructures = dataAndStructures;
     }
 
-    public void Play(){
+    public void Play(ActionListener actionListener) {
 
         //initialise timer
-        timer = new Timer(5, this);
+        timer = new Timer(5, actionListener);
         timer.start();
     }
 
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-
+    public void performAction() {
         dataAndStructures.getGlobalConfigManager().incrementTick();//adds one to tick with every action performed
 
         if(dataAndStructures.getGlobalConfigManager().getCurrentSecond()>previousSecond)//move once a second
@@ -78,5 +65,10 @@ private int maxCars = 20;
 
             previousSecond = dataAndStructures.getGlobalConfigManager().getCurrentSecond();//update previous second
         }
+    }
+
+
+    public DataAndStructures getDataAndStructures() {
+        return dataAndStructures;
     }
 }

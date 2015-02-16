@@ -4,7 +4,6 @@ import managers.globalconfig.ClimaticCondition;
 import managers.runit.RUnit;
 import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
-import managers.space.Space;
 
 /**
  * Created by naveena on 08/02/15.
@@ -73,14 +72,21 @@ public class Vehicle implements IVehicleManager {
         if(this.rUnit.getNextRUnitList().size()>0) {
 
             //if you fit there
-            if(spaceManager.checkFit(objectInSpace)) {
-                //progress to the next rUnit
-                this.rUnit = this.rUnit.getNextRUnitList().get(0);
+//            if(spaceManager.checkFit(objectInSpace)) {
+//                //progress to the next rUnit
+//                this.rUnit = this.rUnit.getNextRUnitList().get(0);
+//
+//                //adjust your position in space
+//                objectInSpace.setX(rUnit.getX());
+//                objectInSpace.setY(rUnit.getY());
+//            }
 
-                //adjust your position in space
-                objectInSpace.setX(rUnit.getX());
-                objectInSpace.setY(rUnit.getY());
-            }
+            //progress to the next rUnit
+            this.rUnit = this.rUnit.getNextRUnitList().get(0);
+
+            //adjust your position in space
+            objectInSpace.setX(rUnit.getX());
+            objectInSpace.setY(rUnit.getY());
         }
 
     }

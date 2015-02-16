@@ -1,3 +1,12 @@
+import dataAndStructures.DataAndStructures;
+import engine.SimEngine;
+import managers.globalconfig.GlobalConfigManager;
+import managers.roadnetwork.RoadNetwork;
+import managers.roadnetwork.RoadNetworkManager;
+import managers.vehiclefactory.VehicleFactoryManager;
+import ui.draw.Coordinates;
+import ui.draw.DrawingBoard;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -6,11 +15,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 
 public class Traffic_Simulator {
 
     private JFrame trafficSimulatorFrame;
+    private RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
+    private VehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
+    private GlobalConfigManager globalConfigManager = new GlobalConfigManager(20);
+    final DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
+    private SimEngine simEngine = new SimEngine(dataAndStructures);
 
     /**
      * Create the application.
@@ -452,12 +467,6 @@ public class Traffic_Simulator {
         driverBehaviorSlider2.setBounds(65, 189, 85, 26);
         trafficPatternPanel.add(driverBehaviorSlider2);
 
-        JPanel drawingBoardPanel = new JPanel();
-        drawingBoardPanel.setBackground(Color.WHITE);
-        drawingBoardPanel.setBounds(286, 79, 1021, 348);
-        trafficSimulatorFrame.getContentPane().add(drawingBoardPanel);
-        drawingBoardPanel.setLayout(null);
-
         //Traffic Light Configuration Panel
 
         final JPanel trafficLightConfigPanel = new JPanel();
@@ -515,6 +524,30 @@ public class Traffic_Simulator {
         table.setModel(model);
         scrollPane.setViewportView(table);
         trafficLightConfigPanel.add(scrollPane);
+
+
+        //Drawing Board Panel
+        final DrawingBoard drawingBoard = new DrawingBoard(new ArrayList<Coordinates>(), roadNetworkManager, simEngine);
+        trafficSimulatorFrame.getContentPane().add(drawingBoard);
+        single_lane.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.addMouseMotionListener();
+            }
+        });
+
+
+        //Start simulation
+        playButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                simEngine.Play(drawingBoard);
+                //Adding vehicle factory and dataStructures
+                vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRoadNetwork().getrUnitHashtable().get("0"));
+            }
+        });
+
+
     }
 
     @SuppressWarnings("serial")
@@ -530,4 +563,5 @@ public class Traffic_Simulator {
             return comp;
         }
     }
+
 }

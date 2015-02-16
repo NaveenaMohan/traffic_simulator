@@ -12,18 +12,26 @@ import java.util.List;
 public class RoadNetworkManager implements IRoadNetworkManager {
 
     private RoadNetwork roadNetwork;
-
-    public RoadNetwork getRoadNetwork() {
-        return roadNetwork;
-    }
+    private int rUnitId = 0;
 
     public RoadNetworkManager(RoadNetwork roadNetwork) {
         this.roadNetwork = roadNetwork;
     }
 
+    public RoadNetwork getRoadNetwork() {
+        return roadNetwork;
+    }
+
     @Override
-    public boolean addSingleLan(int x, int y, RUnit prevRUnit) {
-        return false;
+    public RUnit addSingleLane(int x, int y, RUnit prevRUnit) {
+        RUnit currentRUnit = new RUnit(rUnitId, x, y);
+        if (prevRUnit != null) {
+            currentRUnit.getPrevsRUnitList().add(prevRUnit);
+            prevRUnit.getNextRUnitList().add(currentRUnit);
+        }
+        roadNetwork.getrUnitHashtable().put(String.valueOf(rUnitId), currentRUnit);
+        rUnitId++;
+        return currentRUnit;
     }
 
     @Override
