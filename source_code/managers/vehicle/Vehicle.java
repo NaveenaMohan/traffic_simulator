@@ -2,19 +2,29 @@ package managers.vehicle;
 
 import managers.globalconfig.ClimaticCondition;
 import managers.runit.RUnit;
-import managers.space.Space;
+import managers.space.ISpaceManager;
+import managers.space.ObjectInSpace;
 
 /**
  * Created by naveena on 08/02/15.
  */
-public class Vehicle {
+public class Vehicle implements IVehicleManager {
 
     private RUnit rUnit;
     private Driver driver;
     private int maxSpeedLimit;
     private VehicleType vehicleType;
     private String destination;
-    private ClimaticCondition climaticCondition;
+    private ObjectInSpace objectInSpace;
+
+    public Vehicle(RUnit rUnit, Driver driver, int maxSpeedLimit, VehicleType vehicleType, String destination, ObjectInSpace objectInSpace) {
+        this.rUnit = rUnit;
+        this.driver = driver;
+        this.maxSpeedLimit = maxSpeedLimit;
+        this.vehicleType = vehicleType;
+        this.destination = destination;
+        this.objectInSpace = objectInSpace;
+    }
 
     public RUnit getrUnit() {
         return rUnit;
@@ -56,15 +66,38 @@ public class Vehicle {
         this.destination = destination;
     }
 
-    public ClimaticCondition getClimaticCondition() {
-        return climaticCondition;
+    public void move(ISpaceManager spaceManager, Long time, ClimaticCondition climaticCondition) {
+
+        //if there is anywhere to go - if there is a next
+        if(this.rUnit.getNextRUnitList().size()>0) {
+
+            //if you fit there
+//            if(spaceManager.checkFit(objectInSpace)) {
+//                //progress to the next rUnit
+//                this.rUnit = this.rUnit.getNextRUnitList().get(0);
+//
+//                //adjust your position in space
+//                objectInSpace.setX(rUnit.getX());
+//                objectInSpace.setY(rUnit.getY());
+//            }
+
+            //progress to the next rUnit
+            this.rUnit = this.rUnit.getNextRUnitList().get(0);
+
+            //adjust your position in space
+            objectInSpace.setX(rUnit.getX());
+            objectInSpace.setY(rUnit.getY());
+        }
+
     }
 
-    public void setClimaticCondition(ClimaticCondition climaticCondition) {
-        this.climaticCondition = climaticCondition;
+    @Override
+    public boolean isVisible(int minX, int maxX, int minY, int maxY) {
+        return false;
     }
 
-    public void move(Space space) {
-
+    @Override
+    public Vehicle getVehicle() {
+        return this;
     }
 }

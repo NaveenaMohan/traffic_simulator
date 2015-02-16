@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface IRoadNetworkManager {
 
-    boolean addSingleLan(int x, int y, RUnit prevRUnit);
+    RUnit addSingleLane(int x, int y, RUnit prevRUnit);
 
     boolean addDoubleLane(int x, int y, RUnit prevRUnit);
 
