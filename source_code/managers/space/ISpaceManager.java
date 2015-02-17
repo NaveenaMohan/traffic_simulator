@@ -13,5 +13,7 @@ public interface ISpaceManager {
 
     boolean checkFit(ObjectInSpace objectInSpace);
 
+    boolean checkFit(int id, int x, int y, int width, int height);
+
     public List<ObjectInSpace> getObjects();
 }

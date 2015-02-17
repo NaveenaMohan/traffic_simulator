@@ -17,17 +17,17 @@ import java.util.ArrayList;
 public class test1 {
     public static void main(String[] args) {
 
-        RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
-        VehicleFactoryManager vehicleFactoryManager=new VehicleFactoryManager();
-        GlobalConfigManager globalConfigManager= new GlobalConfigManager(100);
-
-        vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRoadNetwork().getrUnitHashtable().get("0"));
-
-        DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
-
-
-
-        SimEngine engine = new SimEngine(dataAndStructures);
-        engine.Play(new DrawingBoard(new ArrayList<Coordinates>(), roadNetworkManager, engine));
+//        RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
+//        VehicleFactoryManager vehicleFactoryManager=new VehicleFactoryManager();
+//        GlobalConfigManager globalConfigManager= new GlobalConfigManager(100);
+//
+//        vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRoadNetwork().getrUnitHashtable().get("0"));
+//
+//        DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
+//
+//
+//
+//        SimEngine engine = new SimEngine(dataAndStructures);
+//        engine.Play(new DrawingBoard(new ArrayList<Coordinates>(), roadNetworkManager, engine));
     }
 }

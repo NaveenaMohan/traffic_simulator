@@ -34,4 +34,6 @@ public interface IRoadNetworkManager {
     void addTrafficLightBehavior(TrafficLight trafficLight, List<Boolean> trafficLightPattern);
 
     List<TrafficLight> getAllTrafficLights();
+
+    RoadNetwork getRoadNetwork();
 }

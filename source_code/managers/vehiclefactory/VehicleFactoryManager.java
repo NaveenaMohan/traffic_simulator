@@ -1,5 +1,6 @@
 package managers.vehiclefactory;
 
+import dataAndStructures.IDataAndStructures;
 import managers.globalconfig.ClimaticCondition;
 import managers.globalconfig.GlobalConfigManager;
 import managers.globalconfig.IGlobalConfigManager;
@@ -26,12 +27,15 @@ public class VehicleFactoryManager implements IVehicleFactoryManager {
     }
 
     @Override
-    public Vehicle createVehicle(IGlobalConfigManager globalConfigManager, ISpaceManager spaceManager) {
+    public Vehicle createVehicle(IDataAndStructures dataAndStructures) {
         //create vehicle is consulting globalConfig to look at destinations, driver behaviour, climatic conditions, etc...
 
-        return vehicleFactoryList.get(0).addVehicle(VehicleType.car,//vehicle Type
+        return vehicleFactoryList.get(0).addVehicle(
+                dataAndStructures.getVehicles().size()+1,
+                VehicleType.car,//vehicle Type
                 null,//driver
                 null,//destination
-                spaceManager);
+                dataAndStructures.getSpaceManager(),
+                dataAndStructures.getGlobalConfigManager().getCurrentSecond());
     }
 }
