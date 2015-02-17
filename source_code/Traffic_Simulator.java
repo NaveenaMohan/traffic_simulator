@@ -23,7 +23,10 @@ public class Traffic_Simulator {
     private JFrame trafficSimulatorFrame;
     private RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
     private VehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
-    private GlobalConfigManager globalConfigManager = new GlobalConfigManager(1);
+    private GlobalConfigManager globalConfigManager = new GlobalConfigManager(
+            100,//ticks per second
+            5//metres per RUnit
+    );
     final DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
     private SimEngine simEngine = new SimEngine(dataAndStructures);
 
@@ -543,7 +546,7 @@ public class Traffic_Simulator {
             public void actionPerformed(ActionEvent e) {
                 simEngine.Play(drawingBoard);
                 //Adding vehicle factory and dataStructures
-                vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRoadNetwork().getrUnitHashtable().get("0"));
+                vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRoadNetwork().getrUnitHashtable().get("30"));
             }
         });
 
