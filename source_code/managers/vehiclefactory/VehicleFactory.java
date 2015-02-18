@@ -66,6 +66,7 @@ public class VehicleFactory{
                     destination,
                     objectInSpace,
                     2.7,//maximum acceleration in metres per second.
+                    -10,//max deceleration
                     time
             );
             return vehicle;

@@ -42,6 +42,17 @@ public class SpaceManager implements ISpaceManager {
     }
 
     @Override
+    public ObjectInSpace getObjectWithCentreAt(int x, int y, int z) {
+        for(ObjectInSpace obj : space.getObjects())
+        {
+            if(obj.getX()==x & obj.getY()==y & obj.getZ()==z)
+                return obj;
+        }
+
+        return null;
+    }
+
+    @Override
     public List<ObjectInSpace> getObjects() {
         return space.getObjects();
     }

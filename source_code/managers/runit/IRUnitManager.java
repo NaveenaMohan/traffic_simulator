@@ -21,8 +21,29 @@ public interface IRUnitManager {
 
     void addDirectionSign();
 
+    ZebraCrossing getZebraCrossing();
+
+    TrafficLight getTrafficLight();
+
+    Blockage getBlockage();
+
+    TrafficSign getTrafficSign();
+
+     int getX();
+
+     int getY();
+
+     int getZ();
+
+    int getId();
+
+    List<RUnit> getNextRUnitList();
+
+    List<RUnit> getPrevsRUnitList();
+
     public void ChangeLight(boolean color, String trafficLightID, int index);
 
+    RUnit getChangeAbleRUnit();
     public boolean go();
 
 }

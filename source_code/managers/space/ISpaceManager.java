@@ -15,5 +15,8 @@ public interface ISpaceManager {
 
     boolean checkFit(int id, int x, int y, int width, int height);
 
+    //returns the first object that has its centre at these coordinates
+    ObjectInSpace getObjectWithCentreAt(int x, int y, int z);
+
     public List<ObjectInSpace> getObjects();
 }

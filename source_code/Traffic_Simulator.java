@@ -3,6 +3,7 @@ import engine.SimEngine;
 import managers.globalconfig.GlobalConfigManager;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
+import managers.runit.Blockage;
 import managers.vehiclefactory.VehicleFactoryManager;
 import ui.draw.Coordinates;
 import ui.draw.DrawingBoard;
@@ -547,6 +548,7 @@ public class Traffic_Simulator {
                 simEngine.Play(drawingBoard);
                 //Adding vehicle factory and dataStructures
                 vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRUnitByID("30"));
+                roadNetworkManager.getRUnitByID("100").setBlockage(new Blockage());
             }
         });
 
