@@ -15,10 +15,6 @@ public class Space {
         objects.remove(objectInSpace);
     }
 
-    public boolean checkObjectFit(ObjectInSpace objectInSpace, int x, int y, int z, VehicleDirection direction) {
-        return true;
-    }
-
     public  List<ObjectInSpace> getObjects(){
         return objects;
     }

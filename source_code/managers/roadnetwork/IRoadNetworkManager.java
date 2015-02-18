@@ -34,7 +34,10 @@ public interface IRoadNetworkManager {
     void addTrafficLightBehavior(TrafficLight trafficLight, List<Boolean> trafficLightPattern);
 
     public void changeLight(Long currentSecond);
+    
     RUnit getRUnitByID(String ID);
 
     TrafficLight getTrafficLightByID(String ID);
+
+    RoadNetwork getRoadNetwork();
 }

@@ -17,7 +17,15 @@ public interface IGlobalConfigManager {
 
     void addOrUpdateDestinationDensity(String destination, double density);
 
-    Long getCurrentSecond();
+    double getCurrentSecond();
 
     void incrementTick();
+
+    double getLengthMetres(int rUnits);
+
+    double getLengthRUnits(double metres);
+
+    double getMetresPerRUnit();
+
+
 }
