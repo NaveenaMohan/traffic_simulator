@@ -5,6 +5,7 @@ import engine.SimEngine;
 import managers.globalconfig.GlobalConfigManager;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
+import managers.runit.TrafficLight;
 import managers.vehiclefactory.VehicleFactoryManager;
 import ui.draw.Coordinates;
 import ui.draw.DrawingBoard;
@@ -17,11 +18,15 @@ import java.util.ArrayList;
 public class test1 {
     public static void main(String[] args) {
 
-        RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
+        TrafficLight trafficLight=new TrafficLight();
+        RoadNetwork roadNetwork=new RoadNetwork();
+        RoadNetworkManager roadNetworkManager = new RoadNetworkManager(roadNetwork);
         VehicleFactoryManager vehicleFactoryManager=new VehicleFactoryManager();
         GlobalConfigManager globalConfigManager= new GlobalConfigManager(100);
 
-        vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRoadNetwork().getrUnitHashtable().get("0"));
+        vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRUnitByID("0"));
+        roadNetworkManager.addTrafficLight(roadNetworkManager.getRUnitByID("5"), trafficLight);//TODO to be done by UI
+        roadNetwork.printTrafficLights();
 
         DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
 

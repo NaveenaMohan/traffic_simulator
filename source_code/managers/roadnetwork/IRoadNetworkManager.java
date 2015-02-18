@@ -15,7 +15,7 @@ public interface IRoadNetworkManager {
 
     boolean addDoubleLane(int x, int y, RUnit prevRUnit);
 
-    boolean addTrafficLight(RUnit rUnit);
+    boolean addTrafficLight(RUnit rUnit, TrafficLight trafficLight);
 
     boolean addZebraCrossing(RUnit rUnit);
 
@@ -33,5 +33,8 @@ public interface IRoadNetworkManager {
 
     void addTrafficLightBehavior(TrafficLight trafficLight, List<Boolean> trafficLightPattern);
 
-    List<TrafficLight> getAllTrafficLights();
+    public void changeLight(Long currentSecond);
+    RUnit getRUnitByID(String ID);
+
+    TrafficLight getTrafficLightByID(String ID);
 }

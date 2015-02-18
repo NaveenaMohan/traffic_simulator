@@ -543,7 +543,7 @@ public class Traffic_Simulator {
             public void actionPerformed(ActionEvent e) {
                 simEngine.Play(drawingBoard);
                 //Adding vehicle factory and dataStructures
-                vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRoadNetwork().getrUnitHashtable().get("0"));
+                vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRUnitByID("0"));
             }
         });
 

@@ -5,11 +5,9 @@ import java.util.List;
 /**
  * Created by naveena on 08/02/15.
  */
-public interface IRUnit {
+public interface IRUnitManager {
 
-    void addRUnit(int x, int y, List<RUnit> prevRUnits, List<RUnit> changeableRUnits, boolean isLeft);
-
-    void addTrafficLight();
+    void addTrafficLight(TrafficLight trafficLight);
 
     void addZebraCrossing();
 
@@ -23,6 +21,8 @@ public interface IRUnit {
 
     void addDirectionSign();
 
-    void addTrafficLightBehavior();
+    public void ChangeLight(boolean color, String trafficLightID, int index);
+
+    public boolean go();
 
 }

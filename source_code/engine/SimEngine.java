@@ -1,6 +1,8 @@
 package engine;
 
 import dataAndStructures.DataAndStructures;
+import managers.runit.RUnit;
+import managers.runit.TrafficLight;
 import managers.space.ObjectInSpace;
 import managers.vehicle.IVehicleManager;
 
@@ -30,8 +32,12 @@ public class SimEngine {
         timer.start();
     }
 
+
+
     public void performAction() {
         dataAndStructures.getGlobalConfigManager().incrementTick();//adds one to tick with every action performed
+
+        dataAndStructures.getRoadNetworkManager().changeLight(dataAndStructures.getGlobalConfigManager().getCurrentSecond());
 
         if(dataAndStructures.getGlobalConfigManager().getCurrentSecond()>previousSecond)//move once a second
         {
@@ -56,12 +62,22 @@ public class SimEngine {
                         dataAndStructures.getGlobalConfigManager().getCurrentSecond(),//time
                         null);//climatic condition
             }
+            int i=-1;
+            RUnit rUnitTrafficLight;
 
+            dataAndStructures.getRoadNetworkManager().changeLight(dataAndStructures.getGlobalConfigManager().getCurrentSecond()); //changing all traffic lights every second
             //print out all objects in space progress
+
+
             for(ObjectInSpace obj : dataAndStructures.getSpaceManager().getObjects())
-            {
+            {   i++;
+                rUnitTrafficLight=dataAndStructures.getRoadNetworkManager().getRUnitByID(i+"");
                 System.out.println("second: " + dataAndStructures.getGlobalConfigManager().getCurrentSecond() + " object: " + obj + " x: "+obj.getX()+" y: "+obj.getY());
+
+                System.out.print("second: " + dataAndStructures.getGlobalConfigManager().getCurrentSecond() + " Traffic Light ID: " + (rUnitTrafficLight.getTrafficLight()!=null ? rUnitTrafficLight.getTrafficLight().getTrafficLightID() + " TL_x: " + rUnitTrafficLight.getX() + " TL_y: " + rUnitTrafficLight.getY() : " No Traffic Light "));
+                System.out.println("second: " + dataAndStructures.getGlobalConfigManager().getCurrentSecond() + " Traffic Light Color: " + (rUnitTrafficLight.getTrafficLight()!=null ? (rUnitTrafficLight.go() ? "Green" : "Red") : "Continue, No Traffic Light"));
             }
+
 
             previousSecond = dataAndStructures.getGlobalConfigManager().getCurrentSecond();//update previous second
         }
