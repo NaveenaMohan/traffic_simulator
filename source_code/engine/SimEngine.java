@@ -36,27 +36,49 @@ public class SimEngine {
     }
 
     public void performAction() {
-
+        //LORENA TESTING TRAFFIC LIGHTS
         dataAndStructures.getRoadNetworkManager().changeLight(dataAndStructures.getGlobalConfigManager().getCurrentSecond());
+        double currentSecond=dataAndStructures.getGlobalConfigManager().getCurrentSecond();
+        RUnit rUnitTrafficLight;
+        dataAndStructures.getRoadNetworkManager().changeLight(dataAndStructures.getGlobalConfigManager().getCurrentSecond()); //changing all traffic lights every second
 
+        //if an RUnit has a Traffic Light, prints it
+        if (dataAndStructures.getRoadNetworkManager().getRoadNetwork()!=null) {
+            if(dataAndStructures.getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().size()>0) {
+                for (int i = 0; i < dataAndStructures.getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().size(); i++) {
+                    rUnitTrafficLight = dataAndStructures.getRoadNetworkManager().getRUnitByID(i + ""); //get RUnit
+                    System.out.print("second: " + currentSecond + " Traffic Light ID: " + (rUnitTrafficLight.getTrafficLight() != null ? rUnitTrafficLight.getTrafficLight().getTrafficLightID() + " X: " + rUnitTrafficLight.getX() + " Y: " + rUnitTrafficLight.getY() : " No Traffic Light "));
+                    System.out.println(" Traffic Light Color: " + (rUnitTrafficLight.getTrafficLight() != null ? (rUnitTrafficLight.go() ? "Green" : "Red") : "Continue, No Traffic Light"));
+                }
+            }
+        }
+        //ENDS LORENA TESTING
+
+        //FABIAN
         System.out.println("In rd");
         int highest = 0;
-        for (Map.Entry<String, RUnit> entry : dataAndStructures.getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().entrySet())
-        {
-            if(highest < entry.getValue().getId())
-                highest = entry.getValue().getId();
+        if (dataAndStructures.getRoadNetworkManager().getRoadNetwork()!=null) {
+            if (dataAndStructures.getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().size()>0) {
+                for (Map.Entry<String, RUnit> entry : dataAndStructures.getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().entrySet()) {
+                    if (highest < entry.getValue().getId())
+                        highest = entry.getValue().getId();
 
+                }
+            }
         }
         System.out.println(highest);
         System.out.println("In chain");
         highest=0;
-        RUnit nnn = dataAndStructures.getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().get("0");
-        while(nnn.getNextRUnitList().size()>0){
+        if (dataAndStructures.getRoadNetworkManager().getRoadNetwork()!=null) {
+            RUnit nnn = dataAndStructures.getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().get("0");
+            while (nnn.getNextRUnitList().size() > 0) {
 
-            nnn=nnn.getNextRUnitList().get(0);
-            if(highest < nnn.getId())
-                highest = nnn.getId();
-        }System.out.println(highest);
+                nnn = nnn.getNextRUnitList().get(0);
+                if (highest < nnn.getId())
+                    highest = nnn.getId();
+            }
+        }
+        System.out.println(highest);
         dataAndStructures.getGlobalConfigManager().incrementTick();//adds one to tick with every action performed
 
         //create new vehicles
@@ -78,24 +100,6 @@ public class SimEngine {
                     dataAndStructures.getGlobalConfigManager().getCurrentSecond(),//time
                     dataAndStructures.getGlobalConfigManager());//global config
         }
-
-        int i=-1;
-        RUnit rUnitTrafficLight;
-
-        dataAndStructures.getRoadNetworkManager().changeLight(dataAndStructures.getGlobalConfigManager().getCurrentSecond()); //changing all traffic lights every second
-
-        //print out all objects in space progress
-
-
-        for(ObjectInSpace obj : dataAndStructures.getSpaceManager().getObjects())
-        {   i++;
-            rUnitTrafficLight=dataAndStructures.getRoadNetworkManager().getRUnitByID(i+"");
-            System.out.println("second: " + dataAndStructures.getGlobalConfigManager().getCurrentSecond() + " object: " + obj + " x: "+obj.getX()+" y: "+obj.getY());
-
-            System.out.print("second: " + dataAndStructures.getGlobalConfigManager().getCurrentSecond() + " Traffic Light ID: " + (rUnitTrafficLight.getTrafficLight()!=null ? rUnitTrafficLight.getTrafficLight().getTrafficLightID() + " TL_x: " + rUnitTrafficLight.getX() + " TL_y: " + rUnitTrafficLight.getY() : " No Traffic Light "));
-            System.out.println("second: " + dataAndStructures.getGlobalConfigManager().getCurrentSecond() + " Traffic Light Color: " + (rUnitTrafficLight.getTrafficLight()!=null ? (rUnitTrafficLight.go() ? "Green" : "Red") : "Continue, No Traffic Light"));
-        }
-
     }
 
 

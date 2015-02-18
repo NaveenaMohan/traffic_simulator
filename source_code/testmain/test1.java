@@ -22,7 +22,7 @@ public class test1 {
         RoadNetwork roadNetwork=new RoadNetwork();
         RoadNetworkManager roadNetworkManager = new RoadNetworkManager(roadNetwork);
         VehicleFactoryManager vehicleFactoryManager=new VehicleFactoryManager();
-        GlobalConfigManager globalConfigManager= new GlobalConfigManager(100);
+        GlobalConfigManager globalConfigManager= new GlobalConfigManager(100, 5);
 
         vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRUnitByID("0"));
         roadNetworkManager.addTrafficLight(roadNetworkManager.getRUnitByID("5"), trafficLight);//TODO to be done by UI

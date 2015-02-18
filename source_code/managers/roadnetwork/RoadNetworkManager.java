@@ -41,12 +41,12 @@ public class RoadNetworkManager implements IRoadNetworkManager {
     public boolean addTrafficLight(RUnit rUnit, TrafficLight trafficLight) {
         //TODO naveena - you can use this code. The main point is retrieve the list of traffic lights
         //TODO here getTrafficLightHashtable.
-        //TODO remember to first create the traffic light with its synchronisation cycle. Then add to RUnit and then to getTrafficLightHashtable
+        //TODO remember to first create the traffic light with its cycle. Then add to RUnit and then to getTrafficLightHashtable
 
         //Naveena is to retrieve this info from UI
         ArrayList<Boolean> cycle= new ArrayList<Boolean>(Arrays.asList(true, false, true, false, true, true, true, true, true, true));
         trafficLight.setCycle(cycle);
-        //trafficLight.setTrafficLightID(trafficLight.getTrafficLightID());
+        trafficLight.setTrafficLightID(1);
 
         rUnit.addTrafficLight(trafficLight); //set the trafficLight to the rUnit
 
@@ -56,7 +56,7 @@ public class RoadNetworkManager implements IRoadNetworkManager {
     }
 
     @Override
-    public void changeLight(Long currentSecond) {
+    public void changeLight(double currentSecond) {
         TrafficLight currentTL;
         int t=0;
         t= (int) (currentSecond % 120); //to know the corresponding column of the cycle at a particular current second
@@ -80,6 +80,11 @@ public class RoadNetworkManager implements IRoadNetworkManager {
             }
 
         }
+    }
+
+    @Override
+    public RoadNetwork getRoadNetwork() {
+        return null;
     }
 
     @Override

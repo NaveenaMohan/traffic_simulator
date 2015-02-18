@@ -33,7 +33,7 @@ public interface IRoadNetworkManager {
 
     void addTrafficLightBehavior(TrafficLight trafficLight, List<Boolean> trafficLightPattern);
 
-    public void changeLight(Long currentSecond);
+    public void changeLight(double currentSecond);
     
     RUnit getRUnitByID(String ID);
 
