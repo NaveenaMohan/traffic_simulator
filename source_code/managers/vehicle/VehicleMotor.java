@@ -113,7 +113,7 @@ public class VehicleMotor {
             {
                 return currentRUnit.getChangeAbleRUnit();
             } else {
-                currentAcceleration = aimForSpeed(0, distance);
+                currentAcceleration = aimForSpeed(0, distance-depthInCurrentRUnit);
             }
         }
         return currentRUnit;
@@ -136,7 +136,7 @@ public class VehicleMotor {
                 else
                 {
                     //if there is nowhere to run, match his speed
-                    currentAcceleration = aimForSpeed(vehicle.getCurrentVelocity(), distance);
+                    currentAcceleration = aimForSpeed(vehicle.getCurrentVelocity(), distance-depthInCurrentRUnit);
                 }
             }
         }
@@ -153,7 +153,7 @@ public class VehicleMotor {
 
 
     private void StrategyStopSignAhead(IRUnitManager rUnit, double distance) {
-        currentAcceleration = aimForSpeed(0, distance);
+        currentAcceleration = aimForSpeed(0, distance-depthInCurrentRUnit);
         System.out.println("StrategyStopSignAhead");
     }
 
@@ -164,7 +164,7 @@ public class VehicleMotor {
     private void StrategyTrafficLightAhead(IRUnitManager rUnit, double distance) {
         System.out.println("StrategyTrafficLightAhead");
         if(!rUnit.getTrafficLight().isGreen())
-            currentAcceleration = aimForSpeed(0, distance);
+            currentAcceleration = aimForSpeed(0, distance-depthInCurrentRUnit);
     }
 
     private void StrategyDecisionPointAhead(IRUnitManager rUnit) {
@@ -173,7 +173,7 @@ public class VehicleMotor {
 
     private void StrategyEndOfRoadAhead(double distance) {
         System.out.println("StrategyEndOfRoadAhead");
-        currentAcceleration = aimForSpeed(0,distance);
+        currentAcceleration = aimForSpeed(0,distance-depthInCurrentRUnit);
     }
 
     private double aimForSpeed(double requiredVelocity, double distance)//returns the acceleration

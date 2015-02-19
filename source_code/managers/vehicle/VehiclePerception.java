@@ -14,7 +14,7 @@ public class VehiclePerception {
     public static void See(int vehID, IRUnitManager rUnit, int maxVision, VehicleState vehicleState, ISpaceManager spaceManager, IDataAndStructures dataAndStructures, ObjectInSpace myObject) {
         IRUnitManager temp = rUnit;
         for (int i = 0; i < maxVision; i++) {
-            double distance = (i + 1) * dataAndStructures.getGlobalConfigManager().getMetresPerRUnit();
+            double distance = Math.max(0,i * dataAndStructures.getGlobalConfigManager().getMetresPerRUnit());
             //check for blockages
             if (temp.getBlockage() != null)
                 vehicleState.RegisterObject(new VehicleMemoryObject(temp, temp.getBlockage(), distance));

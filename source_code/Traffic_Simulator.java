@@ -548,7 +548,7 @@ public class Traffic_Simulator {
                 simEngine.Play(drawingBoard);
                 //Adding vehicle factory and dataStructures
                 vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRUnitByID("30"));
-                roadNetworkManager.getRUnitByID("100").setBlockage(new Blockage());
+
             }
         });
 
