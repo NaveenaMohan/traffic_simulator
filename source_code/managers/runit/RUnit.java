@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by naveena on 08/02/15.
  */
-public class RUnit {
+public class RUnit implements IRUnitManager{
 
     private int x;
     private int y;
@@ -22,6 +22,11 @@ public class RUnit {
     private ZebraCrossing zebraCrossing;
     private Blockage blockage;
     private TrafficLight trafficLight;
+
+    @Override
+    public void ChangeLight(boolean color, String trafficLightID, int index) {
+        //TODO change cycle element for traffic light
+    }
 
     public RUnit(int id, int x, int y ) {
         this.id = id;
@@ -131,7 +136,51 @@ public class RUnit {
         return trafficLight;
     }
 
-    public void setTrafficLight(TrafficLight trafficLight) {
+    @Override
+    public void addTrafficLight(TrafficLight trafficLight) {
         this.trafficLight = trafficLight;
+    }
+
+    @Override
+    public boolean go(){
+        if (this.getTrafficLight()!=null) {
+            if (this.getTrafficLight().isGreen()) {
+                return true; //if traffic Light is green
+            }
+            else return false; //if traffic Light is red
+        }
+        else
+            return true; //if no traffic Light then vehicles can continue, treated as if it would be green.
+    }
+
+
+    @Override
+    public void addZebraCrossing() {
+
+    }
+
+    @Override
+    public void addBlockage() {
+
+    }
+
+    @Override
+    public void addSpeedLimit() {
+
+    }
+
+    @Override
+    public void addStopSign() {
+
+    }
+
+    @Override
+    public void addWelcomeSign() {
+
+    }
+
+    @Override
+    public void addDirectionSign() {
+
     }
 }

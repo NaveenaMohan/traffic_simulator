@@ -10,9 +10,11 @@ import java.util.Map;
 public class GlobalConfigManager implements IGlobalConfigManager {
 
     private TickTime tickTime;
+    private DistancesScale distancesScale;
 
-    public GlobalConfigManager(int tickRatio) {
+    public GlobalConfigManager(int tickRatio, int metresPerRUnit) {
         tickTime=new TickTime(tickRatio);
+        distancesScale = new DistancesScale(metresPerRUnit);
     }
 
     @Override
@@ -36,12 +38,27 @@ public class GlobalConfigManager implements IGlobalConfigManager {
     }
 
     @Override
-    public Long getCurrentSecond() {
-        return (tickTime.getCurrentTick()/tickTime.getRatio());
+    public double getCurrentSecond() {
+        return ((double)tickTime.getCurrentTick()/tickTime.getRatio());
     }
 
     @Override
     public void incrementTick() {
         tickTime.incrementTick();
+    }
+
+    @Override
+    public double getLengthMetres(int rUnits) {
+        return distancesScale.getLengthMetres(rUnits);
+    }
+
+    @Override
+    public double getLengthRUnits(double metres) {
+        return distancesScale.getLengthRUnits(metres);
+    }
+
+    @Override
+    public double getMetresPerRUnit() {
+        return distancesScale.getMetresPerRUnit();
     }
 }

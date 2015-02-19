@@ -9,6 +9,7 @@ import java.awt.*;
  */
 public class ObjectInSpace {
 
+    private int id;
     private int x;
     private int y;
     private int z;
@@ -17,7 +18,16 @@ public class ObjectInSpace {
     private int length;
     private VehicleDirection direction;
 
-    public ObjectInSpace(int x, int y, int z, int width, int height, int length, VehicleDirection direction) {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public ObjectInSpace(int id, int x, int y, int z, int width, int length, int height, VehicleDirection direction) {
+        this.id=id;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -86,7 +96,7 @@ public class ObjectInSpace {
 
     public Rectangle getBounds() {
         //this must be changed in the future if we implement direction as well
-        return new Rectangle(x, y, width, height);
+        return new Rectangle(x, y, width, length);
     }
 
 }

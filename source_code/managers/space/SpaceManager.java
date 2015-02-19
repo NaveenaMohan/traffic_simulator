@@ -19,17 +19,37 @@ public class SpaceManager implements ISpaceManager {
 
     @Override
     public boolean checkFit(ObjectInSpace objectToCheck) {
-        //go through every object in space and check if you fits
-        //for now ignore direction
+        return checkFit(objectToCheck.getId(), objectToCheck.getX(),objectToCheck.getY(),objectToCheck.getWidth(), objectToCheck.getLength());
+    }
 
+    @Override
+    public boolean checkFit(int id, int x, int y, int width, int length) {
+        //System.out.println("checkFit id: " + id + " x: "+ x + " y: " + y + " width: " + width + " length: " + length);
+        ObjectInSpace objectToCheck = new ObjectInSpace(id, x,y,0,width,length,0, null);
         //go through each object in space and check if you intersect
         for(ObjectInSpace obj : space.getObjects())
         {
-            if(objectToCheck!=obj & objectToCheck.getBounds().intersects(obj.getBounds()))
-                return false;
+//            System.out.println("-against id: " + obj.getId() + " x: "+ obj.getX() + " y: " + obj.getY()
+//                    + " width: " + obj.getWidth() + " length: " + obj.getLength());
+            //check that the object is not yourself
+            if(objectToCheck.getId()!=obj.getId())
+                if( objectToCheck.getBounds().intersects(obj.getBounds())) //check if you intersect that object
+                    return false;
+                    //System.out.print("-object the same");
         }
+       // System.out.println(" !! Good - true");
         return true;
+    }
 
+    @Override
+    public ObjectInSpace getObjectWithCentreAt(int x, int y, int z) {
+        for(ObjectInSpace obj : space.getObjects())
+        {
+            if(obj.getX()==x & obj.getY()==y & obj.getZ()==z)
+                return obj;
+        }
+
+        return null;
     }
 
     @Override

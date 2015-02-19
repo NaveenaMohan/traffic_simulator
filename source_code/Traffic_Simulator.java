@@ -3,6 +3,7 @@ import engine.SimEngine;
 import managers.globalconfig.GlobalConfigManager;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
+import managers.runit.Blockage;
 import managers.vehiclefactory.VehicleFactoryManager;
 import ui.draw.Coordinates;
 import ui.draw.DrawingBoard;
@@ -23,7 +24,10 @@ public class Traffic_Simulator {
     private JFrame trafficSimulatorFrame;
     private RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
     private VehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
-    private GlobalConfigManager globalConfigManager = new GlobalConfigManager(20);
+    private GlobalConfigManager globalConfigManager = new GlobalConfigManager(
+            100,//ticks per second
+            5//metres per RUnit
+    );
     final DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
     private SimEngine simEngine = new SimEngine(dataAndStructures);
 
@@ -56,11 +60,11 @@ public class Traffic_Simulator {
     private void initialize() {
 
         trafficSimulatorFrame = new JFrame();
-        trafficSimulatorFrame.getContentPane().setBounds(new Rectangle(10000, 10000, 0, 0));
+        trafficSimulatorFrame.getContentPane().setBounds(new Rectangle(900, 900, 0, 0));
         trafficSimulatorFrame.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 20));
         trafficSimulatorFrame.setTitle("TRAFFIC SIMULATOR");
         trafficSimulatorFrame.getContentPane().setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 16));
-        trafficSimulatorFrame.setBounds(2000, 2000, 2000, 2000);
+        trafficSimulatorFrame.setBounds(1000, 700, 1314, 743);
         trafficSimulatorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         trafficSimulatorFrame.getContentPane().setLayout(null);
 
@@ -543,7 +547,8 @@ public class Traffic_Simulator {
             public void actionPerformed(ActionEvent e) {
                 simEngine.Play(drawingBoard);
                 //Adding vehicle factory and dataStructures
-                vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRoadNetwork().getrUnitHashtable().get("0"));
+                vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRUnitByID("30"));
+
             }
         });
 
