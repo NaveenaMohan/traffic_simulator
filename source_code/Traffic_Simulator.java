@@ -3,10 +3,7 @@ import engine.SimEngine;
 import managers.globalconfig.GlobalConfigManager;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
-import managers.runit.Blockage;
 import managers.vehiclefactory.VehicleFactoryManager;
-import ui.draw.Coordinates;
-import ui.draw.DrawingBoard;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -16,7 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 
 public class Traffic_Simulator {
@@ -531,24 +527,52 @@ public class Traffic_Simulator {
 
 
         //Drawing Board Panel
-        final DrawingBoard drawingBoard = new DrawingBoard(new ArrayList<Coordinates>(), roadNetworkManager, simEngine);
+        final DrawingBoard drawingBoard = new DrawingBoard(roadNetworkManager, simEngine);
         trafficSimulatorFrame.getContentPane().add(drawingBoard);
+        drawingBoard.initialize();//Initializing the drawing board
+
+        //Adding action listeners for all configuration buttons
+
         single_lane.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawingBoard.addMouseMotionListener();
+                drawingBoard.addMouseDragMotionListener();
             }
         });
 
+        traffic_light.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.addTrafficLightButtonListener();
+            }
+        });
+
+        zebra_crossing.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.addZebraCrossingButtonListener();
+            }
+        });
+
+        road_blockages.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.addBlockageButtonActionListener();
+            }
+        });
+
+        vehicle_factory.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.addVehicleFactoryButtonActionListener();
+            }
+        });
 
         //Start simulation
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 simEngine.Play(drawingBoard);
-                //Adding vehicle factory and dataStructures
-                vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRUnitByID("30"));
-
             }
         });
 

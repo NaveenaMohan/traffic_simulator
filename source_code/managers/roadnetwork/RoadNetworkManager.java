@@ -1,10 +1,9 @@
 package managers.roadnetwork;
 
-import managers.runit.DirectionSignType;
-import managers.runit.RUnit;
-import managers.runit.TrafficLight;
+import managers.runit.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Guera_000 on 12/02/2015.
@@ -15,8 +14,8 @@ public class RoadNetworkManager implements IRoadNetworkManager {
 
     private int rUnitId = 0;
 
-    public RoadNetworkManager(RoadNetwork roadNetwork){
-        this.roadNetwork =roadNetwork;
+    public RoadNetworkManager(RoadNetwork roadNetwork) {
+        this.roadNetwork = roadNetwork;
     }
 
 
@@ -39,21 +38,14 @@ public class RoadNetworkManager implements IRoadNetworkManager {
 
     @Override
     public boolean addTrafficLight(RUnit rUnit, TrafficLight trafficLight) {
-        //TODO naveena - you can use this code. The main point is retrieve the list of traffic lights
-        //TODO here getTrafficLightHashtable.
-        //TODO remember to first create the traffic light with its cycle. Then add to RUnit and then to getTrafficLightHashtable
-
-        //Naveena is to retrieve this info from UI
-        ArrayList<Boolean> cycle= new ArrayList<Boolean>(Arrays.asList(true, false, true, false, true, true, true, true, true, true));
-        trafficLight.setCycle(cycle);
-        trafficLight.setTrafficLightID(1);
-
-        rUnit.addTrafficLight(trafficLight); //set the trafficLight to the rUnit
-
-        roadNetwork.getTrafficLightHashtable().put(trafficLight.getTrafficLightID()+ "", trafficLight); //adds trafficLights to Hashtable
-
-        return false;
+        if (roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())) != null) {
+            roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).addTrafficLight(trafficLight);
+            return true;
+        } else {
+            return false;
+        }
     }
+
 
     @Override
     public void changeLight(double currentSecond) {
@@ -84,17 +76,27 @@ public class RoadNetworkManager implements IRoadNetworkManager {
 
     @Override
     public RoadNetwork getRoadNetwork() {
-        return null;
+        return roadNetwork;
     }
 
     @Override
     public boolean addZebraCrossing(RUnit rUnit) {
-        return false;
+        if (roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())) != null) {
+            roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).setZebraCrossing(new ZebraCrossing(new TrafficLight()));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean addBlockage(RUnit rUnit) {
-        return false;
+        if (roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())) != null) {
+            roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).setBlockage(new Blockage());
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
