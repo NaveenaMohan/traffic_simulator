@@ -7,6 +7,7 @@ import ui.ConfigButtonSelected;
 import ui.Coordinates;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DrawingBoard extends JPanel implements ActionListener {
+    private static int trafficLightIdIndex = 0;
+    private static int zebraCrossingTrafficLightIdIndex = 0;
     BufferedImage bi;
     private int currentX, currentY;
     private List<Coordinates> singleLaneCoordinates = new ArrayList<Coordinates>();
@@ -32,9 +35,11 @@ public class DrawingBoard extends JPanel implements ActionListener {
     private Image blockageImage;
     private ConfigButtonSelected configButtonSelected = ConfigButtonSelected.noOption;
     private boolean mousePressed;
+    private DefaultTableModel model;
 
 
-    public DrawingBoard(RoadNetworkManager roadNetworkManager, SimEngine simEngine) {
+    public DrawingBoard(DefaultTableModel model, RoadNetworkManager roadNetworkManager, SimEngine simEngine) {
+        this.model = model;
         this.roadNetworkManager = roadNetworkManager;
         this.simEngine = simEngine;
         setBackground(Color.white);
@@ -67,11 +72,12 @@ public class DrawingBoard extends JPanel implements ActionListener {
 
         if (mousePressed && configButtonSelected.equals(ConfigButtonSelected.addSingleLane)) {
             Graphics2D g2D = (Graphics2D) g;
-
-            //Add and Return RUnit for single lane and store it as previous RUnit TODO : Change storage of previous RUnit
-            previousRUnit = roadNetworkManager.addSingleLane(currentX, currentY, previousRUnit);
-            singleLaneCoordinates.add(new Coordinates(currentX, currentY));
-
+            Coordinates coordinates = new Coordinates(currentX, currentY);
+            if (!singleLaneCoordinates.contains(coordinates)) {
+                //Add and Return RUnit for single lane and store it as previous RUnit TODO : Change storage of previous RUnit
+                singleLaneCoordinates.add(coordinates);
+                previousRUnit = roadNetworkManager.addSingleLane(currentX, currentY, previousRUnit);
+            }
             //Drawing the road
             for (Coordinates coordinate : singleLaneCoordinates) {
                 g2D.drawImage(bi, coordinate.getX(), coordinate.getY(), this);
@@ -90,8 +96,16 @@ public class DrawingBoard extends JPanel implements ActionListener {
                 trafficLight.setCycle(cycle);
                 trafficLight.setTrafficLightID(1);
                 simEngine.getDataAndStructures().getRoadNetworkManager().addTrafficLight(bestMatchRUnit, trafficLight);
-                //Drawing the traffic Light
+                //Drawing the traffic Light and adding the traffic light cycle configuration
                 g.drawImage(trafficLightImage, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, this);
+                if (model != null) {
+                    if (trafficLightIdIndex == 0) {
+                        trafficLightIdIndex++;
+                    } else {
+                        model.addRow(new Object[]{"TL-" + trafficLightIdIndex, false, false, false, false, false, false, false, false, false, false});
+                        trafficLightIdIndex++;
+                    }
+                }
             }
         }
 
@@ -102,8 +116,16 @@ public class DrawingBoard extends JPanel implements ActionListener {
             } else {
                 //Updating the best match rUnit with the zebra crossing
                 simEngine.getDataAndStructures().getRoadNetworkManager().addZebraCrossing(bestMatchRUnit);
-                //Drawing the zebra crossing
+                //Drawing the zebra crossing with traffic light configuration
                 g.drawImage(zebraCrossingImage, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, this);
+                if (model != null) {
+                    if (zebraCrossingTrafficLightIdIndex == 0) {
+                        zebraCrossingTrafficLightIdIndex++;
+                    } else {
+                        model.addRow(new Object[]{"ZTL-" + zebraCrossingTrafficLightIdIndex, false, false, false, false, false, false, false, false, false, false});
+                        zebraCrossingTrafficLightIdIndex++;
+                    }
+                }
             }
         }
 

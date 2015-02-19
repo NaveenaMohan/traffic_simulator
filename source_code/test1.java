@@ -6,6 +6,8 @@ import managers.roadnetwork.RoadNetworkManager;
 import managers.runit.TrafficLight;
 import managers.vehiclefactory.VehicleFactoryManager;
 
+import javax.swing.table.DefaultTableModel;
+
 /**
  * Created by Fabians on 12/02/2015.
  */
@@ -27,6 +29,6 @@ public class test1 {
 
 
         SimEngine engine = new SimEngine(dataAndStructures);
-        engine.Play(new DrawingBoard(roadNetworkManager, engine));
+        engine.Play(new DrawingBoard(new DefaultTableModel(), roadNetworkManager, engine));
     }
 }
