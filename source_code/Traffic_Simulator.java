@@ -3,8 +3,10 @@ import engine.SimEngine;
 import managers.globalconfig.GlobalConfigManager;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
+import managers.runit.RUnit;
 import managers.vehiclefactory.VehicleFactoryManager;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -13,9 +15,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.swing.JFileChooser;
 
 
-public class Traffic_Simulator {
+public class  Traffic_Simulator {
 
     private JFrame trafficSimulatorFrame;
     private RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
@@ -26,6 +32,8 @@ public class Traffic_Simulator {
     );
     final DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
     private SimEngine simEngine = new SimEngine(dataAndStructures);
+    DefaultTableModel model;
+    int index=2;
 
     /**
      * Create the application.
@@ -97,12 +105,27 @@ public class Traffic_Simulator {
         traffic_light.setBounds(190, 27, 70, 70);
         traffic_light.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Traffic Light.png")));
         roadInfraStructurePanel.add(traffic_light);
+        traffic_light.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.addRow(new Object[]{index+"", false, false, false, false, false, false, false, false, false, false});
+                index++;
+            }
+        });
+
 
         JButton zebra_crossing = new JButton();
         zebra_crossing.setToolTipText("Add a Zebra Crossing");
         zebra_crossing.setBounds(26, 98, 70, 70);
         zebra_crossing.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Zebra Crossing.png")));
         roadInfraStructurePanel.add(zebra_crossing);
+        zebra_crossing.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.addRow(new Object[]{index+"", false, false, false, false, false, false, false, false, false, false});
+                index++;
+            }
+        });
 
         JButton road_blockages = new JButton();
         road_blockages.setToolTipText("Add Road Obstruction");
@@ -288,6 +311,7 @@ public class Traffic_Simulator {
         uploadImageButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("upload.png")));
         simulationConfigPanel.add(uploadImageButton);
 
+
         JButton importConfigButton = new JButton();
         importConfigButton.setToolTipText("Import Configuration");
         importConfigButton.setBounds(498, 0, 70, 70);
@@ -349,6 +373,7 @@ public class Traffic_Simulator {
         visibility_slider.setBounds(337, 14, 165, 26);
         visibility_slider.setPaintTicks(true);
         visibility_slider.setMajorTickSpacing(30);
+        trafficPatternPanel.add(visibility_slider);
         trafficPatternPanel.add(visibility_slider);
 
         JSlider slippery_slider = new JSlider();
@@ -488,18 +513,19 @@ public class Traffic_Simulator {
         //TODO Remove Hard coded data
         Object[][] data = {
                 {"1", false, false, false, false, false, false, false, false, false, false},
-                {"2", false, false, false, false, false, false, false, false, false, false},
-                {"3", false, false, false, false, false, false, false, false, false, false},
-                {"4", false, false, false, false, false, false, false, false, false, false},
-                {"5", false, false, false, false, false, false, false, false, false, false},
-                {"6", false, false, false, false, false, false, false, false, false, false},
-                {"7", false, false, false, false, false, false, false, false, false, false},
-                {"8", false, false, false, false, false, false, false, false, false, false},
-                {"9", false, false, false, false, false, false, false, false, false, false},
-                {"10", false, false, false, false, false, false, false, false, false, false}};
+         //       {"2", false, false, false, false, false, false, false, false, false, false},
+           //     {"3", false, false, false, false, false, false, false, false, false, false},
+             //   {"4", false, false, false, false, false, false, false, false, false, false},
+               // {"5", false, false, false, false, false, false, false, false, false, false},
+              //  {"6", false, false, false, false, false, false, false, false, false, false},
+              //  {"7", false, false, false, false, false, false, false, false, false, false},
+              //  {"8", false, false, false, false, false, false, false, false, false, false},
+               // {"9", false, false, false, false, false, false, false, false, false, false},
+              //  {"10", false, false, false, false, false, false, false, false, false, false}
+              };
         String[] cols = {"TL ID", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10"};
 
-        final DefaultTableModel model = new DefaultTableModel(data, cols) {
+      model = new DefaultTableModel(data, cols) {
             private static final long serialVersionUID = 1L;
 
             @SuppressWarnings("unchecked")
@@ -573,6 +599,59 @@ public class Traffic_Simulator {
             @Override
             public void actionPerformed(ActionEvent e) {
                 simEngine.Play(drawingBoard);
+            }
+        });
+        uploadImageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                        File file;
+                        BufferedImage image=null;
+                        JFileChooser fileChooser = new JFileChooser();
+                        int returnValue = fileChooser.showOpenDialog(null);
+                        // myfileFilter filter = new myfileFilter();
+                        // fileChooser.addChoosableFileFilter(filter);
+                        if (returnValue == JFileChooser.APPROVE_OPTION){
+                            //System.out.println("Ok");
+                            //
+                            //System.out.println("Ok");
+                            try{
+                                file=fileChooser.getSelectedFile();
+                                System.out.println("Selected file is "+ file);
+                                image= ImageIO.read(file);
+                                System.out.println("Ok");
+                                ImageIcon icon = new ImageIcon(image);
+                                JLabel picLabel = new JLabel(icon);
+                                //  picLabel.setIcon(icon);
+                                //picLabel.revalidate();
+                                //  picLabel.repaint();
+                                // JLabel picLabel = new JLabel(new ImageIcon(image));
+                                System.out.println("Ok");
+                                //picLabel.setIcon(icon);
+
+
+                                drawingBoard.add(picLabel);
+                                drawingBoard.revalidate();
+                                drawingBoard.repaint();
+                                // drawingBoardPanel.add(picLabel);
+                                // drawingBoardPanel.revalidate();
+
+                                // drawingBoardPanel.repaint();
+
+                                int w = image.getWidth(null);
+                                int h = image.getHeight(null);
+                                BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+                                Graphics g = bi.getGraphics();
+                                g.drawImage(image,0,0,null);
+                                System.out.println("Ok");
+
+
+                            }
+                            catch(IOException e1){
+                                e1.printStackTrace();
+
+                            }}
+
             }
         });
 
