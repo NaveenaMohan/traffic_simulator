@@ -5,7 +5,15 @@ package managers.runit;
  */
 public class ZebraCrossing {
 
+
     private TrafficLight trafficLight;
+
+    public ZebraCrossing() {
+    }
+
+    public ZebraCrossing(TrafficLight trafficLight) {
+        this.trafficLight = trafficLight;
+    }
 
     public TrafficLight getTrafficLight() {
         return trafficLight;

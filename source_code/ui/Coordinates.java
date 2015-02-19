@@ -1,4 +1,4 @@
-package ui.draw;
+package ui;
 
 public class Coordinates {
     int x;
