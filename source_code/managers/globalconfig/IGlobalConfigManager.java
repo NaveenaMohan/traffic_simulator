@@ -11,7 +11,9 @@ public interface IGlobalConfigManager {
 
     void addOrUpdateVehicleDensity(Map<VehicleType, Double> vehicleDensityMap, int VehicleCount);
 
-    void addOrUpdateWeather(double visibility, double slipperiness);
+    void addOrUpdateWeather(ClimaticCondition climaticCondition);
+
+    public ClimaticCondition getClimaticCondition();
 
     void addOrUpdateDriverBehavior(Map<DriverBehaviorType, Double> driverBehaviorTypeMap);
 
