@@ -2,6 +2,7 @@ package engine;
 
 import dataAndStructures.DataAndStructures;
 import managers.runit.RUnit;
+import managers.runit.TrafficSign;
 import managers.space.ObjectInSpace;
 import managers.vehicle.IVehicleManager;
 import managers.runit.TrafficLight;
@@ -62,6 +63,14 @@ public class SimEngine {
 
         //change traffic lights
         dataAndStructures.getRoadNetworkManager().changeLight(dataAndStructures.getGlobalConfigManager().getCurrentSecond());
+
+        for(Map.Entry<String, TrafficLight> tl : dataAndStructures.getRoadNetworkManager().getRoadNetwork().getTrafficLightHashtable().entrySet())
+        {
+            if(tl.getValue().isGreen())
+                System.out.println("Green");
+            else
+                System.out.println("Red");
+        }
     }
 
 

@@ -13,6 +13,7 @@ public class VehicleState {
 
     public void RegisterObject(VehicleMemoryObject obj)
     {
+        System.out.println("=registered "+obj.getObject().getClass() + " " + obj.getObject());
         //saves the given object to its list of objects
         objects.add(obj);
     }

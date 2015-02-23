@@ -2,10 +2,7 @@ package managers.vehicle;
 
 import dataAndStructures.IDataAndStructures;
 import jdk.nashorn.internal.ir.Block;
-import managers.runit.Blockage;
-import managers.runit.IRUnitManager;
-import managers.runit.RUnit;
-import managers.runit.TrafficLight;
+import managers.runit.*;
 import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
 
@@ -48,6 +45,7 @@ public class VehicleMotor {
         currentAcceleration = aimForSpeed(maxSpeedLimit, 1);
 
         if(vehicleMemoryObject!=null) {
+
             if (vehicleMemoryObject.getObject() instanceof Blockage)//check for blockage and apply strategy
                 rUnit = StrategyBlockageAhead(rUnit, vehicleMemoryObject.getDistance(), 500, vehicleState.isChangeableClear());
             else if (vehicleMemoryObject.getObject() instanceof Vehicle)//check for vehicle and apply strategy
@@ -56,7 +54,10 @@ public class VehicleMotor {
             else if (vehicleMemoryObject.getObject() instanceof EndOfRoad)//check for end of road and apply strategy
                 StrategyEndOfRoadAhead(vehicleMemoryObject.getDistance());
             else if (vehicleMemoryObject.getObject() instanceof TrafficLight)//check for traffic light and apply strategy
-                StrategyTrafficLightAhead(rUnit, vehicleMemoryObject.getDistance());
+                StrategyTrafficLightAhead((TrafficLight)vehicleMemoryObject.getObject(), vehicleMemoryObject.getDistance(), 100);
+            else if (vehicleMemoryObject.getObject() instanceof ZebraCrossing)//check for zebra crossing and apply strategy
+                StrategyZebraCrossingAhead((ZebraCrossing)vehicleMemoryObject.getObject(), vehicleMemoryObject.getDistance(), 100);
+
             //TODO implement other strategies
         }
         return rUnit;
@@ -107,7 +108,7 @@ public class VehicleMotor {
     private IRUnitManager StrategyBlockageAhead(IRUnitManager currentRUnit
             , double distance, double safeDistance, boolean isChangeableClear) {
         //if the blockage is closer than your safe distance change lane if possible
-        System.out.println("StrategyBlockageAhead");
+        //System.out.println("StrategyBlockageAhead");
         if (distance < safeDistance) {
             if (isChangeableClear)//if the changeable unit is clear
             {
@@ -120,7 +121,7 @@ public class VehicleMotor {
     }
 
     private IRUnitManager StrategyVehicleAhead(IRUnitManager currentRUnit, IVehicleManager vehicle, double distance, double safeDistance, boolean isChangeableClear) {
-        System.out.println("StrategyVehicleAhead");
+        //System.out.println("StrategyVehicleAhead");
         currentAcceleration = aimForSpeed(maxSpeedLimit, 1);//may be overwritten
 
         //if the vehicle speed is slower than yours
@@ -154,17 +155,28 @@ public class VehicleMotor {
 
     private void StrategyStopSignAhead(IRUnitManager rUnit, double distance) {
         currentAcceleration = aimForSpeed(0, distance-depthInCurrentRUnit);
-        System.out.println("StrategyStopSignAhead");
+       // System.out.println("StrategyStopSignAhead");
     }
 
     private void StrategySpeedLimitSignAhead(IRUnitManager rUnit) {
 
     }
 
-    private void StrategyTrafficLightAhead(IRUnitManager rUnit, double distance) {
+    private void StrategyTrafficLightAhead(TrafficLight trafficLight, double distance, double safeDistance) {
         System.out.println("StrategyTrafficLightAhead");
-        if(!rUnit.getTrafficLight().isGreen())
-            currentAcceleration = aimForSpeed(0, distance-depthInCurrentRUnit);
+        if(distance<safeDistance) {
+            if (!trafficLight.isGreen()) {System.out.println("TrafficLight - Slow");
+                currentAcceleration = aimForSpeed(0, distance - depthInCurrentRUnit);
+            }
+        }
+    }
+
+    private void StrategyZebraCrossingAhead(ZebraCrossing zebraCrossing, double distance, double safeDistance) {
+        System.out.println("StrategyZebraCrossingAhead");
+        if(distance<safeDistance) {
+            if (!zebraCrossing.getTrafficLight().isGreen())
+                currentAcceleration = aimForSpeed(0, distance - depthInCurrentRUnit);
+        }
     }
 
     private void StrategyDecisionPointAhead(IRUnitManager rUnit) {
@@ -172,7 +184,7 @@ public class VehicleMotor {
     }
 
     private void StrategyEndOfRoadAhead(double distance) {
-        System.out.println("StrategyEndOfRoadAhead");
+        //System.out.println("StrategyEndOfRoadAhead");
         currentAcceleration = aimForSpeed(0,distance-depthInCurrentRUnit);
     }
 

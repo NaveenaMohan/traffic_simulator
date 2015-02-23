@@ -38,6 +38,9 @@ public class RoadNetworkManager implements IRoadNetworkManager {
 
     @Override
     public boolean addTrafficLight(RUnit rUnit, TrafficLight trafficLight) {
+        //add the light to the road network
+        System.out.println("---------------------------------sdgsdgsdgsdg");
+        roadNetwork.getTrafficLightHashtable().put(trafficLight.getTrafficLightID() + "", trafficLight);
         if (roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())) != null) {
             roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).addTrafficLight(trafficLight);
             return true;

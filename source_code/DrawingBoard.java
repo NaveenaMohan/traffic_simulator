@@ -45,7 +45,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
     public void initialize() {
         rUnitImage = getToolkit().getImage(DrawingBoard.class.getResource("road.jpg"));
         trafficLightImage = getToolkit().getImage(DrawingBoard.class.getResource("lightMini.png"));
-        carImage = getToolkit().getImage(DrawingBoard.class.getResource("car.png"));
+        carImage = getToolkit().getImage(DrawingBoard.class.getResource("car2.png"));
         zebraCrossingImage = getToolkit().getImage(DrawingBoard.class.getResource("zebraCrossingMini.png"));
         blockageImage = getToolkit().getImage(DrawingBoard.class.getResource("blockMini.png"));
         MediaTracker mt = new MediaTracker(this);
