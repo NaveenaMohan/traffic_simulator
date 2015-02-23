@@ -1,4 +1,4 @@
-package managers.space;
+package managers.vehicle;
 
 /**
  * Created by naveena on 08/02/15.
