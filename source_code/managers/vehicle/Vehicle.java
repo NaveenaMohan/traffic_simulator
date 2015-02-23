@@ -22,6 +22,7 @@ public class Vehicle implements IVehicleManager {
     private Driver driver;
     private VehicleType vehicleType;
     private String destination;
+    private boolean arrivedToDestination;
     private ObjectInSpace objectInSpace;
     private double timeCreated;
     private VehicleMotor vehicleMotor;
