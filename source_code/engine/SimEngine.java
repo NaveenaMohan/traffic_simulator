@@ -21,7 +21,7 @@ public class SimEngine {
     private DataAndStructures dataAndStructures;
     private Long previousSecond=0L;//use this to make a move every second
 
-    private int maxCars = 1;
+    private int maxCars = 20;
 
     private int maxSeconds = 220;
 
@@ -50,7 +50,9 @@ public class SimEngine {
             if (newVehicle != null) {
 
                 dataAndStructures.getVehicles().add(newVehicle);
-                System.out.println("vehicle Created " + dataAndStructures.getVehicles().size());
+                System.out.println("vehicle Created " + dataAndStructures.getVehicles().size() +
+                " type: " + newVehicle.getVehicle().getVehicleType() + " driver: " + newVehicle.getVehicle().getDriver().getDriverBehaviorType()
+                + " destination: " + newVehicle.getVehicle().getDestination());
             }
         }
 

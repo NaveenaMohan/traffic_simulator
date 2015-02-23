@@ -87,7 +87,7 @@ public class VehicleMotor {
                         & rUnit.getNextRUnitList().get(0).getBlockage()==null) {
                     rUnit = rUnit.getNextRUnitList().get(0);
                 } else {
-                    System.out.println("Collision");
+                    //System.out.println("Collision");
                     //if you encounter an obstacle then at least you reach the end of the current RUnit
                     depthInCurrentRUnit = dataAndStructures.getGlobalConfigManager().getMetresPerRUnit();
                     //you hit it so your velocity is now 0
@@ -100,7 +100,7 @@ public class VehicleMotor {
 
         }
 
-        System.out.println("rUnit: " + rUnit.getId() + " v: " + currentVelocity + " a: " + currentAcceleration + " d: " + depthInCurrentRUnit);
+        //System.out.println("rUnit: " + rUnit.getId() + " v: " + currentVelocity + " a: " + currentAcceleration + " d: " + depthInCurrentRUnit);
 
         return rUnit;
     }
@@ -154,6 +154,7 @@ public class VehicleMotor {
 
 
     private void StrategyStopSignAhead(IRUnitManager rUnit, double distance) {
+        //System.out.println("StrategyStopSignAhead");
         currentAcceleration = aimForSpeed(0, distance-depthInCurrentRUnit);
        // System.out.println("StrategyStopSignAhead");
     }
@@ -163,7 +164,7 @@ public class VehicleMotor {
     }
 
     private void StrategyTrafficLightAhead(TrafficLight trafficLight, double distance, double safeDistance) {
-        System.out.println("StrategyTrafficLightAhead");
+        //System.out.println("StrategyTrafficLightAhead");
         if(distance<safeDistance) {
             if (!trafficLight.isGreen()) {System.out.println("TrafficLight - Slow");
                 currentAcceleration = aimForSpeed(0, distance - depthInCurrentRUnit);
@@ -172,7 +173,7 @@ public class VehicleMotor {
     }
 
     private void StrategyZebraCrossingAhead(ZebraCrossing zebraCrossing, double distance, double safeDistance) {
-        System.out.println("StrategyZebraCrossingAhead");
+        //System.out.println("StrategyZebraCrossingAhead");
         if(distance<safeDistance) {
             if (!zebraCrossing.getTrafficLight().isGreen())
                 currentAcceleration = aimForSpeed(0, distance - depthInCurrentRUnit);
@@ -196,11 +197,22 @@ public class VehicleMotor {
         //finalVelocity^2=initialVelocity^2 + 2*acceleration*distance
         //Hence acceleration=(finalVelocity^2-initialVelocity^2)/2*distance
 
-        double acceleration = ((requiredVelocity*requiredVelocity) - (currentVelocity*currentVelocity)) / (2 * distance);
+        double acceleration ;
 
-        System.out.println("----- r:"+requiredVelocity + " d: " + distance + " a: " +acceleration);
 
-        return Math.max(Math.min(acceleration, maxAcceleration), maxDeceleration);
+        //if the object is very close drop down your acceleration to -100 in order to come to a full stop
+        if(requiredVelocity < currentVelocity & distance < 10)
+            acceleration= -100;
+        else
+            acceleration = Math.max(Math.min(
+                    ((requiredVelocity*requiredVelocity) - (currentVelocity*currentVelocity)) / (2 * distance),
+                    maxAcceleration), maxDeceleration);
+//
+//        if(distance != 1 )
+//        System.out.println("----- r:"+requiredVelocity + " d: " + distance + " a: " +acceleration);
+
+
+        return acceleration;
     }
 
 

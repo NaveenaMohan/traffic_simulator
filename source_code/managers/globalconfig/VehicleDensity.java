@@ -5,10 +5,10 @@ package managers.globalconfig;
  */
 public class VehicleDensity {
 
-    private double carDensity;
-    private double heavyVehicleDensity;
-    private double emergencyVehicleDensity;
-    private int vehicleTotalCount;
+    private double carDensity=0.5;
+    private double heavyVehicleDensity=0.5;
+    private double emergencyVehicleDensity=0;
+    private int totalVehicles=50;
 
     public double getCarDensity() {
         return carDensity;
@@ -43,11 +43,11 @@ public class VehicleDensity {
         }else throw new IllegalArgumentException("Density of cars+heavies+emergencies not matching total of vehicles");
     }
 
-    public int getVehicleTotalCount() {
-        return vehicleTotalCount;
+    public int getTotalVehicles() {
+        return totalVehicles;
     }
 
-    public void setVehicleTotalCount(int vehicleTotalCount) {
-        this.vehicleTotalCount = vehicleTotalCount;
+    public void setTotalVehicles(int totalVehicles) {
+        this.totalVehicles = totalVehicles;
     }
 }

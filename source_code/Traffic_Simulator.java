@@ -1,7 +1,6 @@
 import dataAndStructures.DataAndStructures;
 import engine.SimEngine;
-import managers.globalconfig.ClimaticCondition;
-import managers.globalconfig.GlobalConfigManager;
+import managers.globalconfig.*;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
 import managers.vehiclefactory.VehicleFactoryManager;
@@ -21,11 +20,13 @@ public class Traffic_Simulator {
     private JFrame trafficSimulatorFrame;
     private RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
     private VehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
-    private ClimaticCondition climaticCondition=new ClimaticCondition(); //adds default conditions
     private GlobalConfigManager globalConfigManager = new GlobalConfigManager(
             100,//ticks per second
             5,//metres per RUnit
-            climaticCondition
+            new ClimaticCondition(),
+            new DriverBehavior(),
+            new VehicleDensity(),
+            new Route()
     );
     final DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
 

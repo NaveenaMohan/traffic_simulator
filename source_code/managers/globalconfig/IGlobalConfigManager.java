@@ -15,6 +15,12 @@ public interface IGlobalConfigManager {
 
     public ClimaticCondition getClimaticCondition();
 
+    public DriverBehavior getDriverBehaviour();
+
+    public VehicleDensity getVehicleDensity();
+
+    public Route getRoute();
+
     void addOrUpdateDriverBehavior(Map<DriverBehaviorType, Double> driverBehaviorTypeMap);
 
     void addOrUpdateDestinationDensity(String destination, double density);
