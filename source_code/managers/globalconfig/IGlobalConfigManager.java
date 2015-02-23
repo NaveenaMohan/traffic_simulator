@@ -1,6 +1,6 @@
 package managers.globalconfig;
 
-import managers.vehicle.VehicleType;
+
 
 import java.util.Map;
 
