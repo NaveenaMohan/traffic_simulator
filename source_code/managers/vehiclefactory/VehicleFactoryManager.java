@@ -1,9 +1,10 @@
 package managers.vehiclefactory;
 
 import dataAndStructures.IDataAndStructures;
+import managers.globalconfig.VehicleType;
 import managers.runit.RUnit;
 import managers.vehicle.Vehicle;
-import managers.vehicle.VehicleType;
+
 
 import java.util.ArrayList;
 import java.util.List;

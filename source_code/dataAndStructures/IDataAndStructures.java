@@ -1,15 +1,12 @@
 package dataAndStructures;
 
-import managers.globalconfig.DriverBehaviorType;
 import managers.globalconfig.IGlobalConfigManager;
 import managers.roadnetwork.IRoadNetworkManager;
 import managers.space.ISpaceManager;
 import managers.vehicle.IVehicleManager;
-import managers.vehicle.VehicleType;
 import managers.vehiclefactory.IVehicleFactoryManager;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by naveena on 08/02/15.

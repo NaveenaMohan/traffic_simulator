@@ -1,18 +1,12 @@
 package managers.vehiclefactory;
 
-import dataAndStructures.IDataAndStructures;
-import managers.globalconfig.ClimaticCondition;
-import managers.globalconfig.Route;
-import managers.globalconfig.VehicleDensity;
+import managers.globalconfig.VehicleType;
 import managers.runit.RUnit;
 import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
-import managers.space.SpaceManager;
 import managers.vehicle.Driver;
 import managers.vehicle.Vehicle;
-import managers.vehicle.VehicleType;
 
-import java.util.List;
 
 /**
  * Created by naveena on 09/02/15.

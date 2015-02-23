@@ -3,6 +3,7 @@ package managers.vehicle;
 import dataAndStructures.IDataAndStructures;
 import managers.globalconfig.ClimaticCondition;
 import managers.globalconfig.IGlobalConfigManager;
+import managers.globalconfig.VehicleType;
 import managers.runit.IRUnitManager;
 import managers.runit.RUnit;
 import managers.space.ISpaceManager;
