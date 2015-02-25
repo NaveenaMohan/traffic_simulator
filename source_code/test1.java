@@ -21,17 +21,17 @@ public class test1 {
         RoadNetworkManager roadNetworkManager = new RoadNetworkManager(roadNetwork);
         VehicleFactoryManager vehicleFactoryManager=new VehicleFactoryManager();
         ClimaticCondition climaticCondition=new ClimaticCondition();
-        GlobalConfigManager globalConfigManager= new GlobalConfigManager(100, 5, climaticCondition);
+        //GlobalConfigManager globalConfigManager= new GlobalConfigManager(100, 5, climaticCondition);
 
         vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRUnitByID("0"));
         roadNetworkManager.addTrafficLight(roadNetworkManager.getRUnitByID("5"), trafficLight);//TODO to be done by UI
         roadNetwork.printTrafficLights();
 
-        DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
+        //DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
 
 
 
-        SimEngine engine = new SimEngine(dataAndStructures);
-        engine.Play(new DrawingBoard(new DefaultTableModel(), roadNetworkManager, engine));
+        //SimEngine engine = new SimEngine(dataAndStructures);
+        //engine.Play(new DrawingBoard(new DefaultTableModel(), roadNetworkManager, engine));
     }
 }

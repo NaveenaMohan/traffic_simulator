@@ -340,51 +340,28 @@ public class  Traffic_Simulator {
         slippery_slider.setMajorTickSpacing(30);
         trafficPatternPanel.add(slippery_slider);
 
-        JSlider trafficDensitySlider1 = new JSlider();
-        trafficDensitySlider1.setBounds(6, 99, 85, 26);
-        trafficDensitySlider1.setMajorTickSpacing(30);
-        trafficDensitySlider1.setPaintTicks(true);
-        trafficPatternPanel.add(trafficDensitySlider1);
-
-        JSlider driverBehaviorSlider1 = new JSlider();
-        driverBehaviorSlider1.setBounds(6, 189, 85, 26);
-        driverBehaviorSlider1.setPaintTicks(true);
-        driverBehaviorSlider1.setMajorTickSpacing(30);
-        trafficPatternPanel.add(driverBehaviorSlider1);
-
-        RangeSlider rangeSlider = new RangeSlider();
-        //JSlider trafficDensitySlider2 = new JSlider();
-        // trafficDensitySlider2.setPaintTicks(true);
-        //trafficDensitySlider2.setMajorTickSpacing(30);
-        //trafficDensitySlider2.setBounds(65, 99, 85, 26);
-        //trafficPatternPanel.add(trafficDensitySlider2);
-        rangeSlider.setPaintTicks(true);
-        rangeSlider.setMajorTickSpacing(5);
-        rangeSlider.setPreferredSize(new Dimension(240, rangeSlider.getPreferredSize().height));
-        rangeSlider.setBounds(6, 99, 160, 26);
-        rangeSlider.setMinimum(0);
-        rangeSlider.setMaximum(10);
-        rangeSlider.setValue(3);
-        rangeSlider.setUpperValue(7);
-        trafficPatternPanel.add(rangeSlider);
+        RangeSlider trafficDensityRangeSlider = new RangeSlider();
+        trafficDensityRangeSlider.setPaintTicks(true);
+        trafficDensityRangeSlider.setMajorTickSpacing(5);
+        trafficDensityRangeSlider.setPreferredSize(new Dimension(240, trafficDensityRangeSlider.getPreferredSize().height));
+        trafficDensityRangeSlider.setBounds(6, 99, 160, 26);
+        trafficDensityRangeSlider.setMinimum(0);
+        trafficDensityRangeSlider.setMaximum(100);
+        trafficDensityRangeSlider.setValue(3);
+        trafficDensityRangeSlider.setUpperValue(7);
+        trafficPatternPanel.add(trafficDensityRangeSlider);
 
 
-        RangeSlider rangeSlider2 = new RangeSlider();
-        rangeSlider2.setPaintTicks(true);
-        rangeSlider2.setMajorTickSpacing(5);
-        rangeSlider2.setPreferredSize(new Dimension(240, rangeSlider.getPreferredSize().height));
-        rangeSlider2.setBounds(6, 189, 160, 26);
-        rangeSlider2.setMinimum(0);
-        rangeSlider2.setMaximum(10);
-        rangeSlider2.setValue(3);
-        rangeSlider2.setUpperValue(7);
-        trafficPatternPanel.add(rangeSlider2);
-        //JSlider driverBehaviorSlider2 = new JSlider();
-        //driverBehaviorSlider2.setPaintTicks(true);
-        //driverBehaviorSlider2.setMajorTickSpacing(30);
-        //driverBehaviorSlider2.setBounds(65, 189, 85, 26);
-        //trafficPatternPanel.add(driverBehaviorSlider2);
-
+        RangeSlider driverBehaviourRangeSlider = new RangeSlider();
+        driverBehaviourRangeSlider.setPaintTicks(true);
+        driverBehaviourRangeSlider.setMajorTickSpacing(5);
+        driverBehaviourRangeSlider.setPreferredSize(new Dimension(240, trafficDensityRangeSlider.getPreferredSize().height));
+        driverBehaviourRangeSlider.setBounds(6, 189, 160, 26);
+        driverBehaviourRangeSlider.setMinimum(0);
+        driverBehaviourRangeSlider.setMaximum(100);
+        driverBehaviourRangeSlider.setValue(3);
+        driverBehaviourRangeSlider.setUpperValue(7);
+        trafficPatternPanel.add(driverBehaviourRangeSlider);
 
         JLabel lbl_slippery = new JLabel("Slipperniess");
         lbl_slippery.setBounds(266, 52, 85, 18);
