@@ -5,14 +5,14 @@ import java.awt.event.ActionListener;
 
 
 public class LocationDialog extends JDialog {
-	private JTextField textField;
 
-	public LocationDialog() {
+    private String destination;
 
-        initUI();
+    public String getDestination() {
+        return destination;
     }
-	
-	public final void initUI() {
+
+    public final void initUI() {
 
         ImageIcon icon = new ImageIcon(Traffic_Simulator.class.getResource("Location.png"));
         getContentPane().setLayout(null);
@@ -26,8 +26,8 @@ public class LocationDialog extends JDialog {
         name.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 13));
         name.setAlignmentX(0.5f);
         getContentPane().add(name);
-        
-        textField = new JTextField();
+
+        final JTextField textField = new JTextField();
         textField.setBounds(39, 153, 222, 29);
         getContentPane().add(textField);
         textField.setColumns(10);
@@ -37,6 +37,8 @@ public class LocationDialog extends JDialog {
         close.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent event) {
+                destination = textField.getText();
+                setVisible(false);
                 dispose();
             }
         });

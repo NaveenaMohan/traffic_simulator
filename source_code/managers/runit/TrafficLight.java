@@ -8,10 +8,11 @@ import java.util.List;
  */
 public class TrafficLight {
 
-    private ArrayList<Boolean> cycle=new ArrayList<Boolean>();
-    private int trafficLightID;
+    private List<Boolean> cycle = new ArrayList<Boolean>();
+    private String trafficLightID; // Should be string as its prefixed with TL or ZTL
     private boolean trafficLightCurrentColor=false;
     private boolean isGreen=false;
+    private TrafficLightSynchronisation trafficLightSynchronisation;
 
     public boolean getTrafficLightCurrentColor() {
         return trafficLightCurrentColor;
@@ -24,24 +25,21 @@ public class TrafficLight {
         else setGreen(false);
     }
 
-    public ArrayList<Boolean> getCycle() {
+    public List<Boolean> getCycle() {
         return cycle;
     }
 
-    public void setCycle(ArrayList<Boolean> cycle) {
+    public void setCycle(List<Boolean> cycle) {
         this.cycle = cycle;
     }
 
-    public int getTrafficLightID() {
+    public String getTrafficLightID() {
         return trafficLightID;
     }
 
-    public void setTrafficLightID(int trafficLightID) {
+    public void setTrafficLightID(String trafficLightID) {
         this.trafficLightID = trafficLightID;
     }
-
-
-    private TrafficLightSynchronisation trafficLightSynchronisation;
 
     public TrafficLightSynchronisation getTrafficLightSynchronisation() {
         return trafficLightSynchronisation;

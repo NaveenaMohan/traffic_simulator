@@ -1,6 +1,6 @@
 package managers.globalconfig;
 
-import managers.vehicle.VehicleType;
+
 
 import java.util.Map;
 
@@ -11,7 +11,15 @@ public interface IGlobalConfigManager {
 
     void addOrUpdateVehicleDensity(Map<VehicleType, Double> vehicleDensityMap, int VehicleCount);
 
-    void addOrUpdateWeather(double visibility, double slipperiness);
+    void addOrUpdateWeather(ClimaticCondition climaticCondition);
+
+    public ClimaticCondition getClimaticCondition();
+
+    public DriverBehavior getDriverBehaviour();
+
+    public VehicleDensity getVehicleDensity();
+
+    public Route getRoute();
 
     void addOrUpdateDriverBehavior(Map<DriverBehaviorType, Double> driverBehaviorTypeMap);
 

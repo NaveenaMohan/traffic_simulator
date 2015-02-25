@@ -15,17 +15,21 @@ public class VehiclePerception {
         IRUnitManager temp = rUnit;
         for (int i = 0; i < maxVision; i++) {
             double distance = Math.max(0,i * dataAndStructures.getGlobalConfigManager().getMetresPerRUnit());
+
             //check for blockages
             if (temp.getBlockage() != null)
                 vehicleState.RegisterObject(new VehicleMemoryObject(temp, temp.getBlockage(), distance));
 
+            //TODO SOMETHING IS WRONG WITH ZEBRA CROSSING
             //check for zebra crossings
-            if (temp.getZebraCrossing() != null)
-                vehicleState.RegisterObject(new VehicleMemoryObject(temp, temp.getZebraCrossing(), distance));
+//            if (temp.getZebraCrossing() != null)
+//                vehicleState.RegisterObject(new VehicleMemoryObject(temp, temp.getZebraCrossing(), distance));
 
             //check for traffic lights
-            if (temp.getTrafficLight() != null)
+            if (temp.getTrafficLight() != null) {
+
                 vehicleState.RegisterObject(new VehicleMemoryObject(temp, temp.getTrafficLight(), distance));
+            }
 
             //check for traffic signs
             if (temp.getTrafficSign() != null)
@@ -43,8 +47,8 @@ public class VehiclePerception {
                     }
 
             //check for end of road
-            if (temp.getNextRUnitList().size() < 0)
-                vehicleState.RegisterObject(new VehicleMemoryObject(temp, new EndOfRoad(), i));
+            if (temp.getNextRUnitList().size() <= 0)
+                vehicleState.RegisterObject(new VehicleMemoryObject(temp, new EndOfRoad(), distance));
 
             //check if the changeable RUnit is clear
             vehicleState.setChangeableClear(false);

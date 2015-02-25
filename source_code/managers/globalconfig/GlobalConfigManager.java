@@ -1,6 +1,6 @@
 package managers.globalconfig;
 
-import managers.vehicle.VehicleType;
+
 
 import java.util.Map;
 
@@ -11,10 +11,39 @@ public class GlobalConfigManager implements IGlobalConfigManager {
 
     private TickTime tickTime;
     private DistancesScale distancesScale;
+    private ClimaticCondition climaticCondition;
+    private DriverBehavior driverBehavior;
+    private VehicleDensity vehicleDensity;
+    private Route route;
 
-    public GlobalConfigManager(int tickRatio, int metresPerRUnit) {
-        tickTime=new TickTime(tickRatio);
-        distancesScale = new DistancesScale(metresPerRUnit);
+    public GlobalConfigManager(int tickRatio, int metresPerRUnit, ClimaticCondition climaticCondition, DriverBehavior driverBehavior
+    ,VehicleDensity vehicleDensity, Route route) {
+        this.tickTime=new TickTime(tickRatio);
+        this.distancesScale = new DistancesScale(metresPerRUnit);
+        this.climaticCondition=climaticCondition;
+        this.driverBehavior=driverBehavior;
+        this.vehicleDensity=vehicleDensity;
+        this.route= route;
+    }
+
+    @Override
+    public ClimaticCondition getClimaticCondition() {
+        return climaticCondition;
+    }
+
+    @Override
+    public DriverBehavior getDriverBehaviour() {
+        return driverBehavior;
+    }
+
+    @Override
+    public VehicleDensity getVehicleDensity() {
+        return vehicleDensity;
+    }
+
+    @Override
+    public Route getRoute() {
+        return route;
     }
 
     @Override
@@ -23,8 +52,8 @@ public class GlobalConfigManager implements IGlobalConfigManager {
     }
 
     @Override
-    public void addOrUpdateWeather(double visibility, double slipperiness) {
-
+    public void addOrUpdateWeather(ClimaticCondition climaticCondition) {
+        this.climaticCondition = climaticCondition;
     }
 
     @Override
