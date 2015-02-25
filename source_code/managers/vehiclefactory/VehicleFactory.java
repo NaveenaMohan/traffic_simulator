@@ -37,7 +37,7 @@ public class VehicleFactory{
         switch(vehicleType)
         {
             case car:
-                objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 20,20,20,null);
+                objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,3,2,null);
                 break;
             case emergency:
                 objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,2,2,null);
@@ -46,7 +46,7 @@ public class VehicleFactory{
                 objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 4,4,4,null);
                 break;
             default:
-                objectInSpace = new ObjectInSpace(vehID, rUnit.getX(), rUnit.getY(), rUnit.getZ(), 20,20,20,null);
+                objectInSpace = new ObjectInSpace(vehID, rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,3,2,null);
         }
 
         //only add the new vehicle if it fits in the space outside the factory
@@ -60,7 +60,7 @@ public class VehicleFactory{
                     destination,
                     objectInSpace,
                     2.7,//maximum acceleration in metres per second.
-                    -10,//max deceleration
+                    -50,//max deceleration
                     time
             );
             return vehicle;

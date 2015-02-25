@@ -5,8 +5,8 @@ package managers.globalconfig;
  */
 public class Route {
 
-    private String destination;
-    private double trafficPercent;
+    private String destination="";
+    private double trafficPercent=0;
 
     public Route() {
     }

@@ -25,9 +25,6 @@ public class test1 {
         roadNetworkManager.addTrafficLight(roadNetworkManager.getRUnitByID("5"), trafficLight);//TODO to be done by UI
         roadNetwork.printTrafficLights();
 
-
-
-
         DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
 
 

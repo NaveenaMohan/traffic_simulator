@@ -1,16 +1,24 @@
 package managers.vehicle;
 
 import managers.globalconfig.DriverBehavior;
+import managers.globalconfig.DriverBehaviorType;
 
 /**
  * Created by naveena on 09/02/15.
  */
 public class Driver {
 
-    private double speedOffset;
-    private double visibilityOffset;
-    private double reactionTimeOffset;
-    private DriverBehavior driverBehavior;
+    private double speedOffset=1;
+    private double visibilityOffset=1;
+    private double reactionTimeOffset=1;
+    private DriverBehaviorType driverBehaviorType= DriverBehaviorType.normal;
+
+    public Driver(double speedOffset, double visibilityOffset, double reactionTimeOffset, DriverBehaviorType driverBehaviorType) {
+        this.speedOffset = speedOffset;
+        this.visibilityOffset = visibilityOffset;
+        this.reactionTimeOffset = reactionTimeOffset;
+        this.driverBehaviorType = driverBehaviorType;
+    }
 
     public double getSpeedOffset() {
         return speedOffset;
@@ -36,11 +44,11 @@ public class Driver {
         this.reactionTimeOffset = reactionTimeOffset;
     }
 
-    public DriverBehavior getDriverBehavior() {
-        return driverBehavior;
+    public DriverBehaviorType getDriverBehaviorType() {
+        return driverBehaviorType;
     }
 
-    public void setDriverBehavior(DriverBehavior driverBehavior) {
-        this.driverBehavior = driverBehavior;
+    public void setDriverBehaviorType(DriverBehaviorType driverBehaviorType) {
+        this.driverBehaviorType = driverBehaviorType;
     }
 }

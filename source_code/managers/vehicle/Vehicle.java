@@ -84,7 +84,7 @@ public class Vehicle implements IVehicleManager {
         VehiclePerception.See(
                 vehID,
                 rUnit,//your position
-                20, //rUnits of vision
+                50, //rUnits of vision
                 vehicleState,
                 spaceManager,
                 dataAndStructures,

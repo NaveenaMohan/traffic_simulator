@@ -2,6 +2,7 @@ package engine;
 
 import dataAndStructures.DataAndStructures;
 import managers.runit.RUnit;
+import managers.runit.TrafficSign;
 import managers.space.ObjectInSpace;
 import managers.vehicle.IVehicleManager;
 import managers.runit.TrafficLight;
@@ -21,7 +22,7 @@ public class SimEngine {
     private DataAndStructures dataAndStructures;
     private Long previousSecond=0L;//use this to make a move every second
     private DCP dcp;
-    private int maxCars = 1;
+    private int maxCars = 20;
 
     private int maxSeconds = 220;
 
@@ -63,7 +64,6 @@ public class SimEngine {
                     dataAndStructures);//global config
                     dcp.getVehiclesAvgSpeed(vehicle.getVehicle()); //REPORTING VELOCITY
         }
-
 
         //change traffic lights
         dataAndStructures.getRoadNetworkManager().changeLight(dataAndStructures.getGlobalConfigManager().getCurrentSecond());
