@@ -5,6 +5,7 @@ import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
 import managers.vehiclefactory.VehicleFactoryManager;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -13,9 +14,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 
-public class Traffic_Simulator {
+public class  Traffic_Simulator {
 
     private JFrame trafficSimulatorFrame;
     private RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
@@ -32,6 +36,7 @@ public class Traffic_Simulator {
 
 
     private SimEngine simEngine = new SimEngine(dataAndStructures);
+    private DefaultTableModel model;
 
     /**
      * Create the application.
@@ -136,14 +141,6 @@ public class Traffic_Simulator {
         roadInfraStructurePanel.add(stop_sign);
 
         JButton left_sign = new JButton();
-        left_sign.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                LocationDialog db = new LocationDialog();
-                db.setVisible(true);
-
-
-            }
-        });
         left_sign.setToolTipText("Add a Go Left Sign");
         left_sign.setBounds(72, 192, 70, 70);
         left_sign.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Left.png")));
@@ -151,24 +148,11 @@ public class Traffic_Simulator {
 
 
         JButton up_sign = new JButton();
-        up_sign.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                LocationDialog db = new LocationDialog();
-                db.setVisible(true);
-            }
-        });
-        up_sign.setToolTipText("Add a Go Straight Sign");
         up_sign.setBounds(141, 192, 70, 70);
         up_sign.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Straight.png")));
         roadInfraStructurePanel.add(up_sign);
 
         JButton right_sign = new JButton();
-        right_sign.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                LocationDialog db = new LocationDialog();
-                db.setVisible(true);
-            }
-        });
         right_sign.setToolTipText("Add a Go Right Sign");
         right_sign.setBounds(208, 192, 70, 70);
         right_sign.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Right.png")));
@@ -227,13 +211,6 @@ public class Traffic_Simulator {
         roadInfraStructurePanel.add(txtrDestinationSignBoard);
 
         JButton welcome_board = new JButton();
-        welcome_board.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                DestinationDialog dd = new DestinationDialog();
-                dd.setVisible(true);
-
-            }
-        });
         welcome_board.setToolTipText("Add Welcome Board");
         welcome_board.setBounds(-9, 360, 287, 70);
         welcome_board.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Welcome Board.png")));
@@ -491,21 +468,10 @@ public class Traffic_Simulator {
         table.setForeground(new Color(0, 0, 0));
         table.setBackground(new Color(248, 248, 255));
         table.setCellSelectionEnabled(true);
-        //TODO Remove Hard coded data
-        Object[][] data = {
-                {"1", false, false, false, false, false, false, false, false, false, false},
-                {"2", false, false, false, false, false, false, false, false, false, false},
-                {"3", false, false, false, false, false, false, false, false, false, false},
-                {"4", false, false, false, false, false, false, false, false, false, false},
-                {"5", false, false, false, false, false, false, false, false, false, false},
-                {"6", false, false, false, false, false, false, false, false, false, false},
-                {"7", false, false, false, false, false, false, false, false, false, false},
-                {"8", false, false, false, false, false, false, false, false, false, false},
-                {"9", false, false, false, false, false, false, false, false, false, false},
-                {"10", false, false, false, false, false, false, false, false, false, false}};
+        Object[][] data = {};
         String[] cols = {"TL ID", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10"};
 
-        final DefaultTableModel model = new DefaultTableModel(data, cols) {
+        model = new DefaultTableModel(data, cols) {
             private static final long serialVersionUID = 1L;
 
             @SuppressWarnings("unchecked")
@@ -531,9 +497,8 @@ public class Traffic_Simulator {
         scrollPane.setViewportView(table);
         trafficLightConfigPanel.add(scrollPane);
 
-
         //Drawing Board Panel
-        final DrawingBoard drawingBoard = new DrawingBoard(roadNetworkManager, simEngine);
+        final DrawingBoard drawingBoard = new DrawingBoard(model, roadNetworkManager, simEngine);
         trafficSimulatorFrame.getContentPane().add(drawingBoard);
         drawingBoard.initialize();//Initializing the drawing board
 
@@ -574,14 +539,126 @@ public class Traffic_Simulator {
             }
         });
 
+        stop_sign.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.addStopButtonActionListener();
+            }
+        });
+
+        left_sign.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.addLeftButtonActionListener();
+            }
+        });
+
+        right_sign.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.addRightButtonActionListener();
+            }
+        });
+
+        up_sign.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.addStraightButtonActionListener();
+            }
+        });
+
+        speed_20.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.addSpeed20ButtonActionListener();
+            }
+        });
+
+
+        speed_30.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.addSpeed30ButtonActionListener();
+            }
+        });
+
+
+        speed_50.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.addSpeed50ButtonActionListener();
+            }
+        });
+
+        speed_60.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.addSpeed60ButtonActionListener();
+            }
+        });
+
+
+        speed_70.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.addSpeed70ButtonActionListener();
+            }
+        });
+
+        welcome_board.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.addWelcomeDestinationButtonActionListener();
+            }
+        });
+
+        speed_90.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.addSpeed90ButtonActionListener();
+            }
+        });
+
         //Start simulation
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setSimulationPlaying(true);
                 simEngine.Play(drawingBoard);
             }
         });
 
+        //Upload road map image
+
+        uploadImageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                File file;
+                BufferedImage image;
+                JFileChooser fileChooser = new JFileChooser();
+                int returnValue = fileChooser.showOpenDialog(null);
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        file = fileChooser.getSelectedFile();
+                        image = ImageIO.read(file);
+                        ImageIcon icon = new ImageIcon(image);
+                        JLabel picLabel = new JLabel(icon);
+                        drawingBoard.add(picLabel);
+                        drawingBoard.revalidate();
+                        drawingBoard.repaint();
+
+                        int w = image.getWidth(null);
+                        int h = image.getHeight(null);
+                        BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+                        Graphics g = bi.getGraphics();
+                        g.drawImage(image, 0, 0, null);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+
+                    }
+                }
+            }
+        });
 
     }
 
