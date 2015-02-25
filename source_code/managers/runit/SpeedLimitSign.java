@@ -7,6 +7,10 @@ public class SpeedLimitSign extends TrafficSign {
 
     private int speedLimit;
 
+    public SpeedLimitSign(int speedLimit) {
+        this.speedLimit = speedLimit;
+    }
+
     public int getSpeedLimit() {
         return speedLimit;
     }

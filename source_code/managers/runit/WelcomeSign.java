@@ -7,6 +7,10 @@ public class WelcomeSign extends TrafficSign {
 
     private String location;
 
+    public WelcomeSign(String location) {
+        this.location = location;
+    }
+
     public String getLocation() {
         return location;
     }

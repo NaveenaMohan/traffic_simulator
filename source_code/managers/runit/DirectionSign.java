@@ -8,6 +8,11 @@ public class DirectionSign extends TrafficSign {
     private String location;
     private DirectionSignType directionSignType;
 
+    public DirectionSign(String location, DirectionSignType directionSignType) {
+        this.location = location;
+        this.directionSignType = directionSignType;
+    }
+
     public DirectionSignType getDirectionSignType() {
         return directionSignType;
     }
