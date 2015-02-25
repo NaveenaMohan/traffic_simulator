@@ -21,7 +21,7 @@ public class SimEngine {
     private Timer timer;
     private DataAndStructures dataAndStructures;
     private Long previousSecond=0L;//use this to make a move every second
-    private DCP dcp;
+
     private int maxCars = 20;
 
     private int maxSeconds = 220;
@@ -52,7 +52,7 @@ public class SimEngine {
 
                 dataAndStructures.getVehicles().add(newVehicle);
                 System.out.println("vehicle Created " + dataAndStructures.getVehicles().size());
-                dcp=new DCP(dataAndStructures.getVehicles().get(0).getVehicle());
+               // dcp=new DCP(dataAndStructures.getVehicles().get(0).getVehicle());
 
             }
         }
@@ -62,11 +62,19 @@ public class SimEngine {
             vehicle.move(dataAndStructures.getSpaceManager(),
                     dataAndStructures.getGlobalConfigManager().getCurrentSecond(),//time
                     dataAndStructures);//global config
-                    dcp.getVehiclesAvgSpeed(vehicle.getVehicle()); //REPORTING VELOCITY
+                   // dcp.getVehiclesAvgSpeed(vehicle.getVehicle()); //REPORTING VELOCITY
         }
 
         //change traffic lights
         dataAndStructures.getRoadNetworkManager().changeLight(dataAndStructures.getGlobalConfigManager().getCurrentSecond());
+
+        for(Map.Entry<String, TrafficLight> tl : dataAndStructures.getRoadNetworkManager().getRoadNetwork().getTrafficLightHashtable().entrySet())
+        {
+            if(tl.getValue().isGreen())
+                System.out.println("Green");
+            else
+                System.out.println("Red");
+        }
     }
 
 
