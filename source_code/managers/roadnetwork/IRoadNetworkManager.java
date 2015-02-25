@@ -13,25 +13,25 @@ public interface IRoadNetworkManager {
 
     RUnit addSingleLane(int x, int y, RUnit prevRUnit);
 
-    boolean addDoubleLane(int x, int y, RUnit prevRUnit);
+    RUnit addDoubleLane(int x, int y, RUnit prevRUnit);
 
-    boolean addTrafficLight(RUnit rUnit, TrafficLight trafficLight);
+    void addTrafficLight(RUnit rUnit, TrafficLight trafficLight);
 
-    boolean addZebraCrossing(RUnit rUnit);
+    void addZebraCrossing(RUnit rUnit, TrafficLight trafficLight);
 
-    boolean addBlockage(RUnit rUnit);
+    void addBlockage(RUnit rUnit);
 
-    boolean addSpeedLimit(RUnit rUnit, int speedLimit);
+    void addSpeedLimit(RUnit rUnit, int speedLimit);
 
-    boolean addStopSign(RUnit rUnit);
+    void addStopSign(RUnit rUnit);
 
-    boolean addWelcomeSign(RUnit rUnit, String location);
+    void addWelcomeSign(RUnit rUnit, String location);
 
-    boolean addDirectionSign(RUnit rUnit, String location, DirectionSignType directionSignType);
+    void addDirectionSign(RUnit rUnit, String location, DirectionSignType directionSignType);
 
-    boolean addVehicleFactory(RUnit rUnit);
+    void addVehicleFactory(RUnit rUnit);
 
-    void addTrafficLightBehavior(TrafficLight trafficLight, List<Boolean> trafficLightPattern);
+    void addTrafficLightBehavior(String trafficLightId, List<Boolean> trafficLightPattern);
 
     public void changeLight(double currentSecond);
     

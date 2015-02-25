@@ -32,18 +32,15 @@ public class RoadNetworkManager implements IRoadNetworkManager {
     }
 
     @Override
-    public boolean addDoubleLane(int x, int y, RUnit prevRUnit) {
-        return false;
+    public RUnit addDoubleLane(int x, int y, RUnit prevRUnit) {
+
+        return null;
     }
 
     @Override
-    public boolean addTrafficLight(RUnit rUnit, TrafficLight trafficLight) {
-        if (roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())) != null) {
-            roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).addTrafficLight(trafficLight);
-            return true;
-        } else {
-            return false;
-        }
+    public void addTrafficLight(RUnit rUnit, TrafficLight trafficLight) {
+        roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).addTrafficLight(trafficLight);
+        roadNetwork.getTrafficLightHashtable().put(trafficLight.getTrafficLightID(), trafficLight);
     }
 
 
@@ -80,53 +77,46 @@ public class RoadNetworkManager implements IRoadNetworkManager {
     }
 
     @Override
-    public boolean addZebraCrossing(RUnit rUnit) {
-        if (roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())) != null) {
-            roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).setZebraCrossing(new ZebraCrossing(new TrafficLight()));
-            return true;
-        } else {
-            return false;
+    public void addZebraCrossing(RUnit rUnit, TrafficLight trafficLight) {
+        roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).setZebraCrossing(new ZebraCrossing(trafficLight));
+        roadNetwork.getTrafficLightHashtable().put(trafficLight.getTrafficLightID(), trafficLight);
+    }
+
+    @Override
+    public void addBlockage(RUnit rUnit) {
+        roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).setBlockage(new Blockage());
+    }
+
+    @Override
+    public void addSpeedLimit(RUnit rUnit, int speedLimit) {
+        roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).setTrafficSign(new SpeedLimitSign(speedLimit));
+    }
+
+    @Override
+    public void addStopSign(RUnit rUnit) {
+        roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).setTrafficSign(new StopSign());
+    }
+
+    @Override
+    public void addWelcomeSign(RUnit rUnit, String location) {
+        roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).setTrafficSign(new WelcomeSign(location));
+    }
+
+    @Override
+    public void addDirectionSign(RUnit rUnit, String location, DirectionSignType directionSignType) {
+        roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).setTrafficSign(new DirectionSign(location, directionSignType));
+    }
+
+    @Override
+    public void addVehicleFactory(RUnit rUnit) {
+    }
+
+    @Override
+    public void addTrafficLightBehavior(String trafficLightId, List<Boolean> trafficLightPattern) {
+        TrafficLight trafficLight = roadNetwork.getTrafficLightHashtable().get(trafficLightId);
+        if (trafficLight != null) {
+            trafficLight.setCycle(trafficLightPattern);
         }
-    }
-
-    @Override
-    public boolean addBlockage(RUnit rUnit) {
-        if (roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())) != null) {
-            roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).setBlockage(new Blockage());
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean addSpeedLimit(RUnit rUnit, int speedLimit) {
-        return false;
-    }
-
-    @Override
-    public boolean addStopSign(RUnit rUnit) {
-        return false;
-    }
-
-    @Override
-    public boolean addWelcomeSign(RUnit rUnit, String location) {
-        return false;
-    }
-
-    @Override
-    public boolean addDirectionSign(RUnit rUnit, String location, DirectionSignType directionSignType) {
-        return false;
-    }
-
-    @Override
-    public boolean addVehicleFactory(RUnit rUnit) {
-        return false;
-    }
-
-    @Override
-    public void addTrafficLightBehavior(TrafficLight trafficLight, List<Boolean> trafficLightPattern) {
-
     }
 
     @Override
