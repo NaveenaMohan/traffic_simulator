@@ -1,6 +1,6 @@
 import dataAndStructures.DataAndStructures;
 import engine.SimEngine;
-import managers.globalconfig.GlobalConfigManager;
+import managers.globalconfig.*;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
 import managers.vehiclefactory.VehicleFactoryManager;
@@ -26,9 +26,15 @@ public class  Traffic_Simulator {
     private VehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
     private GlobalConfigManager globalConfigManager = new GlobalConfigManager(
             100,//ticks per second
-            5//metres per RUnit
+            5,//metres per RUnit
+            new ClimaticCondition(),
+            new DriverBehavior(),
+            new VehicleDensity(),
+            new Route()
     );
     final DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
+
+
     private SimEngine simEngine = new SimEngine(dataAndStructures);
     private DefaultTableModel model;
 

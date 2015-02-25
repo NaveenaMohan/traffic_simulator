@@ -21,4 +21,6 @@ public interface IVehicleManager {
 
     int getVehID();
 
+    double getCurrentAcceleration();
+
 }

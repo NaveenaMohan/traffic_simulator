@@ -1,71 +1,141 @@
 package managers.globalconfig;
 
+import common.Common;
+import managers.vehicle.Driver;
+
 /**
  * Created by naveena on 09/02/15.
  */
 public class DriverBehavior {
 
-    private DriverBehaviorType driverBehaviorType;
-    private double minSpeedOffset;
-    private double maxSpeedOffset;
-    private double minReactionTimeOffset;
-    private double maxReactionTimeOffset;
-    private double minVisibilityOffset;
-    private double maxVisibilityOffset;
+    private double percentageReckless;
+    private double percentageNormal;
+    private double percentageCautious;
 
-    public DriverBehaviorType getDriverBehaviorType() {
-        return driverBehaviorType;
+    private double recklessMinSpeedOffset;
+    private double recklessMaxSpeedOffset;
+    private double recklessMinReactionTimeOffset;
+    private double recklessMaxReactionTimeOffset;
+    private double recklessMinVisibilityOffset;
+    private double recklessMaxVisibilityOffset;
+
+    private double normalMinSpeedOffset;
+    private double normalMaxSpeedOffset;
+    private double normalMinReactionTimeOffset;
+    private double normalMaxReactionTimeOffset;
+    private double normalMinVisibilityOffset;
+    private double normalMaxVisibilityOffset;
+
+    private double cautiousMinSpeedOffset;
+    private double cautiousMaxSpeedOffset;
+    private double cautiousMinReactionTimeOffset;
+    private double cautiousMaxReactionTimeOffset;
+    private double cautiousMinVisibilityOffset;
+    private double cautiousMaxVisibilityOffset;
+
+    public DriverBehavior(){
+        //Range taken:
+        //0.3 - 0.7
+        //0.8 - 1.2
+        //1.3 - 1.7
+        this.percentageReckless = 0.33;
+        this.percentageNormal = 0.33;
+        this.percentageCautious = 0.34;
+
+        this.recklessMinSpeedOffset = 1.3;
+        this.recklessMaxSpeedOffset = 1.7;
+        this.recklessMinReactionTimeOffset = 0.3;//reckless decreases RUnits to look ahead when stopping
+        this.recklessMaxReactionTimeOffset = 0.7;
+        this.recklessMinVisibilityOffset = 0.3;
+        this.recklessMaxVisibilityOffset = 0.7;
+
+        this.normalMinSpeedOffset = 0.8;
+        this.normalMaxSpeedOffset = 1.2;
+        this.normalMinReactionTimeOffset = 0.8;
+        this.normalMaxReactionTimeOffset = 1.2;
+        this.normalMinVisibilityOffset = 0.8;
+        this.normalMaxVisibilityOffset = 1.2;
+
+        this.cautiousMinSpeedOffset = 0.3;
+        this.cautiousMaxSpeedOffset = 0.7;
+        this.cautiousMinReactionTimeOffset = 1.3;
+        this.cautiousMaxReactionTimeOffset = 1.7;
+        this.cautiousMinVisibilityOffset = 1.3;
+        this.cautiousMaxVisibilityOffset = 1.7;
     }
 
-    public void setDriverBehaviorType(DriverBehaviorType driverBehaviorType) {
-        this.driverBehaviorType = driverBehaviorType;
+    public void setPercentageReckless(double percentageReckless) {
+        if(percentageCautious+percentageNormal+percentageReckless==1){
+        }else throw new IllegalArgumentException("The sum of driver percentages is not equal to 1");
+        this.percentageReckless = percentageReckless;
     }
 
-    public double getMinSpeedOffset() {
-        return minSpeedOffset;
+    public void setPercentageNormal(double percentageNormal) {
+        if(percentageCautious+percentageNormal+percentageReckless==1){
+        }else throw new IllegalArgumentException("The sum of driver percentages is not equal to 1");
+        this.percentageNormal = percentageNormal;
     }
 
-    public void setMinSpeedOffset(double minSpeedOffset) {
-        this.minSpeedOffset = minSpeedOffset;
+    public void setPercentageCautious(double percentageCautious) {
+        if(percentageCautious+percentageNormal+percentageReckless==1){
+        }else throw new IllegalArgumentException("The sum of driver percentages is not equal to 1");
+        this.percentageCautious = percentageCautious;
     }
 
-    public double getMaxSpeedOffset() {
-        return maxSpeedOffset;
+    public double getPercentageReckless() {
+        return percentageReckless;
     }
 
-    public void setMaxSpeedOffset(double maxSpeedOffset) {
-        this.maxSpeedOffset = maxSpeedOffset;
+    public double getPercentageNormal() {
+        return percentageNormal;
     }
 
-    public double getMinReactionTimeOffset() {
-        return minReactionTimeOffset;
+    public double getPercentageCautious() {
+        return percentageCautious;
     }
 
-    public void setMinReactionTimeOffset(double minReactionTimeOffset) {
-        this.minReactionTimeOffset = minReactionTimeOffset;
+    public double getRandomSpeedOffsetForDriverType(DriverBehaviorType driverBehaviorType)
+    {
+        switch(driverBehaviorType)
+        {
+            case normal:
+                return Common.randDoubleBetween(normalMinSpeedOffset, normalMaxSpeedOffset);
+            case cautious:
+                return Common.randDoubleBetween(cautiousMinSpeedOffset, cautiousMaxSpeedOffset);
+            case reckless:
+                return Common.randDoubleBetween(recklessMinSpeedOffset, recklessMaxSpeedOffset);
+            default:
+                return 1;
+        }
     }
 
-    public double getMaxReactionTimeOffset() {
-        return maxReactionTimeOffset;
+    public double getRandomVisibilityOffsetForDriverType(DriverBehaviorType driverBehaviorType)
+    {
+        switch(driverBehaviorType)
+        {
+            case normal:
+                return Common.randDoubleBetween(normalMinVisibilityOffset, normalMaxVisibilityOffset);
+            case cautious:
+                return Common.randDoubleBetween(cautiousMinVisibilityOffset, cautiousMaxVisibilityOffset);
+            case reckless:
+                return Common.randDoubleBetween(recklessMinVisibilityOffset, recklessMaxVisibilityOffset);
+            default:
+                return 1;
+        }
     }
 
-    public void setMaxReactionTimeOffset(double maxReactionTimeOffset) {
-        this.maxReactionTimeOffset = maxReactionTimeOffset;
-    }
-
-    public double getMinVisibilityOffset() {
-        return minVisibilityOffset;
-    }
-
-    public void setMinVisibilityOffset(double minVisibilityOffset) {
-        this.minVisibilityOffset = minVisibilityOffset;
-    }
-
-    public double getMaxVisibilityOffset() {
-        return maxVisibilityOffset;
-    }
-
-    public void setMaxVisibilityOffset(double maxVisibilityOffset) {
-        this.maxVisibilityOffset = maxVisibilityOffset;
+    public double getRandomReactionTimeOffsetForDriverType(DriverBehaviorType driverBehaviorType)
+    {
+        switch(driverBehaviorType)
+        {
+            case normal:
+                return Common.randDoubleBetween(normalMinReactionTimeOffset, normalMaxReactionTimeOffset);
+            case cautious:
+                return Common.randDoubleBetween(cautiousMinReactionTimeOffset, cautiousMaxReactionTimeOffset);
+            case reckless:
+                return Common.randDoubleBetween(recklessMinReactionTimeOffset, recklessMaxReactionTimeOffset);
+            default:
+                return 1;
+        }
     }
 }

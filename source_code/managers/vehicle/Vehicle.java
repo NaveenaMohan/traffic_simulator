@@ -3,6 +3,7 @@ package managers.vehicle;
 import dataAndStructures.IDataAndStructures;
 import managers.globalconfig.ClimaticCondition;
 import managers.globalconfig.IGlobalConfigManager;
+import managers.globalconfig.VehicleType;
 import managers.runit.IRUnitManager;
 import managers.runit.RUnit;
 import managers.space.ISpaceManager;
@@ -21,6 +22,7 @@ public class Vehicle implements IVehicleManager {
     private Driver driver;
     private VehicleType vehicleType;
     private String destination;
+    private boolean arrivedToDestination;
     private ObjectInSpace objectInSpace;
     private double timeCreated;
     private VehicleMotor vehicleMotor;
@@ -82,7 +84,7 @@ public class Vehicle implements IVehicleManager {
         VehiclePerception.See(
                 vehID,
                 rUnit,//your position
-                20, //rUnits of vision
+                50, //rUnits of vision
                 vehicleState,
                 spaceManager,
                 dataAndStructures,
@@ -129,5 +131,8 @@ public class Vehicle implements IVehicleManager {
         return vehID;
     }
 
-
+    @Override
+    public double getCurrentAcceleration() { //ADDED BY LORENA TO TEST ACCELERATION IN THE REPORTS
+        return vehicleMotor.getCurrentAcceleration();
+    } //ADDED IN ORDER TO REPORT
 }

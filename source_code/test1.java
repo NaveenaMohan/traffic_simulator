@@ -1,10 +1,12 @@
 import dataAndStructures.DataAndStructures;
 import engine.SimEngine;
+import managers.globalconfig.ClimaticCondition;
 import managers.globalconfig.GlobalConfigManager;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
 import managers.runit.TrafficLight;
 import managers.vehiclefactory.VehicleFactoryManager;
+import reports.DCP;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -18,7 +20,8 @@ public class test1 {
         RoadNetwork roadNetwork=new RoadNetwork();
         RoadNetworkManager roadNetworkManager = new RoadNetworkManager(roadNetwork);
         VehicleFactoryManager vehicleFactoryManager=new VehicleFactoryManager();
-        GlobalConfigManager globalConfigManager= new GlobalConfigManager(100, 5);
+        ClimaticCondition climaticCondition=new ClimaticCondition();
+        GlobalConfigManager globalConfigManager= new GlobalConfigManager(100, 5, climaticCondition);
 
         vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRUnitByID("0"));
         roadNetworkManager.addTrafficLight(roadNetworkManager.getRUnitByID("5"), trafficLight);//TODO to be done by UI

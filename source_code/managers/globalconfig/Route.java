@@ -5,8 +5,16 @@ package managers.globalconfig;
  */
 public class Route {
 
-    private String destination;
-    private double trafficPercent;
+    private String destination="";
+    private double trafficPercent=0;
+
+    public Route() {
+    }
+
+    public Route(String destination, double trafficPercent) {
+        this.destination = destination;
+        setTrafficPercent(trafficPercent);
+    }
 
     public String getDestination() {
         return destination;
@@ -21,6 +29,8 @@ public class Route {
     }
 
     public void setTrafficPercent(double trafficPercent) {
-        this.trafficPercent = trafficPercent;
+        if(trafficPercent>=0 && trafficPercent<=1){
+            this.trafficPercent = trafficPercent;
+        }else throw new IllegalArgumentException("Error setting traffic percentage");
     }
 }

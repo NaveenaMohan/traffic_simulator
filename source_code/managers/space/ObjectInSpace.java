@@ -1,6 +1,6 @@
 package managers.space;
 
-import managers.vehicle.Vehicle;
+import managers.vehicle.VehicleDirection;
 
 import java.awt.*;
 
