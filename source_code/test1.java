@@ -6,6 +6,7 @@ import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
 import managers.runit.TrafficLight;
 import managers.vehiclefactory.VehicleFactoryManager;
+import reports.DCP;
 
 /**
  * Created by Fabians on 12/02/2015.
@@ -23,6 +24,9 @@ public class test1 {
         vehicleFactoryManager.addVehicleFactory(roadNetworkManager.getRUnitByID("0"));
         roadNetworkManager.addTrafficLight(roadNetworkManager.getRUnitByID("5"), trafficLight);//TODO to be done by UI
         roadNetwork.printTrafficLights();
+
+
+
 
         DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
 

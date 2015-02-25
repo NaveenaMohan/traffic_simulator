@@ -131,5 +131,8 @@ public class Vehicle implements IVehicleManager {
         return vehID;
     }
 
-
+    @Override
+    public double getCurrentAcceleration() { //ADDED BY LORENA TO TEST ACCELERATION IN THE REPORTS
+        return vehicleMotor.getCurrentAcceleration();
+    } //ADDED IN ORDER TO REPORT
 }

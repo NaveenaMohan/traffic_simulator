@@ -163,6 +163,7 @@ public class VehicleMotor {
 
     private void StrategyTrafficLightAhead(IRUnitManager rUnit, double distance) {
         System.out.println("StrategyTrafficLightAhead");
+        if (rUnit.getTrafficLight()!=null)  //ADDED BY LORENA IN ORDER TO TEST
         if(!rUnit.getTrafficLight().isGreen())
             currentAcceleration = aimForSpeed(0, distance-depthInCurrentRUnit);
     }
@@ -198,5 +199,7 @@ public class VehicleMotor {
                 currentVelocity + currentAcceleration * timePassed);
     }
 
-
+    public double getCurrentAcceleration() { //ADDED BY LORENA TO TEST ACCELERATION IN THE REPORTS
+        return currentAcceleration;
+    }
 }
