@@ -38,7 +38,7 @@ public class VehicleFactoryManager implements IVehicleFactoryManager {
             if (vehicleFactoryList.size() > 0) {
 
                 //get the vehicle factory from which you will now produce
-                return vehicleFactoryList.get(0).addVehicle(
+                return vehicleFactoryList.get(Common.randIntegerBetween(0, vehicleFactoryList.size()-1)).addVehicle(
                         dataAndStructures.getVehicles().size() + 1,
                         nextVehicleType(dataAndStructures),//vehicle Type
                         nextDriver(dataAndStructures),//driver

@@ -11,11 +11,17 @@ public class VehicleMemoryObject<T> {
     private IRUnitManager rUnit;
     private T object;
     private double distance;
+    private double velocity;
 
-    public VehicleMemoryObject(IRUnitManager rUnit, T object, double distance) {
+    public double getVelocity() {
+        return velocity;
+    }
+
+    public VehicleMemoryObject(IRUnitManager rUnit, T object, double distance, double velocity) {
         this.rUnit = rUnit;
         this.object = object;
         this.distance=distance;
+        this.velocity=velocity;
     }
 
     public IRUnitManager getrUnit() {

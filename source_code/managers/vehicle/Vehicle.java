@@ -74,6 +74,10 @@ public class Vehicle implements IVehicleManager {
         this.destination = destination;
     }
 
+    public double getDepthInCurrentRUnit() {
+        return vehicleMotor.getDepthInCurrentRUnit();
+    }
+
     @Override
     public void move(ISpaceManager spaceManager, double time, IDataAndStructures dataAndStructures) {
         VehicleState vehicleState = new VehicleState();//create a disposable vehicle state object
@@ -106,6 +110,7 @@ public class Vehicle implements IVehicleManager {
 
     }
 
+    public String getCurrentStrategy(){return vehicleMotor.currentStrategy;}
     @Override
     public boolean isVisible(int minX, int maxX, int minY, int maxY) {
         return false;

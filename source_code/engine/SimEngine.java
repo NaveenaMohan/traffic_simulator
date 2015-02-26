@@ -1,16 +1,11 @@
 package engine;
 
 import dataAndStructures.DataAndStructures;
-import managers.runit.RUnit;
-import managers.runit.TrafficSign;
-import managers.space.ObjectInSpace;
 import managers.vehicle.IVehicleManager;
-import managers.runit.TrafficLight;
-import reports.DCP;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
-import java.util.Map;
+
 
 /**
  * Created by Fabians on 12/02/2015.
@@ -20,11 +15,9 @@ public class SimEngine {
 
     private Timer timer;
     private DataAndStructures dataAndStructures;
-    private Long previousSecond=0L;//use this to make a move every second
+    private int previousSecond=0;//use this to make a move every second
 
     private int maxCars = 20;
-
-    private int maxSeconds = 220;
 
     public SimEngine(DataAndStructures dataAndStructures) {
         this.dataAndStructures = dataAndStructures;
@@ -35,6 +28,7 @@ public class SimEngine {
         //initialise timer
         timer = new Timer(5, actionListener);
         timer.start();
+
     }
 
     public void performAction() {
@@ -51,7 +45,7 @@ public class SimEngine {
             if (newVehicle != null) {
 
                 dataAndStructures.getVehicles().add(newVehicle);
-                System.out.println("vehicle Created " + dataAndStructures.getVehicles().size());
+                //System.out.println("vehicle Created " + dataAndStructures.getVehicles().size());
                // dcp=new DCP(dataAndStructures.getVehicles().get(0).getVehicle());
 
             }
@@ -68,13 +62,17 @@ public class SimEngine {
         //change traffic lights
         dataAndStructures.getRoadNetworkManager().changeLight(dataAndStructures.getGlobalConfigManager().getCurrentSecond());
 
-        for(Map.Entry<String, TrafficLight> tl : dataAndStructures.getRoadNetworkManager().getRoadNetwork().getTrafficLightHashtable().entrySet())
-        {
-            if(tl.getValue().isGreen())
-                System.out.println("Green");
-            else
-                System.out.println("Red");
+
+        if((int)dataAndStructures.getGlobalConfigManager().getCurrentSecond()>previousSecond) {
+            System.out.println("--------------------------------- " + dataAndStructures.getGlobalConfigManager().getCurrentSecond());
+            for (IVehicleManager vehicle : dataAndStructures.getVehicles()) {//vid, rUnit, x,y, depth, velocity, strategy, distance
+                System.out.println("vid: " + vehicle.getVehID() + " rUnit: " + vehicle.getVehicle().getrUnit()
+                        + " x: " + vehicle.getVehicle().getrUnit().getX() + " y: " + vehicle.getVehicle().getrUnit().getY()
+                        + " v: " + vehicle.getVehicle().getCurrentVelocity() +
+                        " dep: " + vehicle.getVehicle().getDepthInCurrentRUnit() + " s: " + vehicle.getVehicle().getCurrentStrategy());
+            }
         }
+        previousSecond = (int) dataAndStructures.getGlobalConfigManager().getCurrentSecond();
     }
 
 

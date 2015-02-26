@@ -40,10 +40,10 @@ public class VehicleFactory{
                 objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,3,2,null);
                 break;
             case emergency:
-                objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,2,2,null);
+                objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,3,2,null);
                 break;
             case heavyLoad:
-                objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 4,4,4,null);
+                objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,4,4,null);
                 break;
             default:
                 objectInSpace = new ObjectInSpace(vehID, rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,3,2,null);
@@ -60,7 +60,7 @@ public class VehicleFactory{
                     destination,
                     objectInSpace,
                     2.7,//maximum acceleration in metres per second.
-                    -50,//max deceleration
+                    -100,//max deceleration
                     time
             );
             return vehicle;
