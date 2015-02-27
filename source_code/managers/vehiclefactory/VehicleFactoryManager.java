@@ -31,14 +31,14 @@ public class VehicleFactoryManager implements IVehicleFactoryManager {
 
 
         //get the number of vehicles that are left to produce in the system
-        int vehiclesLeftToProduce = dataAndStructures.getGlobalConfigManager().getVehicleDensity().getTotalVehicles()
+        int vehiclesLeftToProduce = 100//dataAndStructures.getGlobalConfigManager().getVehicleDensity().getTotalVehicles()
                 - dataAndStructures.getVehicles().size();
 
         if (vehiclesLeftToProduce > 0) {
             if (vehicleFactoryList.size() > 0) {
 
                 //get the vehicle factory from which you will now produce
-                return vehicleFactoryList.get(0).addVehicle(
+                return vehicleFactoryList.get(Common.randIntegerBetween(0, vehicleFactoryList.size()-1)).addVehicle(
                         dataAndStructures.getVehicles().size() + 1,
                         nextVehicleType(dataAndStructures),//vehicle Type
                         nextDriver(dataAndStructures),//driver

@@ -9,6 +9,7 @@ import managers.runit.RUnit;
 import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
 import managers.space.SpaceManager;
+import managers.space.VehicleDirection;
 
 import javax.imageio.spi.IIOServiceProvider;
 
@@ -20,7 +21,6 @@ public class Vehicle implements IVehicleManager {
     private int vehID;
     private IRUnitManager rUnit;
     private Driver driver;
-    private VehicleType vehicleType;
     private String destination;
     private boolean arrivedToDestination;
     private ObjectInSpace objectInSpace;
@@ -29,17 +29,17 @@ public class Vehicle implements IVehicleManager {
 
     private double previousTime;
 
-    public Vehicle(int vehID, RUnit rUnit, Driver driver, int maxSpeedLimit, VehicleType vehicleType, String destination
+    public Vehicle(int vehID, RUnit rUnit, Driver driver, int maxSpeedLimit, String destination
             , ObjectInSpace objectInSpace, double maxAcceleration, double maxDeceleration, double timeCreated) {
         this.vehID = vehID;
         this.rUnit = rUnit;
         this.driver = driver;
-        this.vehicleType = vehicleType;
         this.destination = destination;
         this.objectInSpace = objectInSpace;
         this.timeCreated = timeCreated;
         previousTime=timeCreated;
         this.vehicleMotor = new VehicleMotor(maxAcceleration, maxDeceleration, maxSpeedLimit, vehID);
+        objectInSpace.setDirection(new VehicleDirection(1, 1, 1, 1));
     }
 
     public IRUnitManager getrUnit() {
@@ -50,20 +50,16 @@ public class Vehicle implements IVehicleManager {
         this.rUnit = rUnit;
     }
 
+    public VehicleDirection getDirection() {
+        return objectInSpace.getDirection();
+    }
+
     public Driver getDriver() {
         return driver;
     }
 
     public void setDriver(Driver driver) {
         this.driver = driver;
-    }
-
-    public VehicleType getVehicleType() {
-        return vehicleType;
-    }
-
-    public void setVehicleType(VehicleType vehicleType) {
-        this.vehicleType = vehicleType;
     }
 
     public String getDestination() {
@@ -74,11 +70,18 @@ public class Vehicle implements IVehicleManager {
         this.destination = destination;
     }
 
+    public double getDepthInCurrentRUnit() {
+        return vehicleMotor.getDepthInCurrentRUnit();
+    }
+
     @Override
     public void move(ISpaceManager spaceManager, double time, IDataAndStructures dataAndStructures) {
         VehicleState vehicleState = new VehicleState();//create a disposable vehicle state object
         //this object gets destroyed and recreated on every move
 
+
+        //get the previous rUnit for Direction calculations
+        IRUnitManager previousrUnit = rUnit;
 
         //perceive the world and update your state
         VehiclePerception.See(
@@ -100,12 +103,14 @@ public class Vehicle implements IVehicleManager {
         //adjust your position in space
         objectInSpace.setX(rUnit.getX());
         objectInSpace.setY(rUnit.getY());
+        if(previousrUnit.getId() != rUnit.getId())
+            objectInSpace.setDirection(new VehicleDirection(previousrUnit.getX(), previousrUnit.getY(), rUnit.getX(), rUnit.getY()));
 
-
-        previousTime= time;
+       previousTime= time;
 
     }
 
+    public String getCurrentStrategy(){return vehicleMotor.currentStrategy;}
     @Override
     public boolean isVisible(int minX, int maxX, int minY, int maxY) {
         return false;

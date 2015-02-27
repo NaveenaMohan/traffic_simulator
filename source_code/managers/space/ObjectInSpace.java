@@ -1,6 +1,6 @@
 package managers.space;
 
-import managers.vehicle.VehicleDirection;
+import managers.globalconfig.VehicleType;
 
 import java.awt.*;
 
@@ -17,6 +17,7 @@ public class ObjectInSpace {
     private int height;
     private int length;
     private VehicleDirection direction;
+    private VehicleType vehicleType;
 
     public int getId() {
         return id;
@@ -26,7 +27,15 @@ public class ObjectInSpace {
         this.id = id;
     }
 
-    public ObjectInSpace(int id, int x, int y, int z, int width, int length, int height, VehicleDirection direction) {
+    public VehicleType getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    public ObjectInSpace(int id, int x, int y, int z, int width, int length, int height, VehicleDirection direction,  VehicleType vehicleType) {
         this.id=id;
         this.x = x;
         this.y = y;
@@ -35,6 +44,7 @@ public class ObjectInSpace {
         this.height = height;
         this.length = length;
         this.direction = direction;
+        this.vehicleType=vehicleType;
     }
 
     public int getX() {

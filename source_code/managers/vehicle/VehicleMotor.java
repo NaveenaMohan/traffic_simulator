@@ -21,6 +21,7 @@ public class VehicleMotor {
     private double depthInCurrentRUnit;//if the RUnit is say 100m long we need to keep track of how far in the vehicle is
     private int maxSpeedLimit;//the speed limit as according to the signs
     private int vehID;
+    public String currentStrategy;
 
     public VehicleMotor(double maxAcceleration, double maxDeceleration, int maxSpeedLimit, int vehID) {
         this.maxAcceleration = maxAcceleration;
@@ -41,25 +42,32 @@ public class VehicleMotor {
         //this function applies various strategies depending on the types of objects ahead
         //it changes vehicle acceleration and returns proposed vehicle position
 
-        //fetch the next object to look at
-        //TODO here we are only looking at the next object and nothing after that. We might want to change that later on
-        VehicleMemoryObject vehicleMemoryObject = vehicleState.NextObject();
+        //get the slowest object within x metres
+        VehicleMemoryObject vehicleMemoryObject = vehicleState.getSlowestWithin(200);
+        ;
 
         //initially aim for the speed limit
         currentAcceleration = aimForSpeed(maxSpeedLimit, 1);
 
-        if(vehicleMemoryObject!=null) {
+        if (vehicleMemoryObject != null) {
+
+
+            int safeDistance = 0;
             if (vehicleMemoryObject.getObject() instanceof Blockage)//check for blockage and apply strategy
-                rUnit = StrategyBlockageAhead(rUnit, vehicleMemoryObject.getDistance(), 500, vehicleState.isChangeableClear());
+                rUnit = StrategyBlockageAhead(rUnit, vehicleMemoryObject, vehicleState.isChangeableClear());
             else if (vehicleMemoryObject.getObject() instanceof Vehicle)//check for vehicle and apply strategy
-                rUnit = StrategyVehicleAhead(rUnit, (Vehicle) vehicleMemoryObject.getObject(), vehicleMemoryObject.getDistance()
-                        , 500, vehicleState.isChangeableClear());
+                rUnit = StrategyVehicleAhead(rUnit, vehicleMemoryObject
+                        , vehicleState.isChangeableClear());
             else if (vehicleMemoryObject.getObject() instanceof EndOfRoad)//check for end of road and apply strategy
-                StrategyEndOfRoadAhead(vehicleMemoryObject.getDistance());
+                StrategyEndOfRoadAhead(vehicleMemoryObject);
             else if (vehicleMemoryObject.getObject() instanceof TrafficLight)//check for traffic light and apply strategy
-                StrategyTrafficLightAhead((TrafficLight)vehicleMemoryObject.getObject(), vehicleMemoryObject.getDistance(), 100);
+                StrategyTrafficLightAhead(vehicleMemoryObject);
             else if (vehicleMemoryObject.getObject() instanceof ZebraCrossing)//check for zebra crossing and apply strategy
-                StrategyZebraCrossingAhead((ZebraCrossing)vehicleMemoryObject.getObject(), vehicleMemoryObject.getDistance(), 100);
+                StrategyZebraCrossingAhead(vehicleMemoryObject);
+            else if (vehicleMemoryObject.getObject() instanceof SpeedLimitSign)//check for traffic sign and apply strategy
+                StrategySpeedLimitSignAhead(vehicleMemoryObject);
+            else if (vehicleMemoryObject.getObject() instanceof StopSign)//check for traffic sign and apply strategy
+                StrategyStopSignAhead(vehicleMemoryObject);
 
             //TODO implement other strategies
         }
@@ -67,8 +75,7 @@ public class VehicleMotor {
     }
 
     public IRUnitManager performAction(double timePassed, IDataAndStructures dataAndStructures,
-                                       ISpaceManager spaceManager, IRUnitManager rUnit, ObjectInSpace objectInSpace)
-    {
+                                       ISpaceManager spaceManager, IRUnitManager rUnit, ObjectInSpace objectInSpace) {
         //get distance to be travelled in the timePassed with proposedVelocity
         double distanceTravelled = currentVelocity * timePassed;
 
@@ -86,15 +93,23 @@ public class VehicleMotor {
         //travel the rUnits
         for (int i = 0; i < RUnitsTravelled; i++) {//go through as many metres as many you have travelled since last move
             if (rUnit.getNextRUnitList().size() > 0) {
-                if (spaceManager.checkFit(vehID, rUnit.getX(), rUnit.getY(), objectInSpace.getWidth(), objectInSpace.getLength())
-                        & rUnit.getNextRUnitList().get(0).getBlockage()==null) {
+                // if (spaceManager.checkFit(vehID, rUnit.getX(), rUnit.getY(), objectInSpace.getWidth(), objectInSpace.getLength())
+                if (rUnit.getNextRUnitList().get(0).getBlockage() == null) {
+
+                    //see and process the objects we have just passed
+                    processObjectPassed(VehiclePerception.getObjectAtRUnit(rUnit));
+
+                    //advance
                     rUnit = rUnit.getNextRUnitList().get(0);
-                } else {
-                    //System.out.println("Collision");
-                    //if you encounter an obstacle then at least you reach the end of the current RUnit
-                    depthInCurrentRUnit = dataAndStructures.getGlobalConfigManager().getMetresPerRUnit();
-                    //you hit it so your velocity is now 0
-                    currentVelocity = 0;
+
+
+
+//                } else {
+//                    //System.out.println("Collision");
+//                    //if you encounter an obstacle then at least you reach the end of the current RUnit
+//                    depthInCurrentRUnit = dataAndStructures.getGlobalConfigManager().getMetresPerRUnit();
+//                    //you hit it so your velocity is now 0
+//                    currentVelocity = 0;
                 }
 
 
@@ -108,78 +123,96 @@ public class VehicleMotor {
         return rUnit;
     }
 
-    private IRUnitManager StrategyBlockageAhead(IRUnitManager currentRUnit
-            , double distance, double safeDistance, boolean isChangeableClear) {
+    private IRUnitManager StrategyBlockageAhead(IRUnitManager currentRUnit, VehicleMemoryObject obj, boolean isChangeableClear) {
         //if the blockage is closer than your safe distance change lane if possible
         //System.out.println("StrategyBlockageAhead");
-        if (distance < safeDistance) {
+        currentStrategy = "StrategyBlockageAhead";
+        if (obj.getDistance() <= getDecelerationStartDistance(currentVelocity, obj.getVelocity(), obj.getDistance() - depthInCurrentRUnit)) {
             if (isChangeableClear)//if the changeable unit is clear
             {
                 return currentRUnit.getChangeAbleRUnit();
             } else {
-                currentAcceleration = aimForSpeed(0, distance-depthInCurrentRUnit);
+                currentStrategy += " matching (0) d: " + (obj.getDistance() - depthInCurrentRUnit);
+                currentAcceleration = aimForSpeed(0, obj.getDistance() - depthInCurrentRUnit);
             }
         }
         return currentRUnit;
     }
 
-    private IRUnitManager StrategyVehicleAhead(IRUnitManager currentRUnit, IVehicleManager vehicle, double distance, double safeDistance, boolean isChangeableClear) {
-        //System.out.println("StrategyVehicleAhead");
+    private IRUnitManager StrategyVehicleAhead(IRUnitManager currentRUnit, VehicleMemoryObject obj
+            , boolean isChangeableClear) {
+        currentStrategy = "StrategyVehicleAhead travelling at: " + obj.getVelocity() + " d: " + (obj.getDistance() - depthInCurrentRUnit);
         currentAcceleration = aimForSpeed(maxSpeedLimit, 1);//may be overwritten
 
         //if the vehicle speed is slower than yours
-        if(vehicle.getCurrentVelocity() < currentVelocity)
-        {
+        if (obj.getVelocity() < currentVelocity) {
             //if the vehicle is within your safe distance
-            if(distance<safeDistance)
-            {
-                if(isChangeableClear)
-                {
+            if (obj.getDistance() <= getDecelerationStartDistance(currentVelocity, obj.getVelocity(), obj.getDistance() - depthInCurrentRUnit - 5)) {
+                if (isChangeableClear) {
+                    currentStrategy += " changeable Clear";
                     return currentRUnit.getChangeAbleRUnit();
-                }
-                else
-                {
+                } else {
                     //if there is nowhere to run, match his speed
-                    currentAcceleration = aimForSpeed(vehicle.getCurrentVelocity(), distance-depthInCurrentRUnit);
+                    currentStrategy += " matching (" + obj.getVelocity() + ") ";
+                    currentAcceleration = aimForSpeed(obj.getVelocity(), obj.getDistance() - depthInCurrentRUnit);
                 }
-            }
+            } else
+                currentStrategy += "not matching d: " + obj.getDistance() + " sd: " + getDecelerationStartDistance(currentVelocity, obj.getVelocity(), obj.getDistance() - depthInCurrentRUnit - 5);
         }
         return currentRUnit;
     }
 
-    private void StrategyWelcomeSignAhead(IRUnitManager rUnit) {
+    private void StrategyWelcomeSignAhead() {
 
     }
 
-    private void StrategyDirectionSignAhead(IRUnitManager rUnit) {
+    private void StrategyDirectionSignAhead() {
 
     }
 
 
-    private void StrategyStopSignAhead(IRUnitManager rUnit, double distance) {
-        //System.out.println("StrategyStopSignAhead");
-        currentAcceleration = aimForSpeed(0, distance-depthInCurrentRUnit);
-       // System.out.println("StrategyStopSignAhead");
+    private void StrategyStopSignAhead(VehicleMemoryObject obj) {
+        currentStrategy = "StrategyStopSignAhead";
+        currentStrategy += " matching (" + obj.getVelocity() + ") d: " + (obj.getDistance() - depthInCurrentRUnit);
+        currentAcceleration = aimForSpeed(obj.getVelocity(), obj.getDistance() - depthInCurrentRUnit);
+        // System.out.println("StrategyStopSignAhead");
     }
 
-    private void StrategySpeedLimitSignAhead(IRUnitManager rUnit) {
+    private void StrategySpeedLimitSignAhead(VehicleMemoryObject obj) {
+        currentStrategy = "StrategySpeedLimitSignAhead for: " + obj.getVelocity() + " d: " + (obj.getDistance() - depthInCurrentRUnit);
+        currentAcceleration = aimForSpeed(maxSpeedLimit, 1);//may be overwritten
 
-    }
+        //if the vehicle speed is slower than yours
+        if (obj.getVelocity() < currentVelocity) {
+            //if the vehicle is within your safe distance
+            if (obj.getDistance() <= getDecelerationStartDistance(currentVelocity, obj.getVelocity(), obj.getDistance() - depthInCurrentRUnit - 5)) {
 
-    private void StrategyTrafficLightAhead(TrafficLight trafficLight, double distance, double safeDistance) {
-        //System.out.println("StrategyTrafficLightAhead");
-        if(distance<safeDistance) {
-            if (!trafficLight.isGreen()) {System.out.println("TrafficLight - Slow");
-                currentAcceleration = aimForSpeed(0, distance - depthInCurrentRUnit);
-            }
+                //if there is nowhere to run, match his speed
+                currentStrategy += " matching (" + obj.getVelocity() + ") ";
+                currentAcceleration = aimForSpeed(obj.getVelocity(), obj.getDistance() - depthInCurrentRUnit);
+            } else
+                currentStrategy += "not matching d: " + obj.getDistance() + " sd: " + getDecelerationStartDistance(currentVelocity, obj.getVelocity(), obj.getDistance() - depthInCurrentRUnit - 5);
         }
     }
 
-    private void StrategyZebraCrossingAhead(ZebraCrossing zebraCrossing, double distance, double safeDistance) {
-        //System.out.println("StrategyZebraCrossingAhead");
-        if(distance<safeDistance) {
-            if (!zebraCrossing.getTrafficLight().isGreen())
-                currentAcceleration = aimForSpeed(0, distance - depthInCurrentRUnit);
+    private void StrategyTrafficLightAhead(VehicleMemoryObject obj) {
+        currentStrategy = "StrategyTrafficLightAhead";
+        if (obj.getDistance() < getDecelerationStartDistance(currentVelocity, obj.getVelocity(), obj.getDistance() - depthInCurrentRUnit)) {
+            if (!((TrafficLight) obj.getObject()).isGreen()) {
+                currentStrategy += " matching (" + obj.getVelocity() + ") d: " + (obj.getDistance() - depthInCurrentRUnit);
+                currentAcceleration = aimForSpeed(obj.getVelocity(), obj.getDistance() - depthInCurrentRUnit);
+            }
+
+        }
+    }
+
+    private void StrategyZebraCrossingAhead(VehicleMemoryObject obj) {
+        currentStrategy = "StrategyZebraCrossingAhead";
+        if (obj.getDistance() < getDecelerationStartDistance(currentVelocity, obj.getVelocity(), obj.getDistance() - depthInCurrentRUnit)) {
+            if (!((ZebraCrossing) obj.getObject()).getTrafficLight().isGreen()) {
+                currentStrategy += " matching (" + obj.getVelocity() + ") d: " + (obj.getDistance() - depthInCurrentRUnit);
+                currentAcceleration = aimForSpeed(obj.getVelocity(), obj.getDistance() - depthInCurrentRUnit);
+            }
         }
     }
 
@@ -187,9 +220,11 @@ public class VehicleMotor {
 
     }
 
-    private void StrategyEndOfRoadAhead(double distance) {
+    private void StrategyEndOfRoadAhead(VehicleMemoryObject obj) {
+        currentStrategy = "StrategyEndOfRoadAhead";
         //System.out.println("StrategyEndOfRoadAhead");
-        currentAcceleration = aimForSpeed(0,distance-depthInCurrentRUnit);
+        currentStrategy += " matching (" + obj.getVelocity() + ") d: " + (obj.getDistance() - depthInCurrentRUnit);
+        currentAcceleration = aimForSpeed(obj.getVelocity(), obj.getDistance() - depthInCurrentRUnit);
     }
 
     private double aimForSpeed(double requiredVelocity, double distance)//returns the acceleration
@@ -200,32 +235,44 @@ public class VehicleMotor {
         //finalVelocity^2=initialVelocity^2 + 2*acceleration*distance
         //Hence acceleration=(finalVelocity^2-initialVelocity^2)/2*distance
 
-        double acceleration ;
+        double acceleration;
 
+//        if(distance<0)
+//            throw new IllegalArgumentException(vehID + " distance is " + distance);
 
         //if the object is very close drop down your acceleration to -100 in order to come to a full stop
-        if(requiredVelocity < currentVelocity & distance < 10)
-            acceleration= -100;
+        if (requiredVelocity < currentVelocity & distance < 20)
+            acceleration = -100;
         else
-            acceleration = Math.max(Math.min(
-                    ((requiredVelocity*requiredVelocity) - (currentVelocity*currentVelocity)) / (2 * distance),
-                    maxAcceleration), maxDeceleration);
-//
-//        if(distance != 1 )
-//        System.out.println("----- r:"+requiredVelocity + " d: " + distance + " a: " +acceleration);
-
-
-        return acceleration;
+            acceleration = ((requiredVelocity * requiredVelocity) - (currentVelocity * currentVelocity)) / (2 * distance);
+        return Math.max(Math.min(acceleration, maxAcceleration), maxDeceleration);
     }
 
 
     private void updateVelocity(double timePassed) {
         //velocity can't be below 0
-        currentVelocity =  Math.max(0,
+        currentVelocity = Math.max(0,
                 currentVelocity + currentAcceleration * timePassed);
+    }
+
+    private void processObjectPassed(Object obj) {
+        //if you have just passed a speed sign update your maxSpeedLimit
+        if (obj instanceof SpeedLimitSign) {
+            maxSpeedLimit = (((SpeedLimitSign) obj).getSpeedLimit() * 1000) / 3600;//convert km/h to m/s
+        }
     }
 
     public double getCurrentAcceleration() { //ADDED BY LORENA TO TEST ACCELERATION IN THE REPORTS
         return currentAcceleration;
+    }
+
+    private double getDecelerationStartDistance(double currentVelocity, double requiredVelocity, double distance) {
+        //the distance by which the car should start decelerating before an obstacle
+
+        return Math.max((currentVelocity - requiredVelocity), distance) + 50;
+    }
+
+    public double getDepthInCurrentRUnit() {
+        return depthInCurrentRUnit;
     }
 }
