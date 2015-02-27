@@ -340,18 +340,28 @@ public class  Traffic_Simulator {
         slippery_slider.setMajorTickSpacing(30);
         trafficPatternPanel.add(slippery_slider);
 
-        JSlider trafficDensitySlider1 = new JSlider();
-        trafficDensitySlider1.setBounds(6, 99, 85, 26);
-        trafficDensitySlider1.setMajorTickSpacing(30);
-        trafficDensitySlider1.setPaintTicks(true);
-        trafficPatternPanel.add(trafficDensitySlider1);
+        RangeSlider trafficDensityRangeSlider = new RangeSlider();
+        trafficDensityRangeSlider.setPaintTicks(true);
+        trafficDensityRangeSlider.setMajorTickSpacing(5);
+        trafficDensityRangeSlider.setPreferredSize(new Dimension(240, trafficDensityRangeSlider.getPreferredSize().height));
+        trafficDensityRangeSlider.setBounds(6, 99, 160, 26);
+        trafficDensityRangeSlider.setMinimum(0);
+        trafficDensityRangeSlider.setMaximum(100);
+        trafficDensityRangeSlider.setValue(3);
+        trafficDensityRangeSlider.setUpperValue(7);
+        trafficPatternPanel.add(trafficDensityRangeSlider);
 
-        JSlider driverBehaviorSlider1 = new JSlider();
-        driverBehaviorSlider1.setBounds(6, 189, 85, 26);
-        driverBehaviorSlider1.setPaintTicks(true);
-        driverBehaviorSlider1.setMajorTickSpacing(30);
-        trafficPatternPanel.add(driverBehaviorSlider1);
 
+        RangeSlider driverBehaviourRangeSlider = new RangeSlider();
+        driverBehaviourRangeSlider.setPaintTicks(true);
+        driverBehaviourRangeSlider.setMajorTickSpacing(5);
+        driverBehaviourRangeSlider.setPreferredSize(new Dimension(240, trafficDensityRangeSlider.getPreferredSize().height));
+        driverBehaviourRangeSlider.setBounds(6, 189, 160, 26);
+        driverBehaviourRangeSlider.setMinimum(0);
+        driverBehaviourRangeSlider.setMaximum(100);
+        driverBehaviourRangeSlider.setValue(3);
+        driverBehaviourRangeSlider.setUpperValue(7);
+        trafficPatternPanel.add(driverBehaviourRangeSlider);
 
         JLabel lbl_slippery = new JLabel("Slipperniess");
         lbl_slippery.setBounds(266, 52, 85, 18);
