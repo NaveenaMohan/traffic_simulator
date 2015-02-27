@@ -31,7 +31,7 @@ public class VehicleFactoryManager implements IVehicleFactoryManager {
 
 
         //get the number of vehicles that are left to produce in the system
-        int vehiclesLeftToProduce = dataAndStructures.getGlobalConfigManager().getVehicleDensity().getTotalVehicles()
+        int vehiclesLeftToProduce = 100//dataAndStructures.getGlobalConfigManager().getVehicleDensity().getTotalVehicles()
                 - dataAndStructures.getVehicles().size();
 
         if (vehiclesLeftToProduce > 0) {

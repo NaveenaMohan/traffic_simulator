@@ -25,7 +25,7 @@ public class SpaceManager implements ISpaceManager {
     @Override
     public boolean checkFit(int id, int x, int y, int width, int length) {
         //System.out.println("checkFit id: " + id + " x: "+ x + " y: " + y + " width: " + width + " length: " + length);
-        ObjectInSpace objectToCheck = new ObjectInSpace(id, x,y,0,width,length,0, null);
+        ObjectInSpace objectToCheck = new ObjectInSpace(id, x,y,0,width,length,0, null, null);
         //go through each object in space and check if you intersect
         for(ObjectInSpace obj : space.getObjects())
         {
