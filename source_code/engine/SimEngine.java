@@ -47,6 +47,8 @@ public class SimEngine {
     public void performAction() {
 
         if(!pause) {
+
+
             //FABIAN
             dataAndStructures.getGlobalConfigManager().incrementTick();//adds one to tick with every action performed
 
@@ -80,10 +82,11 @@ public class SimEngine {
             if ((int) dataAndStructures.getGlobalConfigManager().getCurrentSecond() > previousSecond) {
                 System.out.println("--------------------------------- " + dataAndStructures.getGlobalConfigManager().getCurrentSecond());
                 for (IVehicleManager vehicle : dataAndStructures.getVehicles()) {//vid, rUnit, x,y, depth, velocity, strategy, distance
-                    System.out.println("vid: " + vehicle.getVehID() + " rUnit: " + vehicle.getVehicle().getrUnit()
+                    System.out.println("vid: " + vehicle.getVehID() + " rUnit: " + vehicle.getVehicle().getrUnit().getId()
                             + " x: " + vehicle.getVehicle().getrUnit().getX() + " y: " + vehicle.getVehicle().getrUnit().getY()
-                            + " v: " + vehicle.getVehicle().getCurrentVelocity() +
-                            " dep: " + vehicle.getVehicle().getDepthInCurrentRUnit() + " dir: " + vehicle.getDirection().getAngle() +
+                            + " v: " + Common.round(vehicle.getVehicle().getCurrentVelocity(), 2) +
+                            " dep: " + Common.round(vehicle.getVehicle().getDepthInCurrentRUnit(), 2) +
+                            " dir: " + Common.round(vehicle.getDirection().getAngle(), 2) +
                             " s: " + vehicle.getVehicle().getCurrentStrategy());
                 }
             }

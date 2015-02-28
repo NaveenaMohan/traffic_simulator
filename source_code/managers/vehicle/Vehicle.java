@@ -38,7 +38,7 @@ public class Vehicle implements IVehicleManager {
         this.objectInSpace = objectInSpace;
         this.timeCreated = timeCreated;
         previousTime=timeCreated;
-        this.vehicleMotor = new VehicleMotor(maxAcceleration, maxDeceleration, maxSpeedLimit, vehID);
+        this.vehicleMotor = new VehicleMotor(maxAcceleration, maxDeceleration, maxSpeedLimit);
         objectInSpace.setDirection(new VehicleDirection(1, 1, 1, 1));
     }
 
@@ -87,7 +87,7 @@ public class Vehicle implements IVehicleManager {
         VehiclePerception.See(
                 vehID,
                 rUnit,//your position
-                50, //rUnits of vision
+                driver.getVision(50, dataAndStructures.getGlobalConfigManager().getClimaticCondition().getVisibility()), //rUnits of vision
                 vehicleState,
                 spaceManager,
                 dataAndStructures,
@@ -95,10 +95,15 @@ public class Vehicle implements IVehicleManager {
         );
 
         //prepare the acceleration and rUnit position
-        rUnit = vehicleMotor.PrepareAction(rUnit, driver, vehicleState, time-previousTime);
+        rUnit = vehicleMotor.PrepareAction(
+                rUnit,
+                driver,
+                vehicleState,
+                dataAndStructures.getGlobalConfigManager().getClimaticCondition().getSlipperiness()
+        );
 
         //move
-        rUnit = vehicleMotor.performAction(time-previousTime,dataAndStructures,spaceManager,rUnit,objectInSpace);
+        rUnit = vehicleMotor.performAction(time-previousTime,dataAndStructures,rUnit);
 
         //adjust your position in space
         objectInSpace.setX(rUnit.getX());

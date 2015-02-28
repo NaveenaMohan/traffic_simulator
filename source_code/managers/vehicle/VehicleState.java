@@ -27,12 +27,20 @@ public class VehicleState {
         return changeableClear;
     }
 
+    public VehicleMemoryObject nextObjectWithin(double metres) {
+        if (objectsAhead.size() > 0)
+            if(objectsAhead.get(0).getDistance()<=metres)
+            return objectsAhead.get(0);
+
+        return null;
+    }
+
     public VehicleMemoryObject getSlowestWithin(double metres) {
         //returns the slowest object within metres metres
 
 
         int currentIndex = 0;
-        VehicleMemoryObject slowestObject=null;
+        VehicleMemoryObject slowestObject = null;
 
         for (VehicleMemoryObject obj : objectsAhead) {
             if (obj.getDistance() > metres)
@@ -40,8 +48,8 @@ public class VehicleState {
 
             if (slowestObject == null) {
                 slowestObject = obj;
-            }else if(slowestObject.getVelocity()>obj.getVelocity()){
-                slowestObject=obj;
+            } else if (slowestObject.getVelocity() > obj.getVelocity()) {
+                slowestObject = obj;
             }
         }
 

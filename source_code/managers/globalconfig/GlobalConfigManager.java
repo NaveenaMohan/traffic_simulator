@@ -87,6 +87,16 @@ public class GlobalConfigManager implements IGlobalConfigManager {
     }
 
     @Override
+    public int getTicksPerSecond() {
+        return tickTime.getRatio();
+    }
+
+    @Override
+    public Long getCurrentTick() {
+        return tickTime.getCurrentTick();
+    }
+
+    @Override
     public double getMetresPerRUnit() {
         return distancesScale.getMetresPerRUnit();
     }

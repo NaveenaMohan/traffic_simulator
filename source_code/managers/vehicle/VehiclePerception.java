@@ -10,13 +10,15 @@ import managers.space.ObjectInSpace;
  * this class is responsible for collecting the information about the world
  */
 public class VehiclePerception {
-    public static void See(int vehID, IRUnitManager rUnit, int maxVision, VehicleState vehicleState, ISpaceManager spaceManager, IDataAndStructures dataAndStructures, ObjectInSpace myObject) {
+    public static void See(int vehID, IRUnitManager rUnit, double maxVision, VehicleState vehicleState, ISpaceManager spaceManager, IDataAndStructures dataAndStructures, ObjectInSpace myObject) {
         IRUnitManager temp = rUnit;
 
         if (temp.getNextRUnitList().size() > 0)
             temp = temp.getNextRUnitList().get(0);
 
-        for (int i = 0; i < maxVision; i++) {
+        int rUnitsVision = (int)(maxVision/dataAndStructures.getGlobalConfigManager().getMetresPerRUnit());
+
+        for (int i = 0; i < rUnitsVision; i++) {
 
             //distance from the object
             double distance = Math.max(0,(i+1) * dataAndStructures.getGlobalConfigManager().getMetresPerRUnit());
@@ -32,7 +34,8 @@ public class VehiclePerception {
 
             //check for traffic lights
             if (temp.getTrafficLight() != null)
-                vehicleState.registerObject(new VehicleMemoryObject(temp, temp.getTrafficLight(), distance, getObjectVelocity(temp.getTrafficLight())));
+                if(!temp.getTrafficLight().isGreen())
+                    vehicleState.registerObject(new VehicleMemoryObject(temp, temp.getTrafficLight(), distance, getObjectVelocity(temp.getTrafficLight())));
 
             //check for traffic signs
             if (temp.getTrafficSign() != null)
@@ -101,15 +104,15 @@ public class VehiclePerception {
 
     private static double getObjectVelocity(Object obj)
     {//return the speed of the object
-        if (obj instanceof Blockage)//check for blockage and apply strategy
+        if (obj instanceof Blockage)//check for blockage
             return 0;
-        else if (obj instanceof Vehicle)//check for vehicle and apply strategy
+        else if (obj instanceof Vehicle)//check for vehicle
             return ((Vehicle) obj).getCurrentVelocity();
-        else if (obj instanceof EndOfRoad)//check for end of road and apply strategy
+        else if (obj instanceof EndOfRoad)//check for end of road
             return 0;
-        else if (obj instanceof TrafficLight)//check for traffic light and apply strategy
-            return (((TrafficLight) obj).isGreen() ? 100 : 0);
-        else if (obj instanceof ZebraCrossing)//check for zebra crossing and apply strategy
+        else if (obj instanceof TrafficLight)//check for traffic light
+            return 0;
+        else if (obj instanceof ZebraCrossing)//check for zebra crossing
             return 0;
         else if (obj instanceof StopSign)//check for stop sign
             return 0;
