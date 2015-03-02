@@ -16,7 +16,7 @@ public class GlobalConfigManager implements IGlobalConfigManager {
     private VehicleDensity vehicleDensity;
     private Route route;
 
-    public GlobalConfigManager(int tickRatio, int metresPerRUnit, ClimaticCondition climaticCondition, DriverBehavior driverBehavior
+    public GlobalConfigManager(int tickRatio, double metresPerRUnit, ClimaticCondition climaticCondition, DriverBehavior driverBehavior
     ,VehicleDensity vehicleDensity, Route route) {
         this.tickTime=new TickTime(tickRatio);
         this.distancesScale = new DistancesScale(metresPerRUnit);

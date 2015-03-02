@@ -21,11 +21,11 @@ public class Vehicle implements IVehicleManager {
     private int vehID;
     private IRUnitManager rUnit;
     private Driver driver;
-    private String destination;
-    private boolean arrivedToDestination;
-    private ObjectInSpace objectInSpace;
-    private double timeCreated;
     private VehicleMotor vehicleMotor;
+    private VehicleState vehicleState;
+
+    private double timeCreated;
+
 
     private double previousTime;
 
@@ -34,12 +34,11 @@ public class Vehicle implements IVehicleManager {
         this.vehID = vehID;
         this.rUnit = rUnit;
         this.driver = driver;
-        this.destination = destination;
-        this.objectInSpace = objectInSpace;
         this.timeCreated = timeCreated;
         previousTime=timeCreated;
-        this.vehicleMotor = new VehicleMotor(maxAcceleration, maxDeceleration, maxSpeedLimit);
-        objectInSpace.setDirection(new VehicleDirection(1, 1, 1, 1));
+
+        this.vehicleMotor = new VehicleMotor(maxAcceleration, maxDeceleration, maxSpeedLimit, destination, objectInSpace);
+        this. vehicleState = new VehicleState();
     }
 
     public IRUnitManager getrUnit() {
@@ -51,7 +50,7 @@ public class Vehicle implements IVehicleManager {
     }
 
     public VehicleDirection getDirection() {
-        return objectInSpace.getDirection();
+        return vehicleMotor.getObjectInSpace().getDirection();
     }
 
     public Driver getDriver() {
@@ -63,11 +62,7 @@ public class Vehicle implements IVehicleManager {
     }
 
     public String getDestination() {
-        return destination;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
+        return vehicleMotor.getDestination();
     }
 
     public double getDepthInCurrentRUnit() {
@@ -76,12 +71,8 @@ public class Vehicle implements IVehicleManager {
 
     @Override
     public void move(ISpaceManager spaceManager, double time, IDataAndStructures dataAndStructures) {
-        VehicleState vehicleState = new VehicleState();//create a disposable vehicle state object
-        //this object gets destroyed and recreated on every move
 
 
-        //get the previous rUnit for Direction calculations
-        IRUnitManager previousrUnit = rUnit;
 
         //perceive the world and update your state
         VehiclePerception.See(
@@ -91,7 +82,8 @@ public class Vehicle implements IVehicleManager {
                 vehicleState,
                 spaceManager,
                 dataAndStructures,
-                objectInSpace
+                vehicleMotor.getObjectInSpace(),
+                vehicleMotor.getDestination()
         );
 
         //prepare the acceleration and rUnit position
@@ -103,13 +95,10 @@ public class Vehicle implements IVehicleManager {
         );
 
         //move
-        rUnit = vehicleMotor.performAction(time-previousTime,dataAndStructures,rUnit);
+        rUnit = vehicleMotor.performAction(time-previousTime,dataAndStructures,rUnit, vehicleState);
 
-        //adjust your position in space
-        objectInSpace.setX(rUnit.getX());
-        objectInSpace.setY(rUnit.getY());
-        if(previousrUnit.getId() != rUnit.getId())
-            objectInSpace.setDirection(new VehicleDirection(previousrUnit.getX(), previousrUnit.getY(), rUnit.getX(), rUnit.getY()));
+        //clear state objects
+        vehicleState.cleanObjectsAhead();
 
        previousTime= time;
 
@@ -128,7 +117,7 @@ public class Vehicle implements IVehicleManager {
 
     @Override
     public ObjectInSpace getObjectInSpace() {
-        return objectInSpace;
+        return vehicleMotor.getObjectInSpace();
     }
 
     @Override

@@ -26,7 +26,7 @@ public class  Traffic_Simulator {
     private VehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
     private GlobalConfigManager globalConfigManager = new GlobalConfigManager(
             100,//ticks per second
-            1,//metres per RUnit
+            0.8,//metres per RUnit
             new ClimaticCondition(),
             new DriverBehavior(),
             new VehicleDensity(),

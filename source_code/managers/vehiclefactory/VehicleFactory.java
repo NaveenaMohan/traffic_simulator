@@ -55,7 +55,7 @@ public class VehicleFactory{
             Vehicle vehicle = new Vehicle(vehID,//vehicle ID
                     rUnit,//vehicle starting point
                     driver,
-                    100,//maximum speed
+                    (90*1000)/3600,//maximum speed
                     destination,
                     objectInSpace,
                     2.7,//maximum acceleration in metres per second.

@@ -18,4 +18,8 @@ public class VehicleDirection {
     public double getAngle() {
         return angle;
     }
+
+    public double getDifference(double bearing) {
+        return ((((bearing - angle) % 360) + 540) % 360) - 180;
+    }
 }

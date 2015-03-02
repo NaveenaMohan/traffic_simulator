@@ -42,26 +42,26 @@ public class DriverBehavior {
         this.percentageNormal = 0.33;
         this.percentageCautious = 0.34;
 
-        this.recklessMinSpeedOffset = 1.3;
-        this.recklessMaxSpeedOffset = 1.7;
-        this.recklessMinReactionTimeOffset = 0.3;//reckless decreases RUnits to look ahead when stopping
-        this.recklessMaxReactionTimeOffset = 0.7;
-        this.recklessMinVisibilityOffset = 0.3;
-        this.recklessMaxVisibilityOffset = 0.7;
+        this.recklessMinSpeedOffset = 1.01;
+        this.recklessMaxSpeedOffset = 1.02;
+        this.recklessMinReactionTimeOffset = 0.95;//reckless decreases RUnits to look ahead when stopping
+        this.recklessMaxReactionTimeOffset = 0.99;
+        this.recklessMinVisibilityOffset = 0.95;
+        this.recklessMaxVisibilityOffset = 0.99;
 
-        this.normalMinSpeedOffset = 0.8;
-        this.normalMaxSpeedOffset = 1.2;
-        this.normalMinReactionTimeOffset = 0.8;
-        this.normalMaxReactionTimeOffset = 1.2;
-        this.normalMinVisibilityOffset = 0.8;
-        this.normalMaxVisibilityOffset = 1.2;
+        this.normalMinSpeedOffset = 0.99;
+        this.normalMaxSpeedOffset = 1.01;
+        this.normalMinReactionTimeOffset = 0.99;
+        this.normalMaxReactionTimeOffset = 1.01;
+        this.normalMinVisibilityOffset = 0.99;
+        this.normalMaxVisibilityOffset = 1.01;
 
-        this.cautiousMinSpeedOffset = 0.3;
-        this.cautiousMaxSpeedOffset = 0.7;
-        this.cautiousMinReactionTimeOffset = 1.3;
-        this.cautiousMaxReactionTimeOffset = 1.7;
-        this.cautiousMinVisibilityOffset = 1.3;
-        this.cautiousMaxVisibilityOffset = 1.7;
+        this.cautiousMinSpeedOffset = 0.97;
+        this.cautiousMaxSpeedOffset = 0.99;
+        this.cautiousMinReactionTimeOffset = 1.01;
+        this.cautiousMaxReactionTimeOffset = 1.02;
+        this.cautiousMinVisibilityOffset = 1;
+        this.cautiousMaxVisibilityOffset = 1;
     }
 
     public void setPercentageReckless(double percentageReckless) {

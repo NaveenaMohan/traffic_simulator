@@ -33,27 +33,27 @@ public class Driver {
         return requiredSpeed*speedOffset*(1-slipperinessOffset);
     }
 
-    public double getDecelerationSafeDistance(double currentVelocity, double requiredVelocity, double distance, double slipperinessOffset, Object obstacle)
+    public double getDecelerationSafeDistance(double currentVelocity, double requiredVelocity, double distance, double slipperinessOffset, VehicleMemoryObject obstacle)
     {
         distance=distance-getStopDistance(slipperinessOffset, obstacle);
-        return Math.max((currentVelocity - requiredVelocity)*(1-slipperinessOffset)*reactionTimeOffset, distance) + 50;
+        return Math.max((currentVelocity - requiredVelocity)*(1-slipperinessOffset)*reactionTimeOffset, distance)+30;
     }
 
-    public double getStopDistance(double slipperinessOffset, Object obstacle)
+    public double getStopDistance(double slipperinessOffset, VehicleMemoryObject obstacle)
     {
-        //safe stop should be 0 for traffic speed signs
 
-        if(!(obstacle instanceof SpeedLimitSign))
+        //if the obstacle is not passable - maintain a safe distance
+        if(!obstacle.isPassable())
             switch(driverBehaviorType)
             {
                 case reckless:
-                    return 8*(1+slipperinessOffset);
+                    return 4*(1+slipperinessOffset);
                 case normal:
-                    return 12*(1+slipperinessOffset);
+                    return 5*(1+slipperinessOffset);
                 case cautious:
-                    return 15*(1+slipperinessOffset);
+                    return 6*(1+slipperinessOffset);
                 default:
-                    return 13*(1+slipperinessOffset);
+                    return 5*(1+slipperinessOffset);
             }
         else
             return 0;

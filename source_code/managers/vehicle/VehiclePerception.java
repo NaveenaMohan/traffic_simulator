@@ -10,7 +10,8 @@ import managers.space.ObjectInSpace;
  * this class is responsible for collecting the information about the world
  */
 public class VehiclePerception {
-    public static void See(int vehID, IRUnitManager rUnit, double maxVision, VehicleState vehicleState, ISpaceManager spaceManager, IDataAndStructures dataAndStructures, ObjectInSpace myObject) {
+    public static void See(int vehID, IRUnitManager rUnit, double maxVision, VehicleState vehicleState,
+                           ISpaceManager spaceManager, IDataAndStructures dataAndStructures, ObjectInSpace myObject, String myDestination) {
         IRUnitManager temp = rUnit;
 
         if (temp.getNextRUnitList().size() > 0)
@@ -23,24 +24,32 @@ public class VehiclePerception {
             //distance from the object
             double distance = Math.max(0,(i+1) * dataAndStructures.getGlobalConfigManager().getMetresPerRUnit());
 
+            //check for decision points
+            if(temp.getNextRUnitList().size()>1)
+                vehicleState.registerObject(new VehicleMemoryObject(temp, new DecisionPoint(), distance, getObjectVelocity(new DecisionPoint()), true));
+
             //check for blockages
             if (temp.getBlockage() != null)
-                vehicleState.registerObject(new VehicleMemoryObject(temp, temp.getBlockage(), distance, getObjectVelocity(temp.getBlockage())));
-
+                vehicleState.registerObject(new VehicleMemoryObject(temp, temp.getBlockage(), distance, getObjectVelocity(temp.getBlockage()), false));
 
             //check for zebra crossings
             if (temp.getZebraCrossing() != null)
-                vehicleState.registerObject(new VehicleMemoryObject(temp, temp.getZebraCrossing(), distance, getObjectVelocity(temp.getZebraCrossing())));
+                if(!temp.getZebraCrossing().getTrafficLight().isGreen())
+                vehicleState.registerObject(new VehicleMemoryObject(temp, temp.getZebraCrossing(), distance, getObjectVelocity(temp.getZebraCrossing()), false));
 
             //check for traffic lights
             if (temp.getTrafficLight() != null)
                 if(!temp.getTrafficLight().isGreen())
-                    vehicleState.registerObject(new VehicleMemoryObject(temp, temp.getTrafficLight(), distance, getObjectVelocity(temp.getTrafficLight())));
+                    vehicleState.registerObject(new VehicleMemoryObject(temp, temp.getTrafficLight(), distance, getObjectVelocity(temp.getTrafficLight()), false));
 
             //check for traffic signs
-            if (temp.getTrafficSign() != null)
-                vehicleState.registerObject(new VehicleMemoryObject(temp, temp.getTrafficSign(), distance, getObjectVelocity(temp.getTrafficSign())));
+            if (temp.getTrafficSign() != null) {
+                vehicleState.registerObject(new VehicleMemoryObject(temp, temp.getTrafficSign(), distance, getObjectVelocity(temp.getTrafficSign()), true));
 
+                //get the next direction
+                if(temp.getTrafficSign() instanceof DirectionSign)
+                    vehicleState.registerObject(new VehicleMemoryObject(temp, temp.getTrafficSign(), distance, getObjectVelocity(temp.getTrafficSign()), true));
+            }
             //check for other vehicles
             ObjectInSpace possibleVehicle = spaceManager.getObjectWithCentreAt(temp.getX(), temp.getY(), temp.getZ());
             if (possibleVehicle != null)
@@ -52,14 +61,15 @@ public class VehiclePerception {
                                             temp,
                                             veh,
                                             distance - (veh.getObjectInSpace().getWidth() / 2) + veh.getVehicle().getDepthInCurrentRUnit(),
-                                            getObjectVelocity(veh)));
+                                            getObjectVelocity(veh),
+                                            false));
                             break;
                         }
                     }
 
             //check for end of road
             if (temp.getNextRUnitList().size() <= 0)
-                vehicleState.registerObject(new VehicleMemoryObject(temp, new EndOfRoad(), distance, getObjectVelocity(new EndOfRoad())));
+                vehicleState.registerObject(new VehicleMemoryObject(temp, new EndOfRoad(), distance, getObjectVelocity(new EndOfRoad()), false));
 
             //check if the changeable RUnit is clear
             vehicleState.setChangeableClear(false);
@@ -70,7 +80,7 @@ public class VehiclePerception {
 
             //go to next rUnit
             if (temp.getNextRUnitList().size() > 0)
-                temp = temp.getNextRUnitList().get(0);
+                temp = VehicleMotor.chooseNext(temp,vehicleState);
             else
                 break;
 
@@ -118,6 +128,10 @@ public class VehiclePerception {
             return 0;
         else if (obj instanceof SpeedLimitSign)//check for speed sign and do the conversion from km/h to m/s
             return (((SpeedLimitSign) obj).getSpeedLimit()*1000)/3600;
+        else if (obj instanceof DirectionSign)//check for Direction Sign
+            return 100;
+        else if (obj instanceof DecisionPoint)//check for Decision Point
+            return 100;
         else
             throw new IllegalArgumentException("object passed is not defined");
     }

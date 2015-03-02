@@ -122,7 +122,6 @@ public class DrawingBoard extends JPanel implements ActionListener {
                     (previousRUnit==null ? currentY : previousRUnit.getY()));
             Coordinates B = new Coordinates(currentX, currentY);
 
-            System.out.println(A + " " + B);
             do {
                 if (!singleLaneCoordinates.contains(A)) {
                     //Add and Return RUnit for single lane and store it as previous RUnit TODO : Change storage of previous RUnit

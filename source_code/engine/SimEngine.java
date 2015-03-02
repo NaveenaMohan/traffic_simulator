@@ -2,8 +2,12 @@ package engine;
 
 import common.Common;
 import dataAndStructures.DataAndStructures;
+import managers.globalconfig.*;
+import managers.roadnetwork.RoadNetwork;
+import managers.roadnetwork.RoadNetworkManager;
 import managers.space.VehicleDirection;
 import managers.vehicle.IVehicleManager;
+import managers.vehiclefactory.VehicleFactoryManager;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -44,10 +48,25 @@ public class SimEngine {
         pause=false;
     }
 
+    public void CleanAll() {
+        RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
+        VehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
+        GlobalConfigManager globalConfigManager = new GlobalConfigManager(
+                100,//ticks per second
+                1,//metres per RUnit
+                new ClimaticCondition(),
+                new DriverBehavior(),
+                new VehicleDensity(),
+                new Route()
+        );
+        dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
+
+        timer.stop();
+    }
+
     public void performAction() {
 
         if(!pause) {
-
 
             //FABIAN
             dataAndStructures.getGlobalConfigManager().incrementTick();//adds one to tick with every action performed
@@ -77,7 +96,6 @@ public class SimEngine {
 
             //change traffic lights
             dataAndStructures.getRoadNetworkManager().changeLight(dataAndStructures.getGlobalConfigManager().getCurrentSecond());
-
 
             if ((int) dataAndStructures.getGlobalConfigManager().getCurrentSecond() > previousSecond) {
                 System.out.println("--------------------------------- " + dataAndStructures.getGlobalConfigManager().getCurrentSecond());
