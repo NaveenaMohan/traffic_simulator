@@ -33,6 +33,10 @@ public interface IGlobalConfigManager {
 
     double getLengthRUnits(double metres);
 
+    int getTicksPerSecond();
+
+    Long getCurrentTick();
+
     double getMetresPerRUnit();
 
 

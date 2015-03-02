@@ -6,6 +6,7 @@ import managers.globalconfig.IGlobalConfigManager;
 import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
 import managers.space.Space;
+import managers.space.VehicleDirection;
 
 public interface IVehicleManager {
 
@@ -22,5 +23,7 @@ public interface IVehicleManager {
     int getVehID();
 
     double getCurrentAcceleration();
+
+    public VehicleDirection getDirection();
 
 }

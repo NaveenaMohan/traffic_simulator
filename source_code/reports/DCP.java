@@ -1,5 +1,6 @@
 package reports;
 
+import jdk.nashorn.internal.runtime.regexp.JoniRegExp;
 import managers.globalconfig.GlobalConfigManager;
 import managers.vehicle.Vehicle;
 import managers.vehiclefactory.VehicleFactory;
@@ -22,7 +23,7 @@ public class DCP {
     public DCP() {
     }
 
-    public DCP(Vehicle vehicle) {
+    public void sendVehicleInformation(Vehicle vehicle) {
         Speed.add(vehicle.getCurrentAcceleration());
 
         if (vehiclesSpeed.containsKey(vehicle.getVehID()))
@@ -30,6 +31,12 @@ public class DCP {
         else
             vehiclesSpeed.put(vehicle.getVehID()+"", Speed);
     }
+
+    public void sendVehicleFactory(VehicleFactory vehicleFactory){
+
+
+    }
+
 
 
     public void getVehiclesAvgSpeed(Vehicle vehicle) {

@@ -37,16 +37,16 @@ public class VehicleFactory{
         switch(vehicleType)
         {
             case car:
-                objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,3,2,null);
+                objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,3,2,null, vehicleType);
                 break;
             case emergency:
-                objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,2,2,null);
+                objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,3,2,null, vehicleType);
                 break;
             case heavyLoad:
-                objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 4,4,4,null);
+                objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,4,4,null, vehicleType);
                 break;
             default:
-                objectInSpace = new ObjectInSpace(vehID, rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,3,2,null);
+                objectInSpace = new ObjectInSpace(vehID, rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,3,2,null, vehicleType);
         }
 
         //only add the new vehicle if it fits in the space outside the factory
@@ -55,12 +55,11 @@ public class VehicleFactory{
             Vehicle vehicle = new Vehicle(vehID,//vehicle ID
                     rUnit,//vehicle starting point
                     driver,
-                    100,//maximum speed
-                    vehicleType,
+                    (90*1000)/3600,//maximum speed
                     destination,
                     objectInSpace,
                     2.7,//maximum acceleration in metres per second.
-                    -50,//max deceleration
+                    -100,//max deceleration
                     time
             );
             return vehicle;

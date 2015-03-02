@@ -4,7 +4,7 @@ package managers.globalconfig;
  * Created by Fabians on 13/02/2015.
  */
 public class TickTime {
-    private double ratio;
+    private int ratio;
     private Long currentTick;
 
     public void incrementTick(){
@@ -19,7 +19,7 @@ public class TickTime {
         return currentTick;
     }
 
-    public double getRatio() {
+    public int getRatio() {
         return ratio;
     }
 

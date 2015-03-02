@@ -1,3 +1,4 @@
+import common.Common;
 import engine.SimEngine;
 import managers.roadnetwork.RoadNetworkManager;
 import managers.runit.DirectionSignType;
@@ -118,13 +119,21 @@ public class DrawingBoard extends JPanel implements ActionListener {
 
         if (mousePressed && configButtonSelected.equals(ConfigButtonSelected.addSingleLane)) {
             Graphics2D g2D = (Graphics2D) g;
-            Coordinates coordinates = new Coordinates(currentX, currentY);
-            if (!singleLaneCoordinates.contains(coordinates)) {
-                //Add and Return RUnit for single lane and store it as previous RUnit TODO : Change storage of previous RUnit
-                singleLaneCoordinates.add(coordinates);
-                previousRUnit = roadNetworkManager.addSingleLane(currentX, currentY, previousRUnit);
-            }
-            g2D.drawImage(bi, currentX, currentY, this);
+
+            Coordinates A = new Coordinates((previousRUnit==null ? currentX : previousRUnit.getX()),
+                    (previousRUnit==null ? currentY : previousRUnit.getY()));
+            Coordinates B = new Coordinates(currentX, currentY);
+
+            do {
+                if (!singleLaneCoordinates.contains(A)) {
+                    //Add and Return RUnit for single lane and store it as previous RUnit TODO : Change storage of previous RUnit
+                    singleLaneCoordinates.add(A);
+                    previousRUnit = roadNetworkManager.addSingleLane(A.getX(), A.getY(), previousRUnit);
+
+                }
+                A = new Coordinates(Common.getNextPointFromTo(A, B).getX(), Common.getNextPointFromTo(A,B).getY());
+                g2D.drawImage(bi, currentX, currentY, this);
+            }while(A.getY()!=B.getY() & A.getX() != B.getX());
         }
 
         if (configButtonSelected.equals(ConfigButtonSelected.trafficLight)) {

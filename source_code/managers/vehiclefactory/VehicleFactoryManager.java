@@ -29,16 +29,17 @@ public class VehicleFactoryManager implements IVehicleFactoryManager {
     public Vehicle createVehicle(IDataAndStructures dataAndStructures) {
         //create vehicle is consulting globalConfig to look at destinations, driver behaviour, climatic conditions, etc...
 
-
-        //get the number of vehicles that are left to produce in the system
-        int vehiclesLeftToProduce = dataAndStructures.getGlobalConfigManager().getVehicleDensity().getTotalVehicles()
-                - dataAndStructures.getVehicles().size();
-
-        if (vehiclesLeftToProduce > 0) {
+        //this happens on every tick
+        //get the vehicleCreation Rate and ticks per second to figure out whether to create a vehicle on this occasion or not
+        if(Common.randIntegerBetween(1,
+                (int)(dataAndStructures.getGlobalConfigManager().getTicksPerSecond()
+                        /dataAndStructures.getGlobalConfigManager().getVehicleDensity().getCreationRatePerSecond()))
+                ==1)//look at probabilities of choosing one per rate
             if (vehicleFactoryList.size() > 0) {
 
+                System.out.println("Creating vehicle");
                 //get the vehicle factory from which you will now produce
-                return vehicleFactoryList.get(0).addVehicle(
+                return vehicleFactoryList.get(Common.randIntegerBetween(0, vehicleFactoryList.size()-1)).addVehicle(
                         dataAndStructures.getVehicles().size() + 1,
                         nextVehicleType(dataAndStructures),//vehicle Type
                         nextDriver(dataAndStructures),//driver
@@ -46,7 +47,6 @@ public class VehicleFactoryManager implements IVehicleFactoryManager {
                         dataAndStructures.getSpaceManager(),
                         dataAndStructures.getGlobalConfigManager().getCurrentSecond());
             }
-        }
 
         return null;
     }

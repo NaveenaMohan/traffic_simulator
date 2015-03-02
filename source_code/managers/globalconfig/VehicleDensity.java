@@ -8,7 +8,7 @@ public class VehicleDensity {
     private double carDensity=0.5;
     private double heavyVehicleDensity=0.5;
     private double emergencyVehicleDensity=0;
-    private int totalVehicles=50;
+    private double creationRatePerSecond=0.5;
 
     public double getCarDensity() {
         return carDensity;
@@ -43,11 +43,11 @@ public class VehicleDensity {
         }else throw new IllegalArgumentException("Density of cars+heavies+emergencies not matching total of vehicles");
     }
 
-    public int getTotalVehicles() {
-        return totalVehicles;
+    public double getCreationRatePerSecond() {
+        return creationRatePerSecond;
     }
 
-    public void setTotalVehicles(int totalVehicles) {
-        this.totalVehicles = totalVehicles;
+    public void setCreationRatePerSecond(int creationRatePerSecond) {
+        this.creationRatePerSecond = creationRatePerSecond;
     }
 }
