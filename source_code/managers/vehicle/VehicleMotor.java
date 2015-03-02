@@ -138,7 +138,7 @@ public class VehicleMotor {
             }
 
             //if next object is a decision point
-            if (nextObject.getObject() instanceof DecisionPoint) {
+            if (nextObject.getObject() instanceof RoadDecisionPoint) {
                 //if you have next direction set
                 if (vehicleState.getNextDirectionAtDecisionPoint() != null) {
                     //set your nextRUnit
@@ -249,7 +249,7 @@ public class VehicleMotor {
         }
 
         //if you have just passed a decision Point
-        if (obj instanceof DecisionPoint) {
+        if (obj instanceof RoadDecisionPoint) {
             vehicleState.setNextRUnitAfterDecisionPoint(null);
             vehicleState.setNextDirectionAtDecisionPoint(null);
         }

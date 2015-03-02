@@ -26,7 +26,7 @@ public class VehiclePerception {
 
             //check for decision points
             if(temp.getNextRUnitList().size()>1)
-                vehicleState.registerObject(new VehicleMemoryObject(temp, new DecisionPoint(), distance, getObjectVelocity(new DecisionPoint()), true));
+                vehicleState.registerObject(new VehicleMemoryObject(temp, new RoadDecisionPoint(), distance, getObjectVelocity(new RoadDecisionPoint()), true));
 
             //check for blockages
             if (temp.getBlockage() != null)
@@ -130,7 +130,7 @@ public class VehiclePerception {
             return (((SpeedLimitSign) obj).getSpeedLimit()*1000)/3600;
         else if (obj instanceof DirectionSign)//check for Direction Sign
             return 100;
-        else if (obj instanceof DecisionPoint)//check for Decision Point
+        else if (obj instanceof RoadDecisionPoint)//check for Decision Point
             return 100;
         else
             throw new IllegalArgumentException("object passed is not defined");
