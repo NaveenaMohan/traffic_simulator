@@ -63,11 +63,13 @@ public class DrawingBoard extends JPanel implements ActionListener {
     private boolean mousePressed;
     private DefaultTableModel model;
     private boolean isSimulationPlaying;
+    private JLabel currentSecondValue;
 
-    public DrawingBoard(DefaultTableModel model, RoadNetworkManager roadNetworkManager, SimEngine simEngine) {
+    public DrawingBoard(DefaultTableModel model, RoadNetworkManager roadNetworkManager, SimEngine simEngine, JLabel currentSecondValue) {
         this.model = model;
         this.roadNetworkManager = roadNetworkManager;
         this.simEngine = simEngine;
+        this.currentSecondValue = currentSecondValue;
         setBackground(Color.white);
         setBounds(286, 79, 1021, 348);
         setLayout(null);
@@ -519,6 +521,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                 }
             }
         }
+        currentSecondValue.setText(String.valueOf(simEngine.getDataAndStructures().getGlobalConfigManager().getCurrentSecond()));
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
     }
