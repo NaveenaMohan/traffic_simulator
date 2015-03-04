@@ -35,7 +35,7 @@ public interface IRUnitManager {
 
      int getZ();
 
-    int getId();
+    String getId();
 
     List<RUnit> getNextRUnitList();
 

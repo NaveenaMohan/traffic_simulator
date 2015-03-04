@@ -2,6 +2,7 @@ package managers.roadnetwork;
 
 import managers.runit.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public class RoadNetworkManager implements IRoadNetworkManager {
 
     @Override
     public RUnit addSingleLane(int x, int y, RUnit prevRUnit) {
-        RUnit currentRUnit = new RUnit(rUnitId, x, y);
+        RUnit currentRUnit = new RUnit(String.valueOf(rUnitId), x, y);
         if (prevRUnit != null) {
             currentRUnit.getPrevsRUnitList().add(prevRUnit);
             prevRUnit.getNextRUnitList().add(currentRUnit);
@@ -32,10 +33,38 @@ public class RoadNetworkManager implements IRoadNetworkManager {
     }
 
     @Override
-    public RUnit addDoubleLane(int x, int y, RUnit prevRUnit) {
+    public Map<String, RUnit> addDoubleLane(int x, int y, int changeableX, int changeableY, RUnit prevRUnit, RUnit changeablePrevRunit) {
+        //Populate Current RUnit
+        RUnit currentRUnit = new RUnit(String.valueOf(rUnitId), x, y);
+        if (prevRUnit != null) {
+            currentRUnit.getPrevsRUnitList().add(prevRUnit);
+            prevRUnit.getNextRUnitList().add(currentRUnit);
+        }
 
-        return null;
+        //Populate changeable Current RUnit
+        RUnit currentChangeableRUnit = new RUnit("c" + String.valueOf(rUnitId), x, y);
+        currentChangeableRUnit.setRight(true);
+
+        if (changeablePrevRunit != null) {
+            currentChangeableRUnit.getPrevsRUnitList().add(changeablePrevRunit);
+            changeablePrevRunit.getNextRUnitList().add(currentChangeableRUnit);
+        }
+
+        //Mutually setting the changeable RUnits
+        currentRUnit.setChangeAbleRUnit(currentChangeableRUnit);
+        currentChangeableRUnit.setChangeAbleRUnit(currentRUnit);
+
+        //Populate both RUnit Hashtables
+        roadNetwork.getrUnitHashtable().put(currentRUnit.getId(), currentRUnit);
+        roadNetwork.getChangeableRUnitHashtable().put(currentChangeableRUnit.getId(), currentRUnit);
+        rUnitId++;
+
+        Map<String, RUnit> prevRUnitMap = new HashMap<String, RUnit>();
+        prevRUnitMap.put("runit", currentRUnit);
+        prevRUnitMap.put("changeableRunit", currentChangeableRUnit);
+        return prevRUnitMap;
     }
+
 
     @Override
     public void addTrafficLight(RUnit rUnit, TrafficLight trafficLight) {

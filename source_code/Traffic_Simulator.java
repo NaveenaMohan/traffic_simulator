@@ -595,7 +595,14 @@ public class  Traffic_Simulator {
         single_lane.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawingBoard.addMouseDragMotionListener();
+                drawingBoard.addSingleLaneMouseDragMotionListener();
+            }
+        });
+
+        double_lane.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.addDoubleLaneMouseDragMotionListener();
             }
         });
 

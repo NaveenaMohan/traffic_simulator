@@ -35,4 +35,27 @@ public class Common {
 
         return new Coordinates((int)(A.getX()+xVel), (int)( A.getY()+yVel));
     }
+
+    public static double normalizeAngle(double angle) {
+        double newAngle = angle;
+        while (newAngle <= -180) newAngle += 360;
+        while (newAngle > 180) newAngle -= 360;
+        return newAngle;
+    }
+
+    public static Coordinates getAdjacentPointToB(Coordinates A, Coordinates B, double distance, double bearing) {
+        //get the angle of line from A to B
+        double ABAngle = (Math.atan2(B.getY() - A.getY(), B.getX() - A.getX()) * 180) / Math.PI;
+
+        //add bearing to angle and normalize to -179 to 180
+        double newAngle = normalizeAngle(ABAngle + bearing);
+
+        //get the new x and y
+        double x = distance * Math.cos(newAngle * (Math.PI / 180));
+        double y = distance * Math.sin(newAngle * (Math.PI / 180));
+
+        return new Coordinates((int) round((B.getX() + x), 0), (int) round((B.getY() + y), 0));
+
+
+    }
 }

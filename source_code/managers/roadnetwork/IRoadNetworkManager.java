@@ -5,6 +5,7 @@ import managers.runit.RUnit;
 import managers.runit.TrafficLight;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by naveena on 08/02/15.
@@ -13,7 +14,7 @@ public interface IRoadNetworkManager {
 
     RUnit addSingleLane(int x, int y, RUnit prevRUnit);
 
-    RUnit addDoubleLane(int x, int y, RUnit prevRUnit);
+    Map<String, RUnit> addDoubleLane(int x, int y, int changeableX, int changeableY, RUnit prevRUnit, RUnit changeablePrevRunit);
 
     void addTrafficLight(RUnit rUnit, TrafficLight trafficLight);
 
