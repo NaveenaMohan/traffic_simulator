@@ -1,14 +1,12 @@
 package managers.vehiclefactory;
 
 import common.Common;
-import dataAndStructures.DataAndStructures;
 import dataAndStructures.IDataAndStructures;
 import managers.globalconfig.DriverBehaviorType;
 import managers.globalconfig.VehicleType;
 import managers.runit.RUnit;
 import managers.vehicle.Driver;
 import managers.vehicle.Vehicle;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +16,7 @@ import java.util.List;
  */
 public class VehicleFactoryManager implements IVehicleFactoryManager {
 
-    private List<VehicleFactory> vehicleFactoryList = new ArrayList<VehicleFactory>();
+    public List<VehicleFactory> vehicleFactoryList = new ArrayList<VehicleFactory>();
 
     @Override
     public void addVehicleFactory(RUnit rUnit) {
@@ -31,9 +29,9 @@ public class VehicleFactoryManager implements IVehicleFactoryManager {
 
         //this happens on every tick
         //get the vehicleCreation Rate and ticks per second to figure out whether to create a vehicle on this occasion or not
-        if(Common.randIntegerBetween(1,
-                (int)(dataAndStructures.getGlobalConfigManager().getTicksPerSecond()
-                        /dataAndStructures.getGlobalConfigManager().getVehicleDensity().getCreationRatePerSecond()))
+        if (Common.randIntegerBetween(1,
+                (int) (dataAndStructures.getGlobalConfigManager().getTicksPerSecond()
+                        / dataAndStructures.getGlobalConfigManager().getVehicleDensity().getCreationRatePerSecond()))
                 ==1)//look at probabilities of choosing one per rate
             if (vehicleFactoryList.size() > 0) {
 

@@ -22,7 +22,6 @@ import java.util.Map;
 public class DrawingBoard extends JPanel implements ActionListener {
     private static int trafficLightIdIndex = 1;
     private static int zebraCrossingTrafficLightIdIndex = 1;
-    private static int blockageIndex = 1;
     BufferedImage bi;
     BufferedImage db;
     private int currentX, currentY;
@@ -253,12 +252,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addBlockage(bestMatchRUnit);
                 //Drawing the blockage
-                JButton blk = new JButton();
-                blk.setToolTipText("Blockage: " + blockageIndex);
-                blk.setBounds(bestMatchRUnit.getX(), bestMatchRUnit.getY(), 15, 15);
-                blk.setIcon(new ImageIcon(blockageImage));
-                this.add(blk);
-                blockageIndex++;
+                g.drawImage(blockageImage, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, this);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -308,7 +302,11 @@ public class DrawingBoard extends JPanel implements ActionListener {
                     //Updating the best match rUnit with the blockage
                     simEngine.getDataAndStructures().getRoadNetworkManager().addDirectionSign(bestMatchRUnit, destination, DirectionSignType.left);
                     //Drawing the left sign
-                    g.drawImage(leftSignImage, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, this);
+                    JButton left = new JButton();
+                    left.setToolTipText("Take left to go to " + destination);
+                    left.setBounds(bestMatchRUnit.getX(), bestMatchRUnit.getY(), 15, 15);
+                    left.setIcon(new ImageIcon(leftSignImage));
+                    this.add(left);
                 }
             }
             configButtonSelected = ConfigButtonSelected.noOption;
@@ -329,7 +327,11 @@ public class DrawingBoard extends JPanel implements ActionListener {
                     //Updating the best match rUnit with the blockage
                     simEngine.getDataAndStructures().getRoadNetworkManager().addDirectionSign(bestMatchRUnit, destination, DirectionSignType.right);
                     //Drawing the right sign
-                    g.drawImage(rightSignImage, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, this);
+                    JButton right = new JButton();
+                    right.setToolTipText("Take right to go to " + destination);
+                    right.setBounds(bestMatchRUnit.getX(), bestMatchRUnit.getY(), 15, 15);
+                    right.setIcon(new ImageIcon(rightSignImage));
+                    this.add(right);
                 }
             }
             configButtonSelected = ConfigButtonSelected.noOption;
@@ -350,7 +352,11 @@ public class DrawingBoard extends JPanel implements ActionListener {
                     //Updating the best match rUnit with the blockage
                     simEngine.getDataAndStructures().getRoadNetworkManager().addDirectionSign(bestMatchRUnit, destination, DirectionSignType.straight);
                     //Drawing the straight sign
-                    g.drawImage(straightSignImage, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, this);
+                    JButton straight = new JButton();
+                    straight.setToolTipText("Go straight to go to " + destination);
+                    straight.setBounds(bestMatchRUnit.getX(), bestMatchRUnit.getY(), 15, 15);
+                    straight.setIcon(new ImageIcon(straightSignImage));
+                    this.add(straight);
                 }
             }
             configButtonSelected = ConfigButtonSelected.noOption;

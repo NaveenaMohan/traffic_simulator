@@ -3,6 +3,7 @@ import engine.SimEngine;
 import managers.globalconfig.*;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
+import managers.vehiclefactory.NoVehicleFactoryDialogBox;
 import managers.vehiclefactory.VehicleFactoryManager;
 
 import javax.imageio.ImageIO;
@@ -719,7 +720,12 @@ public class  Traffic_Simulator {
             @Override
             public void actionPerformed(ActionEvent e) {
                 drawingBoard.setSimulationPlaying(true);
-                simEngine.Play(drawingBoard);
+                if (vehicleFactoryManager.vehicleFactoryList.isEmpty()) {
+                    NoVehicleFactoryDialogBox vehicleFactoryDialogBox = new NoVehicleFactoryDialogBox();
+                    vehicleFactoryDialogBox.vehicleFactoryDialog();
+                    vehicleFactoryDialogBox.setVisible(true);
+                } else
+                    simEngine.Play(drawingBoard);
             }
         });
 
