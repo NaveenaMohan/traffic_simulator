@@ -41,6 +41,10 @@ public interface IRUnitManager {
 
     List<RUnit> getPrevsRUnitList();
 
+    boolean isLeft();
+
+    void setLeft(boolean isLeft);
+
     public void ChangeLight(boolean color, String trafficLightID, int index);
 
     RUnit getChangeAbleRUnit();

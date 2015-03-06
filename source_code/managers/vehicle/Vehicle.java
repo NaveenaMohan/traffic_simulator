@@ -31,15 +31,16 @@ public class Vehicle implements IVehicleManager {
 
     private double previousTime;
 
-    public Vehicle(int vehID, RUnit rUnit, Driver driver, int maxSpeedLimit, String destination
-            , ObjectInSpace objectInSpace, double maxAcceleration, double maxDeceleration, double timeCreated) {
+    public Vehicle(int vehID, RUnit rUnit, Driver driver, int initialSpeed, String destination
+            , ObjectInSpace objectInSpace, double maxAcceleration, double maxDeceleration, double timeCreated, double maximumVelocity) {
         this.vehID = vehID;
         this.rUnit = rUnit;
         this.driver = driver;
         this.timeCreated = timeCreated;
         previousTime=timeCreated;
 
-        this.vehicleMotor = new VehicleMotor(maxAcceleration, maxDeceleration, maxSpeedLimit, destination, objectInSpace);
+        this.vehicleMotor = new VehicleMotor(maxAcceleration, maxDeceleration, initialSpeed, destination, objectInSpace, maximumVelocity,
+                (objectInSpace.getVehicleType()==VehicleType.emergency ? true : false));
         this. vehicleState = new VehicleState();
     }
 
@@ -143,4 +144,9 @@ public class Vehicle implements IVehicleManager {
     public double getCurrentAcceleration() { //ADDED BY LORENA TO TEST ACCELERATION IN THE REPORTS
         return vehicleMotor.getCurrentAcceleration();
     } //ADDED IN ORDER TO REPORT
+
+    @Override
+    public boolean isVisible() {
+        return getObjectInSpace().isVisible();
+    }
 }

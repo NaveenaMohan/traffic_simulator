@@ -68,7 +68,7 @@ public class GlobalConfigManager implements IGlobalConfigManager {
 
     @Override
     public double getCurrentSecond() {
-        return ((double)tickTime.getCurrentTick()/tickTime.getRatio());
+        return tickTime.getCurrentSecond();
     }
 
     @Override
@@ -89,6 +89,11 @@ public class GlobalConfigManager implements IGlobalConfigManager {
     @Override
     public int getTicksPerSecond() {
         return tickTime.getRatio();
+    }
+
+    @Override
+    public void setTicksPerSecond(int ticksPerSecond) {
+        tickTime.setRatio(ticksPerSecond);
     }
 
     @Override
