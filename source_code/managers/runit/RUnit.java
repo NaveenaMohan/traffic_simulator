@@ -16,28 +16,28 @@ public class RUnit implements IRUnitManager{
     private List<RUnit> nextRUnitList = new ArrayList<RUnit>();
     private List<RUnit> prevsRUnitList = new ArrayList<RUnit>();
     private RUnit changeAbleRUnit;
-    private int id;
-    private boolean isLeft;
+    private String id;
+    private boolean isLeft = true;
     private TrafficSign trafficSign;
     private ZebraCrossing zebraCrossing;
     private Blockage blockage;
     private TrafficLight trafficLight;
 
-    @Override
-    public void ChangeLight(boolean color, String trafficLightID, int index) {
-        //TODO change cycle element for traffic light
-    }
-
-    public RUnit(int id, int x, int y ) {
+    public RUnit(String id, int x, int y) {
         this.id = id;
         this.x = x;
         this.y = y;
     }
 
-    public RUnit(int id, List<RUnit> prevsRUnitList, List<RUnit> nextRUnitList) {
+    public RUnit(String id, List<RUnit> prevsRUnitList, List<RUnit> nextRUnitList) {
         this.id = id;
         this.prevsRUnitList = prevsRUnitList;
         this.nextRUnitList = nextRUnitList;
+    }
+
+    @Override
+    public void ChangeLight(boolean color, String trafficLightID, int index) {
+        //TODO change cycle element for traffic light
     }
 
     public int getX() {
@@ -76,6 +76,16 @@ public class RUnit implements IRUnitManager{
         return prevsRUnitList;
     }
 
+    @Override
+    public boolean isLeft() {
+        return isLeft;
+    }
+
+    @Override
+    public void setLeft(boolean isLeft) {
+        this.isLeft = isLeft;
+    }
+
     public void setPrevsRUnitList(List<RUnit> prevsRUnitList) {
         this.prevsRUnitList = prevsRUnitList;
     }
@@ -88,20 +98,12 @@ public class RUnit implements IRUnitManager{
         this.changeAbleRUnit = changeAbleRUnit;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public boolean isLeft() {
-        return isLeft;
-    }
-
-    public void setLeft(boolean isLeft) {
-        this.isLeft = isLeft;
     }
 
     public TrafficSign getTrafficSign() {

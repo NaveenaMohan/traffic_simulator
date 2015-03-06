@@ -8,6 +8,7 @@ import managers.roadnetwork.RoadNetworkManager;
 import managers.space.VehicleDirection;
 import managers.vehicle.IVehicleManager;
 import managers.vehiclefactory.VehicleFactoryManager;
+import reports.DCP;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -23,12 +24,15 @@ public class SimEngine {
     private DataAndStructures dataAndStructures;
     private int previousSecond=0;//use this to make a move every second
     private boolean pause;
+    private DCP dcp;
 
     int test = 0;
     private int maxCars =200 ;
 
-    public SimEngine(DataAndStructures dataAndStructures) {
+    public SimEngine(DataAndStructures dataAndStructures, DCP dcp) {
         this.dataAndStructures = dataAndStructures;
+        this.dcp = dcp;
+
     }
 
     public void Play(ActionListener actionListener) {
@@ -78,6 +82,9 @@ public class SimEngine {
 
             //FABIAN
             dataAndStructures.getGlobalConfigManager().incrementTick();//adds one to tick with every action performed
+
+            //Report Update
+            dcp.updateReportingInfo(dataAndStructures);
 
             //create new vehicles
             if (dataAndStructures.getVehicles().size() < maxCars | 1==1) {

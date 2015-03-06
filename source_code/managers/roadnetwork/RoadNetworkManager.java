@@ -1,9 +1,9 @@
 package managers.roadnetwork;
 
 import managers.runit.*;
+import ui.Coordinates;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Guera_000 on 12/02/2015.
@@ -21,21 +21,74 @@ public class RoadNetworkManager implements IRoadNetworkManager {
 
     @Override
     public RUnit addSingleLane(int x, int y, RUnit prevRUnit) {
-        RUnit currentRUnit = new RUnit(rUnitId, x, y);
-        if (prevRUnit != null) {
-            currentRUnit.getPrevsRUnitList().add(prevRUnit);
-            prevRUnit.getNextRUnitList().add(currentRUnit);
-        }
+        //Populate Current RUnit
+        RUnit currentRUnit = checkIntersection(x,y,prevRUnit,false);
         roadNetwork.getrUnitHashtable().put(String.valueOf(rUnitId), currentRUnit);
-        rUnitId++;
+        return currentRUnit;
+    }
+
+    private RUnit checkIntersectionAndReturnIntersectedRUnit(Collection<RUnit> rUnits,Coordinates intersectionCoordinates){
+        for(RUnit rUnit :rUnits ){
+            Coordinates coordinates = new Coordinates(rUnit.getX(),rUnit.getY());
+            if(coordinates.equals(intersectionCoordinates)){
+                return rUnit;
+            }
+        }
+        return null;
+    }
+
+    private RUnit checkIntersection(int x, int y,RUnit prevRUnit,boolean isDoubleLane){
+        Coordinates intersectionCoordinates = new Coordinates(x,y);
+        //Check for intersection in Single Lane Coordinates
+        RUnit currentRUnit = checkIntersectionAndReturnIntersectedRUnit(roadNetwork.getrUnitHashtable().values(),intersectionCoordinates);
+        if(currentRUnit == null){
+            //Check for intersection in Double Lane Changeable Coordinates
+            currentRUnit = checkIntersectionAndReturnIntersectedRUnit(roadNetwork.getChangeableRUnitHashtable().values(),intersectionCoordinates);
+        }
+        if(currentRUnit == null){
+            //Create new RUnit Object if it does not intersect with any existing lane coordinates
+            if(isDoubleLane){
+                currentRUnit = new RUnit("c" + String.valueOf(rUnitId), x, y);
+            }else{
+                currentRUnit = new RUnit(String.valueOf(rUnitId), x, y);
+            }
+            rUnitId++;
+        }
+
+        if (prevRUnit != null) {
+            //Assigning the current Runit's previous Runitist with previous Runit
+            if(!currentRUnit.getPrevsRUnitList().contains(prevRUnit)){
+                currentRUnit.getPrevsRUnitList().add(prevRUnit);
+            }
+            //Assigning the previous Runit's next Runitist with current Runit
+            if(!prevRUnit.getNextRUnitList().contains(currentRUnit)){
+                prevRUnit.getNextRUnitList().add(currentRUnit);
+            }
+        }
         return currentRUnit;
     }
 
     @Override
-    public RUnit addDoubleLane(int x, int y, RUnit prevRUnit) {
+    public Map<String, RUnit> addDoubleLane(int x, int y, int changeableX, int changeableY, RUnit prevRUnit, RUnit changeablePrevRunit) {
+        //Populate Current RUnit
+        RUnit currentRUnit = checkIntersection(x,y,prevRUnit,false);
+        roadNetwork.getrUnitHashtable().put(currentRUnit.getId(), currentRUnit);
 
-        return null;
+        //Populate changeable Current RUnit
+        RUnit currentChangeableRUnit = checkIntersection(changeableX,changeableY,changeablePrevRunit,true);
+        roadNetwork.getChangeableRUnitHashtable().put(currentChangeableRUnit.getId(), currentChangeableRUnit);
+        currentChangeableRUnit.setLeft(false);
+
+        //Mutually setting the changeable RUnits
+        currentRUnit.setChangeAbleRUnit(currentChangeableRUnit);
+        currentChangeableRUnit.setChangeAbleRUnit(currentRUnit);
+
+        Map<String, RUnit> prevRUnitMap = new HashMap<String, RUnit>();
+        prevRUnitMap.put("runit", currentRUnit);
+        prevRUnitMap.put("changeableRunit", currentChangeableRUnit);
+        return prevRUnitMap;
     }
+
 
     @Override
     public void addTrafficLight(RUnit rUnit, TrafficLight trafficLight) {

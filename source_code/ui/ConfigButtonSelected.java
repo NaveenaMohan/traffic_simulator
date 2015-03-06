@@ -5,7 +5,7 @@ package ui;
  */
 public enum ConfigButtonSelected {
     addSingleLane,
-    doubleLane,
+    addDoubleLane,
     trafficLight,
     zebraCrossing,
     blockage,
