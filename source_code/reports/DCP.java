@@ -54,7 +54,7 @@ public class DCP {
 
     private void vehiclesMadeDestination() {
         for (IVehicleManager vehicle : dataAndStructures.getVehicles()) {
-            if (vehicle.getVehicle().getMadeDestination) {
+            if (vehicle.getVehicle().getMadeDestination()) {
                 percentageMadeDest++;
                 avgTimeToDestination+=vehicle.getVehicle().getArrivalDestTime();
             }
