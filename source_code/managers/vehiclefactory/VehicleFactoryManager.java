@@ -35,7 +35,6 @@ public class VehicleFactoryManager implements IVehicleFactoryManager {
                 ==1)//look at probabilities of choosing one per rate
             if (vehicleFactoryList.size() > 0) {
 
-                System.out.println("Creating vehicle");
                 //get the vehicle factory from which you will now produce
                 return vehicleFactoryList.get(Common.randIntegerBetween(0, vehicleFactoryList.size()-1)).addVehicle(
                         dataAndStructures.getVehicles().size() + 1,

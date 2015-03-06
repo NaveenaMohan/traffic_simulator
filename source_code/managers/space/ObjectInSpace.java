@@ -16,8 +16,17 @@ public class ObjectInSpace {
     private int width;
     private int height;
     private int length;
+    private boolean isVisible;
     private VehicleDirection direction;
     private VehicleType vehicleType;
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(boolean isVisible) {
+        this.isVisible = isVisible;
+    }
 
     public int getId() {
         return id;
@@ -45,6 +54,7 @@ public class ObjectInSpace {
         this.length = length;
         this.direction = direction;
         this.vehicleType=vehicleType;
+        isVisible = true;
     }
 
     public int getX() {
@@ -106,7 +116,7 @@ public class ObjectInSpace {
 
     public Rectangle getBounds() {
         //this must be changed in the future if we implement direction as well
-        return new Rectangle(x, y, width, length);
+        return new Rectangle(x, y, width*2, length*2);
     }
 
 }

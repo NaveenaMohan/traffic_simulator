@@ -5,6 +5,7 @@ import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
 import managers.vehiclefactory.NoVehicleFactoryDialogBox;
 import managers.vehiclefactory.VehicleFactoryManager;
+import reports.DCP;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -36,7 +37,7 @@ public class  Traffic_Simulator {
             new Route()
     );
     final DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
-
+    private DCP dcp=new DCP(dataAndStructures);
 
     private SimEngine simEngine = new SimEngine(dataAndStructures);
     private DefaultTableModel model;
