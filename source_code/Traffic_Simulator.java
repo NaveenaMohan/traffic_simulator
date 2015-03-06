@@ -438,7 +438,7 @@ public class  Traffic_Simulator {
             public void stateChanged(ChangeEvent e) {
                 globalConfigManager.getVehicleDensity().setCarDensity((trafficDensityRangeSlider.getValue() - trafficDensityRangeSlider.getMinimum())/10);
                 globalConfigManager.getVehicleDensity().setHeavyVehicleDensity((trafficDensityRangeSlider.getUpperValue() - trafficDensityRangeSlider.getValue()) / 10);
-                globalConfigManager.getVehicleDensity().setEmergencyVehicleDensity((trafficDensityRangeSlider.getMaximum()- trafficDensityRangeSlider.getValue())/10);
+                globalConfigManager.getVehicleDensity().setEmergencyVehicleDensity((trafficDensityRangeSlider.getMaximum()- trafficDensityRangeSlider.getUpperValue())/10);
             }
         });
 
@@ -458,7 +458,7 @@ public class  Traffic_Simulator {
             public void stateChanged(ChangeEvent e) {
                 globalConfigManager.getDriverBehaviour().setPercentageCautious((driverBehaviourRangeSlider.getValue() - driverBehaviourRangeSlider.getMinimum()) / 100);
                 globalConfigManager.getDriverBehaviour().setPercentageNormal((driverBehaviourRangeSlider.getUpperValue() - driverBehaviourRangeSlider.getValue()) / 100);
-                globalConfigManager.getDriverBehaviour().setPercentageReckless((driverBehaviourRangeSlider.getMaximum() - driverBehaviourRangeSlider.getValue()) / 100);
+                globalConfigManager.getDriverBehaviour().setPercentageReckless((driverBehaviourRangeSlider.getMaximum() - driverBehaviourRangeSlider.getUpperValue()) / 100);
 
             }
         });

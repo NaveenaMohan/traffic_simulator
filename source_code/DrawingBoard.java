@@ -15,7 +15,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,8 +24,8 @@ import java.util.Map;
 public class DrawingBoard extends JPanel implements ActionListener {
     private static int trafficLightIdIndex = 1;
     private static int zebraCrossingTrafficLightIdIndex = 1;
-    BufferedImage bi;
-    BufferedImage db;
+    BufferedImage bufferedRoadImage;
+    BufferedImage bufferedChangeableRoadImage;
     private int currentX, currentY;
     private List<Coordinates> singleLaneCoordinates = new ArrayList<Coordinates>();
     private List<Coordinates> doubleLaneCoordinates = new ArrayList<Coordinates>();
@@ -50,6 +49,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
     private RUnit previousRUnit;
     private RUnit previousChangeableRunit;
     private Image rUnitImage;
+    private Image changeableRUnitImage;
     private Image trafficLightImage;
     private Image carImage;
     private Image doubleRoad;
@@ -91,10 +91,11 @@ public class DrawingBoard extends JPanel implements ActionListener {
         //TODO: Get the correct images
 
         rUnitImage = getToolkit().getImage(DrawingBoard.class.getResource("road.jpg"));
+        changeableRUnitImage = getToolkit().getImage(DrawingBoard.class.getResource("black.jpg"));
         doubleRoad = getToolkit().getImage(DrawingBoard.class.getResource("doubleRoad.jpg"));
         trafficLightImage = getToolkit().getImage(DrawingBoard.class.getResource("lightMini.png"));
-        carImage = getToolkit().getImage(DrawingBoard.class.getResource("car2.png"));
-        truckImage = getToolkit().getImage(DrawingBoard.class.getResource("heavyLoad.png"));
+        carImage = getToolkit().getImage(DrawingBoard.class.getResource("car.png"));
+        truckImage = getToolkit().getImage(DrawingBoard.class.getResource("truck.png"));
         emergencyVehicleImage = getToolkit().getImage(DrawingBoard.class.getResource("emergency.png"));
         zebraCrossingImage = getToolkit().getImage(DrawingBoard.class.getResource("zebraCrossingMini.png"));
         blockageImage = getToolkit().getImage(DrawingBoard.class.getResource("blockMini.png"));
@@ -113,29 +114,29 @@ public class DrawingBoard extends JPanel implements ActionListener {
         speed90Image = getToolkit().getImage(DrawingBoard.class.getResource("90mini.png"));
         welcomeImage = getToolkit().getImage(DrawingBoard.class.getResource("welcomeMini.png"));
 
-        MediaTracker mt = new MediaTracker(this);
-        mt.addImage(rUnitImage, 1);
+        MediaTracker roadMediaTracker = new MediaTracker(this);
+        roadMediaTracker.addImage(rUnitImage, 1);
         try {
-            mt.waitForAll();
+            roadMediaTracker.waitForAll();
         } catch (Exception e) {
             System.out.println("Exception while loading RUnitImage");
         }
-        bi = new BufferedImage(rUnitImage.getWidth(this), rUnitImage.getHeight(this),
+        bufferedRoadImage = new BufferedImage(rUnitImage.getWidth(this), rUnitImage.getHeight(this),
                 BufferedImage.TYPE_INT_ARGB);
-        Graphics2D big = bi.createGraphics();
-        big.drawImage(rUnitImage, 0, 0, this);
+        Graphics2D roadGraphics = bufferedRoadImage.createGraphics();
+        roadGraphics.drawImage(rUnitImage, 0, 0, this);
 
-        MediaTracker m = new MediaTracker(this);
-        m.addImage(doubleRoad, 1);
+        MediaTracker changeableRoadMediaTracker = new MediaTracker(this);
+        changeableRoadMediaTracker.addImage(changeableRUnitImage, 1);
         try {
-            m.waitForAll();
+            changeableRoadMediaTracker.waitForAll();
         } catch (Exception e) {
             System.out.println("Exception while loading DoubleRoadImage");
         }
-        db = new BufferedImage(doubleRoad.getWidth(this), doubleRoad.getHeight(this),
+        bufferedChangeableRoadImage = new BufferedImage(20, 20,
                 BufferedImage.TYPE_INT_ARGB);
-        Graphics2D b = db.createGraphics();
-        b.drawImage(doubleRoad, 0, 0, this);
+        Graphics2D b = bufferedChangeableRoadImage.createGraphics();
+        b.drawImage(changeableRUnitImage, 0, 0, this);
 
     }
 
@@ -156,7 +157,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                     //Add and Return RUnit for single lane and store it as previous RUnit
                     singleLaneCoordinates.add(A);
                     previousRUnit = roadNetworkManager.addSingleLane(A.getX(), A.getY(), previousRUnit);
-                    g2D.drawImage(bi, currentX, currentY, this);
+                    g2D.drawImage(bufferedRoadImage, currentX, currentY, this);
                 }
                 A = new Coordinates(Common.getNextPointFromTo(A, B).getX(), Common.getNextPointFromTo(A,B).getY());
             }while(A.getY()!=B.getY() & A.getX() != B.getX());
@@ -170,20 +171,27 @@ public class DrawingBoard extends JPanel implements ActionListener {
             Coordinates A = new Coordinates((previousRUnit == null ? currentX : previousRUnit.getX()),
                     (previousRUnit == null ? currentY : previousRUnit.getY()));
             Coordinates B = new Coordinates(currentX, currentY);
+            int currentChangeableX = Common.getAdjacentPointToB(A, B, 15, 90).getX();
+            int currentChangeableY = Common.getAdjacentPointToB(A, B, 15, 90).getY();
+            Coordinates changeableA = new Coordinates((previousChangeableRunit == null ? currentChangeableX : previousChangeableRunit.getX()),
+                    (previousChangeableRunit == null ? currentChangeableY : previousChangeableRunit.getY()));
+            Coordinates changeableB = new Coordinates(currentChangeableX, currentChangeableY);
             do {
-                Coordinates changeableCoordinate = new Coordinates(Common.getAdjacentPointToB(A, B, 5, -90).getX(), Common.getAdjacentPointToB(A, B, 5, -90).getY());
-                if (!doubleLaneCoordinates.contains(A) && ! doubleLaneChangeableCoordinates.contains(changeableCoordinate)) {
+                if (!doubleLaneCoordinates.contains(A) && !doubleLaneChangeableCoordinates.contains(changeableA)) {
                     //Add and Return RUnit for double lane and store it as previous RUnit
                     doubleLaneCoordinates.add(A);
-                    doubleLaneChangeableCoordinates.add(changeableCoordinate);
-                    Map<String, RUnit> prevRUnitMap = roadNetworkManager.addDoubleLane(A.getX(), A.getY(), changeableCoordinate.getX(), changeableCoordinate.getY(), previousRUnit, previousChangeableRunit);
+                    doubleLaneChangeableCoordinates.add(changeableA);
+                    Map<String, RUnit> prevRUnitMap = roadNetworkManager.addDoubleLane(A.getX(), A.getY(), changeableA.getX(), changeableA.getY(), previousRUnit, previousChangeableRunit);
                     if (prevRUnitMap != null) {
                         previousRUnit = prevRUnitMap.get("runit");
                         previousChangeableRunit = prevRUnitMap.get("changeableRunit");
                     }
-                    g2d.drawImage(db, currentX, currentY, this);
+                    //g2d.drawImage(bufferedChangeableRoadImage, currentX, currentY, this);
+                    g2d.drawImage(bufferedRoadImage, currentX, currentY, this);
+                    g2d.drawImage(bufferedChangeableRoadImage, currentChangeableX, currentChangeableY, this);
                 }
                 A = new Coordinates(Common.getNextPointFromTo(A, B).getX(), Common.getNextPointFromTo(A, B).getY());
+                changeableA = new Coordinates(Common.getNextPointFromTo(changeableA, changeableB).getX(), Common.getNextPointFromTo(changeableA,changeableB).getY());
             } while (A.getY() != B.getY() & A.getX() != B.getX());
         }
 
@@ -540,7 +548,15 @@ public class DrawingBoard extends JPanel implements ActionListener {
 
         //Drawing double road
         for (Coordinates coordinate : doubleLaneCoordinates) {
-            g2D.drawImage(doubleRoad, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(rUnitImage, coordinate.getX(), coordinate.getY(), this);
+            g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            BasicStroke bs = new BasicStroke(2);
+            g2D.setStroke(bs);
+        }
+
+        //Drawing double changeable road
+        for (Coordinates coordinate : doubleLaneChangeableCoordinates) {
+            g2D.drawImage(changeableRUnitImage, coordinate.getX(), coordinate.getY(), this);
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             BasicStroke bs = new BasicStroke(2);
             g2D.setStroke(bs);
@@ -630,12 +646,14 @@ public class DrawingBoard extends JPanel implements ActionListener {
                 }
 
 
-                /*double angle = objectInSpace.getDirection().getAngle();
-                //System.out.println("ANGLE :  " +angle);
+                double angle = objectInSpace.getDirection().getAngle();
                 if(angle < 0){
                     angle = angle + 360;
-                }*/
+                }
+                AffineTransform affineTransform = g2d.getTransform();
+                g2d.rotate(angle,objectInSpace.getX(), objectInSpace.getY());
                 g2d.drawImage(vehicleImage, objectInSpace.getX(), objectInSpace.getY(), this);
+                g2d.setTransform(affineTransform);
             }
         }
 
