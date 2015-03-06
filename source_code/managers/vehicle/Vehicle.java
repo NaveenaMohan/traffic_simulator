@@ -19,6 +19,8 @@ import javax.imageio.spi.IIOServiceProvider;
 public class Vehicle implements IVehicleManager {
 
     private int vehID;
+    private boolean madeDestination;
+    private double arrivalDestTime;
     private IRUnitManager rUnit;
     private Driver driver;
     private VehicleMotor vehicleMotor;
@@ -111,6 +113,13 @@ public class Vehicle implements IVehicleManager {
         return false;
     }
 
+    public boolean getMadeDestination(){
+        return madeDestination;
+    }
+
+    public double getArrivalDestTime(){
+        return arrivalDestTime;
+    }
     @Override
     public Vehicle getVehicle() {
         return this;
