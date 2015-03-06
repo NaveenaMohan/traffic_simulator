@@ -35,6 +35,8 @@ public interface IGlobalConfigManager {
 
     int getTicksPerSecond();
 
+    void setTicksPerSecond(int ticksPerSecond);
+
     Long getCurrentTick();
 
     double getMetresPerRUnit();

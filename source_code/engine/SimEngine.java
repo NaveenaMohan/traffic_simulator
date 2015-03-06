@@ -25,7 +25,7 @@ public class SimEngine {
     private boolean pause;
 
     int test = 0;
-    private int maxCars = 100;
+    private int maxCars =200 ;
 
     public SimEngine(DataAndStructures dataAndStructures) {
         this.dataAndStructures = dataAndStructures;
@@ -48,12 +48,20 @@ public class SimEngine {
         pause=false;
     }
 
+    public void SpeedUp() {
+        dataAndStructures.getGlobalConfigManager().setTicksPerSecond(dataAndStructures.getGlobalConfigManager().getTicksPerSecond() / 2);
+    }
+
+    public void SlowDown() {
+        dataAndStructures.getGlobalConfigManager().setTicksPerSecond(dataAndStructures.getGlobalConfigManager().getTicksPerSecond() * 2);
+    }
+
     public void CleanAll() {
         RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
         VehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
         GlobalConfigManager globalConfigManager = new GlobalConfigManager(
-                100,//ticks per second
-                1,//metres per RUnit
+                dataAndStructures.getGlobalConfigManager().getTicksPerSecond(),//ticks per second
+                dataAndStructures.getGlobalConfigManager().getMetresPerRUnit(),//metres per RUnit
                 new ClimaticCondition(),
                 new DriverBehavior(),
                 new VehicleDensity(),
@@ -72,42 +80,32 @@ public class SimEngine {
             dataAndStructures.getGlobalConfigManager().incrementTick();//adds one to tick with every action performed
 
             //create new vehicles
-            if (dataAndStructures.getVehicles().size() < maxCars) {
+            if (dataAndStructures.getVehicles().size() < maxCars | 1==1) {
                 IVehicleManager newVehicle =
                         dataAndStructures.getVehicleFactoryManager().createVehicle(dataAndStructures);
 
                 //newVehicle can be null if the factory decided to not produce the vehicle
                 if (newVehicle != null) {
-
                     dataAndStructures.getVehicles().add(newVehicle);
-                    //System.out.println("vehicle Created " + dataAndStructures.getVehicles().size());
-                    // dcp=new DCP(dataAndStructures.getVehicles().get(0).getVehicle());
-
                 }
             }
 
             //move the vehicles
             for (IVehicleManager vehicle : dataAndStructures.getVehicles()) {
-                vehicle.move(dataAndStructures.getSpaceManager(),
-                        dataAndStructures.getGlobalConfigManager().getCurrentSecond(),//time
-                        dataAndStructures);//global config
-                // dcp.getVehiclesAvgSpeed(vehicle.getVehicle()); //REPORTING VELOCITY
+                if(vehicle.isVisible())
+                    vehicle.move(dataAndStructures.getSpaceManager(),
+                            dataAndStructures.getGlobalConfigManager().getCurrentSecond(),//time
+                            dataAndStructures);//global config
             }
 
             //change traffic lights
             dataAndStructures.getRoadNetworkManager().changeLight(dataAndStructures.getGlobalConfigManager().getCurrentSecond());
 
-            if ((int) dataAndStructures.getGlobalConfigManager().getCurrentSecond() > previousSecond) {
-                System.out.println("--------------------------------- " + dataAndStructures.getGlobalConfigManager().getCurrentSecond());
-                for (IVehicleManager vehicle : dataAndStructures.getVehicles()) {//vid, rUnit, x,y, depth, velocity, strategy, distance
-                    System.out.println("vid: " + vehicle.getVehID() + " rUnit: " + vehicle.getVehicle().getrUnit().getId()
-                            + " x: " + vehicle.getVehicle().getrUnit().getX() + " y: " + vehicle.getVehicle().getrUnit().getY()
-                            + " v: " + Common.round(vehicle.getVehicle().getCurrentVelocity(), 2) +
-                            " dep: " + Common.round(vehicle.getVehicle().getDepthInCurrentRUnit(), 2) +
-                            " dir: " + Common.round(vehicle.getDirection().getAngle(), 2) +
-                            " s: " + vehicle.getVehicle().getCurrentStrategy());
-                }
-            }
+//            if(dataAndStructures.getGlobalConfigManager().getCurrentSecond()>previousSecond)
+//            {
+//                for(IVehicleManager veh : dataAndStructures.getVehicles())
+//                    System.out.println(veh.getVehID() + " " + " " + veh.isVisible() + " " + veh.getVehicle().getCurrentStrategy());
+//            }
             previousSecond = (int) dataAndStructures.getGlobalConfigManager().getCurrentSecond();
         }
    }

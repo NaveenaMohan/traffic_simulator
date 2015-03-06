@@ -1,6 +1,7 @@
 package managers.vehiclefactory;
 
 import managers.globalconfig.VehicleType;
+import managers.globalconfig.VehicleTypeStats;
 import managers.runit.RUnit;
 import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
@@ -33,34 +34,24 @@ public class VehicleFactory{
 
 
         //create object in space based on the vehicle type
-        ObjectInSpace objectInSpace;
-        switch(vehicleType)
-        {
-            case car:
-                objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,3,2,null, vehicleType);
-                break;
-            case emergency:
-                objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,3,2,null, vehicleType);
-                break;
-            case heavyLoad:
-                objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,4,4,null, vehicleType);
-                break;
-            default:
-                objectInSpace = new ObjectInSpace(vehID, rUnit.getX(), rUnit.getY(), rUnit.getZ(), 2,3,2,null, vehicleType);
-        }
+        ObjectInSpace objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), VehicleTypeStats.getWidth(vehicleType)
+                ,VehicleTypeStats.getLength(vehicleType),VehicleTypeStats.getHeight(vehicleType),null, vehicleType);
+
 
         //only add the new vehicle if it fits in the space outside the factory
         if(spaceManager.checkFit(objectInSpace)) {
             spaceManager.addObjectToSpace(objectInSpace);
-            Vehicle vehicle = new Vehicle(vehID,//vehicle ID
+            Vehicle vehicle = new Vehicle(
+                    vehID,//vehicle ID
                     rUnit,//vehicle starting point
                     driver,
-                    (90*1000)/3600,//maximum speed
+                    (90*1000)/3600,//initial speed
                     destination,
                     objectInSpace,
-                    2.7,//maximum acceleration in metres per second.
+                    VehicleTypeStats.getMaxAcceleration(vehicleType),//maximum acceleration in metres per second.
                     -100,//max deceleration
-                    time
+                    time,
+                    VehicleTypeStats.getMaxVelocity(vehicleType)
             );
             return vehicle;
         }

@@ -23,6 +23,7 @@ public interface IVehicleManager {
     int getVehID();
 
     double getCurrentAcceleration();
+boolean isVisible();
 
     public VehicleDirection getDirection();
 

@@ -25,29 +25,34 @@ public class VehicleMotor {
     private double currentAcceleration;
     private double depthInCurrentRUnit;//if the RUnit is say 100m long we need to keep track of how far in the vehicle is
     private int maxSpeedLimit;//the speed limit as according to the signs
+    private double maximumVelocity;
     private ObjectInSpace objectInSpace;
     private String destination;
+    private boolean isEmergency;
 
 
     //TODO: delete this
     public String currentStrategy;
 
-    public VehicleMotor(double maxAcceleration, double maxDeceleration, int maxSpeedLimit, String destination, ObjectInSpace objectInSpace) {
+    public VehicleMotor(double maxAcceleration, double maxDeceleration, int initialSpeed, String destination
+            , ObjectInSpace objectInSpace, double maximumVelocity, boolean isEmergency) {
         this.maxAcceleration = maxAcceleration;
         this.maxDeceleration = maxDeceleration;
-        this.currentVelocity = 0;
+        this.currentVelocity = initialSpeed;
         this.currentAcceleration = 0;
         this.depthInCurrentRUnit = 0;
-        this.maxSpeedLimit = maxSpeedLimit;
+        maxSpeedLimit = 100;
         this.destination = destination;
         this.objectInSpace = objectInSpace;
-
+        this.isEmergency = isEmergency;
+        this.maximumVelocity = maximumVelocity;
         objectInSpace.setDirection(new VehicleDirection(1, 1, 1, 1));
     }
 
     public ObjectInSpace getObjectInSpace() {
         return objectInSpace;
     }
+
 
     public String getDestination() {
         return destination;
@@ -66,7 +71,7 @@ public class VehicleMotor {
 
         //initially aim for the speed limit
         currentAcceleration = aimForSpeed(
-                driver.getSpeed(slipperinessOffset, maxSpeedLimit),//maximum speed limit
+                driver.getSpeed(slipperinessOffset, (isEmergency ? maximumVelocity : maxSpeedLimit)),
                 0,//safe stop distance
                 1//distance to
         );
@@ -104,13 +109,12 @@ public class VehicleMotor {
 
         //travel the rUnits
         for (int i = 0; i < RUnitsTravelled; i++) {//go through as many metres as many you have travelled since last move
-            if (rUnit.getNextRUnitList().size() > 0) {
-                //see and process the objects we have just passed
-                processObjectPassed(VehiclePerception.getObjectAtRUnit(rUnit), vehicleState);
 
                 //advance
                 rUnit = chooseNext(rUnit, vehicleState);
-            }
+
+                //see and process the objects we have just passed
+                processObjectPassed(rUnit, vehicleState);
         }
 
         //adjust your position in space
@@ -172,43 +176,34 @@ public class VehicleMotor {
         VehicleMemoryObject objectToMatch = (decelerationDistanceToNextObject > decelerationDistanceToSlowestObject ?
                 slowestObject : nextObject);
 
+        double speedToMatch = (isEmergency ? maximumVelocity : maxSpeedLimit);
 
-        String nextData = nextObject.getObject() + (nextObject.getObject() instanceof Vehicle ? "(" + ((Vehicle) nextObject.getObject()).getVehID() + ")" : "") + " v: " + Common.round(nextObject.getVelocity(), 2) +
-                " dis: " + Common.round(nextObject.getDistance(), 2) +
-                " sdec: " + Common.round(driver.getDecelerationSafeDistance(currentVelocity, nextObject.getVelocity(), nextObject.getDistance() - additionalDistances(), slipperinessOffset, nextObject), 2) +
-                " decDist: " + Common.round(decelerationDistanceToNextObject, 2);
-        String slowestData = slowestObject.getObject() + (slowestObject.getObject() instanceof Vehicle ? "(" + ((Vehicle) slowestObject.getObject()).getVehID() + ")" : "") + " v: " + Common.round(slowestObject.getVelocity(), 2) +
-                " dis: " + Common.round(slowestObject.getDistance(), 2) +
-                " sdec: " + Common.round(driver.getDecelerationSafeDistance(currentVelocity, slowestObject.getVelocity(), slowestObject.getDistance() - additionalDistances(), slipperinessOffset, slowestObject), 2) +
-                " decDist: " + Common.round(decelerationDistanceToSlowestObject, 2);
-
-        currentStrategy = "next {" + nextData + "} slowest {" + slowestData + "} objectToMatch: " + objectToMatch.getObject();
-
-        double speedToMatch = maxSpeedLimit;
-
-        //if you are within the distance to start slowing down
-        if (objectToMatch.getDistance() <= driver.getDecelerationSafeDistance(
-                currentVelocity,
-                objectToMatch.getVelocity(),
-                objectToMatch.getDistance() - additionalDistances(),
-                slipperinessOffset,
-                objectToMatch))
-            if (isChangeableClear)//change lane if possible
-                return currentRUnit.getChangeAbleRUnit();
-            else {
-                speedToMatch = Math.min(maxSpeedLimit, objectToMatch.getVelocity());
-            }
-
+        //emergency vehicles ignore traffic lights and traffic signs
+        if(!(isEmergency & (objectToMatch.getObject() instanceof TrafficSign | objectToMatch.getObject() instanceof TrafficLight))) {
+            //if you are within the distance to start slowing down
+            if (objectToMatch.getDistance() <= driver.getDecelerationSafeDistance(
+                    currentVelocity,
+                    objectToMatch.getVelocity(),
+                    objectToMatch.getDistance() - additionalDistances(),
+                    slipperinessOffset,
+                    objectToMatch))
+                if (isChangeableClear)//change lane if possible
+                    return currentRUnit.getChangeAbleRUnit();
+                else {
+                    speedToMatch = Math.min((isEmergency ? maximumVelocity : maxSpeedLimit), objectToMatch.getVelocity());
+                }
+        }
         //aim to match the object speed
         currentAcceleration = aimForSpeed(
                 driver.getSpeed(slipperinessOffset, speedToMatch),
                 driver.getStopDistance(slipperinessOffset, objectToMatch),
                 objectToMatch.getDistance() - (objectToMatch.isPassable() ? 0 : additionalDistances()));
 
-        currentStrategy += "[gS:" + Common.round(driver.getSpeed(slipperinessOffset, speedToMatch), 2) +
-                ", gSD:" + Common.round(driver.getStopDistance(slipperinessOffset, objectToMatch), 2) +
-                " D:" + Common.round(objectToMatch.getDistance() - additionalDistances(), 2) +
-                " a:" + Common.round(currentAcceleration, 2);
+        currentStrategy = "speedToMatch: " + speedToMatch + " currentAcceleration: " + currentAcceleration +
+                " objectToMatch: " + objectToMatch.getObject().getClass() + " d: " + objectToMatch.getDistance();
+
+        if (isChangeableClear & !currentRUnit.isLeft())
+            currentRUnit = currentRUnit.getChangeAbleRUnit();
 
         return currentRUnit;
     }
@@ -238,14 +233,21 @@ public class VehicleMotor {
 
     private void updateVelocity(double timePassed) {
         //velocity can't be below 0
-        currentVelocity = Math.max(0,
-                currentVelocity + currentAcceleration * timePassed);
+        currentVelocity = Math.min(maximumVelocity, Math.max(0,
+                currentVelocity + currentAcceleration * timePassed));
     }
 
-    private void processObjectPassed(Object obj, VehicleState vehicleState) {
+    private void processObjectPassed(IRUnitManager rUnit, VehicleState vehicleState) {
+
+        Object obj=VehiclePerception.getObjectAtRUnit(rUnit);
         //if you have just passed a speed sign update your maxSpeedLimit
         if (obj instanceof SpeedLimitSign) {
             maxSpeedLimit = (((SpeedLimitSign) obj).getSpeedLimit() * 1000) / 3600;//convert km/h to m/s
+        }
+
+        //if you have just passed end of road - disappear
+        if (!(rUnit.getNextRUnitList().size() > 0)) {
+            objectInSpace.setVisible(false);
         }
 
         //if you have just passed a decision Point
@@ -316,7 +318,8 @@ public class VehicleMotor {
                         return vehicleState.getNextRUnitAfterDecisionPoint();
                 }
             } else {
-                return rUnit.getNextRUnitList().get(0);
+                //return a random direction
+                return rUnit.getNextRUnitList().get(Common.randIntegerBetween(0, rUnit.getNextRUnitList().size()-1));
             }
         }
         return rUnit;

@@ -33,25 +33,25 @@ public class VehiclePerception {
                 vehicleState.registerObject(new VehicleMemoryObject(temp, temp.getBlockage(), distance, getObjectVelocity(temp.getBlockage()), false));
 
             //check for zebra crossings
-            if (temp.getZebraCrossing() != null)
-                if(!temp.getZebraCrossing().getTrafficLight().isGreen())
-                vehicleState.registerObject(new VehicleMemoryObject(temp, temp.getZebraCrossing(), distance, getObjectVelocity(temp.getZebraCrossing()), false));
+            if (getObjectForDoubleLane(temp) instanceof  ZebraCrossing)
+                if(!((ZebraCrossing)getObjectForDoubleLane(temp)).getTrafficLight().isGreen())
+                vehicleState.registerObject(new VehicleMemoryObject(temp, getObjectForDoubleLane(temp), distance, getObjectVelocity(getObjectForDoubleLane(temp)), false));
 
             //check for traffic lights
-            if (temp.getTrafficLight() != null)
-                if(!temp.getTrafficLight().isGreen())
+            if (getObjectForDoubleLane(temp) instanceof TrafficLight)
+                if(!((TrafficLight)getObjectForDoubleLane(temp)).isGreen())
                     vehicleState.registerObject(new VehicleMemoryObject(temp, temp.getTrafficLight(), distance, getObjectVelocity(temp.getTrafficLight()), false));
 
             //check for traffic signs
-            if (temp.getTrafficSign() != null) {
-                vehicleState.registerObject(new VehicleMemoryObject(temp, temp.getTrafficSign(), distance, getObjectVelocity(temp.getTrafficSign()), true));
+            if (getObjectForDoubleLane(temp) instanceof TrafficSign) {
+                vehicleState.registerObject(new VehicleMemoryObject(temp, getObjectForDoubleLane(temp), distance, getObjectVelocity(getObjectForDoubleLane(temp)), true));
 
                 //get the next direction
-                if(temp.getTrafficSign() instanceof DirectionSign)
-                    vehicleState.registerObject(new VehicleMemoryObject(temp, temp.getTrafficSign(), distance, getObjectVelocity(temp.getTrafficSign()), true));
+                if(getObjectForDoubleLane(temp) instanceof DirectionSign)
+                    vehicleState.registerObject(new VehicleMemoryObject(temp, getObjectForDoubleLane(temp), distance, getObjectVelocity(getObjectForDoubleLane(temp)), true));
             }
             //check for other vehicles
-            ObjectInSpace possibleVehicle = spaceManager.getObjectWithCentreAt(temp.getX(), temp.getY(), temp.getZ());
+            ObjectInSpace possibleVehicle = spaceManager.getObjectAt(myObject.getId(), temp.getX(), temp.getY());
             if (possibleVehicle != null)
                 if (possibleVehicle.getId() != vehID)
                     for (IVehicleManager veh : dataAndStructures.getVehicles()) {
@@ -69,7 +69,7 @@ public class VehiclePerception {
 
             //check for end of road
             if (temp.getNextRUnitList().size() <= 0)
-                vehicleState.registerObject(new VehicleMemoryObject(temp, new EndOfRoad(), distance, getObjectVelocity(new EndOfRoad()), false));
+                vehicleState.registerObject(new VehicleMemoryObject(temp, new EndOfRoad(), distance, getObjectVelocity(new EndOfRoad()), true));
 
             //check if the changeable RUnit is clear
             vehicleState.setChangeableClear(false);
@@ -112,6 +112,25 @@ public class VehiclePerception {
         return null;
     }
 
+    private static Object getObjectForDoubleLane(IRUnitManager rUnit)
+    {
+        if(rUnit.getChangeAbleRUnit()!=null & !rUnit.isLeft())
+            rUnit = rUnit.getChangeAbleRUnit();
+
+        //check for zebra crossings
+        if (rUnit.getZebraCrossing() != null)
+            return rUnit.getZebraCrossing();
+
+        //check for traffic lights
+        if (rUnit.getTrafficLight() != null)
+            return rUnit.getTrafficLight();
+
+        //check for traffic signs
+        if (rUnit.getTrafficSign() != null)
+            return rUnit.getTrafficSign();
+
+        return rUnit;
+    }
     private static double getObjectVelocity(Object obj)
     {//return the speed of the object
         if (obj instanceof Blockage)//check for blockage
@@ -119,7 +138,7 @@ public class VehiclePerception {
         else if (obj instanceof Vehicle)//check for vehicle
             return ((Vehicle) obj).getCurrentVelocity();
         else if (obj instanceof EndOfRoad)//check for end of road
-            return 0;
+            return 100;
         else if (obj instanceof TrafficLight)//check for traffic light
             return 0;
         else if (obj instanceof ZebraCrossing)//check for zebra crossing
