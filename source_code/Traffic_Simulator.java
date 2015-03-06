@@ -39,7 +39,7 @@ public class  Traffic_Simulator {
     final DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
     private DCP dcp=new DCP(dataAndStructures);
 
-    private SimEngine simEngine = new SimEngine(dataAndStructures);
+    private SimEngine simEngine = new SimEngine(dataAndStructures,dcp);
     private DefaultTableModel model;
 
     /**
@@ -278,12 +278,24 @@ public class  Traffic_Simulator {
         slowButton.setBounds(252, 0, 70, 70);
         slowButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("slow.png")));
         simulationConfigPanel.add(slowButton);
+        slowButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                simEngine.SlowDown();
+            }
+        });
 
         JButton fastButton = new JButton();
         fastButton.setToolTipText("Fast");
         fastButton.setBounds(334, 0, 70, 70);
         fastButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("fast.png")));
         simulationConfigPanel.add(fastButton);
+        fastButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                simEngine.SpeedUp();
+            }
+        });
 
         JButton uploadImageButton = new JButton();
         uploadImageButton.setToolTipText("Upload Road Image");
@@ -308,6 +320,12 @@ public class  Traffic_Simulator {
         reportButton.setBounds(659, 0, 70, 70);
         reportButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("report.png")));
         simulationConfigPanel.add(reportButton);
+        reportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dcp.reportInformation();//TODO : Reports in table format
+            }
+        });
 
         //Traffic Pattern Panel
 
@@ -597,6 +615,8 @@ public class  Traffic_Simulator {
         single_lane.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setPreviousRUnit(null);
+                drawingBoard.setPreviousChangeableRunit(null);
                 drawingBoard.addSingleLaneMouseDragMotionListener();
             }
         });
@@ -604,6 +624,8 @@ public class  Traffic_Simulator {
         double_lane.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setPreviousRUnit(null);
+                drawingBoard.setPreviousChangeableRunit(null);
                 drawingBoard.addDoubleLaneMouseDragMotionListener();
             }
         });
@@ -730,6 +752,30 @@ public class  Traffic_Simulator {
             }
         });
 
+        //Pause Simulation
+        pauseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(drawingBoard.isSimulationPlaying()){
+                    drawingBoard.setSimulationPlaying(false);
+                    simEngine.Pause();
+                }else {
+                    drawingBoard.setSimulationPlaying(true);
+                    simEngine.Unpause();
+                }
+            }
+        });
+
+        //Stop Simulation
+        stopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.setSimulationPlaying(false);
+                simEngine.CleanAll();
+                drawingBoard.clean();
+            }
+        });
+
         //Upload road map image
 
         uploadImageButton.addActionListener(new ActionListener() {
@@ -759,6 +805,34 @@ public class  Traffic_Simulator {
 
                     }
                 }
+            }
+        });
+
+        JButton clearVehicleFactoryButton = new JButton("ClearVehicleFactory");
+        clearVehicleFactoryButton.setToolTipText("ClearVehicleFactory");
+        clearVehicleFactoryButton.setBounds(new Rectangle(0, 0, 50, 50));
+        clearVehicleFactoryButton.setBounds(191, 174, 56, 53);
+        trafficPatternPanel.add(clearVehicleFactoryButton);
+        clearVehicleFactoryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.setSimulationPlaying(false);
+                simEngine.CleanAll();
+                drawingBoard.updateUI();
+            }
+        });
+
+        JButton clearAllButton = new JButton("ClearAll");
+        clearAllButton.setToolTipText("ClearAll");
+        clearAllButton.setBounds(new Rectangle(0, 0, 50, 50));
+        clearAllButton.setBounds(266, 174, 56, 53);
+        trafficPatternPanel.add(clearAllButton);
+        clearAllButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingBoard.setSimulationPlaying(false);
+                simEngine.CleanAll();
+                drawingBoard.clean();
             }
         });
 

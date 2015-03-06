@@ -17,7 +17,7 @@ public class RUnit implements IRUnitManager{
     private List<RUnit> prevsRUnitList = new ArrayList<RUnit>();
     private RUnit changeAbleRUnit;
     private String id;
-    private boolean isRight;
+    private boolean isLeft = true;
     private TrafficSign trafficSign;
     private ZebraCrossing zebraCrossing;
     private Blockage blockage;
@@ -76,6 +76,16 @@ public class RUnit implements IRUnitManager{
         return prevsRUnitList;
     }
 
+    @Override
+    public boolean isLeft() {
+        return isLeft;
+    }
+
+    @Override
+    public void setLeft(boolean isLeft) {
+        this.isLeft = isLeft;
+    }
+
     public void setPrevsRUnitList(List<RUnit> prevsRUnitList) {
         this.prevsRUnitList = prevsRUnitList;
     }
@@ -94,14 +104,6 @@ public class RUnit implements IRUnitManager{
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public boolean isRight() {
-        return isRight;
-    }
-
-    public void setRight(boolean isLeft) {
-        this.isRight = isLeft;
     }
 
     public TrafficSign getTrafficSign() {
