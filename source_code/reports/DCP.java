@@ -1,39 +1,26 @@
 package reports;
 
 import dataAndStructures.DataAndStructures;
-import jdk.nashorn.internal.runtime.regexp.JoniRegExp;
-import managers.globalconfig.GlobalConfigManager;
 import managers.vehicle.IVehicleManager;
-import managers.vehicle.Vehicle;
-import managers.vehiclefactory.VehicleFactory;
-import managers.vehiclefactory.VehicleFactoryManager;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+
 /**
  * Created by Guera_000 on 23/02/2015.
  */
 public class DCP extends JPanel{
 
     private DataAndStructures dataAndStructures;
-    private Map<String, List<Double>> vehiclesVelocity = new HashMap<String, List<Double>>();
-    private Map<String, Double> vehiclesVelocity2 = new HashMap<String, Double>();
+    private Map<String, Double> vehiclesVelocity = new HashMap<String, Double>();
     private Map<String, Integer> numberOfTimes = new HashMap<String, Integer>();
-    private List<Double> velocity=new ArrayList<Double>();
     private Map<String, Double> averageVehiclesVelocity = new HashMap<String, Double>();
-    private double avgVelocityPerVehicle=0, avgVelocityTotalVehicles=0, slipperiness=0, visibility=0, percentageMadeDest=0,
+    private double avgVelocityTotalVehicles=0, slipperiness=0, visibility=0, percentageMadeDest=0,
     avgTimeToDestination=0;
-    private int totalNoCars=0;
     protected JTextArea textArea;
     private final static String newline = "\n";
-    private String text="";
 
 
     public DCP(DataAndStructures dataAndStructures) {
@@ -171,11 +158,11 @@ public class DCP extends JPanel{
         if (dataAndStructures.getVehicles() != null)
             for (IVehicleManager vehicle : dataAndStructures.getVehicles()) {
                 if (vehicle.getVehID() != 0) {
-                    if (vehiclesVelocity2.containsKey(vehicle.getVehID() + "")) {
-                        vehiclesVelocity2.put(vehicle.getVehID() + "", (vehiclesVelocity2.get(vehicle.getVehID() + "") + vehicle.getCurrentVelocity()));
+                    if (vehiclesVelocity.containsKey(vehicle.getVehID() + "")) {
+                        vehiclesVelocity.put(vehicle.getVehID() + "", (vehiclesVelocity.get(vehicle.getVehID() + "") + vehicle.getCurrentVelocity()));
                         numberOfTimes.put(vehicle.getVehID() + "", (numberOfTimes.get(vehicle.getVehID() + "") + 1));
                     } else {
-                        vehiclesVelocity2.put(vehicle.getVehID() + "", vehicle.getCurrentVelocity()); //first time adding a car with its velocities into the hash-map
+                        vehiclesVelocity.put(vehicle.getVehID() + "", vehicle.getCurrentVelocity()); //first time adding a car with its velocities into the hash-map
                         numberOfTimes.put(vehicle.getVehID() + "", 1);
                     }
 
@@ -196,7 +183,7 @@ public class DCP extends JPanel{
 
     private void getVehiclesAvgVelocity() {
         //UNCOMMENT THE FOLLOWING IF AVERAGE VEL PER VEHICLE IS NEEDED
-        for (Map.Entry<String, Double> velocityRecordsPerVehicle : vehiclesVelocity2.entrySet()) {
+        for (Map.Entry<String, Double> velocityRecordsPerVehicle : vehiclesVelocity.entrySet()) {
             textArea.append("Vehicle ID: " + velocityRecordsPerVehicle.getKey() + "");
             textArea.append(" Vehicle Average Velocity: " + round(velocityRecordsPerVehicle.getValue()/numberOfTimes.get(velocityRecordsPerVehicle.getKey()+""),2));
             textArea.append(" Driver is: " + dataAndStructures.getVehicles().get(Integer.parseInt(velocityRecordsPerVehicle.getKey())-1).getVehicle().getDriver().getDriverBehaviorType() + newline);
