@@ -117,8 +117,17 @@ public class Vehicle implements IVehicleManager {
         return madeDestination;
     }
 
+    public void setMadeDestination(Boolean madeDestination){
+        this.madeDestination=madeDestination;
+    }
+
     public double getArrivalDestTime(){
         return arrivalDestTime;
+    }
+
+    public void setArrivalDestTime(Double arrivalDestTime){
+        this.arrivalDestTime=arrivalDestTime;
+
     }
     @Override
     public Vehicle getVehicle() {
