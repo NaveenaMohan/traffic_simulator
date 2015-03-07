@@ -109,7 +109,6 @@ public class DCP extends JPanel{
         dataAndStructures.getGlobalConfigManager().getRoute().setDestination("London");
         dataAndStructures.getGlobalConfigManager().getRoute().setTrafficPercent(.3);
         if(dataAndStructures.getGlobalConfigManager().getRoute().getDestination()!="") {
-            totalNoCars = dataAndStructures.getVehicles().size();
             for (IVehicleManager vehicle : dataAndStructures.getVehicles()) {
                 vehicle.getVehicle().setMadeDestination(true);
                 vehicle.getVehicle().setArrivalDestTime(dataAndStructures.getGlobalConfigManager().getCurrentSecond());
