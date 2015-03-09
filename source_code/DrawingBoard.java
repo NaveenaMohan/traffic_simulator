@@ -82,8 +82,16 @@ public class DrawingBoard extends JPanel implements ActionListener {
         this.simEngine = simEngine;
         this.currentSecondValue = currentSecondValue;
         setBackground(Color.white);
-        setBounds(286, 79, 1021, 348);
+        setBounds(296, 83, 965, 339);
         setLayout(null);
+    }
+
+    private static int getTrafficLightIdIndex() {
+        return trafficLightIdIndex;
+    }
+
+    public static void setTrafficLightIdIndex(int trafficLightIdIndex) {
+        DrawingBoard.trafficLightIdIndex = trafficLightIdIndex;
     }
 
     public void initialize() {
@@ -695,7 +703,6 @@ public class DrawingBoard extends JPanel implements ActionListener {
         this.currentY = currentY;
     }
 
-
     @Override
     public int getX() {
         return currentX;
@@ -792,21 +799,12 @@ public class DrawingBoard extends JPanel implements ActionListener {
         addMouseListener(new Speed70ButtonListener(this));
     }
 
-
     public void addSpeed90ButtonActionListener() {
         addMouseListener(new Speed90ButtonListener(this));
     }
 
     public void addWelcomeDestinationButtonActionListener() {
         addMouseListener(new WelcomeDestinationButtonListener(this));
-    }
-
-    private static int getTrafficLightIdIndex() {
-        return trafficLightIdIndex;
-    }
-
-    public static void setTrafficLightIdIndex(int trafficLightIdIndex) {
-        DrawingBoard.trafficLightIdIndex = trafficLightIdIndex;
     }
 
     public RUnit getPreviousRUnit() {
