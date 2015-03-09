@@ -42,7 +42,7 @@ public class SpaceManager implements ISpaceManager {
     public ObjectInSpace getObjectAt(int myID, int x, int y) {
         for (ObjectInSpace obj : space.getObjects()) {
             if (obj.getId() != myID)
-                if (obj.getX() == x & obj.getY() == y)
+                if (obj.getX() == x & obj.getY() == y & obj.isVisible())
 
                     return obj;
         }

@@ -13,7 +13,6 @@ public class VehicleState {
 
 
     private List<VehicleMemoryObject> objectsAhead = new ArrayList<VehicleMemoryObject>();
-    private boolean changeableClear = false;//this is set to true if there is a changeable RUnit next to you and it is clear
     private DirectionSignType nextDirection;
     private String destination;
 
@@ -37,40 +36,68 @@ public class VehicleState {
     }
 
     public void registerObject(VehicleMemoryObject obj) {
-        //System.out.println("=registered "+obj.getObject().getClass() + " " + obj.getObject());
+
+        //System.out.println("=registered "+obj.getObject().getClass() + " d:" + obj.getDistance() +"m, s:" + obj.getVelocity());
         //saves the given object to its list of objects
         objectsAhead.add(obj);
     }
 
-    public void cleanObjectsAhead(){
+    public void cleanObjectsAhead() {
         objectsAhead = new ArrayList<VehicleMemoryObject>();
     }
 
-    public void setChangeableClear(boolean changeableClear) {
-        this.changeableClear = changeableClear;
-    }
+    public VehicleMemoryObject nextObjectWithin(double metres, boolean isEmergency, boolean inLeft) {
 
-    public boolean isChangeableClear() {
-        return changeableClear;
-    }
+        for (int i = 0; i < objectsAhead.size(); i++) {
+            if (objectsAhead.get(i).getDistance() <= metres) {
+                if(objectsAhead.get(i).isInLeft()==inLeft)
+                    if (!(isEmergency &
 
-    public VehicleMemoryObject nextObjectWithin(double metres) {
-        if (objectsAhead.size() > 0)
-            if(objectsAhead.get(0).getDistance()<=metres)
-            return objectsAhead.get(0);
+                            (objectsAhead.get(i).getObject() instanceof TrafficLight |
+                                    objectsAhead.get(i).getObject() instanceof SpeedLimitSign))) {
+                        return objectsAhead.get(i);
+                    }
+            }
+                else
+                    break;
+        }
 
         return null;
     }
 
-    public DirectionSignType getNextDirection() {
-        return nextDirection;
+    public VehicleMemoryObject getNextVehicleObject(double metres, boolean inLeft)
+    {
+        for (int i = 0; i < objectsAhead.size(); i++) {
+            if (objectsAhead.get(i).getDistance() <= metres) {
+                if(objectsAhead.get(i).isInLeft()==inLeft & objectsAhead.get(i).getObject() instanceof Vehicle)
+                    return objectsAhead.get(i);
+            }
+            else
+                break;
+        }
+
+        return null;
     }
 
-    public void setNextDirection(DirectionSignType nextDirection) {
-        this.nextDirection = nextDirection;
+    public VehicleMemoryObject getNextSpeedAffectingRoadElement(double metres, boolean inLeft)
+    {
+        for (int i = 0; i < objectsAhead.size(); i++) {
+            if (objectsAhead.get(i).getDistance() <= metres) {
+                if(objectsAhead.get(i).isInLeft()==inLeft &
+                        (objectsAhead.get(i).getObject() instanceof SpeedLimitSign |
+                                objectsAhead.get(i).getObject() instanceof TrafficLight |
+                                objectsAhead.get(i).getObject() instanceof ZebraCrossing |
+                                objectsAhead.get(i).getObject() instanceof StopSign))
+                    return objectsAhead.get(i);
+            }
+            else
+                break;
+        }
+
+        return null;
     }
 
-    public VehicleMemoryObject getSlowestWithin(double metres) {
+    public VehicleMemoryObject getSlowestWithin(double metres, boolean isEmergency, boolean inLeft) {
         //returns the slowest object within metres metres
 
 
@@ -81,10 +108,18 @@ public class VehicleState {
             if (obj.getDistance() > metres)
                 break;
 
-            if (slowestObject == null) {
-                slowestObject = obj;
-            } else if (slowestObject.getVelocity() > obj.getVelocity()) {
-                slowestObject = obj;
+            if(obj.isInLeft()==inLeft) {
+                if (slowestObject == null & !(isEmergency &
+                        (obj.getObject() instanceof TrafficLight |
+                                obj.getObject() instanceof SpeedLimitSign))) {
+                    slowestObject = obj;
+                }
+                if (slowestObject != null)
+                    if ((slowestObject.getVelocity() > obj.getVelocity()) & !(isEmergency &
+                            (obj.getObject() instanceof TrafficLight |
+                                    obj.getObject() instanceof SpeedLimitSign))) {
+                        slowestObject = obj;
+                    }
             }
         }
 

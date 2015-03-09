@@ -25,6 +25,7 @@ public class Vehicle implements IVehicleManager {
     private Driver driver;
     private VehicleMotor vehicleMotor;
     private VehicleState vehicleState;
+    private VehiclePerception vehiclePerception;
 
     private double timeCreated;
 
@@ -42,6 +43,7 @@ public class Vehicle implements IVehicleManager {
         this.vehicleMotor = new VehicleMotor(maxAcceleration, maxDeceleration, initialSpeed, destination, objectInSpace, maximumVelocity,
                 (objectInSpace.getVehicleType()==VehicleType.emergency ? true : false));
         this. vehicleState = new VehicleState();
+        this.vehiclePerception=new VehiclePerception(timeCreated);
     }
 
     public IRUnitManager getrUnit() {
@@ -78,15 +80,16 @@ public class Vehicle implements IVehicleManager {
 
 
         //perceive the world and update your state
-        VehiclePerception.See(
+        vehiclePerception.See(
                 vehID,
                 rUnit,//your position
-                driver.getVision(50, dataAndStructures.getGlobalConfigManager().getClimaticCondition().getVisibility()), //rUnits of vision
+                driver.getVision(100, dataAndStructures.getGlobalConfigManager().getClimaticCondition().getVisibility()), //rUnits of vision
                 vehicleState,
                 spaceManager,
                 dataAndStructures,
                 vehicleMotor.getObjectInSpace(),
-                vehicleMotor.getDestination()
+                vehicleMotor.getDestination(),
+                dataAndStructures.getGlobalConfigManager().getCurrentSecond()
         );
 
         //prepare the acceleration and rUnit position
@@ -94,7 +97,9 @@ public class Vehicle implements IVehicleManager {
                 rUnit,
                 driver,
                 vehicleState,
-                dataAndStructures.getGlobalConfigManager().getClimaticCondition().getSlipperiness()
+                dataAndStructures.getGlobalConfigManager().getClimaticCondition().getSlipperiness(),
+                spaceManager,
+                dataAndStructures.getGlobalConfigManager().getCurrentSecond()
         );
 
         //move

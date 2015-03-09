@@ -5,9 +5,9 @@ package managers.globalconfig;
  */
 public class VehicleDensity {
 
-    private double carDensity=0.5;
-    private double heavyVehicleDensity=0.0;
-    private double emergencyVehicleDensity=0.5;
+    private double carDensity=0.65;
+    private double heavyVehicleDensity=0.3;
+    private double emergencyVehicleDensity=0.05;
     private double creationRatePerSecond=0.5;
 
     public double getCarDensity() {
