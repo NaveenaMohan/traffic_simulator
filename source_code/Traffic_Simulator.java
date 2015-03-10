@@ -22,7 +22,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-
 public class  Traffic_Simulator {
 
     private JFrame trafficSimulatorFrame;
@@ -30,7 +29,7 @@ public class  Traffic_Simulator {
     private VehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
     private GlobalConfigManager globalConfigManager = new GlobalConfigManager(
             100,//ticks per second
-            0.8,//metres per RUnit
+            0.5,//metres per RUnit
             new ClimaticCondition(),
             new DriverBehavior(),
             new VehicleDensity(),
@@ -38,7 +37,7 @@ public class  Traffic_Simulator {
     );
     final DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
     private DCP dcp=new DCP(dataAndStructures);
-
+    private boolean openReport=false;
     private SimEngine simEngine = new SimEngine(dataAndStructures,dcp);
     private DefaultTableModel model;
 
@@ -71,82 +70,83 @@ public class  Traffic_Simulator {
     private void initialize() {
 
         trafficSimulatorFrame = new JFrame();
+        trafficSimulatorFrame.getContentPane().setBackground(UIManager.getColor("InternalFrame.background"));
         trafficSimulatorFrame.getContentPane().setBounds(new Rectangle(900, 900, 0, 0));
         trafficSimulatorFrame.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 20));
         trafficSimulatorFrame.setTitle("TRAFFIC SIMULATOR");
         trafficSimulatorFrame.getContentPane().setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 16));
-        trafficSimulatorFrame.setBounds(1000, 700, 1314, 743);
+        trafficSimulatorFrame.setBounds(1000, 700, 1265, 697);
         trafficSimulatorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         trafficSimulatorFrame.getContentPane().setLayout(null);
 
         // Road Infrastructure Panel
         JPanel roadInfraStructurePanel = new JPanel();
-        roadInfraStructurePanel.setBackground(new Color(238, 238, 238));
-        roadInfraStructurePanel.setBounds(0, 6, 284, 418);
+        roadInfraStructurePanel.setBackground(UIManager.getColor("InternalFrame.background"));
+        roadInfraStructurePanel.setBounds(6, 6, 284, 416);
         trafficSimulatorFrame.getContentPane().add(roadInfraStructurePanel);
         roadInfraStructurePanel.setLayout(null);
 
-        JTextArea txtrRoadInfrastructure = new JTextArea();
-        txtrRoadInfrastructure.setBackground(new Color(128, 128, 128));
-        txtrRoadInfrastructure.setForeground(new Color(255, 255, 255));
+        JLabel txtrRoadInfrastructure = new JLabel();
+        txtrRoadInfrastructure.setBounds(6, 6, 278, 23);
+        txtrRoadInfrastructure.setBackground(Color.BLACK);
+        //txtrRoadInfrastructure.setForeground(new Color(255, 255, 255));
         txtrRoadInfrastructure.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 20));
         txtrRoadInfrastructure.setText("       CONFIGURATIONS");
-        txtrRoadInfrastructure.setBounds(6, 6, 278, 23);
         roadInfraStructurePanel.add(txtrRoadInfrastructure);
 
         JButton single_lane = new JButton();
-        single_lane.setToolTipText("Add a Single Lane Road");
         single_lane.setBounds(26, 27, 70, 70);
-        single_lane.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Single Lane.png")));
+        single_lane.setToolTipText("Add a Single Lane Road");
+        single_lane.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Single Lane.jpg")));
         roadInfraStructurePanel.add(single_lane);
 
 
         JButton double_lane = new JButton();
-        double_lane.setToolTipText("Add a Double Lane Road");
         double_lane.setBounds(108, 27, 70, 70);
-        double_lane.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Double Lane.png")));
+        double_lane.setToolTipText("Add a Double Lane Road");
+        double_lane.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Double Lane.jpg")));
         roadInfraStructurePanel.add(double_lane);
 
         final JButton traffic_light = new JButton();
-        traffic_light.setToolTipText("Add a Traffic Light");
         traffic_light.setBounds(190, 27, 70, 70);
+        traffic_light.setToolTipText("Add a Traffic Light");
         traffic_light.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Traffic Light.png")));
         roadInfraStructurePanel.add(traffic_light);
 
         JButton zebra_crossing = new JButton();
-        zebra_crossing.setToolTipText("Add a Zebra Crossing");
         zebra_crossing.setBounds(26, 98, 70, 70);
+        zebra_crossing.setToolTipText("Add a Zebra Crossing");
         zebra_crossing.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Zebra Crossing.png")));
         roadInfraStructurePanel.add(zebra_crossing);
 
         JButton road_blockages = new JButton();
-        road_blockages.setToolTipText("Add Road Obstruction");
         road_blockages.setBounds(108, 98, 70, 70);
+        road_blockages.setToolTipText("Add Road Obstruction");
         road_blockages.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Construction.png")));
         roadInfraStructurePanel.add(road_blockages);
 
         JButton vehicle_factory = new JButton();
-        vehicle_factory.setToolTipText("Vehicle Factory");
         vehicle_factory.setBounds(190, 98, 70, 70);
+        vehicle_factory.setToolTipText("Vehicle Factory");
         vehicle_factory.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Vehicle Factory.png")));
         roadInfraStructurePanel.add(vehicle_factory);
 
-        JTextArea txtrTrafficSignBoards = new JTextArea();
+        JLabel txtrTrafficSignBoards = new JLabel();
+        txtrTrafficSignBoards.setBounds(64, 174, 158, 16);
         txtrTrafficSignBoards.setBackground(UIManager.getColor("Button.background"));
         txtrTrafficSignBoards.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 12));
         txtrTrafficSignBoards.setText("TRAFFIC SIGN BOARDS");
-        txtrTrafficSignBoards.setBounds(53, 170, 158, 16);
         roadInfraStructurePanel.add(txtrTrafficSignBoards);
 
         JButton stop_sign = new JButton();
-        stop_sign.setToolTipText("Add a Stop Sign");
         stop_sign.setBounds(6, 192, 70, 70);
+        stop_sign.setToolTipText("Add a Stop Sign");
         stop_sign.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Stop.png")));
         roadInfraStructurePanel.add(stop_sign);
 
         JButton left_sign = new JButton();
-        left_sign.setToolTipText("Add a Go Left Sign");
         left_sign.setBounds(72, 192, 70, 70);
+        left_sign.setToolTipText("Add a Go Left Sign");
         left_sign.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Left.png")));
         roadInfraStructurePanel.add(left_sign);
 
@@ -157,94 +157,96 @@ public class  Traffic_Simulator {
         roadInfraStructurePanel.add(up_sign);
 
         JButton right_sign = new JButton();
-        right_sign.setToolTipText("Add a Go Right Sign");
         right_sign.setBounds(208, 192, 70, 70);
+        right_sign.setToolTipText("Add a Go Right Sign");
         right_sign.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Right.png")));
         roadInfraStructurePanel.add(right_sign);
 
-        JTextArea txtrSpeedLimitSigns = new JTextArea();
+        JLabel txtrSpeedLimitSigns = new JLabel();
+        txtrSpeedLimitSigns.setBounds(82, 263, 130, 14);
         txtrSpeedLimitSigns.setForeground(UIManager.getColor("Button.darkShadow"));
         txtrSpeedLimitSigns.setText("SPEED LIMIT SIGNS");
         txtrSpeedLimitSigns.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 12));
         txtrSpeedLimitSigns.setBackground(UIManager.getColor("Button.background"));
-        txtrSpeedLimitSigns.setBounds(72, 268, 130, 14);
         roadInfraStructurePanel.add(txtrSpeedLimitSigns);
 
         JButton speed_20 = new JButton();
-        speed_20.setToolTipText("Speed Limit 20");
         speed_20.setBounds(1, 286, 50, 50);
+        speed_20.setToolTipText("Speed Limit 20");
         speed_20.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("20.png")));
         roadInfraStructurePanel.add(speed_20);
 
         JButton speed_30 = new JButton();
-        speed_30.setToolTipText("Speed Limit 30");
         speed_30.setBounds(46, 286, 50, 50);
+        speed_30.setToolTipText("Speed Limit 30");
         speed_30.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("30.png")));
         roadInfraStructurePanel.add(speed_30);
 
         JButton speed_50 = new JButton();
-        speed_50.setToolTipText("Speed Limit 50");
         speed_50.setBounds(93, 286, 50, 50);
+        speed_50.setToolTipText("Speed Limit 50");
         speed_50.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("50.png")));
         roadInfraStructurePanel.add(speed_50);
 
         JButton speed_60 = new JButton();
-        speed_60.setToolTipText("Speed Limit 60");
         speed_60.setBounds(139, 286, 50, 50);
+        speed_60.setToolTipText("Speed Limit 60");
         speed_60.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("60.png")));
         roadInfraStructurePanel.add(speed_60);
 
         JButton speed_70 = new JButton();
-        speed_70.setToolTipText("Speed Limit 70");
         speed_70.setBounds(186, 286, 50, 50);
+        speed_70.setToolTipText("Speed Limit 70");
         speed_70.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("70.png")));
         roadInfraStructurePanel.add(speed_70);
 
         JButton speed_90 = new JButton();
-        speed_90.setToolTipText("Speed Limit 90");
         speed_90.setBounds(230, 286, 50, 50);
+        speed_90.setToolTipText("Speed Limit 90");
         speed_90.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("90.png")));
         roadInfraStructurePanel.add(speed_90);
 
-        JTextArea txtrDestinationSignBoard = new JTextArea();
+        JLabel txtrDestinationSignBoard = new JLabel();
+        txtrDestinationSignBoard.setBounds(56, 340, 181, 14);
         txtrDestinationSignBoard.setText("DESTINATION SIGN BOARD");
         txtrDestinationSignBoard.setForeground(UIManager.getColor("Button.foreground"));
         txtrDestinationSignBoard.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 12));
         txtrDestinationSignBoard.setBackground(UIManager.getColor("Button.background"));
-        txtrDestinationSignBoard.setBounds(42, 338, 181, 14);
         roadInfraStructurePanel.add(txtrDestinationSignBoard);
 
         JButton welcome_board = new JButton();
+        welcome_board.setBounds(6, 355, 272, 57);
         welcome_board.setToolTipText("Add Welcome Board");
-        welcome_board.setBounds(-9, 360, 287, 70);
         welcome_board.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Welcome Board.png")));
         roadInfraStructurePanel.add(welcome_board);
 
         // Simulation Configuration Panel
 
         JPanel simulationConfigPanel = new JPanel();
-        simulationConfigPanel.setBounds(523, 6, 756, 74);
+        simulationConfigPanel.setBackground(UIManager.getColor("InternalFrame.background"));
+        simulationConfigPanel.setBounds(523, 6, 738, 71);
         trafficSimulatorFrame.getContentPane().add(simulationConfigPanel);
         simulationConfigPanel.setLayout(null);
 
-        JTextArea txtrSimulation = new JTextArea();
-        txtrSimulation.setBounds(345, 6, 146, 23);
+        JLabel txtrSimulation = new JLabel();
+        txtrSimulation.setBounds(345, 6, 146, 30);
         trafficSimulatorFrame.getContentPane().add(txtrSimulation);
         txtrSimulation.setText("SIMULATION");
-        txtrSimulation.setForeground(Color.WHITE);
+        txtrRoadInfrastructure.setBackground(Color.BLACK);
+        //txtrSimulation.setForeground(Color.WHITE);
         txtrSimulation.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 20));
         txtrSimulation.setBackground(Color.GRAY);
 
 
         JLabel currentSecondLabel = new JLabel("Current Second : ");
-        currentSecondLabel.setBounds(6, 6, 122, 16);
+        currentSecondLabel.setBounds(6, 6, 122, 24);
 
 
         final JLabel currentSecondValue = new JLabel("New label");
-        currentSecondValue.setBounds(119, 6, 96, 16);
+        currentSecondValue.setBounds(119, 6, 96, 24);
 
         JPanel currentSecondPanel = new JPanel();
-        currentSecondPanel.setBounds(296, 38, 221, 33);
+        currentSecondPanel.setBounds(296, 41, 221, 36);
         trafficSimulatorFrame.getContentPane().add(currentSecondPanel);
         currentSecondPanel.setLayout(null);
         currentSecondPanel.add(currentSecondLabel);
@@ -324,13 +326,15 @@ public class  Traffic_Simulator {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dcp.reportInformation();//TODO : Reports in table format
+
             }
         });
 
         //Traffic Pattern Panel
 
         JPanel trafficPatternPanel = new JPanel();
-        trafficPatternPanel.setBounds(0, 425, 505, 253);
+        trafficPatternPanel.setBackground(UIManager.getColor("InternalFrame.background"));
+        trafficPatternPanel.setBounds(6, 425, 497, 244);
         trafficSimulatorFrame.getContentPane().add(trafficPatternPanel);
         trafficPatternPanel.setLayout(null);
         trafficPatternPanel.setLayout(null);
@@ -342,9 +346,9 @@ public class  Traffic_Simulator {
 
         final ClimaticCondition climaticCondition = new ClimaticCondition();
 
-        JLabel lblVisibility = new JLabel("Visibility");
-        lblVisibility.setBounds(266, 17, 85, 18);
-        lblVisibility.setFont(new Font("Times New Roman", Font.BOLD, 14));
+        JLabel lblVisibility = new JLabel("VISIBILITY");
+        lblVisibility.setBounds(248, 15, 85, 25);
+        lblVisibility.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 12));
         trafficPatternPanel.add(lblVisibility);
 
         final JSlider visibility_slider = new JSlider();
@@ -378,11 +382,10 @@ public class  Traffic_Simulator {
             }
         });
 
-        JButton sunny_button = new JButton("New button");
-        sunny_button.setBounds(new Rectangle(0, 0, 50, 50));
+        JButton sunny_button = new JButton();
         sunny_button.setToolTipText("Sunny");
-        sunny_button.setBounds(6, 17, 56, 53);
-        sunny_button.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("sunny.jpg")));
+        sunny_button.setBounds(16, 17, 60, 60);
+        sunny_button.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("sunny.png")));
         trafficPatternPanel.add(sunny_button);
         sunny_button.addActionListener(new ActionListener() {
             @Override
@@ -393,11 +396,10 @@ public class  Traffic_Simulator {
             }
         });
 
-        JButton rainy_button = new JButton("New button");
-        rainy_button.setBounds(new Rectangle(0, 0, 50, 50));
+        JButton rainy_button = new JButton();
         rainy_button.setToolTipText("Rainy");
-        rainy_button.setBounds(78, 17, 58, 53);
-        rainy_button.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("rainy.jpg")));
+        rainy_button.setBounds(90, 17, 60, 60);
+        rainy_button.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("rainy.png")));
         trafficPatternPanel.add(rainy_button);
         rainy_button.addActionListener(new ActionListener() {
             @Override
@@ -408,10 +410,10 @@ public class  Traffic_Simulator {
             }
         });
 
-        JButton snow_button = new JButton("New button");
+        JButton snow_button = new JButton();
         snow_button.setToolTipText("Snowy");
-        snow_button.setBounds(148, 17, 56, 53);
-        snow_button.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("snow.jpg")));
+        snow_button.setBounds(162, 17, 60, 60);
+        snow_button.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("snow.png")));
         trafficPatternPanel.add(snow_button);
         snow_button.addActionListener(new ActionListener() {
             @Override
@@ -463,12 +465,12 @@ public class  Traffic_Simulator {
             }
         });
 
-        JLabel lbl_slippery = new JLabel("Slipperniess");
-        lbl_slippery.setBounds(266, 52, 85, 18);
-        lbl_slippery.setFont(new Font("Times New Roman", Font.BOLD, 14));
+        JLabel lbl_slippery = new JLabel("SLIPPERINESS");
+        lbl_slippery.setBounds(248, 47, 99, 30);
+        lbl_slippery.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 12));
         trafficPatternPanel.add(lbl_slippery);
 
-        JLabel lbl_traffic_density = new JLabel("Traffic Density");
+        JLabel lbl_traffic_density = new JLabel("TRAFFIC DENSITY");
         lbl_traffic_density.setBounds(6, 82, 155, 18);
         lbl_traffic_density.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 15));
         trafficPatternPanel.add(lbl_traffic_density);
@@ -502,37 +504,37 @@ public class  Traffic_Simulator {
         JLabel lblCar = new JLabel("Cars");
         lblCar.setForeground(UIManager.getColor("Button.light"));
         lblCar.setBounds(6, 129, 36, 18);
-        lblCar.setFont(new Font("Times New Roman", Font.BOLD, 14));
+        lblCar.setFont(new Font("Copperplate Gothic", Font.BOLD, 11));
         trafficPatternPanel.add(lblCar);
 
         JLabel lblHeavyVehicles = new JLabel("Trucks");
         lblHeavyVehicles.setForeground(UIManager.getColor("Button.light"));
         lblHeavyVehicles.setBounds(51, 129, 99, 18);
-        lblHeavyVehicles.setFont(new Font("Times New Roman", Font.BOLD, 14));
+        lblHeavyVehicles.setFont(new Font("Copperplate Gothic", Font.BOLD, 11));
         trafficPatternPanel.add(lblHeavyVehicles);
 
         JLabel lblEmergencyVehicles = new JLabel("Emergency");
         lblEmergencyVehicles.setForeground(UIManager.getColor("Button.light"));
         lblEmergencyVehicles.setBounds(103, 125, 126, 26);
-        lblEmergencyVehicles.setFont(new Font("Times New Roman", Font.BOLD, 14));
+        lblEmergencyVehicles.setFont(new Font("Copperplate Gothic", Font.BOLD, 11));
         trafficPatternPanel.add(lblEmergencyVehicles);
 
         JLabel lblCautions = new JLabel("Cautions");
         lblCautions.setForeground(UIManager.getColor("Button.light"));
         lblCautions.setBounds(6, 227, 56, 18);
-        lblCautions.setFont(new Font("Times New Roman", Font.BOLD, 14));
+        lblCautions.setFont(new Font("Copperplate Gothic", Font.BOLD, 11));
         trafficPatternPanel.add(lblCautions);
 
         JLabel lblNormal = new JLabel("Normal");
         lblNormal.setForeground(UIManager.getColor("Button.light"));
         lblNormal.setBounds(65, 227, 55, 18);
-        lblNormal.setFont(new Font("Times New Roman", Font.BOLD, 14));
+        lblNormal.setFont(new Font("Copperplate Gothic", Font.BOLD, 11));
         trafficPatternPanel.add(lblNormal);
 
         JLabel lblReckless = new JLabel("Reckless");
         lblReckless.setForeground(UIManager.getColor("Button.light"));
         lblReckless.setBounds(115, 227, 56, 18);
-        lblReckless.setFont(new Font("Times New Roman", Font.BOLD, 14));
+        lblReckless.setFont(new Font("Copperplate Gothic", Font.BOLD, 11));
         trafficPatternPanel.add(lblReckless);
 
         JLabel lblDestinationDensity = new JLabel("Destination Density");
@@ -542,6 +544,8 @@ public class  Traffic_Simulator {
 
 
         final JTextField locationTxtField = new JTextField("Location");
+        locationTxtField.setForeground(Color.LIGHT_GRAY);
+        locationTxtField.setFont(new Font("Copperplate Gothic Bold", Font.ITALIC, 13));
         trafficPatternPanel.add(locationTxtField);
         locationTxtField.setBounds(183, 189, 145, 50);
         locationTxtField.addActionListener(new ActionListener() {
@@ -570,7 +574,8 @@ public class  Traffic_Simulator {
         //Traffic Light Configuration Panel
 
         final JPanel trafficLightConfigPanel = new JPanel();
-        trafficLightConfigPanel.setBounds(505, 425, 790, 262);
+        trafficLightConfigPanel.setBackground(UIManager.getColor("InternalFrame.background"));
+        trafficLightConfigPanel.setBounds(505, 425, 756, 244);
         trafficSimulatorFrame.getContentPane().add(trafficLightConfigPanel);
         trafficLightConfigPanel.setLayout(null);
 
@@ -580,7 +585,7 @@ public class  Traffic_Simulator {
         trafficLightConfigPanel.add(trafficLightConfigLbl);
 
         final JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(18, 50, 754, 191);
+        scrollPane.setBounds(6, 39, 744, 199);
         final JTable table = new JTable();
         table.setForeground(new Color(0, 0, 0));
         table.setBackground(new Color(248, 248, 255));
@@ -822,10 +827,10 @@ public class  Traffic_Simulator {
             }
         });
 
-        JButton clearVehicleFactoryButton = new JButton("ClearVehicleFactory");
-        clearVehicleFactoryButton.setToolTipText("ClearVehicleFactory");
-        clearVehicleFactoryButton.setBounds(new Rectangle(0, 0, 50, 50));
-        clearVehicleFactoryButton.setBounds(325, 85, 56, 53);
+        JButton clearVehicleFactoryButton = new JButton();
+        clearVehicleFactoryButton.setToolTipText("Clear Vehicle Factory");
+        clearVehicleFactoryButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("clearVehicleFactory.png")));
+        clearVehicleFactoryButton.setBounds(325, 85, 65, 65);
         trafficPatternPanel.add(clearVehicleFactoryButton);
         clearVehicleFactoryButton.addActionListener(new ActionListener() {
             @Override
@@ -836,11 +841,16 @@ public class  Traffic_Simulator {
             }
         });
 
-        JButton clearAllButton = new JButton("ClearAll");
-        clearAllButton.setToolTipText("ClearAll");
-        clearAllButton.setBounds(new Rectangle(0, 0, 50, 50));
-        clearAllButton.setBounds(408, 85, 56, 53);
+        JButton clearAllButton = new JButton();
+        clearAllButton.setToolTipText("Clear All");
+        clearAllButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("clearAll.png")));
+         clearAllButton.setBounds(408, 85, 65, 65);
         trafficPatternPanel.add(clearAllButton);
+
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.WHITE);
+        panel.setBounds(296, 83, 965, 339);
+        trafficSimulatorFrame.getContentPane().add(panel);
         clearAllButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -865,5 +875,4 @@ public class  Traffic_Simulator {
             return comp;
         }
     }
-
 }

@@ -23,13 +23,15 @@ public class VehicleMotor {
     private double maxDeceleration;
     private double currentVelocity;//current speed in metres
     private double currentAcceleration;
+    private boolean madeDestination;
+    private double arrivalDestTime;
     private double depthInCurrentRUnit;//if the RUnit is say 100m long we need to keep track of how far in the vehicle is
     private int maxSpeedLimit;//the speed limit as according to the signs
     private double maximumVelocity;
     private ObjectInSpace objectInSpace;
     private String destination;
     private boolean isEmergency;
-
+private double nextCheckTime;
 
     //TODO: delete this
     public String currentStrategy;
@@ -41,11 +43,12 @@ public class VehicleMotor {
         this.currentVelocity = initialSpeed;
         this.currentAcceleration = 0;
         this.depthInCurrentRUnit = 0;
-        maxSpeedLimit = 100;
+        maxSpeedLimit = initialSpeed;
         this.destination = destination;
         this.objectInSpace = objectInSpace;
         this.isEmergency = isEmergency;
         this.maximumVelocity = maximumVelocity;
+        this.nextCheckTime=0;
         objectInSpace.setDirection(new VehicleDirection(1, 1, 1, 1));
     }
 
@@ -63,28 +66,98 @@ public class VehicleMotor {
     }
 
     public IRUnitManager PrepareAction(IRUnitManager rUnit, Driver driver, VehicleState vehicleState
-            , double slipperinessOffset) {
+            , double slipperinessOffset, ISpaceManager spaceManager, double time) {
+
+        currentStrategy = "=";
+
+        if(nextCheckTime==0 || nextCheckTime<time) {
+            nextCheckTime=time+4;
+            //choose your lane
+            rUnit = chooseLane(rUnit, vehicleState, spaceManager, driver.getSpeed(slipperinessOffset, (isEmergency ? maximumVelocity : maxSpeedLimit)));
+        }
 
         //get the slowest and next objects within x metres
-        VehicleMemoryObject slowestObject = vehicleState.getSlowestWithin(200);
-        VehicleMemoryObject nextObject = vehicleState.nextObjectWithin(200);
+        VehicleMemoryObject slowestObject = vehicleState.getSlowestWithin(200, isEmergency, rUnit.isLeft());
+        VehicleMemoryObject nextObject = vehicleState.nextObjectWithin(200, isEmergency, rUnit.isLeft());
 
-        //initially aim for the speed limit
-        currentAcceleration = aimForSpeed(
-                driver.getSpeed(slipperinessOffset, (isEmergency ? maximumVelocity : maxSpeedLimit)),
-                0,//safe stop distance
-                1//distance to
-        );
+        //control speed and distance based on the situation ahead
+        ControlSpeedAndDistance(nextObject, slowestObject, driver, slipperinessOffset);
 
-        if (nextObject != null) {
+        //replan direction
+        if(nextObject!=null)
+            replan(nextObject,vehicleState);
 
-            //react controls speed and immediate decision making
-            react(rUnit, nextObject, slowestObject, driver, slipperinessOffset, vehicleState.isChangeableClear());
-
-            //replan is responsible for long term decision making
-            replan(nextObject, vehicleState);
-        }
         return rUnit;
+    }
+
+    public boolean isMadeDestination() {
+        return madeDestination;
+    }
+
+    public double getArrivalDestTime() {
+        return arrivalDestTime;
+    }
+
+    private IRUnitManager chooseLane(IRUnitManager rUnit, VehicleState vehicleState, ISpaceManager spaceManager, double desiredSpeed)
+    {
+        IRUnitManager temp = rUnit;
+
+
+
+        if(temp.isLeft())
+        {
+            VehicleMemoryObject vehicleInLeft = vehicleState.getNextVehicleObject(20,true);
+            VehicleMemoryObject vehicleInRight = vehicleState.getNextVehicleObject(20,false);
+            VehicleMemoryObject speedAffectingRoadElement = (isEmergency ? null :vehicleState.getNextSpeedAffectingRoadElement(100,true));
+
+            currentStrategy+="LHS("+(vehicleInLeft==null ? "null)" : Common.round(vehicleInLeft.getVelocity(), 2)+"ms,"+Common.round(vehicleInLeft.getDistance(), 2)+"m) ") +
+                    "RHS("+(vehicleInRight==null ? "null)" :Common.round(vehicleInRight.getVelocity(), 2) + "ms," + Common.round(vehicleInRight.getDistance(), 2) + "m) ") +
+                    "Sp(" + (speedAffectingRoadElement==null ? "null)" :Common.round(speedAffectingRoadElement.getVelocity(), 2) + "ms," + Common.round(speedAffectingRoadElement.getDistance(), 2) + "m)");
+
+            double achievableSpeed = Math.min(
+                    (speedAffectingRoadElement != null ? speedAffectingRoadElement.getVelocity() : desiredSpeed),
+                    desiredSpeed
+            );
+
+            currentStrategy+=" achievableSpeed["+(speedAffectingRoadElement != null ? speedAffectingRoadElement.getVelocity() : desiredSpeed)+"" +
+                    ","+desiredSpeed+"]=" + achievableSpeed;
+
+            currentStrategy+=" [isLeft]";
+            if(vehicleInLeft!=null)
+            {currentStrategy+=" [vehicleInLeft!=null]";
+                if(vehicleInLeft.getVelocity()<achievableSpeed)
+                {currentStrategy+=" [vehicleInLeft.getVelocity()<achievableSpeed]";
+                    if(VehiclePerception.isChangeableClear(temp,spaceManager,objectInSpace, 10, 15)) {
+                        currentStrategy+=" [fits]";
+                        if (vehicleInRight == null) {
+                            currentStrategy+=" [vehicleInRight == null] CHANGING TO RIGHT";
+                            temp = rUnit.getChangeAbleRUnit();
+                        }
+                        else {
+                            if (vehicleInRight.getVelocity() > vehicleInLeft.getVelocity()) {
+                                currentStrategy+=" [vehicleInRight.getVelocity() > vehicleInLeft.getVelocity()] CHANGING TO RIGHT";
+                                temp = rUnit.getChangeAbleRUnit();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            VehicleMemoryObject vehicleInLeft = vehicleState.getNextVehicleObject(100,true);
+            currentStrategy+=" [isRight]";
+            if(vehicleInLeft==null)
+            {
+                if(VehiclePerception.isChangeableClear(temp,spaceManager,objectInSpace, 30, 5)) {
+                    currentStrategy += " [vehicleInLeft==null] CHANGING TO LEFT";
+                    temp = temp.getChangeAbleRUnit();
+                }
+            }
+        }
+
+        currentStrategy="";
+        return temp;
+
     }
 
     public IRUnitManager performAction(double timePassed, IDataAndStructures dataAndStructures,
@@ -110,18 +183,22 @@ public class VehicleMotor {
         //travel the rUnits
         for (int i = 0; i < RUnitsTravelled; i++) {//go through as many metres as many you have travelled since last move
 
-                //advance
-                rUnit = chooseNext(rUnit, vehicleState);
+            //advance
+            rUnit = chooseNext(rUnit, vehicleState);
 
-                //see and process the objects we have just passed
-                processObjectPassed(rUnit, vehicleState);
+            //see and process the objects we have just passed
+            processObjectPassed(rUnit, vehicleState, dataAndStructures.getGlobalConfigManager().getCurrentSecond());
         }
 
         //adjust your position in space
         objectInSpace.setX(rUnit.getX());
         objectInSpace.setY(rUnit.getY());
         if (previousrUnit.getId() != rUnit.getId())
-            objectInSpace.setDirection(new VehicleDirection(previousrUnit.getX(), previousrUnit.getY(), rUnit.getX(), rUnit.getY()));
+            objectInSpace.setDirection(new VehicleDirection(
+                    Common.getNthPrevRUnit(previousrUnit, 1).getX(),
+                    Common.getNthPrevRUnit(previousrUnit, 1).getY(),
+                    Common.getNthNextRUnit(rUnit, 3).getX(),
+                    Common.getNthNextRUnit(rUnit, 3).getY()));
 
         return rUnit;
     }
@@ -132,12 +209,15 @@ public class VehicleMotor {
 
         //if you have a destination
         if (!destination.isEmpty()) {
+            currentStrategy+="[dest not empty]";
             //if the next object is a direction sign
             if (nextObject.getObject() instanceof DirectionSign) {
+                currentStrategy+="[NextObj("+((DirectionSign) nextObject.getObject()).getLocation()+")vs("+destination+")="+((DirectionSign) nextObject.getObject()).getLocation().equals(destination)+"]";
                 //if the destination on the sign matches your destination
-                if (((DirectionSign) nextObject.getObject()).getLocation() == destination) {
+                if (((DirectionSign) nextObject.getObject()).getLocation().equals(destination)) {
                     //set your next direction to the one from the sign
                     vehicleState.setNextDirectionAtDecisionPoint(((DirectionSign) nextObject.getObject()).getDirectionSignType());
+                    currentStrategy+="[SAME DIRECTION. Next direction: " + vehicleState.getNextDirectionAtDecisionPoint()+"]";
                 }
             }
 
@@ -152,60 +232,70 @@ public class VehicleMotor {
         }
     }
 
-    private IRUnitManager react(IRUnitManager currentRUnit, VehicleMemoryObject nextObject, VehicleMemoryObject slowestObject,
-                                Driver driver, double slipperinessOffset, boolean isChangeableClear) {
+    private void ControlSpeedAndDistance(VehicleMemoryObject nextObject, VehicleMemoryObject slowestObject,
+                                Driver driver, double slipperinessOffset) {
         //this function forms a response to a moving or stationary object
 
-        //distance whether you match the speed on the next Object or the Slowest object
-        double decelerationDistanceToNextObject = nextObject.getDistance() -
-                driver.getDecelerationSafeDistance(
-                        currentVelocity,
-                        nextObject.getVelocity(),
-                        nextObject.getDistance() - additionalDistances(),
-                        slipperinessOffset,
-                        nextObject);
-        double decelerationDistanceToSlowestObject = slowestObject.getDistance() -
-                driver.getDecelerationSafeDistance(
-                        currentVelocity,
-                        slowestObject.getVelocity(),
-                        slowestObject.getDistance() - additionalDistances(),
-                        slipperinessOffset,
-                        slowestObject);
+        if(nextObject==null)
+        {
+            currentAcceleration = aimForSpeed(
+                    driver.getSpeed(slipperinessOffset, (isEmergency ? maximumVelocity : maxSpeedLimit)),
+                    0,//safe stop distance
+                    1//distance to
+            );
+        }
+        else {
+            //distance whether you match the speed on the next Object or the Slowest object
+            double decelerationDistanceToNextObject = nextObject.getDistance() -
+                    driver.getDecelerationSafeDistance(
+                            currentVelocity,
+                            nextObject.getVelocity(),
+                            nextObject.getDistance() - additionalDistances(),
+                            slipperinessOffset,
+                            nextObject);
+            double decelerationDistanceToSlowestObject = slowestObject.getDistance() -
+                    driver.getDecelerationSafeDistance(
+                            currentVelocity,
+                            slowestObject.getVelocity(),
+                            slowestObject.getDistance() - additionalDistances(),
+                            slipperinessOffset,
+                            slowestObject);
 
-        //focus on the object which speed you need to match sooner
-        VehicleMemoryObject objectToMatch = (decelerationDistanceToNextObject > decelerationDistanceToSlowestObject ?
-                slowestObject : nextObject);
+            currentStrategy += " next(" + nextObject.getObject() + "," + nextObject.getDistance() + "m," + decelerationDistanceToNextObject +
+                    "dd," + nextObject.getVelocity()
+                    + "ms) vs";
+            currentStrategy += " slowest(" + slowestObject.getObject() + "," + slowestObject.getDistance() + "m," + decelerationDistanceToSlowestObject +
+                    "dd," + "m," + slowestObject.getVelocity()
+                    + "ms)";
+            //focus on the object which speed you need to match sooner
+            VehicleMemoryObject objectToMatch = (decelerationDistanceToNextObject > decelerationDistanceToSlowestObject ?
+                    slowestObject : nextObject);
 
-        double speedToMatch = (isEmergency ? maximumVelocity : maxSpeedLimit);
+//            currentStrategy += "=" + objectToMatch.getObject();
+            double speedToMatch = (isEmergency ? maximumVelocity : maxSpeedLimit);
 
-        //emergency vehicles ignore traffic lights and traffic signs
-        if(!(isEmergency & (objectToMatch.getObject() instanceof TrafficSign | objectToMatch.getObject() instanceof TrafficLight))) {
             //if you are within the distance to start slowing down
             if (objectToMatch.getDistance() <= driver.getDecelerationSafeDistance(
                     currentVelocity,
                     objectToMatch.getVelocity(),
                     objectToMatch.getDistance() - additionalDistances(),
                     slipperinessOffset,
-                    objectToMatch))
-                if (isChangeableClear)//change lane if possible
-                    return currentRUnit.getChangeAbleRUnit();
-                else {
-                    speedToMatch = Math.min((isEmergency ? maximumVelocity : maxSpeedLimit), objectToMatch.getVelocity());
-                }
+                    objectToMatch)) {
+//                currentStrategy += "[within sdd]";
+
+                speedToMatch = Math.min((isEmergency ? maximumVelocity : maxSpeedLimit), objectToMatch.getVelocity());
+
+            }
+
+
+            //aim to match the object speed
+            currentAcceleration = aimForSpeed(
+                    driver.getSpeed(slipperinessOffset, speedToMatch),
+                    driver.getStopDistance(slipperinessOffset, objectToMatch),
+                    objectToMatch.getDistance() - (objectToMatch.isPassable() ? 0 : additionalDistances()));
+
+            currentStrategy="";
         }
-        //aim to match the object speed
-        currentAcceleration = aimForSpeed(
-                driver.getSpeed(slipperinessOffset, speedToMatch),
-                driver.getStopDistance(slipperinessOffset, objectToMatch),
-                objectToMatch.getDistance() - (objectToMatch.isPassable() ? 0 : additionalDistances()));
-
-        currentStrategy = "speedToMatch: " + speedToMatch + " currentAcceleration: " + currentAcceleration +
-                " objectToMatch: " + objectToMatch.getObject().getClass() + " d: " + objectToMatch.getDistance();
-
-        if (isChangeableClear & !currentRUnit.isLeft())
-            currentRUnit = currentRUnit.getChangeAbleRUnit();
-
-        return currentRUnit;
     }
 
 
@@ -237,9 +327,9 @@ public class VehicleMotor {
                 currentVelocity + currentAcceleration * timePassed));
     }
 
-    private void processObjectPassed(IRUnitManager rUnit, VehicleState vehicleState) {
+    private void processObjectPassed(IRUnitManager rUnit, VehicleState vehicleState, double currentTime) {
 
-        Object obj=VehiclePerception.getObjectAtRUnit(rUnit);
+        Object obj = VehiclePerception.getObjectForDoubleLane(rUnit);
         //if you have just passed a speed sign update your maxSpeedLimit
         if (obj instanceof SpeedLimitSign) {
             maxSpeedLimit = (((SpeedLimitSign) obj).getSpeedLimit() * 1000) / 3600;//convert km/h to m/s
@@ -254,6 +344,15 @@ public class VehicleMotor {
         if (obj instanceof RoadDecisionPoint) {
             vehicleState.setNextRUnitAfterDecisionPoint(null);
             vehicleState.setNextDirectionAtDecisionPoint(null);
+        }
+
+        //if you have just passed your destination
+        if (obj instanceof WelcomeSign) {
+            if(((WelcomeSign)obj).getLocation().equals(destination)) {
+                objectInSpace.setVisible(false);
+                madeDestination=true;
+                arrivalDestTime=currentTime;
+            }
         }
     }
 
@@ -319,7 +418,7 @@ public class VehicleMotor {
                 }
             } else {
                 //return a random direction
-                return rUnit.getNextRUnitList().get(Common.randIntegerBetween(0, rUnit.getNextRUnitList().size()-1));
+                return rUnit.getNextRUnitList().get(Common.randIntegerBetween(0, rUnit.getNextRUnitList().size() - 1));
             }
         }
         return rUnit;
@@ -329,4 +428,7 @@ public class VehicleMotor {
         return depthInCurrentRUnit + objectInSpace.getLength();
     }
 
+    public double getMaximumVelocity() {
+        return maximumVelocity;
+    }
 }

@@ -5,7 +5,6 @@ import dataAndStructures.DataAndStructures;
 import managers.globalconfig.*;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
-import managers.space.VehicleDirection;
 import managers.vehicle.IVehicleManager;
 import managers.vehiclefactory.VehicleFactoryManager;
 import reports.DCP;
@@ -27,12 +26,11 @@ public class SimEngine {
     private DCP dcp;
 
     int test = 0;
-    private int maxCars =200 ;
+    private int maxCars =10000 ;
 
     public SimEngine(DataAndStructures dataAndStructures, DCP dcp) {
         this.dataAndStructures = dataAndStructures;
         this.dcp = dcp;
-
     }
 
     public void Play(ActionListener actionListener) {
@@ -76,6 +74,8 @@ public class SimEngine {
         timer.stop();
     }
 
+    //TODO do clear vehicles
+
     public void performAction() {
 
         if(!pause) {
@@ -87,7 +87,7 @@ public class SimEngine {
             dcp.updateReportingInfo(dataAndStructures);
 
             //create new vehicles
-            if (dataAndStructures.getVehicles().size() < maxCars | 1==1) {
+            if (dataAndStructures.getVehicles().size() < maxCars & 1==1) {
                 IVehicleManager newVehicle =
                         dataAndStructures.getVehicleFactoryManager().createVehicle(dataAndStructures);
 
@@ -108,11 +108,17 @@ public class SimEngine {
             //change traffic lights
             dataAndStructures.getRoadNetworkManager().changeLight(dataAndStructures.getGlobalConfigManager().getCurrentSecond());
 
-//            if(dataAndStructures.getGlobalConfigManager().getCurrentSecond()>previousSecond)
+//            if((int)dataAndStructures.getGlobalConfigManager().getCurrentSecond()>previousSecond)
 //            {
-//                for(IVehicleManager veh : dataAndStructures.getVehicles())
-//                    System.out.println(veh.getVehID() + " " + " " + veh.isVisible() + " " + veh.getVehicle().getCurrentStrategy());
-//            }
+                for(IVehicleManager veh : dataAndStructures.getVehicles())
+//               // if(veh.getVehicle().getObjectInSpace().getVehicleType() == VehicleType.emergency)
+                //if(veh.getVehID()==1)
+                //if(veh.getVehicle().getCurrentStrategy().length()>10)
+                    System.out.println(dataAndStructures.getGlobalConfigManager().getCurrentSecond() + " " +
+                            veh.getVehID() + " " + " s: " + Common.round(veh.getVehicle().getCurrentVelocity(), 2)
+                            + " v:" + veh.isVisible() + " rUnit:"
+                            + veh.getVehicle().getrUnit().getId() + " dest: " + veh.getVehicle().getDestination() + "" + veh.getVehicle().getCurrentStrategy());
+//            //}
             previousSecond = (int) dataAndStructures.getGlobalConfigManager().getCurrentSecond();
         }
    }
