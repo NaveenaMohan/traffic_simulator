@@ -25,10 +25,7 @@ public class test1 {
 
     public static void main(String[] args) {
 
-        System.out.println(getDifference(35,40));
-        System.out.println(getDifference(35,30));
-        System.out.println(getDifference(35,29));
-        System.out.println(getDifference(35,41));
+
 
 //        TrafficLight trafficLight=new TrafficLight();
 //        RoadNetwork roadNetwork=new RoadNetwork();

@@ -30,7 +30,7 @@ public class  Traffic_Simulator {
     private VehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
     private GlobalConfigManager globalConfigManager = new GlobalConfigManager(
             100,//ticks per second
-            0.8,//metres per RUnit
+            0.5,//metres per RUnit
             new ClimaticCondition(),
             new DriverBehavior(),
             new VehicleDensity(),
@@ -38,7 +38,7 @@ public class  Traffic_Simulator {
     );
     final DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
     private DCP dcp=new DCP(dataAndStructures);
-
+    private boolean openReport=false;
     private SimEngine simEngine = new SimEngine(dataAndStructures,dcp);
     private DefaultTableModel model;
 
@@ -324,6 +324,7 @@ public class  Traffic_Simulator {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dcp.reportInformation();//TODO : Reports in table format
+
             }
         });
 

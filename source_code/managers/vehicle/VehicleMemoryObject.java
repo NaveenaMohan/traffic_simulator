@@ -13,6 +13,15 @@ public class VehicleMemoryObject<T> {
     private double distance;
     private double velocity;
     private boolean passable;
+    private boolean isInLeft;
+
+    public boolean isInLeft() {
+        return isInLeft;
+    }
+
+    public void setIsInLeft(boolean isInLeft) {
+        this.isInLeft = isInLeft;
+    }
 
     public boolean isPassable() {
         return passable;
@@ -26,12 +35,13 @@ public class VehicleMemoryObject<T> {
         return velocity;
     }
 
-    public VehicleMemoryObject(IRUnitManager rUnit, T object, double distance, double velocity, boolean passable) {
+    public VehicleMemoryObject(IRUnitManager rUnit, T object, double distance, double velocity, boolean passable, boolean isInLeft) {
         this.rUnit = rUnit;
         this.object = object;
         this.distance=distance;
         this.velocity=velocity;
         this.passable=passable;
+        this.isInLeft=isInLeft;
     }
 
     public IRUnitManager getrUnit() {
