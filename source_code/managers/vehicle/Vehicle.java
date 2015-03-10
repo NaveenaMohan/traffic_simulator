@@ -1,17 +1,12 @@
 package managers.vehicle;
 
 import dataAndStructures.IDataAndStructures;
-import managers.globalconfig.ClimaticCondition;
-import managers.globalconfig.IGlobalConfigManager;
 import managers.globalconfig.VehicleType;
 import managers.runit.IRUnitManager;
 import managers.runit.RUnit;
 import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
-import managers.space.SpaceManager;
 import managers.space.VehicleDirection;
-
-import javax.imageio.spi.IIOServiceProvider;
 
 /**
  * Created by naveena on 08/02/15.
@@ -19,12 +14,12 @@ import javax.imageio.spi.IIOServiceProvider;
 public class Vehicle implements IVehicleManager {
 
     private int vehID;
-    private boolean madeDestination;
-    private double arrivalDestTime;
     private IRUnitManager rUnit;
     private Driver driver;
     private VehicleMotor vehicleMotor;
     private VehicleState vehicleState;
+    private VehiclePerception vehiclePerception;
+    private VehicleType vehicleType;
 
     private double timeCreated;
 
@@ -42,6 +37,15 @@ public class Vehicle implements IVehicleManager {
         this.vehicleMotor = new VehicleMotor(maxAcceleration, maxDeceleration, initialSpeed, destination, objectInSpace, maximumVelocity,
                 (objectInSpace.getVehicleType()==VehicleType.emergency ? true : false));
         this. vehicleState = new VehicleState();
+        this.vehiclePerception=new VehiclePerception();
+    }
+
+    public double getTimeCreated() {
+        return timeCreated;
+    }
+
+    public VehicleMotor getVehicleMotor() {
+        return vehicleMotor;
     }
 
     public IRUnitManager getrUnit() {
@@ -78,15 +82,16 @@ public class Vehicle implements IVehicleManager {
 
 
         //perceive the world and update your state
-        VehiclePerception.See(
+        vehiclePerception.See(
                 vehID,
                 rUnit,//your position
-                driver.getVision(50, dataAndStructures.getGlobalConfigManager().getClimaticCondition().getVisibility()), //rUnits of vision
+                driver.getVision(100, dataAndStructures.getGlobalConfigManager().getClimaticCondition().getVisibility()), //rUnits of vision
                 vehicleState,
                 spaceManager,
                 dataAndStructures,
                 vehicleMotor.getObjectInSpace(),
-                vehicleMotor.getDestination()
+                vehicleMotor.getDestination(),
+                dataAndStructures.getGlobalConfigManager().getCurrentSecond()
         );
 
         //prepare the acceleration and rUnit position
@@ -94,7 +99,9 @@ public class Vehicle implements IVehicleManager {
                 rUnit,
                 driver,
                 vehicleState,
-                dataAndStructures.getGlobalConfigManager().getClimaticCondition().getSlipperiness()
+                dataAndStructures.getGlobalConfigManager().getClimaticCondition().getSlipperiness(),
+                spaceManager,
+                dataAndStructures.getGlobalConfigManager().getCurrentSecond()
         );
 
         //move
@@ -107,6 +114,10 @@ public class Vehicle implements IVehicleManager {
 
     }
 
+    public VehicleType getVehicleType() {
+        return vehicleType;
+    }
+
     public String getCurrentStrategy(){return vehicleMotor.currentStrategy;}
     @Override
     public boolean isVisible(int minX, int maxX, int minY, int maxY) {
@@ -114,12 +125,12 @@ public class Vehicle implements IVehicleManager {
     }
 
     public boolean getMadeDestination(){
-        return madeDestination;
+        return vehicleMotor.isMadeDestination();
+    }
+    public double getArrivalDestTime(){
+        return vehicleMotor.getArrivalDestTime();
     }
 
-    public double getArrivalDestTime(){
-        return arrivalDestTime;
-    }
     @Override
     public Vehicle getVehicle() {
         return this;

@@ -52,13 +52,13 @@ public class VehicleTypeStats {
         switch(vehicleType)
         {
             case car:
-                return (160*1000)/3600;
+                return (120*1000)/3600;
             case emergency:
-                return (190*1000)/3600;
+                return (150*1000)/3600;
             case heavyLoad:
-                return (100*1000)/3600;
+                return (70*1000)/3600;
             default:
-                return (160*1000)/3600;
+                return (120*1000)/3600;
         }
     }
     public static double getMaxAcceleration(VehicleType vehicleType)
@@ -73,6 +73,21 @@ public class VehicleTypeStats {
                 return 1.3;
             default:
                 return 2.7;
+        }
+    }
+
+    public static double getMaxDeceleration(VehicleType vehicleType)
+    {
+        switch(vehicleType)
+        {
+            case car:
+                return -500;
+            case emergency:
+                return -500;
+            case heavyLoad:
+                return -500;
+            default:
+                return -500;
         }
     }
 }

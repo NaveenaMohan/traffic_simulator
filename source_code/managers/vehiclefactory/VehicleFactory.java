@@ -39,7 +39,7 @@ public class VehicleFactory{
 
 
         //only add the new vehicle if it fits in the space outside the factory
-        if(spaceManager.checkFit(objectInSpace)) {
+        if(spaceManager.checkFit(objectInSpace.getId(), objectInSpace.getX(), objectInSpace.getY(), 10,10)) {
             spaceManager.addObjectToSpace(objectInSpace);
             Vehicle vehicle = new Vehicle(
                     vehID,//vehicle ID
@@ -49,7 +49,7 @@ public class VehicleFactory{
                     destination,
                     objectInSpace,
                     VehicleTypeStats.getMaxAcceleration(vehicleType),//maximum acceleration in metres per second.
-                    -100,//max deceleration
+                    VehicleTypeStats.getMaxDeceleration(vehicleType),//max deceleration
                     time,
                     VehicleTypeStats.getMaxVelocity(vehicleType)
             );

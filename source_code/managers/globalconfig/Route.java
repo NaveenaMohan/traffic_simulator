@@ -5,8 +5,9 @@ package managers.globalconfig;
  */
 public class Route {
 
-    private String destination="";
-    private double trafficPercent=0;
+    //TODO remove the defaults
+    private String destination="London";
+    private double trafficPercent=0.4;
 
     public Route() {
     }

@@ -36,7 +36,7 @@ public class Driver {
     public double getDecelerationSafeDistance(double currentVelocity, double requiredVelocity, double distance, double slipperinessOffset, VehicleMemoryObject obstacle)
     {
         distance=distance-getStopDistance(slipperinessOffset, obstacle);
-        return Math.max((currentVelocity - requiredVelocity)*(1-slipperinessOffset)*reactionTimeOffset, distance)+30;
+        return Math.max((currentVelocity - requiredVelocity)*(1-slipperinessOffset)*reactionTimeOffset, distance)+10;
     }
 
     public double getStopDistance(double slipperinessOffset, VehicleMemoryObject obstacle)

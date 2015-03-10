@@ -179,8 +179,8 @@ public class DrawingBoard extends JPanel implements ActionListener {
             Coordinates A = new Coordinates((previousRUnit == null ? currentX : previousRUnit.getX()),
                     (previousRUnit == null ? currentY : previousRUnit.getY()));
             Coordinates B = new Coordinates(currentX, currentY);
-            int currentChangeableX = Common.getAdjacentPointToB(A, B, 15, 90).getX();
-            int currentChangeableY = Common.getAdjacentPointToB(A, B, 15, 90).getY();
+            int currentChangeableX = Common.getAdjacentPointToB(A, B, 20, 90).getX();
+            int currentChangeableY = Common.getAdjacentPointToB(A, B, 20, 90).getY();
             Coordinates changeableA = new Coordinates((previousChangeableRunit == null ? currentChangeableX : previousChangeableRunit.getX()),
                     (previousChangeableRunit == null ? currentChangeableY : previousChangeableRunit.getY()));
             Coordinates changeableB = new Coordinates(currentChangeableX, currentChangeableY);
@@ -658,8 +658,9 @@ public class DrawingBoard extends JPanel implements ActionListener {
                 if(angle < 0){
                     angle = angle + 360;
                 }
+
                 AffineTransform affineTransform = g2d.getTransform();
-                g2d.rotate(angle,objectInSpace.getX(), objectInSpace.getY());
+                g2d.rotate(Math.toRadians(angle),objectInSpace.getX(), objectInSpace.getY());
                 g2d.drawImage(vehicleImage, objectInSpace.getX(), objectInSpace.getY(), this);
                 g2d.setTransform(affineTransform);
             }
