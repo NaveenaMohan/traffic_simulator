@@ -65,20 +65,14 @@ public class DriverBehavior {
     }
 
     public void setPercentageReckless(double percentageReckless) {
-        if(percentageCautious+percentageNormal+percentageReckless==1){
-        }else throw new IllegalArgumentException("The sum of driver percentages is not equal to 1");
         this.percentageReckless = percentageReckless;
     }
 
     public void setPercentageNormal(double percentageNormal) {
-        if(percentageCautious+percentageNormal+percentageReckless==1){
-        }else throw new IllegalArgumentException("The sum of driver percentages is not equal to 1");
         this.percentageNormal = percentageNormal;
     }
 
     public void setPercentageCautious(double percentageCautious) {
-        if(percentageCautious+percentageNormal+percentageReckless==1){
-        }else throw new IllegalArgumentException("The sum of driver percentages is not equal to 1");
         this.percentageCautious = percentageCautious;
     }
 

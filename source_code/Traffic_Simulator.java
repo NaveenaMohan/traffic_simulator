@@ -336,7 +336,7 @@ public class  Traffic_Simulator {
         trafficPatternPanel.setLayout(null);
 
         JLabel lblWeather = new JLabel("Weather");
-        lblWeather.setBounds(51, 0, 85, 18);
+        lblWeather.setBounds(6, 0, 85, 18);
         lblWeather.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 15));
         trafficPatternPanel.add(lblWeather);
 
@@ -350,15 +350,15 @@ public class  Traffic_Simulator {
         final JSlider visibility_slider = new JSlider();
         visibility_slider.setBounds(337, 14, 165, 26);
         visibility_slider.setPaintTicks(true);
-        visibility_slider.setMajorTickSpacing(1);
+        visibility_slider.setMajorTickSpacing(10);
         visibility_slider.setMinimum(0);
-        visibility_slider.setMaximum(10);
-        visibility_slider.setValue(2);
+        visibility_slider.setMaximum(100);
+        visibility_slider.setValue((int) (climaticCondition.getVisibility() * 100.0));
         trafficPatternPanel.add(visibility_slider);
         visibility_slider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                climaticCondition.setVisibility(visibility_slider.getValue() / 10);
+                climaticCondition.setVisibility(visibility_slider.getValue() / 100.0);
             }
         });
 
@@ -366,15 +366,15 @@ public class  Traffic_Simulator {
         slippery_slider.setBounds(337, 47, 165, 26);
         slippery_slider.setPaintTicks(true);
         slippery_slider.setPaintTicks(true);
-        slippery_slider.setMajorTickSpacing(1);
+        slippery_slider.setMajorTickSpacing(10);
         slippery_slider.setMinimum(0);
-        slippery_slider.setMaximum(10);
-        slippery_slider.setValue(2);
+        slippery_slider.setMaximum(100);
+        slippery_slider.setValue((int) (climaticCondition.getSlipperiness() * 100.0));
         trafficPatternPanel.add(slippery_slider);
         slippery_slider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                climaticCondition.setSlipperiness(slippery_slider.getValue()/10);
+                climaticCondition.setSlipperiness(slippery_slider.getValue()/100.0);
             }
         });
 
@@ -387,9 +387,9 @@ public class  Traffic_Simulator {
         sunny_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                slippery_slider.setValue(0);
-                visibility_slider.setValue(0);
                 climaticCondition.setWeatherType(WeatherType.sunny);
+                slippery_slider.setValue((int) (climaticCondition.getSlipperiness() * 100.0));
+                visibility_slider.setValue((int) (climaticCondition.getVisibility() * 100.0));
             }
         });
 
@@ -402,9 +402,9 @@ public class  Traffic_Simulator {
         rainy_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                slippery_slider.setValue(5);
-                visibility_slider.setValue(5);
                 climaticCondition.setWeatherType(WeatherType.rainy);
+                slippery_slider.setValue((int) (climaticCondition.getSlipperiness() * 100.0));
+                visibility_slider.setValue((int) (climaticCondition.getVisibility() * 100.0));
             }
         });
 
@@ -416,29 +416,29 @@ public class  Traffic_Simulator {
         snow_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                slippery_slider.setValue(9);
-                visibility_slider.setValue(7);
                 climaticCondition.setWeatherType(WeatherType.snowy);
+                slippery_slider.setValue((int) (climaticCondition.getSlipperiness() * 100.0));
+                visibility_slider.setValue((int) (climaticCondition.getVisibility() * 100.0));
             }
         });
 
 
         final RangeSlider trafficDensityRangeSlider = new RangeSlider();
         trafficDensityRangeSlider.setPaintTicks(true);
-        trafficDensityRangeSlider.setMajorTickSpacing(1);
+        trafficDensityRangeSlider.setMajorTickSpacing(10);
         trafficDensityRangeSlider.setPreferredSize(new Dimension(240, trafficDensityRangeSlider.getPreferredSize().height));
         trafficDensityRangeSlider.setBounds(6, 99, 160, 26);
         trafficDensityRangeSlider.setMinimum(0);
-        trafficDensityRangeSlider.setMaximum(10);
-        trafficDensityRangeSlider.setValue(5);
-        trafficDensityRangeSlider.setUpperValue(10);
+        trafficDensityRangeSlider.setMaximum(100);
+        trafficDensityRangeSlider.setValue((int) (globalConfigManager.getVehicleDensity().getCarDensity() * 100.0));
+        trafficDensityRangeSlider.setUpperValue((int) ((globalConfigManager.getVehicleDensity().getCarDensity() + globalConfigManager.getVehicleDensity().getHeavyVehicleDensity() ) * 100.0));
         trafficPatternPanel.add(trafficDensityRangeSlider);
         trafficDensityRangeSlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                globalConfigManager.getVehicleDensity().setCarDensity((trafficDensityRangeSlider.getValue() - trafficDensityRangeSlider.getMinimum())/10);
-                globalConfigManager.getVehicleDensity().setHeavyVehicleDensity((trafficDensityRangeSlider.getUpperValue() - trafficDensityRangeSlider.getValue()) / 10);
-                globalConfigManager.getVehicleDensity().setEmergencyVehicleDensity((trafficDensityRangeSlider.getMaximum()- trafficDensityRangeSlider.getUpperValue())/10);
+                globalConfigManager.getVehicleDensity().setCarDensity((trafficDensityRangeSlider.getValue() - trafficDensityRangeSlider.getMinimum()) / 100.0);
+                globalConfigManager.getVehicleDensity().setHeavyVehicleDensity((trafficDensityRangeSlider.getUpperValue() - trafficDensityRangeSlider.getValue()) / 100.0);
+                globalConfigManager.getVehicleDensity().setEmergencyVehicleDensity((trafficDensityRangeSlider.getMaximum() - trafficDensityRangeSlider.getUpperValue()) / 100.0);
             }
         });
 
@@ -450,15 +450,15 @@ public class  Traffic_Simulator {
         driverBehaviourRangeSlider.setBounds(6, 189, 160, 26);
         driverBehaviourRangeSlider.setMinimum(0);
         driverBehaviourRangeSlider.setMaximum(100);
-        driverBehaviourRangeSlider.setValue(34);
-        driverBehaviourRangeSlider.setUpperValue(67);
+        driverBehaviourRangeSlider.setValue((int) (globalConfigManager.getDriverBehaviour().getPercentageCautious() * 100.0));
+        driverBehaviourRangeSlider.setUpperValue((int) ((globalConfigManager.getDriverBehaviour().getPercentageCautious() + (globalConfigManager.getDriverBehaviour().getPercentageNormal())) * 100.0));
         trafficPatternPanel.add(driverBehaviourRangeSlider);
         driverBehaviourRangeSlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                globalConfigManager.getDriverBehaviour().setPercentageCautious((driverBehaviourRangeSlider.getValue() - driverBehaviourRangeSlider.getMinimum()) / 100);
-                globalConfigManager.getDriverBehaviour().setPercentageNormal((driverBehaviourRangeSlider.getUpperValue() - driverBehaviourRangeSlider.getValue()) / 100);
-                globalConfigManager.getDriverBehaviour().setPercentageReckless((driverBehaviourRangeSlider.getMaximum() - driverBehaviourRangeSlider.getUpperValue()) / 100);
+                globalConfigManager.getDriverBehaviour().setPercentageCautious((driverBehaviourRangeSlider.getValue() - driverBehaviourRangeSlider.getMinimum()) / 100.0);
+                globalConfigManager.getDriverBehaviour().setPercentageNormal((driverBehaviourRangeSlider.getUpperValue() - driverBehaviourRangeSlider.getValue()) / 100.0);
+                globalConfigManager.getDriverBehaviour().setPercentageReckless((driverBehaviourRangeSlider.getMaximum() - driverBehaviourRangeSlider.getUpperValue()) / 100.0);
 
             }
         });
@@ -469,9 +469,30 @@ public class  Traffic_Simulator {
         trafficPatternPanel.add(lbl_slippery);
 
         JLabel lbl_traffic_density = new JLabel("Traffic Density");
-        lbl_traffic_density.setBounds(16, 80, 155, 18);
+        lbl_traffic_density.setBounds(6, 82, 155, 18);
         lbl_traffic_density.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 15));
         trafficPatternPanel.add(lbl_traffic_density);
+
+        final JSlider vehicleProductionRateSlider = new JSlider();
+        vehicleProductionRateSlider.setPaintTicks(true);
+        vehicleProductionRateSlider.setMinimum(0);
+        vehicleProductionRateSlider.setMaximum(20);
+        vehicleProductionRateSlider.setMajorTickSpacing(20);
+        vehicleProductionRateSlider.setValue((int) (globalConfigManager.getVehicleDensity().getCreationRatePerSecond() * 10.0));
+                vehicleProductionRateSlider.setBounds(148, 47, 155, 133);
+        trafficPatternPanel.add(vehicleProductionRateSlider);
+        vehicleProductionRateSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                globalConfigManager.getVehicleDensity().setCreationRatePerSecond((int) (vehicleProductionRateSlider.getValue()/10.00));
+            }
+        });
+
+        JLabel vehicleCreationRate = new JLabel("Rate");
+        vehicleCreationRate.setForeground(SystemColor.controlHighlight);
+        vehicleCreationRate.setFont(new Font("Times New Roman", Font.BOLD, 14));
+        vehicleCreationRate.setBounds(207, 130, 36, 18);
+        trafficPatternPanel.add(vehicleCreationRate);
 
         JLabel lblDriverBehavior = new JLabel("Driver Behavior");
         lblDriverBehavior.setBounds(6, 159, 173, 18);
@@ -515,14 +536,14 @@ public class  Traffic_Simulator {
         trafficPatternPanel.add(lblReckless);
 
         JLabel lblDestinationDensity = new JLabel("Destination Density");
-        lblDestinationDensity.setBounds(183, 82, 189, 18);
+        lblDestinationDensity.setBounds(183, 159, 189, 18);
         lblDestinationDensity.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 15));
         trafficPatternPanel.add(lblDestinationDensity);
 
 
         final JTextField locationTxtField = new JTextField("Location");
         trafficPatternPanel.add(locationTxtField);
-        locationTxtField.setBounds(186, 112, 145, 50);
+        locationTxtField.setBounds(183, 189, 145, 50);
         locationTxtField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -531,32 +552,20 @@ public class  Traffic_Simulator {
         });
 
         final JSlider routeDensitySlider = new JSlider();
-        routeDensitySlider.setBounds(329, 66, 155, 133);
+        routeDensitySlider.setBounds(325, 143, 155, 133);
         routeDensitySlider.setPaintTicks(true);
-        routeDensitySlider.setMajorTickSpacing(2);
+        routeDensitySlider.setMajorTickSpacing(10);
         routeDensitySlider.setMinimum(0);
-        routeDensitySlider.setMaximum(20);
-        routeDensitySlider.setValue(10);
+        routeDensitySlider.setMaximum(100);
+        routeDensitySlider.setValue((int) (globalConfigManager.getRoute().getTrafficPercent() * 100.0));
         trafficPatternPanel.add(routeDensitySlider);
         routeDensitySlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                globalConfigManager.getRoute().setTrafficPercent(routeDensitySlider.getValue()/10);
+                globalConfigManager.getRoute().setTrafficPercent(routeDensitySlider.getValue() / 100.0);
             }
         });
 
-
-        JSlider trafficDensitySlider2 = new JSlider();
-        trafficDensitySlider2.setPaintTicks(true);
-        trafficDensitySlider2.setMajorTickSpacing(30);
-        trafficDensitySlider2.setBounds(65, 99, 85, 26);
-        trafficPatternPanel.add(trafficDensitySlider2);
-
-        JSlider driverBehaviorSlider2 = new JSlider();
-        driverBehaviorSlider2.setPaintTicks(true);
-        driverBehaviorSlider2.setMajorTickSpacing(30);
-        driverBehaviorSlider2.setBounds(65, 189, 85, 26);
-        trafficPatternPanel.add(driverBehaviorSlider2);
 
         //Traffic Light Configuration Panel
 
@@ -742,13 +751,20 @@ public class  Traffic_Simulator {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawingBoard.setSimulationPlaying(true);
-                if (vehicleFactoryManager.vehicleFactoryList.isEmpty()) {
-                    NoVehicleFactoryDialogBox vehicleFactoryDialogBox = new NoVehicleFactoryDialogBox();
-                    vehicleFactoryDialogBox.vehicleFactoryDialog();
-                    vehicleFactoryDialogBox.setVisible(true);
-                } else
-                    simEngine.Play(drawingBoard);
+                if(drawingBoard.isSimulationStarted()){
+                    simEngine.Unpause();
+                    drawingBoard.setSimulationPlaying(true);
+                }else {
+                    if (vehicleFactoryManager.vehicleFactoryList.isEmpty()) {
+                        NoVehicleFactoryDialogBox vehicleFactoryDialogBox = new NoVehicleFactoryDialogBox();
+                        vehicleFactoryDialogBox.vehicleFactoryDialog();
+                        vehicleFactoryDialogBox.setVisible(true);
+                    } else{
+                        simEngine.Play(drawingBoard);
+                        drawingBoard.setSimulationStarted(true);
+                        drawingBoard.setSimulationPlaying(true);
+                    }
+                }
             }
         });
 
@@ -757,11 +773,8 @@ public class  Traffic_Simulator {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(drawingBoard.isSimulationPlaying()){
-                    drawingBoard.setSimulationPlaying(false);
                     simEngine.Pause();
-                }else {
-                    drawingBoard.setSimulationPlaying(true);
-                    simEngine.Unpause();
+                    drawingBoard.setSimulationPlaying(false);
                 }
             }
         });
@@ -770,9 +783,10 @@ public class  Traffic_Simulator {
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawingBoard.setSimulationPlaying(false);
                 simEngine.CleanAll();
                 drawingBoard.clean();
+                drawingBoard.setSimulationPlaying(false);
+                drawingBoard.setSimulationStarted(false);
             }
         });
 
@@ -811,7 +825,7 @@ public class  Traffic_Simulator {
         JButton clearVehicleFactoryButton = new JButton("ClearVehicleFactory");
         clearVehicleFactoryButton.setToolTipText("ClearVehicleFactory");
         clearVehicleFactoryButton.setBounds(new Rectangle(0, 0, 50, 50));
-        clearVehicleFactoryButton.setBounds(191, 174, 56, 53);
+        clearVehicleFactoryButton.setBounds(325, 85, 56, 53);
         trafficPatternPanel.add(clearVehicleFactoryButton);
         clearVehicleFactoryButton.addActionListener(new ActionListener() {
             @Override
@@ -825,7 +839,7 @@ public class  Traffic_Simulator {
         JButton clearAllButton = new JButton("ClearAll");
         clearAllButton.setToolTipText("ClearAll");
         clearAllButton.setBounds(new Rectangle(0, 0, 50, 50));
-        clearAllButton.setBounds(266, 174, 56, 53);
+        clearAllButton.setBounds(408, 85, 56, 53);
         trafficPatternPanel.add(clearAllButton);
         clearAllButton.addActionListener(new ActionListener() {
             @Override
