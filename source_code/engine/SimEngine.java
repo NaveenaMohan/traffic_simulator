@@ -5,11 +5,9 @@ import dataAndStructures.DataAndStructures;
 import managers.globalconfig.*;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
-import managers.space.VehicleDirection;
 import managers.vehicle.IVehicleManager;
 import managers.vehiclefactory.VehicleFactoryManager;
 import reports.DCP;
-import ui.Coordinates;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -75,6 +73,8 @@ public class SimEngine {
 
         timer.stop();
     }
+
+    //TODO do clear vehicles
 
     public void performAction() {
 
