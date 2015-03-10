@@ -110,8 +110,7 @@ public class DCP extends JPanel{
         dataAndStructures.getGlobalConfigManager().getRoute().setTrafficPercent(.3);
         if(dataAndStructures.getGlobalConfigManager().getRoute().getDestination()!="") {
             for (IVehicleManager vehicle : dataAndStructures.getVehicles()) {
-                vehicle.getVehicle().setMadeDestination(true);
-                vehicle.getVehicle().setArrivalDestTime(dataAndStructures.getGlobalConfigManager().getCurrentSecond());
+
                 if (vehicle.getVehicle().getMadeDestination()) {
                     percentageMadeDest++;
                     avgTimeToDestination = (avgTimeToDestination + vehicle.getVehicle().getArrivalDestTime());
