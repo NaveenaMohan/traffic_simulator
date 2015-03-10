@@ -30,9 +30,7 @@ public class RoadNetworkManager implements IRoadNetworkManager {
     private RUnit checkIntersectionAndReturnIntersectedRUnit(Collection<RUnit> rUnits,Coordinates intersectionCoordinates){
 
         for(RUnit rUnit :rUnits ){
-            Coordinates coordinates = new Coordinates(rUnit.getX(),rUnit.getY());
             if(rUnit.getX() == intersectionCoordinates.getX() & rUnit.getY() == intersectionCoordinates.getY()){
-                System.out.println("INTERSECTION");
                 return rUnit;
             }
         }

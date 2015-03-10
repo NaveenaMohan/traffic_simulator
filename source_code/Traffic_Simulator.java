@@ -90,8 +90,8 @@ public class  Traffic_Simulator {
         txtrRoadInfrastructure.setBounds(6, 6, 278, 23);
         txtrRoadInfrastructure.setBackground(Color.BLACK);
         //txtrRoadInfrastructure.setForeground(new Color(255, 255, 255));
-        txtrRoadInfrastructure.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 20));
-        txtrRoadInfrastructure.setText("       CONFIGURATIONS");
+        txtrRoadInfrastructure.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 12));
+        txtrRoadInfrastructure.setText("                   ROAD INFRASTRUCTURE");
         roadInfraStructurePanel.add(txtrRoadInfrastructure);
 
         JButton single_lane = new JButton();
