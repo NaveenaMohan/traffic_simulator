@@ -26,6 +26,7 @@ public class Vehicle implements IVehicleManager {
     private VehicleMotor vehicleMotor;
     private VehicleState vehicleState;
     private VehiclePerception vehiclePerception;
+    private VehicleType vehicleType;
 
     private double timeCreated;
 
@@ -44,6 +45,14 @@ public class Vehicle implements IVehicleManager {
                 (objectInSpace.getVehicleType()==VehicleType.emergency ? true : false));
         this. vehicleState = new VehicleState();
         this.vehiclePerception=new VehiclePerception(timeCreated);
+    }
+
+    public double getTimeCreated() {
+        return timeCreated;
+    }
+
+    public VehicleMotor getVehicleMotor() {
+        return vehicleMotor;
     }
 
     public IRUnitManager getrUnit() {
@@ -110,6 +119,10 @@ public class Vehicle implements IVehicleManager {
 
        previousTime= time;
 
+    }
+
+    public VehicleType getVehicleType() {
+        return vehicleType;
     }
 
     public String getCurrentStrategy(){return vehicleMotor.currentStrategy;}

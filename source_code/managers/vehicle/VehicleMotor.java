@@ -400,4 +400,7 @@ private double nextCheckTime;
         return depthInCurrentRUnit + objectInSpace.getLength();
     }
 
+    public double getMaximumVelocity() {
+        return maximumVelocity;
+    }
 }
