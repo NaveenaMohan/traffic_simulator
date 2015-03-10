@@ -23,6 +23,8 @@ public class VehicleMotor {
     private double maxDeceleration;
     private double currentVelocity;//current speed in metres
     private double currentAcceleration;
+    private boolean madeDestination;
+    private double arrivalDestTime;
     private double depthInCurrentRUnit;//if the RUnit is say 100m long we need to keep track of how far in the vehicle is
     private int maxSpeedLimit;//the speed limit as according to the signs
     private double maximumVelocity;
@@ -81,7 +83,19 @@ private double nextCheckTime;
         //control speed and distance based on the situation ahead
         ControlSpeedAndDistance(nextObject, slowestObject, driver, slipperinessOffset);
 
+        //replan direction
+        if(nextObject!=null)
+            replan(nextObject,vehicleState);
+
         return rUnit;
+    }
+
+    public boolean isMadeDestination() {
+        return madeDestination;
+    }
+
+    public double getArrivalDestTime() {
+        return arrivalDestTime;
     }
 
     private IRUnitManager chooseLane(IRUnitManager rUnit, VehicleState vehicleState, ISpaceManager spaceManager, double desiredSpeed)
@@ -173,7 +187,7 @@ private double nextCheckTime;
             rUnit = chooseNext(rUnit, vehicleState);
 
             //see and process the objects we have just passed
-            processObjectPassed(rUnit, vehicleState);
+            processObjectPassed(rUnit, vehicleState, dataAndStructures.getGlobalConfigManager().getCurrentSecond());
         }
 
         //adjust your position in space
@@ -195,12 +209,15 @@ private double nextCheckTime;
 
         //if you have a destination
         if (!destination.isEmpty()) {
+            currentStrategy+="[dest not empty]";
             //if the next object is a direction sign
             if (nextObject.getObject() instanceof DirectionSign) {
+                currentStrategy+="[NextObj("+((DirectionSign) nextObject.getObject()).getLocation()+")vs("+destination+")="+((DirectionSign) nextObject.getObject()).getLocation().equals(destination)+"]";
                 //if the destination on the sign matches your destination
-                if (((DirectionSign) nextObject.getObject()).getLocation() == destination) {
+                if (((DirectionSign) nextObject.getObject()).getLocation().equals(destination)) {
                     //set your next direction to the one from the sign
                     vehicleState.setNextDirectionAtDecisionPoint(((DirectionSign) nextObject.getObject()).getDirectionSignType());
+                    currentStrategy+="[SAME DIRECTION. Next direction: " + vehicleState.getNextDirectionAtDecisionPoint()+"]";
                 }
             }
 
@@ -276,6 +293,8 @@ private double nextCheckTime;
                     driver.getSpeed(slipperinessOffset, speedToMatch),
                     driver.getStopDistance(slipperinessOffset, objectToMatch),
                     objectToMatch.getDistance() - (objectToMatch.isPassable() ? 0 : additionalDistances()));
+
+            currentStrategy="";
         }
     }
 
@@ -308,7 +327,7 @@ private double nextCheckTime;
                 currentVelocity + currentAcceleration * timePassed));
     }
 
-    private void processObjectPassed(IRUnitManager rUnit, VehicleState vehicleState) {
+    private void processObjectPassed(IRUnitManager rUnit, VehicleState vehicleState, double currentTime) {
 
         Object obj = VehiclePerception.getObjectForDoubleLane(rUnit);
         //if you have just passed a speed sign update your maxSpeedLimit
@@ -325,6 +344,15 @@ private double nextCheckTime;
         if (obj instanceof RoadDecisionPoint) {
             vehicleState.setNextRUnitAfterDecisionPoint(null);
             vehicleState.setNextDirectionAtDecisionPoint(null);
+        }
+
+        //if you have just passed your destination
+        if (obj instanceof WelcomeSign) {
+            if(((WelcomeSign)obj).getLocation().equals(destination)) {
+                objectInSpace.setVisible(false);
+                madeDestination=true;
+                arrivalDestTime=currentTime;
+            }
         }
     }
 

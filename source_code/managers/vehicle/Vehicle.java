@@ -1,17 +1,12 @@
 package managers.vehicle;
 
 import dataAndStructures.IDataAndStructures;
-import managers.globalconfig.ClimaticCondition;
-import managers.globalconfig.IGlobalConfigManager;
 import managers.globalconfig.VehicleType;
 import managers.runit.IRUnitManager;
 import managers.runit.RUnit;
 import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
-import managers.space.SpaceManager;
 import managers.space.VehicleDirection;
-
-import javax.imageio.spi.IIOServiceProvider;
 
 /**
  * Created by naveena on 08/02/15.
@@ -19,8 +14,6 @@ import javax.imageio.spi.IIOServiceProvider;
 public class Vehicle implements IVehicleManager {
 
     private int vehID;
-    private boolean madeDestination;
-    private double arrivalDestTime;
     private IRUnitManager rUnit;
     private Driver driver;
     private VehicleMotor vehicleMotor;
@@ -44,7 +37,7 @@ public class Vehicle implements IVehicleManager {
         this.vehicleMotor = new VehicleMotor(maxAcceleration, maxDeceleration, initialSpeed, destination, objectInSpace, maximumVelocity,
                 (objectInSpace.getVehicleType()==VehicleType.emergency ? true : false));
         this. vehicleState = new VehicleState();
-        this.vehiclePerception=new VehiclePerception(timeCreated);
+        this.vehiclePerception=new VehiclePerception();
     }
 
     public double getTimeCreated() {
@@ -132,21 +125,12 @@ public class Vehicle implements IVehicleManager {
     }
 
     public boolean getMadeDestination(){
-        return madeDestination;
+        return vehicleMotor.isMadeDestination();
     }
-
-    public void setMadeDestination(Boolean madeDestination){
-        this.madeDestination=madeDestination;
-    }
-
     public double getArrivalDestTime(){
-        return arrivalDestTime;
+        return vehicleMotor.getArrivalDestTime();
     }
 
-    public void setArrivalDestTime(Double arrivalDestTime){
-        this.arrivalDestTime=arrivalDestTime;
-
-    }
     @Override
     public Vehicle getVehicle() {
         return this;

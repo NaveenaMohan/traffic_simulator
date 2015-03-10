@@ -5,11 +5,9 @@ import dataAndStructures.DataAndStructures;
 import managers.globalconfig.*;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
-import managers.space.VehicleDirection;
 import managers.vehicle.IVehicleManager;
 import managers.vehiclefactory.VehicleFactoryManager;
 import reports.DCP;
-import ui.Coordinates;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -76,6 +74,8 @@ public class SimEngine {
         timer.stop();
     }
 
+    //TODO do clear vehicles
+
     public void performAction() {
 
         if(!pause) {
@@ -113,10 +113,11 @@ public class SimEngine {
                 for(IVehicleManager veh : dataAndStructures.getVehicles())
 //               // if(veh.getVehicle().getObjectInSpace().getVehicleType() == VehicleType.emergency)
                 //if(veh.getVehID()==1)
-                if(veh.getVehicle().getCurrentStrategy().length()>10)
+                //if(veh.getVehicle().getCurrentStrategy().length()>10)
                     System.out.println(dataAndStructures.getGlobalConfigManager().getCurrentSecond() + " " +
-                            veh.getVehID() + " " + " s: " + veh.getVehicle().getCurrentVelocity() + " v:" + veh.isVisible() + " rUnit:"
-                            + veh.getVehicle().getrUnit().getId() +  "" + veh.getVehicle().getCurrentStrategy());
+                            veh.getVehID() + " " + " s: " + Common.round(veh.getVehicle().getCurrentVelocity(), 2)
+                            + " v:" + veh.isVisible() + " rUnit:"
+                            + veh.getVehicle().getrUnit().getId() + " dest: " + veh.getVehicle().getDestination() + "" + veh.getVehicle().getCurrentStrategy());
 //            //}
             previousSecond = (int) dataAndStructures.getGlobalConfigManager().getCurrentSecond();
         }

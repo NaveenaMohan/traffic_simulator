@@ -12,11 +12,6 @@ import managers.space.SpaceManager;
  */
 public class VehiclePerception {
 
-    private double lastCheckTime;
-
-    public VehiclePerception(double lastCheckTime) {
-        this.lastCheckTime = lastCheckTime;
-    }
 
     public void See(int vehID, IRUnitManager rUnit, double maxVision, VehicleState vehicleState,
                     ISpaceManager spaceManager, IDataAndStructures dataAndStructures, ObjectInSpace myObject,
@@ -101,7 +96,6 @@ public class VehiclePerception {
 
         }
 
-        lastCheckTime = currentTime;
     }
 
     public static boolean isChangeableClear(IRUnitManager temp, ISpaceManager spaceManager, ObjectInSpace myObject, int backAmount,
@@ -176,6 +170,8 @@ public class VehiclePerception {
         else if (obj instanceof DirectionSign)//check for Direction Sign
             return 100;
         else if (obj instanceof RoadDecisionPoint)//check for Decision Point
+            return 100;
+        else if (obj instanceof WelcomeSign)//check for Decision Point
             return 100;
         else
             throw new IllegalArgumentException("object passed (" + obj + ") is not defined");
