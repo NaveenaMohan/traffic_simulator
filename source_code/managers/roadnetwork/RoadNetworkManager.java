@@ -30,9 +30,7 @@ public class RoadNetworkManager implements IRoadNetworkManager {
     private RUnit checkIntersectionAndReturnIntersectedRUnit(Collection<RUnit> rUnits,Coordinates intersectionCoordinates){
 
         for(RUnit rUnit :rUnits ){
-            Coordinates coordinates = new Coordinates(rUnit.getX(),rUnit.getY());
             if(rUnit.getX() == intersectionCoordinates.getX() & rUnit.getY() == intersectionCoordinates.getY()){
-                System.out.println("INTERSECTION");
                 return rUnit;
             }
         }
@@ -66,6 +64,18 @@ public class RoadNetworkManager implements IRoadNetworkManager {
             if(!prevRUnit.getNextRUnitList().contains(currentRUnit)){
                 prevRUnit.getNextRUnitList().add(currentRUnit);
             }
+//            if(intersected){
+//                System.out.println("************INTERSECTED**************");
+//            }
+//            System.out.println("CurrentX : " + currentRUnit.getX() + " CurrentY : " + currentRUnit.getY());
+//            for(RUnit rUnit : currentRUnit.getPrevsRUnitList()){
+//                System.out.println("Current'sPrev -----> " + "X : " + rUnit.getX() + " Y : " + rUnit.getY() );
+//            }
+//            System.out.println("PrevX : " + prevRUnit.getX() + " PrevY : " + prevRUnit.getY());
+//            for(RUnit rUnit : prevRUnit.getNextRUnitList()){
+//                System.out.println("Prev'sNext -----> " + " X : " + rUnit.getX() + " Y : " + rUnit.getY() );
+//            }
+//            System.out.println("----------------");
         }
         return currentRUnit;
     }
