@@ -1,22 +1,25 @@
+package ui.listeners;
+
 import ui.ConfigButtonSelected;
+import ui.components.DrawingBoard;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
- * Created by naveena on 18/02/15.
+ * Created by naveena on 20/02/15.
  */
-public class TrafficLightButtonListener implements MouseListener {
+public class StopButtonListener implements MouseListener {
 
     private DrawingBoard drawingBoard;
 
-    public TrafficLightButtonListener(DrawingBoard drawingBoard) {
+    public StopButtonListener(DrawingBoard drawingBoard) {
         this.drawingBoard = drawingBoard;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        drawingBoard.setConfigButtonSelected(ConfigButtonSelected.trafficLight);
+        drawingBoard.setConfigButtonSelected(ConfigButtonSelected.stop);
         //Sets the current coordinates for paint function
         drawingBoard.setCurrentX(e.getX());
         drawingBoard.setCurrentY(e.getY());
@@ -33,7 +36,6 @@ public class TrafficLightButtonListener implements MouseListener {
 
     }
 
-
     @Override
     public void mouseEntered(MouseEvent e) {
 
@@ -43,5 +45,4 @@ public class TrafficLightButtonListener implements MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
-
 }

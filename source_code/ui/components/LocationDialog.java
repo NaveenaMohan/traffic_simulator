@@ -1,10 +1,14 @@
+package ui.components;
+
+import ui.Traffic_Simulator;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class DestinationDialog extends JDialog {
+public class LocationDialog extends JDialog {
 
     private String destination;
 
@@ -14,15 +18,15 @@ public class DestinationDialog extends JDialog {
 
     public final void initUI() {
 
-        ImageIcon icon = new ImageIcon(Traffic_Simulator.class.getResource("resources/Destination.png"));
+        ImageIcon icon = new ImageIcon(Traffic_Simulator.class.getResource("/resources/Location.png"));
         getContentPane().setLayout(null);
         JLabel label = new JLabel(icon);
         label.setBounds(49, 22, 200, 75);
         label.setAlignmentX(0.5f);
         getContentPane().add(label);
 
-        JLabel name = new JLabel("Enter Destination Name: ");
-        name.setBounds(58, 126, 191, 15);
+        JLabel name = new JLabel("Enter Location Name: ");
+        name.setBounds(71, 125, 162, 15);
         name.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 13));
         name.setAlignmentX(0.5f);
         getContentPane().add(name);

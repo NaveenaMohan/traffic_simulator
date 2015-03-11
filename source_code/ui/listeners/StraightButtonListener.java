@@ -1,4 +1,7 @@
+package ui.listeners;
+
 import ui.ConfigButtonSelected;
+import ui.components.DrawingBoard;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -6,17 +9,17 @@ import java.awt.event.MouseListener;
 /**
  * Created by naveena on 20/02/15.
  */
-public class LeftButtonListener implements MouseListener {
+public class StraightButtonListener implements MouseListener {
 
     private DrawingBoard drawingBoard;
 
-    public LeftButtonListener(DrawingBoard drawingBoard) {
+    public StraightButtonListener(DrawingBoard drawingBoard) {
         this.drawingBoard = drawingBoard;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        drawingBoard.setConfigButtonSelected(ConfigButtonSelected.left);
+        drawingBoard.setConfigButtonSelected(ConfigButtonSelected.straight);
         //Sets the current coordinates for paint function
         drawingBoard.setCurrentX(e.getX());
         drawingBoard.setCurrentY(e.getY());

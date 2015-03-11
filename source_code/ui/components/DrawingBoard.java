@@ -1,3 +1,5 @@
+package ui.components;
+
 import common.Common;
 import engine.SimEngine;
 import managers.globalconfig.VehicleType;
@@ -8,6 +10,7 @@ import managers.runit.TrafficLight;
 import managers.space.ObjectInSpace;
 import ui.ConfigButtonSelected;
 import ui.Coordinates;
+import ui.listeners.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -91,29 +94,29 @@ public class DrawingBoard extends JPanel implements ActionListener {
 
         //TODO: Get the correct images
 
-        rUnitImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/road.jpg"));
-        changeableRUnitImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/black.jpg"));
-        doubleRoad = getToolkit().getImage(DrawingBoard.class.getResource("resources/doubleRoad.jpg"));
-        trafficLightImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/lightMini.png"));
-        carImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/car.png"));
-        truckImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/truck.png"));
-        emergencyVehicleImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/emergency.png"));
-        zebraCrossingImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/zebraCrossingMini.png"));
-        blockageImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/blockMini.png"));
-        stopImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/stopMini.png"));
-        greenLightImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/green.png"));
-        redLightImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/red.png"));
-        vehicleFactoryImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/vehicleFactoryMini.png"));
-        leftSignImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/leftMini.png"));
-        rightSignImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/rightMini.png"));
-        straightSignImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/straightMini.png"));
-        speed20Image = getToolkit().getImage(DrawingBoard.class.getResource("resources/20mini.png"));
-        speed30Image = getToolkit().getImage(DrawingBoard.class.getResource("resources/30mini.png"));
-        speed50Image = getToolkit().getImage(DrawingBoard.class.getResource("resources/50mini.png"));
-        speed60Image = getToolkit().getImage(DrawingBoard.class.getResource("resources/60mini.png"));
-        speed70Image = getToolkit().getImage(DrawingBoard.class.getResource("resources/70mini.png"));
-        speed90Image = getToolkit().getImage(DrawingBoard.class.getResource("resources/90mini.png"));
-        welcomeImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/welcomeMini.png"));
+        rUnitImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/road.jpg"));
+        changeableRUnitImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/black.jpg"));
+        doubleRoad = getToolkit().getImage(DrawingBoard.class.getResource("/resources/doubleRoad.jpg"));
+        trafficLightImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/lightMini.png"));
+        carImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/car.png"));
+        truckImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/truck.png"));
+        emergencyVehicleImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/emergency.png"));
+        zebraCrossingImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/zebraCrossingMini.png"));
+        blockageImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/blockMini.png"));
+        stopImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/stopMini.png"));
+        greenLightImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/green.png"));
+        redLightImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/red.png"));
+        vehicleFactoryImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/vehicleFactoryMini.png"));
+        leftSignImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/leftMini.png"));
+        rightSignImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/rightMini.png"));
+        straightSignImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/straightMini.png"));
+        speed20Image = getToolkit().getImage(DrawingBoard.class.getResource("/resources/20mini.png"));
+        speed30Image = getToolkit().getImage(DrawingBoard.class.getResource("/resources/30mini.png"));
+        speed50Image = getToolkit().getImage(DrawingBoard.class.getResource("/resources/50mini.png"));
+        speed60Image = getToolkit().getImage(DrawingBoard.class.getResource("/resources/60mini.png"));
+        speed70Image = getToolkit().getImage(DrawingBoard.class.getResource("/resources/70mini.png"));
+        speed90Image = getToolkit().getImage(DrawingBoard.class.getResource("/resources/90mini.png"));
+        welcomeImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/welcomeMini.png"));
 
         MediaTracker roadMediaTracker = new MediaTracker(this);
         roadMediaTracker.addImage(rUnitImage, 1);

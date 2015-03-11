@@ -1,34 +1,39 @@
+package ui.listeners;
 
 import ui.ConfigButtonSelected;
+import ui.components.DrawingBoard;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
- * Created by somya on 27/02/15.
+ * Created by naveena on 20/02/15.
  */
-
-public class DoubleLaneMotionListener implements MouseListener {
+public class RightButtonListener implements MouseListener {
 
     private DrawingBoard drawingBoard;
 
-    public DoubleLaneMotionListener(DrawingBoard drawingBoard) {
+    public RightButtonListener(DrawingBoard drawingBoard) {
         this.drawingBoard = drawingBoard;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        drawingBoard.setConfigButtonSelected(ConfigButtonSelected.right);
+        //Sets the current coordinates for paint function
+        drawingBoard.setCurrentX(e.getX());
+        drawingBoard.setCurrentY(e.getY());
+        drawingBoard.repaint();
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        drawingBoard.setConfigButtonSelected(ConfigButtonSelected.addDoubleLane);
+
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        drawingBoard.setConfigButtonSelected(ConfigButtonSelected.noOption);
+
     }
 
     @Override

@@ -1,3 +1,7 @@
+package ui.components;
+
+import ui.components.RangeSlider;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;

@@ -1,4 +1,7 @@
+package ui.listeners;
+
 import ui.ConfigButtonSelected;
+import ui.components.DrawingBoard;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -6,17 +9,17 @@ import java.awt.event.MouseListener;
 /**
  * Created by naveena on 18/02/15.
  */
-public class ZebraCrossingButtonListener implements MouseListener {
+public class TrafficLightButtonListener implements MouseListener {
 
     private DrawingBoard drawingBoard;
 
-    public ZebraCrossingButtonListener(DrawingBoard drawingBoard) {
+    public TrafficLightButtonListener(DrawingBoard drawingBoard) {
         this.drawingBoard = drawingBoard;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        drawingBoard.setConfigButtonSelected(ConfigButtonSelected.zebraCrossing);
+        drawingBoard.setConfigButtonSelected(ConfigButtonSelected.trafficLight);
         //Sets the current coordinates for paint function
         drawingBoard.setCurrentX(e.getX());
         drawingBoard.setCurrentY(e.getY());
