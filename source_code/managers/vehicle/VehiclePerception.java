@@ -4,7 +4,6 @@ import dataAndStructures.IDataAndStructures;
 import managers.runit.*;
 import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
-import managers.space.SpaceManager;
 
 /**
  * Created by Fabians on 18/02/2015.
@@ -29,11 +28,13 @@ public class VehiclePerception {
             double distance = Math.max(0, (i + 1) * dataAndStructures.getGlobalConfigManager().getMetresPerRUnit());
 
 
-            //TODO: Decision point logic
-//            //check for decision points
-//            if (temp.getNextRUnitList().size() > 1)
-//                vehicleState.registerObject(new VehicleMemoryObject(temp, new RoadDecisionPoint(), distance, getObjectVelocity(new RoadDecisionPoint()), true, true));
 
+            //check for decision points
+            if (temp.getNextRUnitList().size() > 1) {
+                vehicleState.registerObject(new VehicleMemoryObject(temp, new RoadDecisionPoint(), distance, getObjectVelocity(new RoadDecisionPoint()), true, true));
+                vehicleState.registerObject(new VehicleMemoryObject(temp, new RoadDecisionPoint(), distance, getObjectVelocity(new RoadDecisionPoint()), true, false));
+
+            }
             //check for blockages
             if (getObjectForDoubleLane(temp) instanceof Blockage) {
                 //add it for both lanes

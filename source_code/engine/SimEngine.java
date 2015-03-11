@@ -1,5 +1,6 @@
 package engine;
 
+import common.Common;
 import dataAndStructures.DataAndStructures;
 import managers.globalconfig.*;
 import managers.roadnetwork.RoadNetwork;
@@ -10,6 +11,7 @@ import reports.DCP;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 
 /**
@@ -58,7 +60,8 @@ public class SimEngine {
     }
 
     public void SpeedUp() {
-        dataAndStructures.getGlobalConfigManager().setTicksPerSecond(dataAndStructures.getGlobalConfigManager().getTicksPerSecond() / 2);
+        dataAndStructures.getGlobalConfigManager().setTicksPerSecond(Math.max(1,
+                dataAndStructures.getGlobalConfigManager().getTicksPerSecond() / 2));
     }
 
     public void SlowDown() {
@@ -78,6 +81,11 @@ public class SimEngine {
         );
         dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
 
+        timer.stop();
+    }
+
+    public void CleanVehicles() {
+        dataAndStructures.setVehicleManagerList((new ArrayList<IVehicleManager>()));
         timer.stop();
     }
 
@@ -121,16 +129,16 @@ public class SimEngine {
             //change traffic lights
             dataAndStructures.getRoadNetworkManager().changeLight(dataAndStructures.getGlobalConfigManager().getCurrentSecond());
 
-//            if((int)dataAndStructures.getGlobalConfigManager().getCurrentSecond()>previousSecond)
+           // if((int)dataAndStructures.getGlobalConfigManager().getCurrentSecond()>previousSecond)
 //            {
                 for(IVehicleManager veh : dataAndStructures.getVehicles())
 //               // if(veh.getVehicle().getObjectInSpace().getVehicleType() == VehicleType.emergency)
                 //if(veh.getVehID()==1)
                 //if(veh.getVehicle().getCurrentStrategy().length()>10)
-//                    System.out.println(dataAndStructures.getGlobalConfigManager().getCurrentSecond() + " " +
-//                            veh.getVehID() + " " + " s: " + Common.round(veh.getVehicle().getCurrentVelocity(), 2)
-//                            + " v:" + veh.isVisible() + " rUnit:"
-//                            + veh.getVehicle().getrUnit().getId() + " dest: " + veh.getVehicle().getDestination() + "" + veh.getVehicle().getCurrentStrategy());
+                    System.out.println(Common.round(dataAndStructures.getGlobalConfigManager().getCurrentSecond(), 2) + " " +
+                            veh.getVehID() + " " + " s: " + Common.round(veh.getVehicle().getCurrentVelocity(), 2)
+                             + " rUnit:"
+                            + veh.getVehicle().getrUnit().getId() + " " + veh.getVehicle().getCurrentStrategy());
 //            //}
             previousSecond = (int) dataAndStructures.getGlobalConfigManager().getCurrentSecond();
         }
