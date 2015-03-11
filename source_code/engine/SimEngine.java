@@ -11,6 +11,7 @@ import reports.DCP;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 
 /**
@@ -25,13 +26,21 @@ public class SimEngine {
     private boolean pause;
     private DCP dcp;
 
-    int test = 0;
+    int prevSec = -1;
     private int maxCars =10000 ;
 
     public SimEngine(DataAndStructures dataAndStructures, DCP dcp) {
         this.dataAndStructures = dataAndStructures;
         this.dcp = dcp;
     }
+
+    public SimEngine(DataAndStructures dataAndStructures, DCP dcp, int maxCars) {
+        this.dataAndStructures = dataAndStructures;
+        this.dcp=dcp;
+        this.maxCars=maxCars;
+    }
+
+
 
     public void Play(ActionListener actionListener) {
 
@@ -51,7 +60,8 @@ public class SimEngine {
     }
 
     public void SpeedUp() {
-        dataAndStructures.getGlobalConfigManager().setTicksPerSecond(dataAndStructures.getGlobalConfigManager().getTicksPerSecond() / 2);
+        dataAndStructures.getGlobalConfigManager().setTicksPerSecond(Math.max(1,
+                dataAndStructures.getGlobalConfigManager().getTicksPerSecond() / 2));
     }
 
     public void SlowDown() {
@@ -74,6 +84,11 @@ public class SimEngine {
         timer.stop();
     }
 
+    public void CleanVehicles() {
+        dataAndStructures.setVehicleManagerList((new ArrayList<IVehicleManager>()));
+        timer.stop();
+    }
+
     //TODO do clear vehicles
 
     public void performAction() {
@@ -85,6 +100,12 @@ public class SimEngine {
 
             //Report Update
             dcp.updateReportingInfo(dataAndStructures);
+            if (!dcp.firstTimeOpen && !dcp.isFrameClosed)//if report window is still open then it refreshes its data
+                if(((int) dataAndStructures.getGlobalConfigManager().getCurrentSecond())%30==0 &&
+                        prevSec!= ((int) dataAndStructures.getGlobalConfigManager().getCurrentSecond())%30) {
+                    dcp.reportInformation();
+                }
+            prevSec = (int) dataAndStructures.getGlobalConfigManager().getCurrentSecond()%30;
 
             //create new vehicles
             if (dataAndStructures.getVehicles().size() < maxCars & 1==1) {
@@ -108,16 +129,16 @@ public class SimEngine {
             //change traffic lights
             dataAndStructures.getRoadNetworkManager().changeLight(dataAndStructures.getGlobalConfigManager().getCurrentSecond());
 
-//            if((int)dataAndStructures.getGlobalConfigManager().getCurrentSecond()>previousSecond)
+           // if((int)dataAndStructures.getGlobalConfigManager().getCurrentSecond()>previousSecond)
 //            {
                 for(IVehicleManager veh : dataAndStructures.getVehicles())
 //               // if(veh.getVehicle().getObjectInSpace().getVehicleType() == VehicleType.emergency)
                 //if(veh.getVehID()==1)
                 //if(veh.getVehicle().getCurrentStrategy().length()>10)
-                    System.out.println(dataAndStructures.getGlobalConfigManager().getCurrentSecond() + " " +
+                    System.out.println(Common.round(dataAndStructures.getGlobalConfigManager().getCurrentSecond(), 2) + " " +
                             veh.getVehID() + " " + " s: " + Common.round(veh.getVehicle().getCurrentVelocity(), 2)
-                            + " v:" + veh.isVisible() + " rUnit:"
-                            + veh.getVehicle().getrUnit().getId() + " dest: " + veh.getVehicle().getDestination() + "" + veh.getVehicle().getCurrentStrategy());
+                             + " rUnit:"
+                            + veh.getVehicle().getrUnit().getId() + " " + veh.getVehicle().getCurrentStrategy());
 //            //}
             previousSecond = (int) dataAndStructures.getGlobalConfigManager().getCurrentSecond();
         }
