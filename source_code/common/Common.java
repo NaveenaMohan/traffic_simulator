@@ -3,8 +3,6 @@ package common;
 import managers.runit.IRUnitManager;
 import ui.Coordinates;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -31,7 +29,9 @@ public class Common {
 
     public static Coordinates getNextPointFromTo(Coordinates A, Coordinates B)
     {
-
+        /*
+        This function takes in two Coordinates as parameters and returns the next point on the path from one to another
+         */
         double angle = Math.atan2(B.getY() - A.getY(), B.getX() - A.getX());
         double xVel = Math.round(Math.cos(angle));
         double yVel = Math.round( Math.sin(angle));
@@ -41,53 +41,23 @@ public class Common {
 
     public static double normalizeAngle(double angle)
     {
+         /*
+        This function transforms angles from 0 to 360 to -179 to 180
+         */
         double newAngle = angle;
         while (newAngle <= -180) newAngle += 360;
         while (newAngle > 180) newAngle -= 360;
         return newAngle;
     }
 
-    public static int getYForTrendLine(IRUnitManager rUnit, int number, int x)
-    {
-        int n = 0;
-        //get all the coordinates for the rUnit path
-        List<Coordinates> path = new ArrayList<Coordinates>();
-
-        IRUnitManager temp = rUnit;
-        for (int i = 0; i < n; i++) {
-            path.add(new Coordinates(temp.getX(), temp.getY()));
-            if(temp.getNextRUnitList().size()>0) {
-                temp = temp.getNextRUnitList().get(0);
-                n += 1;
-            }
-        }
-
-
-        int sumxy = 0;
-        int sumx = 0;
-        int sumy = 0;
-        int sumx2 = 0;
-        for(Coordinates coord : path)
-        {
-            //get sum of all xy
-            sumxy += coord.getX()*coord.getY();
-            //get sum of all x
-            sumx +=coord.getX();
-            //get sum of all y
-            sumy +=coord.getY();
-            //get sum x squared
-            sumx2 += coord.getX()*coord.getX();
-        }
-
-        //get alpha
-        double alpha = (n*sumxy-sumx*sumy)/(n*(sumx2) - (sumx*sumx));
-        //get beta
-        double beta = (sumy - alpha*sumx)/n;
-
-        return (int)(alpha*x+beta);
-    }
     public static IRUnitManager getNthNextRUnit(IRUnitManager rUnit, int n)
     {
+        /*
+        This function returns the nth next rUnit. It should not go out of range
+         */
+        if(rUnit==null)
+            return null;
+
         IRUnitManager temp = rUnit;
         if(n>0)
             for (int i = 0; i < n; i++) {
@@ -100,6 +70,12 @@ public class Common {
 
     public static IRUnitManager getNthPrevRUnit(IRUnitManager rUnit, int n)
     {
+        /*
+        This function returns the nth previous rUnit. It should not go out of range
+         */
+        if(rUnit==null)
+            return null;
+
         IRUnitManager temp = rUnit;
         if(n>0)
             for (int i = 0; i < n; i++) {
@@ -112,6 +88,10 @@ public class Common {
 
     public static Coordinates getAdjacentPointToB(Coordinates A, Coordinates B, double distance, double bearing)
     {
+        /*
+        This function is used for creating double lanes. It takes two points and returns a third point that is at some defined distance and angle to the second point
+         */
+
         //get the angle of line from A to B
         double ABAngle=(Math.atan2(B.getY()-A.getY(), B.getX()-A.getX())*180)/Math.PI;
 

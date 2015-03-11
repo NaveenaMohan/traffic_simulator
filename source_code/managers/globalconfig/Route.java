@@ -7,7 +7,7 @@ public class Route {
 
     //TODO remove the defaults
     private String destination="London";
-    private double trafficPercent=0.4;
+    private double trafficPercent=1;
 
     public Route() {
     }
