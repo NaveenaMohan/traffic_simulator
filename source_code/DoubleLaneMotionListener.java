@@ -24,13 +24,11 @@ public class DoubleLaneMotionListener implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         drawingBoard.setConfigButtonSelected(ConfigButtonSelected.addDoubleLane);
-        drawingBoard.setMousePressed(true);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         drawingBoard.setConfigButtonSelected(ConfigButtonSelected.noOption);
-        drawingBoard.setMousePressed(false);
     }
 
     @Override

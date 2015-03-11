@@ -71,7 +71,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
     private Image greenLightImage;
     private Image vehicleFactoryImage;
     private ConfigButtonSelected configButtonSelected = ConfigButtonSelected.noOption;
-    private boolean mousePressed;
+    private boolean isDraw;
     private DefaultTableModel model;
     private boolean isSimulationPlaying;
     private boolean isSimulationStarted;
@@ -146,7 +146,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
         super.paintComponent(g);
 
         //Add single lane
-        if (mousePressed && configButtonSelected.equals(ConfigButtonSelected.addSingleLane)) {
+        if (configButtonSelected.equals(ConfigButtonSelected.addSingleLane)) {
             Graphics2D g2D = (Graphics2D) g;
 
             Coordinates A = new Coordinates((previousRUnit==null ? currentX : previousRUnit.getX()),
@@ -166,7 +166,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
 
         //Add double lane
 
-        if (mousePressed && configButtonSelected.equals(ConfigButtonSelected.addDoubleLane)) {
+        if (configButtonSelected.equals(ConfigButtonSelected.addDoubleLane)) {
             Graphics2D g2d = (Graphics2D) g;
 
             Coordinates A = new Coordinates((previousRUnit == null ? currentX : previousRUnit.getX()),
@@ -655,14 +655,6 @@ public class DrawingBoard extends JPanel implements ActionListener {
         return currentY;
     }
 
-    public boolean isMousePressed() {
-        return mousePressed;
-    }
-
-    public void setMousePressed(boolean mousePressed) {
-        this.mousePressed = mousePressed;
-    }
-
     public void addSingleLaneMouseDragMotionListener() {
         addMouseMotionListener(new MouseDragMotionListener(this));
         addMouseListener(new SingleLaneMotionListener(this));
@@ -805,5 +797,13 @@ public class DrawingBoard extends JPanel implements ActionListener {
 
     public void setSimulationStarted(boolean isSimulationStarted) {
         this.isSimulationStarted = isSimulationStarted;
+    }
+
+    public boolean isDraw() {
+        return isDraw;
+    }
+
+    public void setDraw(boolean isDraw) {
+        this.isDraw = isDraw;
     }
 }

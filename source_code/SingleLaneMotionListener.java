@@ -22,13 +22,11 @@ public class SingleLaneMotionListener implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         drawingBoard.setConfigButtonSelected(ConfigButtonSelected.addSingleLane);
-        drawingBoard.setMousePressed(true);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         drawingBoard.setConfigButtonSelected(ConfigButtonSelected.noOption);
-        drawingBoard.setMousePressed(false);
     }
 
     @Override
