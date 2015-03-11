@@ -81,12 +81,16 @@ public class SimEngine {
         );
         dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
 
-        timer.stop();
+        if(timer !=null){
+            timer.stop();
+        }
     }
 
     public void CleanVehicles() {
         dataAndStructures.setVehicleManagerList((new ArrayList<IVehicleManager>()));
-        timer.stop();
+        if(timer != null){
+            timer.stop();
+        }
     }
 
     //TODO do clear vehicles

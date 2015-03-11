@@ -25,9 +25,9 @@ public class DrawingBoard extends JPanel implements ActionListener {
     BufferedImage bufferedRoadImage;
     BufferedImage bufferedChangeableRoadImage;
     private int currentX, currentY;
-    private Set<Coordinates> singleLaneCoordinates = new HashSet<Coordinates>();
-    private Set<Coordinates> doubleLaneCoordinates = new HashSet<Coordinates>();
-    private Set<Coordinates> doubleLaneChangeableCoordinates = new HashSet<Coordinates>();
+    private Set<Coordinates> singleLaneCoordinates = new LinkedHashSet<Coordinates>();
+    private Set<Coordinates> doubleLaneCoordinates = new LinkedHashSet<Coordinates>();
+    private Set<Coordinates> doubleLaneChangeableCoordinates = new LinkedHashSet<Coordinates>();
     private List<Coordinates> vehicleFactoryCoordinates = new ArrayList<Coordinates>();
     private Map<String, Coordinates> trafficLightCoordinates = new HashMap<String, Coordinates>();
     private Map<String, Coordinates> zebraCrossingCoordinates = new HashMap<String, Coordinates>();
@@ -91,29 +91,29 @@ public class DrawingBoard extends JPanel implements ActionListener {
 
         //TODO: Get the correct images
 
-        rUnitImage = getToolkit().getImage(DrawingBoard.class.getResource("road.jpg"));
-        changeableRUnitImage = getToolkit().getImage(DrawingBoard.class.getResource("black.jpg"));
-        doubleRoad = getToolkit().getImage(DrawingBoard.class.getResource("doubleRoad.jpg"));
-        trafficLightImage = getToolkit().getImage(DrawingBoard.class.getResource("lightMini.png"));
-        carImage = getToolkit().getImage(DrawingBoard.class.getResource("car.png"));
-        truckImage = getToolkit().getImage(DrawingBoard.class.getResource("truck.png"));
-        emergencyVehicleImage = getToolkit().getImage(DrawingBoard.class.getResource("emergency.png"));
-        zebraCrossingImage = getToolkit().getImage(DrawingBoard.class.getResource("zebraCrossingMini.png"));
-        blockageImage = getToolkit().getImage(DrawingBoard.class.getResource("blockMini.png"));
-        stopImage = getToolkit().getImage(DrawingBoard.class.getResource("stopMini.png"));
-        greenLightImage = getToolkit().getImage(DrawingBoard.class.getResource("green.png"));
-        redLightImage = getToolkit().getImage(DrawingBoard.class.getResource("red.png"));
-        vehicleFactoryImage = getToolkit().getImage(DrawingBoard.class.getResource("vehicleFactoryMini.png"));
-        leftSignImage = getToolkit().getImage(DrawingBoard.class.getResource("leftMini.png"));
-        rightSignImage = getToolkit().getImage(DrawingBoard.class.getResource("rightMini.png"));
-        straightSignImage = getToolkit().getImage(DrawingBoard.class.getResource("straightMini.png"));
-        speed20Image = getToolkit().getImage(DrawingBoard.class.getResource("20mini.png"));
-        speed30Image = getToolkit().getImage(DrawingBoard.class.getResource("30mini.png"));
-        speed50Image = getToolkit().getImage(DrawingBoard.class.getResource("50mini.png"));
-        speed60Image = getToolkit().getImage(DrawingBoard.class.getResource("60mini.png"));
-        speed70Image = getToolkit().getImage(DrawingBoard.class.getResource("70mini.png"));
-        speed90Image = getToolkit().getImage(DrawingBoard.class.getResource("90mini.png"));
-        welcomeImage = getToolkit().getImage(DrawingBoard.class.getResource("welcomeMini.png"));
+        rUnitImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/road.jpg"));
+        changeableRUnitImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/black.jpg"));
+        doubleRoad = getToolkit().getImage(DrawingBoard.class.getResource("resources/doubleRoad.jpg"));
+        trafficLightImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/lightMini.png"));
+        carImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/car.png"));
+        truckImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/truck.png"));
+        emergencyVehicleImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/emergency.png"));
+        zebraCrossingImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/zebraCrossingMini.png"));
+        blockageImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/blockMini.png"));
+        stopImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/stopMini.png"));
+        greenLightImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/green.png"));
+        redLightImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/red.png"));
+        vehicleFactoryImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/vehicleFactoryMini.png"));
+        leftSignImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/leftMini.png"));
+        rightSignImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/rightMini.png"));
+        straightSignImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/straightMini.png"));
+        speed20Image = getToolkit().getImage(DrawingBoard.class.getResource("resources/20mini.png"));
+        speed30Image = getToolkit().getImage(DrawingBoard.class.getResource("resources/30mini.png"));
+        speed50Image = getToolkit().getImage(DrawingBoard.class.getResource("resources/50mini.png"));
+        speed60Image = getToolkit().getImage(DrawingBoard.class.getResource("resources/60mini.png"));
+        speed70Image = getToolkit().getImage(DrawingBoard.class.getResource("resources/70mini.png"));
+        speed90Image = getToolkit().getImage(DrawingBoard.class.getResource("resources/90mini.png"));
+        welcomeImage = getToolkit().getImage(DrawingBoard.class.getResource("resources/welcomeMini.png"));
 
         MediaTracker roadMediaTracker = new MediaTracker(this);
         roadMediaTracker.addImage(rUnitImage, 1);
@@ -282,13 +282,14 @@ public class DrawingBoard extends JPanel implements ActionListener {
         }
 
         if (configButtonSelected.equals(ConfigButtonSelected.left)) {
-            LocationDialog locationDialog = new LocationDialog();
-            locationDialog.initUI();
-            locationDialog.setVisible(true);
-            String destination = locationDialog.getDestination();
-            if (destination != null) {
-                RUnit bestMatchRUnit = fetchAndAddBestMatchRUnit(leftCoordinates, destination);
-                if (bestMatchRUnit != null) {
+            RUnit bestMatchRUnit = fetchBestMatchRUnit();
+            if (bestMatchRUnit != null) {
+                LocationDialog locationDialog = new LocationDialog();
+                locationDialog.initUI();
+                locationDialog.setVisible(true);
+                String destination = locationDialog.getDestination();
+                if(destination != null ){
+                    leftCoordinates.put(new Coordinates(bestMatchRUnit.getX(),bestMatchRUnit.getY()),destination);
                     //Updating the best match rUnit with the blockage
                     simEngine.getDataAndStructures().getRoadNetworkManager().addDirectionSign(bestMatchRUnit, destination, DirectionSignType.left);
                     //Drawing the left sign
@@ -303,13 +304,14 @@ public class DrawingBoard extends JPanel implements ActionListener {
         }
 
         if (configButtonSelected.equals(ConfigButtonSelected.right)) {
-            LocationDialog locationDialog = new LocationDialog();
-            locationDialog.initUI();
-            locationDialog.setVisible(true);
-            String destination = locationDialog.getDestination();
-            if (destination != null) {
-                RUnit bestMatchRUnit = fetchAndAddBestMatchRUnit(rightCoordinates, destination);
-                if (bestMatchRUnit != null) {
+            RUnit bestMatchRUnit = fetchBestMatchRUnit();
+            if (bestMatchRUnit != null) {
+                LocationDialog locationDialog = new LocationDialog();
+                locationDialog.initUI();
+                locationDialog.setVisible(true);
+                String destination = locationDialog.getDestination();
+                if(destination != null ){
+                    rightCoordinates.put(new Coordinates(bestMatchRUnit.getX(),bestMatchRUnit.getY()),destination);
                     //Updating the best match rUnit with the blockage
                     simEngine.getDataAndStructures().getRoadNetworkManager().addDirectionSign(bestMatchRUnit, destination, DirectionSignType.right);
                     //Drawing the right sign
@@ -324,13 +326,14 @@ public class DrawingBoard extends JPanel implements ActionListener {
         }
 
         if (configButtonSelected.equals(ConfigButtonSelected.straight)) {
-            LocationDialog locationDialog = new LocationDialog();
-            locationDialog.initUI();
-            locationDialog.setVisible(true);
-            String destination = locationDialog.getDestination();
-            if (destination != null) {
-                RUnit bestMatchRUnit = fetchAndAddBestMatchRUnit(straightCoordinates, destination);
-                if (bestMatchRUnit != null) {
+            RUnit bestMatchRUnit = fetchBestMatchRUnit();
+            if (bestMatchRUnit != null) {
+                LocationDialog locationDialog = new LocationDialog();
+                locationDialog.initUI();
+                locationDialog.setVisible(true);
+                String destination = locationDialog.getDestination();
+                if(destination != null ){
+                    straightCoordinates.put(new Coordinates(bestMatchRUnit.getX(),bestMatchRUnit.getY()),destination);
                     //Updating the best match rUnit with the blockage
                     simEngine.getDataAndStructures().getRoadNetworkManager().addDirectionSign(bestMatchRUnit, destination, DirectionSignType.straight);
                     //Drawing the straight sign
@@ -409,13 +412,14 @@ public class DrawingBoard extends JPanel implements ActionListener {
         }
 
         if (configButtonSelected.equals(ConfigButtonSelected.welcome)) {
-            DestinationDialog destinationDialog = new DestinationDialog();
-            destinationDialog.initUI();
-            destinationDialog.setVisible(true);
-            String destination = destinationDialog.getDestination();
-            if (destination != null) {
-                RUnit bestMatchRUnit = fetchAndAddBestMatchRUnit(welcomeCoordinates, destination);
-                if (bestMatchRUnit != null) {
+            RUnit bestMatchRUnit = fetchBestMatchRUnit();
+            if (bestMatchRUnit != null) {
+                LocationDialog locationDialog = new LocationDialog();
+                locationDialog.initUI();
+                locationDialog.setVisible(true);
+                String destination = locationDialog.getDestination();
+                if(destination != null ){
+                    welcomeCoordinates.put(new Coordinates(bestMatchRUnit.getX(),bestMatchRUnit.getY()),destination);
                     //Updating the best match rUnit with the blockage
                     simEngine.getDataAndStructures().getRoadNetworkManager().addWelcomeSign(bestMatchRUnit, destination);
                     JButton dest = new JButton();
@@ -446,19 +450,6 @@ public class DrawingBoard extends JPanel implements ActionListener {
             if (rectangle.contains(currentX, currentY)) {
                 if (coordinates != null) {
                     coordinates.add(new Coordinates(rUnit.getX(), rUnit.getY()));
-                }
-                return rUnit;
-            }
-        }
-        return null;
-    }
-
-    private RUnit fetchAndAddBestMatchRUnit(Map<Coordinates, String> coordinates, String destination) {
-        for (RUnit rUnit : simEngine.getDataAndStructures().getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()) {
-            Rectangle rectangle = new Rectangle(rUnit.getX(), rUnit.getY(), doubleRoad.getWidth(this), doubleRoad.getHeight(this));
-            if (rectangle.contains(currentX, currentY)) {
-                if (coordinates != null) {
-                    coordinates.put(new Coordinates(rUnit.getX(), rUnit.getY()), destination);
                 }
                 return rUnit;
             }

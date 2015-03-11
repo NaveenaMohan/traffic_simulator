@@ -97,38 +97,38 @@ public class  Traffic_Simulator {
         JButton single_lane = new JButton();
         single_lane.setBounds(26, 27, 70, 70);
         single_lane.setToolTipText("Add a Single Lane Road");
-        single_lane.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Single Lane.jpg")));
+        single_lane.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/Single Lane.jpg")));
         roadInfraStructurePanel.add(single_lane);
 
 
         JButton double_lane = new JButton();
         double_lane.setBounds(108, 27, 70, 70);
         double_lane.setToolTipText("Add a Double Lane Road");
-        double_lane.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Double Lane.jpg")));
+        double_lane.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/Double Lane.jpg")));
         roadInfraStructurePanel.add(double_lane);
 
         final JButton traffic_light = new JButton();
         traffic_light.setBounds(190, 27, 70, 70);
         traffic_light.setToolTipText("Add a Traffic Light");
-        traffic_light.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Traffic Light.png")));
+        traffic_light.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/Traffic Light.png")));
         roadInfraStructurePanel.add(traffic_light);
 
         JButton zebra_crossing = new JButton();
         zebra_crossing.setBounds(26, 98, 70, 70);
         zebra_crossing.setToolTipText("Add a Zebra Crossing");
-        zebra_crossing.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Zebra Crossing.png")));
+        zebra_crossing.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/Zebra Crossing.png")));
         roadInfraStructurePanel.add(zebra_crossing);
 
         JButton road_blockages = new JButton();
         road_blockages.setBounds(108, 98, 70, 70);
         road_blockages.setToolTipText("Add Road Obstruction");
-        road_blockages.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Construction.png")));
+        road_blockages.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/Construction.png")));
         roadInfraStructurePanel.add(road_blockages);
 
         JButton vehicle_factory = new JButton();
         vehicle_factory.setBounds(190, 98, 70, 70);
         vehicle_factory.setToolTipText("Vehicle Factory");
-        vehicle_factory.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Vehicle Factory.png")));
+        vehicle_factory.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/Vehicle Factory.png")));
         roadInfraStructurePanel.add(vehicle_factory);
 
         JLabel txtrTrafficSignBoards = new JLabel();
@@ -141,25 +141,25 @@ public class  Traffic_Simulator {
         JButton stop_sign = new JButton();
         stop_sign.setBounds(6, 192, 70, 70);
         stop_sign.setToolTipText("Add a Stop Sign");
-        stop_sign.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Stop.png")));
+        stop_sign.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/Stop.png")));
         roadInfraStructurePanel.add(stop_sign);
 
         JButton left_sign = new JButton();
         left_sign.setBounds(72, 192, 70, 70);
         left_sign.setToolTipText("Add a Go Left Sign");
-        left_sign.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Left.png")));
+        left_sign.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/Left.png")));
         roadInfraStructurePanel.add(left_sign);
 
 
         JButton up_sign = new JButton();
         up_sign.setBounds(141, 192, 70, 70);
-        up_sign.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Straight.png")));
+        up_sign.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/Straight.png")));
         roadInfraStructurePanel.add(up_sign);
 
         JButton right_sign = new JButton();
         right_sign.setBounds(208, 192, 70, 70);
         right_sign.setToolTipText("Add a Go Right Sign");
-        right_sign.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Right.png")));
+        right_sign.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/Right.png")));
         roadInfraStructurePanel.add(right_sign);
 
         JLabel txtrSpeedLimitSigns = new JLabel();
@@ -173,37 +173,37 @@ public class  Traffic_Simulator {
         JButton speed_20 = new JButton();
         speed_20.setBounds(1, 286, 50, 50);
         speed_20.setToolTipText("Speed Limit 20");
-        speed_20.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("20.png")));
+        speed_20.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/20.png")));
         roadInfraStructurePanel.add(speed_20);
 
         JButton speed_30 = new JButton();
         speed_30.setBounds(46, 286, 50, 50);
         speed_30.setToolTipText("Speed Limit 30");
-        speed_30.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("30.png")));
+        speed_30.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/30.png")));
         roadInfraStructurePanel.add(speed_30);
 
         JButton speed_50 = new JButton();
         speed_50.setBounds(93, 286, 50, 50);
         speed_50.setToolTipText("Speed Limit 50");
-        speed_50.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("50.png")));
+        speed_50.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/50.png")));
         roadInfraStructurePanel.add(speed_50);
 
         JButton speed_60 = new JButton();
         speed_60.setBounds(139, 286, 50, 50);
         speed_60.setToolTipText("Speed Limit 60");
-        speed_60.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("60.png")));
+        speed_60.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/60.png")));
         roadInfraStructurePanel.add(speed_60);
 
         JButton speed_70 = new JButton();
         speed_70.setBounds(186, 286, 50, 50);
         speed_70.setToolTipText("Speed Limit 70");
-        speed_70.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("70.png")));
+        speed_70.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/70.png")));
         roadInfraStructurePanel.add(speed_70);
 
         JButton speed_90 = new JButton();
         speed_90.setBounds(230, 286, 50, 50);
         speed_90.setToolTipText("Speed Limit 90");
-        speed_90.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("90.png")));
+        speed_90.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/90.png")));
         roadInfraStructurePanel.add(speed_90);
 
         JLabel txtrDestinationSignBoard = new JLabel();
@@ -217,7 +217,7 @@ public class  Traffic_Simulator {
         JButton welcome_board = new JButton();
         welcome_board.setBounds(6, 355, 272, 57);
         welcome_board.setToolTipText("Add Welcome Board");
-        welcome_board.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("Welcome Board.png")));
+        welcome_board.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/Welcome Board.png")));
         roadInfraStructurePanel.add(welcome_board);
 
         // Simulation Configuration Panel
@@ -256,13 +256,13 @@ public class  Traffic_Simulator {
         JButton playButton = new JButton();
         playButton.setToolTipText("Play");
         playButton.setBounds(6, 0, 70, 70);
-        playButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("play.png")));
+        playButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/play.png")));
         simulationConfigPanel.add(playButton);
 
         JButton pauseButton = new JButton();
         pauseButton.setToolTipText("Pause");
         pauseButton.setBounds(88, 0, 70, 70);
-        pauseButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("pause.png")));
+        pauseButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/pause.png")));
         simulationConfigPanel.add(pauseButton);
 
         JButton stopButton = new JButton();
@@ -272,13 +272,13 @@ public class  Traffic_Simulator {
         });
         stopButton.setToolTipText("Stop");
         stopButton.setBounds(170, 0, 70, 70);
-        stopButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("stop_music.png")));
+        stopButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/stop_music.png")));
         simulationConfigPanel.add(stopButton);
 
         JButton slowButton = new JButton();
         slowButton.setToolTipText("Slow");
         slowButton.setBounds(252, 0, 70, 70);
-        slowButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("slow.png")));
+        slowButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/slow.png")));
         simulationConfigPanel.add(slowButton);
         slowButton.addActionListener(new ActionListener() {
             @Override
@@ -290,7 +290,7 @@ public class  Traffic_Simulator {
         JButton fastButton = new JButton();
         fastButton.setToolTipText("Fast");
         fastButton.setBounds(334, 0, 70, 70);
-        fastButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("fast.png")));
+        fastButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/fast.png")));
         simulationConfigPanel.add(fastButton);
         fastButton.addActionListener(new ActionListener() {
             @Override
@@ -302,25 +302,25 @@ public class  Traffic_Simulator {
         JButton uploadImageButton = new JButton();
         uploadImageButton.setToolTipText("Upload Road Image");
         uploadImageButton.setBounds(416, 0, 70, 70);
-        uploadImageButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("upload.png")));
+        uploadImageButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/upload.png")));
         simulationConfigPanel.add(uploadImageButton);
 
         JButton importConfigButton = new JButton();
         importConfigButton.setToolTipText("Import Configuration");
         importConfigButton.setBounds(498, 0, 70, 70);
-        importConfigButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("import.png")));
+        importConfigButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/import.png")));
         simulationConfigPanel.add(importConfigButton);
 
         JButton exportConfigButton = new JButton();
         exportConfigButton.setToolTipText("Export Configuration");
         exportConfigButton.setBounds(580, 0, 70, 70);
-        exportConfigButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("export.png")));
+        exportConfigButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/export.png")));
         simulationConfigPanel.add(exportConfigButton);
 
         JButton reportButton = new JButton();
         reportButton.setToolTipText("Generate Report");
         reportButton.setBounds(659, 0, 70, 70);
-        reportButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("report.png")));
+        reportButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/report.png")));
         simulationConfigPanel.add(reportButton);
         reportButton.addActionListener(new ActionListener() {
             @Override
@@ -385,7 +385,7 @@ public class  Traffic_Simulator {
         JButton sunny_button = new JButton();
         sunny_button.setToolTipText("Sunny");
         sunny_button.setBounds(16, 17, 60, 60);
-        sunny_button.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("sunny.png")));
+        sunny_button.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/sunny.png")));
         trafficPatternPanel.add(sunny_button);
         sunny_button.addActionListener(new ActionListener() {
             @Override
@@ -399,7 +399,7 @@ public class  Traffic_Simulator {
         JButton rainy_button = new JButton();
         rainy_button.setToolTipText("Rainy");
         rainy_button.setBounds(90, 17, 60, 60);
-        rainy_button.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("rainy.png")));
+        rainy_button.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/rainy.png")));
         trafficPatternPanel.add(rainy_button);
         rainy_button.addActionListener(new ActionListener() {
             @Override
@@ -413,7 +413,7 @@ public class  Traffic_Simulator {
         JButton snow_button = new JButton();
         snow_button.setToolTipText("Snowy");
         snow_button.setBounds(162, 17, 60, 60);
-        snow_button.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("snow.png")));
+        snow_button.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/snow.png")));
         trafficPatternPanel.add(snow_button);
         snow_button.addActionListener(new ActionListener() {
             @Override
@@ -846,7 +846,7 @@ public class  Traffic_Simulator {
 
         JButton clearVehicleFactoryButton = new JButton();
         clearVehicleFactoryButton.setToolTipText("Clear Vehicle Factory");
-        clearVehicleFactoryButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("clearVehicleFactory.png")));
+        clearVehicleFactoryButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/clearVehicleFactory.png")));
         clearVehicleFactoryButton.setBounds(325, 85, 65, 65);
         trafficPatternPanel.add(clearVehicleFactoryButton);
         clearVehicleFactoryButton.addActionListener(new ActionListener() {
@@ -860,7 +860,7 @@ public class  Traffic_Simulator {
 
         JButton clearAllButton = new JButton();
         clearAllButton.setToolTipText("Clear All");
-        clearAllButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("clearAll.png")));
+        clearAllButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("resources/clearAll.png")));
          clearAllButton.setBounds(408, 85, 65, 65);
         trafficPatternPanel.add(clearAllButton);
 

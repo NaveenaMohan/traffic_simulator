@@ -14,7 +14,7 @@ public class DestinationDialog extends JDialog {
 
     public final void initUI() {
 
-        ImageIcon icon = new ImageIcon(Traffic_Simulator.class.getResource("Destination.png"));
+        ImageIcon icon = new ImageIcon(Traffic_Simulator.class.getResource("resources/Destination.png"));
         getContentPane().setLayout(null);
         JLabel label = new JLabel(icon);
         label.setBounds(49, 22, 200, 75);
