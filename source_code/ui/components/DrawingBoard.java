@@ -58,6 +58,8 @@ public class DrawingBoard implements ActionListener {
     private Image truckImage;
     private Image emergencyVehicleImage;
     private Image zebraCrossingImage;
+    private Image greenLightZebraImage;
+    private Image redLightZebraImage;
     private Image blockageImage;
     private Image stopImage;
     private Image leftSignImage;
@@ -88,6 +90,14 @@ public class DrawingBoard implements ActionListener {
         this.currentSecondValue = currentSecondValue;
     }
 
+    private static int getTrafficLightIdIndex() {
+        return trafficLightIdIndex;
+    }
+
+    public static void setTrafficLightIdIndex(int trafficLightIdIndex) {
+        DrawingBoard.trafficLightIdIndex = trafficLightIdIndex;
+    }
+
     public void initialize() {
         rUnitImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/road.jpg"));
         changeableRUnitImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/black.jpg"));
@@ -101,6 +111,8 @@ public class DrawingBoard implements ActionListener {
         stopImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/stopMini.png"));
         greenLightImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/green.png"));
         redLightImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/red.png"));
+        greenLightZebraImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/greenZebra.png"));
+        redLightZebraImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/redZebra.png"));
         vehicleFactoryImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/vehicleFactoryMini.png"));
         leftSignImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/leftMini.png"));
         rightSignImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/rightMini.png"));
@@ -600,13 +612,13 @@ public class DrawingBoard implements ActionListener {
                     if (trafficLightCoordinates.get(trafficLightId) != null) {
                         g2d.drawImage(greenLightImage, trafficLightCoordinates.get(trafficLightId).getX(), trafficLightCoordinates.get(trafficLightId).getY(), drawingBoardPanel);
                     } else {
-                        g2d.drawImage(greenLightImage, zebraCrossingCoordinates.get(trafficLightId).getX(), zebraCrossingCoordinates.get(trafficLightId).getY(), drawingBoardPanel);
+                        g2d.drawImage(greenLightZebraImage, zebraCrossingCoordinates.get(trafficLightId).getX(), zebraCrossingCoordinates.get(trafficLightId).getY(), drawingBoardPanel);
                     }
                 } else {
                     if (trafficLightCoordinates.get(trafficLightId) != null) {
                         g2d.drawImage(redLightImage, trafficLightCoordinates.get(trafficLightId).getX(), trafficLightCoordinates.get(trafficLightId).getY(), drawingBoardPanel);
                     } else {
-                        g2d.drawImage(redLightImage, zebraCrossingCoordinates.get(trafficLightId).getX(), zebraCrossingCoordinates.get(trafficLightId).getY(), drawingBoardPanel);
+                        g2d.drawImage(redLightZebraImage, zebraCrossingCoordinates.get(trafficLightId).getX(), zebraCrossingCoordinates.get(trafficLightId).getY(), drawingBoardPanel);
                     }
                 }
             }
@@ -629,11 +641,11 @@ public class DrawingBoard implements ActionListener {
     public void setCurrentY(int currentY) {
         this.currentY = currentY;
     }
-    
+
     public int getX() {
         return currentX;
     }
-    
+
     public int getY() {
         return currentY;
     }
@@ -716,21 +728,12 @@ public class DrawingBoard implements ActionListener {
         drawingBoardPanel.addMouseListener(new Speed70ButtonListener(this));
     }
 
-
     public void addSpeed90ButtonActionListener() {
         drawingBoardPanel.addMouseListener(new Speed90ButtonListener(this));
     }
 
     public void addWelcomeDestinationButtonActionListener() {
         drawingBoardPanel.addMouseListener(new WelcomeDestinationButtonListener(this));
-    }
-
-    private static int getTrafficLightIdIndex() {
-        return trafficLightIdIndex;
-    }
-
-    public static void setTrafficLightIdIndex(int trafficLightIdIndex) {
-        DrawingBoard.trafficLightIdIndex = trafficLightIdIndex;
     }
 
     public RUnit getPreviousRUnit() {
