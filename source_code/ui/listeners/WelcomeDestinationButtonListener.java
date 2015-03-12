@@ -23,7 +23,7 @@ public class WelcomeDestinationButtonListener implements MouseListener {
         //Sets the current coordinates for paint function
         drawingBoard.setCurrentX(e.getX());
         drawingBoard.setCurrentY(e.getY());
-        drawingBoard.repaint();
+        drawingBoard.getDrawingBoardPanel().repaint();
     }
 
     @Override

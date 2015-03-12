@@ -1,6 +1,6 @@
 package ui.components;
 
-import ui.RangeSliderUI;
+import ui.components.RangeSliderUI;
 
 import javax.swing.JSlider;
 

@@ -22,7 +22,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 
-public class DrawingBoard extends JPanel implements ActionListener {
+public class DrawingBoard implements ActionListener {
     private static int trafficLightIdIndex = 1;
     private static int zebraCrossingTrafficLightIdIndex = 1;
     BufferedImage bufferedRoadImage;
@@ -79,58 +79,53 @@ public class DrawingBoard extends JPanel implements ActionListener {
     private boolean isSimulationPlaying;
     private boolean isSimulationStarted;
     private JLabel currentSecondValue;
+    private JPanel drawingBoardPanel;
 
     public DrawingBoard(DefaultTableModel model, RoadNetworkManager roadNetworkManager, SimEngine simEngine, JLabel currentSecondValue) {
         this.model = model;
         this.roadNetworkManager = roadNetworkManager;
         this.simEngine = simEngine;
         this.currentSecondValue = currentSecondValue;
-        setBackground(Color.white);
-        setBounds(286, 79, 1021, 348);
-        setLayout(null);
     }
 
     public void initialize() {
+        rUnitImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/road.jpg"));
+        changeableRUnitImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/black.jpg"));
+        doubleRoad = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/doubleRoad.jpg"));
+        trafficLightImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/lightMini.png"));
+        carImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/car.png"));
+        truckImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/truck.png"));
+        emergencyVehicleImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/emergency.png"));
+        zebraCrossingImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/zebraCrossingMini.png"));
+        blockageImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/blockMini.png"));
+        stopImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/stopMini.png"));
+        greenLightImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/green.png"));
+        redLightImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/red.png"));
+        vehicleFactoryImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/vehicleFactoryMini.png"));
+        leftSignImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/leftMini.png"));
+        rightSignImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/rightMini.png"));
+        straightSignImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/straightMini.png"));
+        speed20Image = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/20mini.png"));
+        speed30Image = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/30mini.png"));
+        speed50Image = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/50mini.png"));
+        speed60Image = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/60mini.png"));
+        speed70Image = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/70mini.png"));
+        speed90Image = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/90mini.png"));
+        welcomeImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/welcomeMini.png"));
 
-        //TODO: Get the correct images
-
-        rUnitImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/road.jpg"));
-        changeableRUnitImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/black.jpg"));
-        doubleRoad = getToolkit().getImage(DrawingBoard.class.getResource("/resources/doubleRoad.jpg"));
-        trafficLightImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/lightMini.png"));
-        carImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/car.png"));
-        truckImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/truck.png"));
-        emergencyVehicleImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/emergency.png"));
-        zebraCrossingImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/zebraCrossingMini.png"));
-        blockageImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/blockMini.png"));
-        stopImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/stopMini.png"));
-        greenLightImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/green.png"));
-        redLightImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/red.png"));
-        vehicleFactoryImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/vehicleFactoryMini.png"));
-        leftSignImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/leftMini.png"));
-        rightSignImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/rightMini.png"));
-        straightSignImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/straightMini.png"));
-        speed20Image = getToolkit().getImage(DrawingBoard.class.getResource("/resources/20mini.png"));
-        speed30Image = getToolkit().getImage(DrawingBoard.class.getResource("/resources/30mini.png"));
-        speed50Image = getToolkit().getImage(DrawingBoard.class.getResource("/resources/50mini.png"));
-        speed60Image = getToolkit().getImage(DrawingBoard.class.getResource("/resources/60mini.png"));
-        speed70Image = getToolkit().getImage(DrawingBoard.class.getResource("/resources/70mini.png"));
-        speed90Image = getToolkit().getImage(DrawingBoard.class.getResource("/resources/90mini.png"));
-        welcomeImage = getToolkit().getImage(DrawingBoard.class.getResource("/resources/welcomeMini.png"));
-
-        MediaTracker roadMediaTracker = new MediaTracker(this);
+        MediaTracker roadMediaTracker = new MediaTracker(drawingBoardPanel);
         roadMediaTracker.addImage(rUnitImage, 1);
         try {
             roadMediaTracker.waitForAll();
         } catch (Exception e) {
             System.out.println("Exception while loading RUnitImage");
         }
-        bufferedRoadImage = new BufferedImage(rUnitImage.getWidth(this), rUnitImage.getHeight(this),
+        bufferedRoadImage = new BufferedImage(rUnitImage.getWidth(drawingBoardPanel), rUnitImage.getHeight(drawingBoardPanel),
                 BufferedImage.TYPE_INT_ARGB);
         Graphics2D roadGraphics = bufferedRoadImage.createGraphics();
-        roadGraphics.drawImage(rUnitImage, 0, 0, this);
+        roadGraphics.drawImage(rUnitImage, 0, 0, drawingBoardPanel);
 
-        MediaTracker changeableRoadMediaTracker = new MediaTracker(this);
+        MediaTracker changeableRoadMediaTracker = new MediaTracker(drawingBoardPanel);
         changeableRoadMediaTracker.addImage(changeableRUnitImage, 1);
         try {
             changeableRoadMediaTracker.waitForAll();
@@ -140,14 +135,12 @@ public class DrawingBoard extends JPanel implements ActionListener {
         bufferedChangeableRoadImage = new BufferedImage(20, 20,
                 BufferedImage.TYPE_INT_ARGB);
         Graphics2D b = bufferedChangeableRoadImage.createGraphics();
-        b.drawImage(changeableRUnitImage, 0, 0, this);
+        b.drawImage(changeableRUnitImage, 0, 0, drawingBoardPanel);
 
     }
 
     //Configuration Phase - Drawing road and configuring other traffic elements
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
         //Add single lane
         if (configButtonSelected.equals(ConfigButtonSelected.addSingleLane)) {
             Graphics2D g2D = (Graphics2D) g;
@@ -161,7 +154,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                     //Add and Return RUnit for single lane and store it as previous RUnit
                     singleLaneCoordinates.add(A);
                     previousRUnit = roadNetworkManager.addSingleLane(A.getX(), A.getY(), previousRUnit);
-                    g2D.drawImage(bufferedRoadImage, currentX, currentY, this);
+                    g2D.drawImage(bufferedRoadImage, currentX, currentY, drawingBoardPanel);
                 }
                 A = new Coordinates(Common.getNextPointFromTo(A, B).getX(), Common.getNextPointFromTo(A,B).getY());
             }while(A.getY()!=B.getY() & A.getX() != B.getX());
@@ -191,9 +184,9 @@ public class DrawingBoard extends JPanel implements ActionListener {
                         previousRUnit = prevRUnitMap.get("runit");
                         previousChangeableRunit = prevRUnitMap.get("changeableRunit");
                     }
-                    //g2d.drawImage(bufferedChangeableRoadImage, currentX, currentY, this);
-                    g2d.drawImage(bufferedRoadImage, currentX, currentY, this);
-                    g2d.drawImage(bufferedChangeableRoadImage, currentChangeableX, currentChangeableY, this);
+                    //g2d.drawImage(bufferedChangeableRoadImage, currentX, currentY, drawingBoardPanel);
+                    g2d.drawImage(bufferedRoadImage, currentX, currentY, drawingBoardPanel);
+                    g2d.drawImage(bufferedChangeableRoadImage, currentChangeableX, currentChangeableY, drawingBoardPanel);
                 }
                 A = new Coordinates(Common.getNextPointFromTo(A, B).getX(), Common.getNextPointFromTo(A, B).getY());
                 changeableA = new Coordinates(Common.getNextPointFromTo(changeableA, changeableB).getX(), Common.getNextPointFromTo(changeableA,changeableB).getY());
@@ -214,7 +207,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                 tl.setBounds(bestMatchRUnit.getX(), bestMatchRUnit.getY(), 15, 15);
                 tl.setToolTipText("Traffic Light: " + trafficLightIdIndex);
                 tl.setIcon(new ImageIcon(trafficLightImage));
-                this.add(tl);
+                drawingBoardPanel.add(tl);
 
                 if (model != null) {
                     model.addRow(new Object[]{trafficLightId, false, false, false, false, false, false, false, false, false, false});
@@ -238,7 +231,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                 ztl.setToolTipText("Zebra Crossing Traffic Light: " + zebraCrossingTrafficLightIdIndex);
                 ztl.setBounds(bestMatchRUnit.getX(), bestMatchRUnit.getY(), 15, 15);
                 ztl.setIcon(new ImageIcon(zebraCrossingImage));
-                this.add(ztl);
+                drawingBoardPanel.add(ztl);
 
                 if (model != null) {
                     model.addRow(new Object[]{trafficLightId, false, false, false, false, false, false, false, false, false, false});
@@ -255,7 +248,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addBlockage(bestMatchRUnit);
                 //Drawing the blockage
-                g.drawImage(blockageImage, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, this);
+                g.drawImage(blockageImage, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -267,7 +260,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                 //Adding vehicle factory and dataStructures
                 simEngine.getDataAndStructures().getVehicleFactoryManager().addVehicleFactory(roadNetworkManager.getRoadNetwork().getrUnitHashtable().get(String.valueOf(bestMatchRUnit.getId())));
                 //Drawing the vehicleFactory
-                g.drawImage(vehicleFactoryImage, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, this);
+                g.drawImage(vehicleFactoryImage, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -279,7 +272,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addStopSign(bestMatchRUnit);
                 //Drawing the stop image
-                g.drawImage(stopImage, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, this);
+                g.drawImage(stopImage, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -300,7 +293,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                     left.setToolTipText("Take left to go to " + destination);
                     left.setBounds(bestMatchRUnit.getX(), bestMatchRUnit.getY(), 15, 15);
                     left.setIcon(new ImageIcon(leftSignImage));
-                    this.add(left);
+                    drawingBoardPanel.add(left);
                 }
             }
             configButtonSelected = ConfigButtonSelected.noOption;
@@ -322,7 +315,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                     right.setToolTipText("Take right to go to " + destination);
                     right.setBounds(bestMatchRUnit.getX(), bestMatchRUnit.getY(), 15, 15);
                     right.setIcon(new ImageIcon(rightSignImage));
-                    this.add(right);
+                    drawingBoardPanel.add(right);
                 }
             }
             configButtonSelected = ConfigButtonSelected.noOption;
@@ -344,7 +337,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                     straight.setToolTipText("Go straight to go to " + destination);
                     straight.setBounds(bestMatchRUnit.getX(), bestMatchRUnit.getY(), 15, 15);
                     straight.setIcon(new ImageIcon(straightSignImage));
-                    this.add(straight);                }
+                    drawingBoardPanel.add(straight);                }
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -355,7 +348,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 20);
                 //Drawing the speed limit
-                g.drawImage(speed20Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, this);
+                g.drawImage(speed20Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -366,7 +359,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 30);
                 //Drawing the speed limit
-                g.drawImage(speed30Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, this);
+                g.drawImage(speed30Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -377,7 +370,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 50);
                 //Drawing the speed limit
-                g.drawImage(speed50Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, this);
+                g.drawImage(speed50Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -388,7 +381,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 60);
                 //Drawing the speed limit
-                g.drawImage(speed60Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, this);
+                g.drawImage(speed60Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -399,7 +392,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 70);
                 //Drawing the speed limit
-                g.drawImage(speed70Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, this);
+                g.drawImage(speed70Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -409,7 +402,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
             if (bestMatchRUnit != null) {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 90);
-                g.drawImage(speed90Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, this);
+                g.drawImage(speed90Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -417,10 +410,10 @@ public class DrawingBoard extends JPanel implements ActionListener {
         if (configButtonSelected.equals(ConfigButtonSelected.welcome)) {
             RUnit bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
-                LocationDialog locationDialog = new LocationDialog();
-                locationDialog.initUI();
-                locationDialog.setVisible(true);
-                String destination = locationDialog.getDestination();
+                DestinationDialog destinationDialog = new DestinationDialog();
+                destinationDialog.initUI();
+                destinationDialog.setVisible(true);
+                String destination = destinationDialog.getDestination();
                 if(destination != null ){
                     welcomeCoordinates.put(new Coordinates(bestMatchRUnit.getX(),bestMatchRUnit.getY()),destination);
                     //Updating the best match rUnit with the blockage
@@ -429,7 +422,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                     dest.setToolTipText("Welcome to " + destination);
                     dest.setBounds(bestMatchRUnit.getX(), bestMatchRUnit.getY(), 15, 15);
                     dest.setIcon(new ImageIcon(welcomeImage));
-                    this.add(dest);
+                    drawingBoardPanel.add(dest);
                 }
             }
             configButtonSelected = ConfigButtonSelected.noOption;
@@ -449,7 +442,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
 
     private RUnit fetchAndAddBestMatchRUnit(List<Coordinates> coordinates) {
         for (RUnit rUnit : simEngine.getDataAndStructures().getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()) {
-            Rectangle rectangle = new Rectangle(rUnit.getX(), rUnit.getY(), doubleRoad.getWidth(this), doubleRoad.getHeight(this));
+            Rectangle rectangle = new Rectangle(rUnit.getX(), rUnit.getY(), doubleRoad.getWidth(drawingBoardPanel), doubleRoad.getHeight(drawingBoardPanel));
             if (rectangle.contains(currentX, currentY)) {
                 if (coordinates != null) {
                     coordinates.add(new Coordinates(rUnit.getX(), rUnit.getY()));
@@ -462,7 +455,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
 
     private RUnit fetchBestMatchRUnit() {
         for (RUnit rUnit : simEngine.getDataAndStructures().getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()) {
-            Rectangle rectangle = new Rectangle(rUnit.getX(), rUnit.getY(), doubleRoad.getWidth(this), doubleRoad.getHeight(this));
+            Rectangle rectangle = new Rectangle(rUnit.getX(), rUnit.getY(), doubleRoad.getWidth(drawingBoardPanel), doubleRoad.getHeight(drawingBoardPanel));
             if (rectangle.contains(currentX, currentY)) {
                 return rUnit;
             }
@@ -472,12 +465,11 @@ public class DrawingBoard extends JPanel implements ActionListener {
 
     //Simulation Phase - Displaying roads and other traffic elements
     public void paint(Graphics g) {
-        super.paint(g);
         Graphics2D g2D = (Graphics2D) g;
 
         //Drawing single road
         for (Coordinates coordinate : singleLaneCoordinates) {
-            g2D.drawImage(rUnitImage, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(rUnitImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             BasicStroke bs = new BasicStroke(2);
             g2D.setStroke(bs);
@@ -485,7 +477,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
 
         //Drawing double road
         for (Coordinates coordinate : doubleLaneCoordinates) {
-            g2D.drawImage(rUnitImage, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(rUnitImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             BasicStroke bs = new BasicStroke(2);
             g2D.setStroke(bs);
@@ -493,7 +485,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
 
         //Drawing double changeable road
         for (Coordinates coordinate : doubleLaneChangeableCoordinates) {
-            g2D.drawImage(changeableRUnitImage, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(changeableRUnitImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             BasicStroke bs = new BasicStroke(2);
             g2D.setStroke(bs);
@@ -501,76 +493,76 @@ public class DrawingBoard extends JPanel implements ActionListener {
 
         //Drawing traffic lights
         for (Coordinates coordinate : trafficLightCoordinates.values()) {
-            g2D.drawImage(trafficLightImage, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(trafficLightImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing zebra crossing
         for (Coordinates coordinate : zebraCrossingCoordinates.values()) {
-            g2D.drawImage(zebraCrossingImage, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(zebraCrossingImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing vehicle factories
         for (Coordinates coordinate : vehicleFactoryCoordinates) {
-            g2D.drawImage(vehicleFactoryImage, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(vehicleFactoryImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing blockages
         for (Coordinates coordinate : blockageCoordinates) {
-            g2D.drawImage(blockageImage, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(blockageImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing stop signs
         for (Coordinates coordinate : stopCoordinates) {
-            g2D.drawImage(stopImage, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(stopImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing left signs
         for (Coordinates coordinate : leftCoordinates.keySet()) {
-            g2D.drawImage(leftSignImage, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(leftSignImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing right signs
         for (Coordinates coordinate : rightCoordinates.keySet()) {
-            g2D.drawImage(rightSignImage, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(rightSignImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing straight signs
         for (Coordinates coordinate : straightCoordinates.keySet()) {
-            g2D.drawImage(straightSignImage, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(straightSignImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing speed20 signs
         for (Coordinates coordinate : speed20Coordinates) {
-            g2D.drawImage(speed20Image, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(speed20Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing speed30 signs
         for (Coordinates coordinate : speed30Coordinates) {
-            g2D.drawImage(speed30Image, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(speed30Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing speed50 signs
         for (Coordinates coordinate : speed50Coordinates) {
-            g2D.drawImage(speed50Image, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(speed50Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing speed60 signs
         for (Coordinates coordinate : speed60Coordinates) {
-            g2D.drawImage(speed60Image, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(speed60Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
         //Drawing speed70 signs
         for (Coordinates coordinate : speed70Coordinates) {
-            g2D.drawImage(speed70Image, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(speed70Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing speed90 signs
         for (Coordinates coordinate : speed90Coordinates) {
-            g2D.drawImage(speed90Image, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(speed90Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing welcome signs
         for (Coordinates coordinate : welcomeCoordinates.keySet()) {
-            g2D.drawImage(welcomeImage, coordinate.getX(), coordinate.getY(), this);
+            g2D.drawImage(welcomeImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Move Vehicles on RUnits on UI
@@ -595,7 +587,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
                 AffineTransform affineTransform = g2d.getTransform();
                 g2d.rotate(Math.toRadians(angle),objectInSpace.getX(), objectInSpace.getY());
                 //g2d.rotate(angle,objectInSpace.getX(), objectInSpace.getY());
-                g2d.drawImage(vehicleImage, objectInSpace.getX(), objectInSpace.getY(), this);
+                g2d.drawImage(vehicleImage, objectInSpace.getX(), objectInSpace.getY(), drawingBoardPanel);
                 g2d.setTransform(affineTransform);
             }
         }
@@ -606,15 +598,15 @@ public class DrawingBoard extends JPanel implements ActionListener {
                 TrafficLight trafficLight = roadNetworkManager.getRoadNetwork().getTrafficLightHashtable().get(trafficLightId);
                 if (trafficLight.getTrafficLightCurrentColor()) {
                     if (trafficLightCoordinates.get(trafficLightId) != null) {
-                        g2d.drawImage(greenLightImage, trafficLightCoordinates.get(trafficLightId).getX(), trafficLightCoordinates.get(trafficLightId).getY(), this);
+                        g2d.drawImage(greenLightImage, trafficLightCoordinates.get(trafficLightId).getX(), trafficLightCoordinates.get(trafficLightId).getY(), drawingBoardPanel);
                     } else {
-                        g2d.drawImage(greenLightImage, zebraCrossingCoordinates.get(trafficLightId).getX(), zebraCrossingCoordinates.get(trafficLightId).getY(), this);
+                        g2d.drawImage(greenLightImage, zebraCrossingCoordinates.get(trafficLightId).getX(), zebraCrossingCoordinates.get(trafficLightId).getY(), drawingBoardPanel);
                     }
                 } else {
                     if (trafficLightCoordinates.get(trafficLightId) != null) {
-                        g2d.drawImage(redLightImage, trafficLightCoordinates.get(trafficLightId).getX(), trafficLightCoordinates.get(trafficLightId).getY(), this);
+                        g2d.drawImage(redLightImage, trafficLightCoordinates.get(trafficLightId).getX(), trafficLightCoordinates.get(trafficLightId).getY(), drawingBoardPanel);
                     } else {
-                        g2d.drawImage(redLightImage, zebraCrossingCoordinates.get(trafficLightId).getX(), zebraCrossingCoordinates.get(trafficLightId).getY(), this);
+                        g2d.drawImage(redLightImage, zebraCrossingCoordinates.get(trafficLightId).getX(), zebraCrossingCoordinates.get(trafficLightId).getY(), drawingBoardPanel);
                     }
                 }
             }
@@ -627,7 +619,7 @@ public class DrawingBoard extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         simEngine.performAction();
-        repaint();
+        drawingBoardPanel.repaint();
     }
 
     public void setCurrentX(int currentX) {
@@ -637,34 +629,31 @@ public class DrawingBoard extends JPanel implements ActionListener {
     public void setCurrentY(int currentY) {
         this.currentY = currentY;
     }
-
-
-    @Override
+    
     public int getX() {
         return currentX;
     }
-
-    @Override
+    
     public int getY() {
         return currentY;
     }
 
     public void addSingleLaneMouseDragMotionListener() {
-        addMouseMotionListener(new MouseDragMotionListener(this));
-        addMouseListener(new SingleLaneMotionListener(this));
+        drawingBoardPanel.addMouseMotionListener(new MouseDragMotionListener(this));
+        drawingBoardPanel.addMouseListener(new SingleLaneMotionListener(this));
     }
 
     public void addDoubleLaneMouseDragMotionListener() {
-        addMouseMotionListener(new MouseDragMotionListener(this));
-        addMouseListener(new DoubleLaneMotionListener(this));
+        drawingBoardPanel.addMouseMotionListener(new MouseDragMotionListener(this));
+        drawingBoardPanel.addMouseListener(new DoubleLaneMotionListener(this));
     }
 
     public void addZebraCrossingButtonListener() {
-        addMouseListener(new ZebraCrossingButtonListener(this));
+        drawingBoardPanel.addMouseListener(new ZebraCrossingButtonListener(this));
     }
 
     public void addTrafficLightButtonListener() {
-        addMouseListener(new TrafficLightButtonListener(this));
+        drawingBoardPanel.addMouseListener(new TrafficLightButtonListener(this));
     }
 
     public ConfigButtonSelected getConfigButtonSelected() {
@@ -684,56 +673,56 @@ public class DrawingBoard extends JPanel implements ActionListener {
     }
 
     public void addBlockageButtonActionListener() {
-        addMouseListener(new BlockageButtonListener(this));
+        drawingBoardPanel.addMouseListener(new BlockageButtonListener(this));
     }
 
     public void addVehicleFactoryButtonActionListener() {
-        addMouseListener(new VehicleFactoryButtonListener(this));
+        drawingBoardPanel.addMouseListener(new VehicleFactoryButtonListener(this));
     }
 
     public void addStopButtonActionListener() {
-        addMouseListener(new StopButtonListener(this));
+        drawingBoardPanel.addMouseListener(new StopButtonListener(this));
     }
 
     public void addLeftButtonActionListener() {
-        addMouseListener(new LeftButtonListener(this));
+        drawingBoardPanel.addMouseListener(new LeftButtonListener(this));
     }
 
     public void addRightButtonActionListener() {
-        addMouseListener(new RightButtonListener(this));
+        drawingBoardPanel.addMouseListener(new RightButtonListener(this));
     }
 
     public void addStraightButtonActionListener() {
-        addMouseListener(new StraightButtonListener(this));
+        drawingBoardPanel.addMouseListener(new StraightButtonListener(this));
     }
 
     public void addSpeed20ButtonActionListener() {
-        addMouseListener(new Speed20ButtonListener(this));
+        drawingBoardPanel.addMouseListener(new Speed20ButtonListener(this));
     }
 
     public void addSpeed30ButtonActionListener() {
-        addMouseListener(new Speed30ButtonListener(this));
+        drawingBoardPanel.addMouseListener(new Speed30ButtonListener(this));
     }
 
     public void addSpeed50ButtonActionListener() {
-        addMouseListener(new Speed50ButtonListener(this));
+        drawingBoardPanel.addMouseListener(new Speed50ButtonListener(this));
     }
 
     public void addSpeed60ButtonActionListener() {
-        addMouseListener(new Speed60ButtonListener(this));
+        drawingBoardPanel.addMouseListener(new Speed60ButtonListener(this));
     }
 
     public void addSpeed70ButtonActionListener() {
-        addMouseListener(new Speed70ButtonListener(this));
+        drawingBoardPanel.addMouseListener(new Speed70ButtonListener(this));
     }
 
 
     public void addSpeed90ButtonActionListener() {
-        addMouseListener(new Speed90ButtonListener(this));
+        drawingBoardPanel.addMouseListener(new Speed90ButtonListener(this));
     }
 
     public void addWelcomeDestinationButtonActionListener() {
-        addMouseListener(new WelcomeDestinationButtonListener(this));
+        drawingBoardPanel.addMouseListener(new WelcomeDestinationButtonListener(this));
     }
 
     private static int getTrafficLightIdIndex() {
@@ -781,8 +770,8 @@ public class DrawingBoard extends JPanel implements ActionListener {
         speed70Coordinates.clear();
         speed90Coordinates.clear();
         vehicleFactoryCoordinates.clear();
-        removeAll();
-        updateUI();
+        drawingBoardPanel.removeAll();
+        drawingBoardPanel.updateUI();
     }
 
     public boolean isSimulationStarted() {
@@ -799,5 +788,13 @@ public class DrawingBoard extends JPanel implements ActionListener {
 
     public void setDraw(boolean isDraw) {
         this.isDraw = isDraw;
+    }
+
+    public JPanel getDrawingBoardPanel() {
+        return drawingBoardPanel;
+    }
+
+    public void setDrawingBoardPanel(JPanel drawingBoardPanel) {
+        this.drawingBoardPanel = drawingBoardPanel;
     }
 }

@@ -21,7 +21,7 @@ public class MouseDragMotionListener extends MouseMotionAdapter {
             //Sets the current coordinates for paint function
             drawingBoard.setCurrentX(e.getX());
             drawingBoard.setCurrentY(e.getY());
-            drawingBoard.repaint();
+            drawingBoard.getDrawingBoardPanel().repaint();
         }
     }
 

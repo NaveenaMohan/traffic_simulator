@@ -329,7 +329,7 @@ public class  Traffic_Simulator {
         reportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dcp.reportInformation();//TODO : Reports in table format
+                dcp.reportInformation();
 
             }
         });
@@ -625,7 +625,25 @@ public class  Traffic_Simulator {
 
         //Drawing Board Panel
         final DrawingBoard drawingBoard = new DrawingBoard(model, roadNetworkManager, simEngine,currentSecondValue);
-        trafficSimulatorFrame.getContentPane().add(drawingBoard);
+        final JPanel drawingBoardPanel = new JPanel() {
+
+            @Override
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                drawingBoard.paintComponent(g);
+            }
+
+            @Override
+            public void paint(Graphics g) {
+                super.paint(g);
+                drawingBoard.paint(g);
+            }
+        };
+        drawingBoard.setDrawingBoardPanel(drawingBoardPanel);
+        drawingBoardPanel.setBackground(Color.white);
+        drawingBoardPanel.setBounds(286, 79, 1021, 348);
+        drawingBoardPanel.setLayout(null);
+        trafficSimulatorFrame.getContentPane().add(drawingBoardPanel);
         drawingBoard.initialize();//Initializing the drawing board
 
         //Adding action listeners for all configuration buttons
@@ -831,9 +849,9 @@ public class  Traffic_Simulator {
                         image = ImageIO.read(file);
                         ImageIcon icon = new ImageIcon(image);
                         JLabel picLabel = new JLabel(icon);
-                        drawingBoard.add(picLabel);
-                        drawingBoard.revalidate();
-                        drawingBoard.repaint();
+                        drawingBoardPanel.add(picLabel);
+                        drawingBoardPanel.revalidate();
+                        drawingBoardPanel.repaint();
 
                         int w = image.getWidth(null);
                         int h = image.getHeight(null);
@@ -857,8 +875,8 @@ public class  Traffic_Simulator {
             @Override
             public void actionPerformed(ActionEvent e) {
                 drawingBoard.setSimulationPlaying(false);
-                simEngine.CleanAll();
-                drawingBoard.updateUI();
+                simEngine.CleanVehicles();
+                drawingBoardPanel.updateUI();
             }
         });
 
@@ -876,6 +894,7 @@ public class  Traffic_Simulator {
             @Override
             public void actionPerformed(ActionEvent e) {
                 drawingBoard.setSimulationPlaying(false);
+                simEngine.CleanVehicles();
                 simEngine.CleanAll();
                 drawingBoard.clean();
             }
