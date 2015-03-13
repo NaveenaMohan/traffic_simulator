@@ -481,7 +481,7 @@ public class  Traffic_Simulator {
         vehicleProductionRateSlider.setMaximum(20);
         vehicleProductionRateSlider.setMajorTickSpacing(20);
         vehicleProductionRateSlider.setValue((int) (globalConfigManager.getVehicleDensity().getCreationRatePerSecond() * 10.0));
-                vehicleProductionRateSlider.setBounds(148, 47, 155, 133);
+                vehicleProductionRateSlider.setBounds(165, 47, 155, 133);
         trafficPatternPanel.add(vehicleProductionRateSlider);
         vehicleProductionRateSlider.addChangeListener(new ChangeListener() {
             @Override
@@ -493,7 +493,7 @@ public class  Traffic_Simulator {
         JLabel vehicleCreationRate = new JLabel("Rate");
         vehicleCreationRate.setForeground(SystemColor.controlHighlight);
         vehicleCreationRate.setFont(new Font("Times New Roman", Font.BOLD, 14));
-        vehicleCreationRate.setBounds(207, 130, 36, 18);
+        vehicleCreationRate.setBounds(225, 128, 36, 18);
         trafficPatternPanel.add(vehicleCreationRate);
 
         JLabel lblDriverBehavior = new JLabel("Driver Behavior");
@@ -543,7 +543,7 @@ public class  Traffic_Simulator {
         trafficPatternPanel.add(lblDestinationDensity);
 
 
-        final JTextField locationTxtField = new JTextField("Location");
+        final JTextField locationTxtField = new JTextField(globalConfigManager.getRoute().getDestination());
         locationTxtField.setForeground(Color.LIGHT_GRAY);
         locationTxtField.setFont(new Font("Copperplate Gothic Bold", Font.ITALIC, 13));
         trafficPatternPanel.add(locationTxtField);
@@ -629,6 +629,7 @@ public class  Traffic_Simulator {
         single_lane.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(true);
                 drawingBoard.setPreviousRUnit(null);
                 drawingBoard.setPreviousChangeableRunit(null);
                 drawingBoard.addSingleLaneMouseDragMotionListener();
@@ -638,6 +639,7 @@ public class  Traffic_Simulator {
         double_lane.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(true);
                 drawingBoard.setPreviousRUnit(null);
                 drawingBoard.setPreviousChangeableRunit(null);
                 drawingBoard.addDoubleLaneMouseDragMotionListener();
@@ -647,6 +649,7 @@ public class  Traffic_Simulator {
         traffic_light.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(false);
                 drawingBoard.addTrafficLightButtonListener();
             }
         });
@@ -654,6 +657,7 @@ public class  Traffic_Simulator {
         zebra_crossing.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(false);
                 drawingBoard.addZebraCrossingButtonListener();
             }
         });
@@ -661,6 +665,7 @@ public class  Traffic_Simulator {
         road_blockages.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(false);
                 drawingBoard.addBlockageButtonActionListener();
             }
         });
@@ -668,6 +673,7 @@ public class  Traffic_Simulator {
         vehicle_factory.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(false);
                 drawingBoard.addVehicleFactoryButtonActionListener();
             }
         });
@@ -675,6 +681,7 @@ public class  Traffic_Simulator {
         stop_sign.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(false);
                 drawingBoard.addStopButtonActionListener();
             }
         });
@@ -682,6 +689,7 @@ public class  Traffic_Simulator {
         left_sign.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(false);
                 drawingBoard.addLeftButtonActionListener();
             }
         });
@@ -689,6 +697,7 @@ public class  Traffic_Simulator {
         right_sign.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(false);
                 drawingBoard.addRightButtonActionListener();
             }
         });
@@ -696,6 +705,7 @@ public class  Traffic_Simulator {
         up_sign.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(false);
                 drawingBoard.addStraightButtonActionListener();
             }
         });
@@ -703,6 +713,7 @@ public class  Traffic_Simulator {
         speed_20.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(false);
                 drawingBoard.addSpeed20ButtonActionListener();
             }
         });
@@ -711,6 +722,7 @@ public class  Traffic_Simulator {
         speed_30.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(false);
                 drawingBoard.addSpeed30ButtonActionListener();
             }
         });
@@ -719,6 +731,7 @@ public class  Traffic_Simulator {
         speed_50.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(false);
                 drawingBoard.addSpeed50ButtonActionListener();
             }
         });
@@ -726,6 +739,7 @@ public class  Traffic_Simulator {
         speed_60.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(false);
                 drawingBoard.addSpeed60ButtonActionListener();
             }
         });
@@ -734,6 +748,7 @@ public class  Traffic_Simulator {
         speed_70.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(false);
                 drawingBoard.addSpeed70ButtonActionListener();
             }
         });
@@ -741,6 +756,7 @@ public class  Traffic_Simulator {
         welcome_board.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(false);
                 drawingBoard.addWelcomeDestinationButtonActionListener();
             }
         });
@@ -748,6 +764,7 @@ public class  Traffic_Simulator {
         speed_90.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(false);
                 drawingBoard.addSpeed90ButtonActionListener();
             }
         });
