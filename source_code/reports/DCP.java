@@ -1,13 +1,13 @@
 package reports;
 
 import dataAndStructures.DataAndStructures;
-import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
 import managers.vehicle.IVehicleManager;
 
 import javax.swing.*;
-import javax.swing.plaf.TextUI;
 import javax.swing.text.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.awt.*;
@@ -31,12 +31,12 @@ public class DCP extends JPanel{
     StyleContext context2 = new StyleContext();
     StyleContext context3 = new StyleContext();
     Style style, style2, style3;
-    boolean buttonPressed=false;
+    public boolean firstTimeOpen =true, isFrameClosed =false;
     int refresh=0;
-
+    JFrame frame;
+    JTextPane textPane;
 
     public DCP(DataAndStructures dataAndStructures) {
-       // super(new GridBagLayout());
         this.dataAndStructures=dataAndStructures;
 
     }
@@ -47,85 +47,118 @@ public class DCP extends JPanel{
     }
 
 
-    private void createAndShowGUI() {
+   private void createAndShowGUI() {
+       if (!firstTimeOpen)
+           frame.dispose();
+       avgVelocityTotalVehicles = 0;
+       slipperiness = 0;
+       visibility = 0;
+       percentageMadeDest = 0;
+       avgTimeToDestination = 0;
+       cars = 0;
+       emergencies = 0;
+       heavyLoads = 0;
+       rate = 0;
+       refresh = 0;
 
-        avgVelocityTotalVehicles=0; slipperiness=0; visibility=0;
-        percentageMadeDest=0; avgTimeToDestination=0; cars=0; emergencies=0;
-        heavyLoads=0; rate=0;
-        JFrame frame = new JFrame("Traffic Report");
+       frame = new JFrame("Traffic Report");
+       context = new StyleContext();
+       context2 = new StyleContext();
+       document = new DefaultStyledDocument(context3);
 
-        context = new StyleContext();
-        context2 = new StyleContext();
-        document = new DefaultStyledDocument(context3);
+       style = context.getStyle(StyleContext.DEFAULT_STYLE);
+       StyleConstants.setAlignment(style, StyleConstants.ALIGN_CENTER);
+       StyleConstants.setFontSize(style, 25);
+       StyleConstants.setSpaceAbove(style, 4);
+       StyleConstants.setSpaceBelow(style, 4);
+       StyleConstants.setBold(style, true);
+       StyleConstants.setUnderline(style, true);
 
+       style2 = context2.getStyle(StyleContext.DEFAULT_STYLE);
+       StyleConstants.setAlignment(style2, StyleConstants.ALIGN_LEFT);
+       StyleConstants.setFontSize(style2, 20);
+       StyleConstants.setSpaceAbove(style2, 4);
+       StyleConstants.setSpaceBelow(style2, 4);
+       StyleConstants.setLeftIndent(style2, (float) 2.5);
+       StyleConstants.setBold(style2, true);
 
-        style = context.getStyle(StyleContext.DEFAULT_STYLE);
-        StyleConstants.setAlignment(style, StyleConstants.ALIGN_CENTER);
-        StyleConstants.setFontSize(style, 25);
-        StyleConstants.setSpaceAbove(style, 4);
-        StyleConstants.setSpaceBelow(style, 4);
-        StyleConstants.setBold(style, true);
-        StyleConstants.setUnderline(style, true);
+       style3 = context3.getStyle(StyleContext.DEFAULT_STYLE);
+       StyleConstants.setAlignment(style3, StyleConstants.ALIGN_LEFT);
+       StyleConstants.setFontSize(style3, 20);
+       StyleConstants.setSpaceAbove(style3, 4);
+       StyleConstants.setSpaceBelow(style3, 4);
+       StyleConstants.setLeftIndent(style3, (float) 2.5);
 
-        style2 = context2.getStyle(StyleContext.DEFAULT_STYLE);
-        StyleConstants.setAlignment(style2, StyleConstants.ALIGN_LEFT);
-        StyleConstants.setFontSize(style2, 20);
-        StyleConstants.setSpaceAbove(style2, 4);
-        StyleConstants.setSpaceBelow(style2, 4);
-        StyleConstants.setLeftIndent(style2, (float) 2.5);
-        StyleConstants.setBold(style2, true);
+       try {
+           document.insertString(document.getLength(), "Vehicles Information: " + newline, style);
+           getVehiclesDensity(); // reports total of different types of vehicles
+           document.insertString(document.getLength(), "Climatic Conditions: " + newline, style);
+           getHowWasTheDay(); //reports the climatic conditions
+           document.insertString(document.getLength(), "Traffic Information: " + newline, style);
+           getAvgVelocityTotalVehicles(); //reports average velocity of total of cars
+           congestionRate();
+           document.insertString(document.getLength(), "Destination: " + newline, style);
+           vehiclesMadeDestination(); // reports percentage of vehicles that made it to their destination along with the avg time it took them to get there
+       } catch (BadLocationException badLocationException) {
+           System.err.println("Error");
+       }
+       textPane = new JTextPane(document);
+       textPane.setEditable(false);
+       JScrollPane scrollPane = new JScrollPane(textPane);
+       frame.add(scrollPane, BorderLayout.CENTER);
+       frame.setSize(800, 950);
+       frame.setVisible(true);
+       firstTimeOpen = false;
+       frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+       frame.addWindowListener(new WindowListener() {
+           @Override
+           public void windowOpened(WindowEvent e) {
+               isFrameClosed =false;
+           }
 
-        style3 = context3.getStyle(StyleContext.DEFAULT_STYLE);
-        StyleConstants.setAlignment(style3, StyleConstants.ALIGN_LEFT);
-        StyleConstants.setFontSize(style3, 20);
-        StyleConstants.setSpaceAbove(style3, 4);
-        StyleConstants.setSpaceBelow(style3, 4);
-        StyleConstants.setLeftIndent(style3, (float) 2.5);
+           @Override
+           public void windowClosing(WindowEvent e) {
 
-//        buttonPressed=true;
-//       while(dataAndStructures.getGlobalConfigManager().getCurrentSecond()!=0)
-//        {
-//            refresh++;
-//            if(refresh==100 || buttonPressed==true){
-               try {
-                    document.insertString(document.getLength(), "Vehicles Information: " + newline, style);
-                    getVehiclesDensity(); // reports total of different types of vehicles
-                    document.insertString(document.getLength(), "Climatic Conditions: " + newline, style);
-                    getHowWasTheDay(); //reports the climatic conditions
-                    document.insertString(document.getLength(), "Traffic Information: " + newline, style);
-                    getAvgVelocityTotalVehicles(); //reports average velocity of total of cars
-                    congestionRate();
-                    document.insertString(document.getLength(), "Destination: " + newline, style);
-                    vehiclesMadeDestination(); // reports percentage of vehicles that made it to their destination along with the avg time it took them to get there
-                } catch (BadLocationException badLocationException) {
-                    System.err.println("Error");
-                }
-//                refresh=0;
-//                buttonPressed=false;
-//            }
-//        }
+           }
 
-        JTextPane textPane = new JTextPane(document);
-        textPane.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(textPane);
-        frame.add(scrollPane, BorderLayout.CENTER);
+           @Override
+           public void windowClosed(WindowEvent e) {
+                isFrameClosed =true;
+           }
 
-        frame.setSize(800, 900);
-        frame.setVisible(true);
-    }
+           @Override
+           public void windowIconified(WindowEvent e) {
+
+           }
+
+           @Override
+           public void windowDeiconified(WindowEvent e) {
+
+           }
+
+           @Override
+           public void windowActivated(WindowEvent e) {
+
+           }
+
+           @Override
+           public void windowDeactivated(WindowEvent e) {
+
+           }
+       });
+   }
+
     public void reportInformation(){ //to be called by the UI when Report button is clicked
         if(dataAndStructures.getGlobalConfigManager().getCurrentSecond()!=0) {
-
             javax.swing.SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-
                     createAndShowGUI();
                 }
             });
         }
     }
 
-    private void getVehiclesDensity() {
+    public void getVehiclesDensity() {
 
         if (dataAndStructures.getVehicles()!=null) {
             if (dataAndStructures.getVehicles().size() != 0) {
@@ -165,8 +198,8 @@ public class DCP extends JPanel{
     }
 
     private void vehiclesMadeDestination() {
-        dataAndStructures.getGlobalConfigManager().getRoute().setDestination("London");
-        dataAndStructures.getGlobalConfigManager().getRoute().setTrafficPercent(1);
+       // dataAndStructures.getGlobalConfigManager().getRoute().setDestination("London");
+       // dataAndStructures.getGlobalConfigManager().getRoute().setTrafficPercent(1);
         if(dataAndStructures.getGlobalConfigManager().getRoute().getDestination()!="") {
             for (IVehicleManager vehicle : dataAndStructures.getVehicles()) {
 
@@ -209,7 +242,7 @@ public class DCP extends JPanel{
             document.insertString(document.getLength(), "It was a rainy day" + newline, style2);
         if(slipperiness==0.9 & visibility==0.7)
             document.insertString(document.getLength(), "It was a snowy day" + newline, style2);
-        if (slipperiness==0.2 & visibility==0.2)
+        if (slipperiness==0.0 & visibility==0.0)
             document.insertString(document.getLength(), "It was a sunny day" + newline, style2);
         if (slipperiness>=0 & slipperiness<=0.4)
             document.insertString(document.getLength(), "Roads were not slippery" + newline, style3);
@@ -254,9 +287,9 @@ public class DCP extends JPanel{
         rate=round(rate/dataAndStructures.getVehicles().size(),2);
         try {
             document.insertString(document.getLength(), "Traffic Intensity: ", style2);
-            if (rate>=0 && rate<=10)
+            if (rate>=0 && rate<11)
                 document.insertString(document.getLength(), "Uncongested, No Traffic", style3);
-            if (rate>=11 && rate<=19)
+            if (rate>=11 && rate<20)
                 document.insertString(document.getLength(), "Roads a bit congested", style3);
             if (rate>=20)
                 document.insertString(document.getLength(), "Traffic jam", style3);

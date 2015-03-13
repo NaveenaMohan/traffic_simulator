@@ -25,13 +25,21 @@ public class SimEngine {
     private boolean pause;
     private DCP dcp;
 
-    int test = 0;
+    int prevSec = -1;
     private int maxCars =10000 ;
 
     public SimEngine(DataAndStructures dataAndStructures, DCP dcp) {
         this.dataAndStructures = dataAndStructures;
         this.dcp = dcp;
     }
+
+    public SimEngine(DataAndStructures dataAndStructures, DCP dcp, int maxCars) {
+        this.dataAndStructures = dataAndStructures;
+        this.dcp=dcp;
+        this.maxCars=maxCars;
+    }
+
+
 
     public void Play(ActionListener actionListener) {
 
@@ -94,6 +102,12 @@ public class SimEngine {
 
             //Report Update
             dcp.updateReportingInfo(dataAndStructures);
+            if (!dcp.firstTimeOpen && !dcp.isFrameClosed)//if report window is still open then it refreshes its data
+                if(((int) dataAndStructures.getGlobalConfigManager().getCurrentSecond())%30==0 &&
+                        prevSec!= ((int) dataAndStructures.getGlobalConfigManager().getCurrentSecond())%30) {
+                    dcp.reportInformation();
+                }
+            prevSec = (int) dataAndStructures.getGlobalConfigManager().getCurrentSecond()%30;
 
             //create new vehicles
             if (dataAndStructures.getVehicles().size() < maxCars & 1==1) {

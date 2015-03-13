@@ -317,7 +317,7 @@ public class VehicleMotor {
 
         double acceleration;
 
-        //if the object is very close drop down your acceleration to -100 in order to come to a full stop
+        //if the object is very isFrameClosed drop down your acceleration to -100 in order to come to a full stop
 
         if (requiredVelocity < currentVelocity & distance < safeStopDistance)
             acceleration = maxDeceleration;
