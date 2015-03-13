@@ -13,19 +13,13 @@ public class SpaceManager implements ISpaceManager {
         space.addObject(objectInSpace);
     }
 
-    @Override
-    public void removeObject(ObjectInSpace object) {
-
-    }
-
-    @Override
-    public boolean checkFit(ObjectInSpace objectToCheck) {
-        return checkFit(objectToCheck.getId(), objectToCheck.getX(), objectToCheck.getY(), objectToCheck.getWidth(), objectToCheck.getLength());
-    }
 
     @Override
     public boolean checkFit(int id, int x, int y, int width, int length) {
-        //System.out.println("checkFit id: " + id + " x: "+ x + " y: " + y + " width: " + width + " length: " + length);
+        /*
+        This function returns true if object does not overlap with other objects in space
+         */
+
         ObjectInSpace objectToCheck = new ObjectInSpace(id, x, y, 0, width, length, 0, null, null);
         //go through each object in space and check if you intersect
         for (ObjectInSpace obj : space.getObjects()) {
@@ -40,6 +34,10 @@ public class SpaceManager implements ISpaceManager {
 
     @Override
     public ObjectInSpace getObjectAt(int myID, int x, int y) {
+        /*
+        Returns an object with center at x and y that is different from the given ID
+         */
+
         for (ObjectInSpace obj : space.getObjects()) {
             if (obj.getId() != myID)
                 if (obj.getX() == x & obj.getY() == y & obj.isVisible())

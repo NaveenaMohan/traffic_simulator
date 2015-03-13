@@ -60,14 +60,6 @@ public class Vehicle implements IVehicleManager {
         return vehicleMotor.getObjectInSpace().getDirection();
     }
 
-    public Driver getDriver() {
-        return driver;
-    }
-
-    public void setDriver(Driver driver) {
-        this.driver = driver;
-    }
-
     public String getDestination() {
         return vehicleMotor.getDestination();
     }
@@ -112,10 +104,6 @@ public class Vehicle implements IVehicleManager {
 
        previousTime= time;
 
-    }
-
-    public VehicleType getVehicleType() {
-        return vehicleType;
     }
 
     public String getCurrentStrategy(){return vehicleMotor.currentStrategy;}

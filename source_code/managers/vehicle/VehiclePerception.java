@@ -17,15 +17,15 @@ public class VehiclePerception {
                     String myDestination, double currentTime) {
         IRUnitManager temp = rUnit;
 
-        if (temp.getNextRUnitList().size() > 0)
-            temp = temp.getNextRUnitList().get(0);
+//        if (temp.getNextRUnitList().size() > 0)
+//            temp = temp.getNextRUnitList().get(0);
 
         int rUnitsVision = (int) (maxVision / dataAndStructures.getGlobalConfigManager().getMetresPerRUnit());
 
         for (int i = 0; i < rUnitsVision; i++) {
 
             //distance from the object
-            double distance = Math.max(0, (i + 1) * dataAndStructures.getGlobalConfigManager().getMetresPerRUnit());
+            double distance = Math.max(0, (i) * dataAndStructures.getGlobalConfigManager().getMetresPerRUnit());
 
 
 
@@ -91,7 +91,7 @@ public class VehiclePerception {
 
             //go to next rUnit
             if (temp.getNextRUnitList().size() > 0)
-                temp = VehicleMotor.chooseNext(temp, vehicleState);
+                temp = temp.getNextRUnitList().get(0);//VehicleMotor.chooseNext(temp, vehicleState);
             else
                 break;
 

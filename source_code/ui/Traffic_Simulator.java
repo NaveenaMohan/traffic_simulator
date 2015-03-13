@@ -31,10 +31,11 @@ public class  Traffic_Simulator {
     private JFrame trafficSimulatorFrame;
     private RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
     private VehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
+    ClimaticCondition climaticCondition = new ClimaticCondition();
     private GlobalConfigManager globalConfigManager = new GlobalConfigManager(
             100,//ticks per second
             0.5,//metres per RUnit
-            new ClimaticCondition(),
+            climaticCondition,
             new DriverBehavior(),
             new VehicleDensity(),
             new Route()
@@ -348,7 +349,7 @@ public class  Traffic_Simulator {
         lblWeather.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 15));
         trafficPatternPanel.add(lblWeather);
 
-        final ClimaticCondition climaticCondition = new ClimaticCondition();
+
 
         JLabel lblVisibility = new JLabel("VISIBILITY");
         lblVisibility.setBounds(248, 15, 85, 25);

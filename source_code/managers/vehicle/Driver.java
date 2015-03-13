@@ -1,9 +1,6 @@
 package managers.vehicle;
 
-import managers.globalconfig.DriverBehavior;
 import managers.globalconfig.DriverBehaviorType;
-import managers.runit.SpeedLimitSign;
-import managers.runit.TrafficSign;
 
 /**
  * Created by naveena on 09/02/15.
@@ -58,37 +55,5 @@ public class Driver {
         else
             return 0;
 
-    }
-
-    public double getSpeedOffset() {
-        return speedOffset;
-    }
-
-    public void setSpeedOffset(double speedOffset) {
-        this.speedOffset = speedOffset;
-    }
-
-    public double getVisionOffset() {
-        return visionOffset;
-    }
-
-    public void setVisionOffset(double visionOffset) {
-        this.visionOffset = visionOffset;
-    }
-
-    public double getReactionTimeOffset() {
-        return reactionTimeOffset;
-    }
-
-    public void setReactionTimeOffset(double reactionTimeOffset) {
-        this.reactionTimeOffset = reactionTimeOffset;
-    }
-
-    public DriverBehaviorType getDriverBehaviorType() {
-        return driverBehaviorType;
-    }
-
-    public void setDriverBehaviorType(DriverBehaviorType driverBehaviorType) {
-        this.driverBehaviorType = driverBehaviorType;
     }
 }
