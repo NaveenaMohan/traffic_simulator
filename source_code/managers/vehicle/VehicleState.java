@@ -79,6 +79,20 @@ public class VehicleState {
         return null;
     }
 
+    public VehicleMemoryObject getNextRoadDecisionPoint(double metres)
+    {
+        for (int i = 0; i < objectsAhead.size(); i++) {
+            if (objectsAhead.get(i).getDistance() <= metres) {
+                if(objectsAhead.get(i).getObject() instanceof RoadDecisionPoint)
+                    return objectsAhead.get(i);
+            }
+            else
+                break;
+        }
+
+        return null;
+    }
+
     public VehicleMemoryObject getNextSpeedAffectingRoadElement(double metres, boolean inLeft)
     {
         for (int i = 0; i < objectsAhead.size(); i++) {

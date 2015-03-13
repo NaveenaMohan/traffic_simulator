@@ -1,7 +1,6 @@
 package managers.vehicle;
 
 import managers.runit.IRUnitManager;
-import managers.runit.RUnit;
 
 /**
  * Created by Fabians on 18/02/2015.
@@ -19,16 +18,8 @@ public class VehicleMemoryObject<T> {
         return isInLeft;
     }
 
-    public void setIsInLeft(boolean isInLeft) {
-        this.isInLeft = isInLeft;
-    }
-
     public boolean isPassable() {
         return passable;
-    }
-
-    public void setPassable(boolean passable) {
-        this.passable = passable;
     }
 
     public double getVelocity() {
