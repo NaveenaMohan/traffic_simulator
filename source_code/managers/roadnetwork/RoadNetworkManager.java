@@ -130,9 +130,7 @@ public class RoadNetworkManager implements IRoadNetworkManager {
             if (obj.getValue()!=null) {
                 obj.getValue().setTrafficLightCurrentColor(currentTL.getCycle().get(t));//depending on the current second
                 //it sets the corresponding color(true or false) from the cycle
-
             }
-
         }
     }
 
