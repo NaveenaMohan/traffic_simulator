@@ -15,10 +15,6 @@ public class VehicleDensity {
     }
 
     public void setCarDensity(double carDensity) {
-
-//        if(carDensity+heavyVehicleDensity+emergencyVehicleDensity==1){
-//            this.carDensity = carDensity;
-//        }else throw new IllegalArgumentException("Density of cars+heavies+emergencies not matching total of vehicles");
         this.carDensity = carDensity;
     }
 
@@ -27,9 +23,6 @@ public class VehicleDensity {
     }
 
     public void setHeavyVehicleDensity(double heavyVehicleDensity) {
-//        if(carDensity+heavyVehicleDensity+emergencyVehicleDensity==1){
-//            this.heavyVehicleDensity = heavyVehicleDensity;
-//        }else throw new IllegalArgumentException("Density of cars+heavies+emergencies not matching total of vehicles");
         this.heavyVehicleDensity = heavyVehicleDensity;
     }
 
@@ -38,9 +31,6 @@ public class VehicleDensity {
     }
 
     public void setEmergencyVehicleDensity(double emergencyVehicleDensity) {
-//        if(carDensity+heavyVehicleDensity+emergencyVehicleDensity==1){
-//            this.emergencyVehicleDensity = emergencyVehicleDensity;
-//        }else throw new IllegalArgumentException("Density of cars+heavies+emergencies not matching total of vehicles");
         this.emergencyVehicleDensity = emergencyVehicleDensity;
     }
 

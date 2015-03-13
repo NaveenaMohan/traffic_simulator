@@ -1,18 +1,17 @@
 package managers.space;
 
+import common.Common;
+
 /**
  * Created by naveena on 08/02/15.
  */
 public class VehicleDirection {
 
-    private double difX;
-    private double difY;
     private double angle;
 
     public VehicleDirection(int x1, int y1, int x2, int y2) {
-        this.difX=x2-x1;
-        this.difY=y2-y1;
-        angle=(Math.atan2(difY, difX)*180)/Math.PI;
+
+        angle= Common.getAngle(x1,y1,x2,y2);
     }
 
     public double getAngle() {
@@ -20,6 +19,6 @@ public class VehicleDirection {
     }
 
     public double getDifference(double bearing) {
-        return ((((bearing - angle) % 360) + 540) % 360) - 180;
+        return Common.getAngleDifference(angle,bearing);
     }
 }

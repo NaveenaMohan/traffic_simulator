@@ -3,19 +3,20 @@ package tests;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SimEngineTest {
+public class VehicleMotorTest {
 
     @Before
     public void setUp() throws Exception {
 
     }
+
     @Test
-    public void testCleanAll() throws Exception {
+    public void testChooseNext() throws Exception {
 
     }
 
     @Test
-    public void testCleanVehicles() throws Exception {
+    public void testPrepareAction() throws Exception {
 
     }
 
@@ -23,4 +24,6 @@ public class SimEngineTest {
     public void testPerformAction() throws Exception {
 
     }
+
+
 }
