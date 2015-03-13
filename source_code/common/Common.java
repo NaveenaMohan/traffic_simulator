@@ -49,12 +49,17 @@ public class Common {
          */
         return getAngle(rUnit.getX(), rUnit.getY(), getNthNextRUnit(rUnit,5).getX(), getNthNextRUnit(rUnit,5).getY());
     }
-    public static double getRoadBackwardDirection(IRUnitManager rUnit)
+    public static double getRoadBackwardDirection(IRUnitManager rUnit,int displacement)
     {
         /*
         This function gets the angle of the road by getting the angle between the given rUnit and it's prevs ones
          */
-        return getAngle(getNthPrevRUnit(rUnit, 5).getX(), getNthPrevRUnit(rUnit, 5).getY(), rUnit.getX(), rUnit.getY());
+        try{
+            return getAngle(getNthPrevRUnit(rUnit, displacement).getX(), getNthPrevRUnit(rUnit, displacement).getY(), rUnit.getX(), rUnit.getY());
+        }catch (NullPointerException ex){
+            System.out.println("Null pointer exception" + ex);
+        }
+        return 0;
     }
 
     public static Coordinates getNextPointFromTo(Coordinates A, Coordinates B)
