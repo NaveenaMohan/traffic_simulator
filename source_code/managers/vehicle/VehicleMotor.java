@@ -476,7 +476,7 @@ public class VehicleMotor {
 
         //decide whether you are in the left lane
         if (rUnit.getChangeAbleRUnit() != null) {
-            if (Common.getAngleDifference(Common.getRoadBackwardDirection(rUnit),
+            if (Common.getAngleDifference(Common.getRoadBackwardDirection(rUnit,5),
                     Common.getAngle(rUnit.getX(), rUnit.getY(), rUnit.getChangeAbleRUnit().getX(), rUnit.getChangeAbleRUnit().getY())) > 0) {
                 isLeft = false;
             }
@@ -489,7 +489,7 @@ public class VehicleMotor {
         if (!isLeft) {
             for (RUnit choice : rUnit.getNextRUnitList()) {
                 //left is on the positive side
-                if (Common.getAngleDifference(Common.getRoadBackwardDirection(rUnit), Common.getRoadForwardDirection(choice)) > -10)
+                if (Common.getAngleDifference(Common.getRoadBackwardDirection(rUnit,5), Common.getRoadForwardDirection(choice)) > -10)
                     choices.add(choice);
             }
 
@@ -497,11 +497,11 @@ public class VehicleMotor {
         {
             for (RUnit choice : rUnit.getNextRUnitList()) {
                 //left is on the positive side
-                System.out.println(rUnit.getId() + "-" + Common.getRoadBackwardDirection(rUnit) + ", " + choice.getId() + "-" + Common.getRoadForwardDirection(choice)
-                        + " = " + Common.getAngleDifference(Common.getRoadBackwardDirection(rUnit), Common.getRoadForwardDirection(choice)) +
-                        " " + (Common.getAngleDifference(Common.getRoadBackwardDirection(rUnit), Common.getRoadForwardDirection(choice)) < 10));
+                System.out.println(rUnit.getId() + "-" + Common.getRoadBackwardDirection(rUnit,5) + ", " + choice.getId() + "-" + Common.getRoadForwardDirection(choice)
+                        + " = " + Common.getAngleDifference(Common.getRoadBackwardDirection(rUnit,5), Common.getRoadForwardDirection(choice)) +
+                        " " + (Common.getAngleDifference(Common.getRoadBackwardDirection(rUnit,5), Common.getRoadForwardDirection(choice)) < 10));
 
-                if (Common.getAngleDifference(Common.getRoadBackwardDirection(rUnit), Common.getRoadForwardDirection(choice)) < 10)
+                if (Common.getAngleDifference(Common.getRoadBackwardDirection(rUnit,5), Common.getRoadForwardDirection(choice)) < 10)
                     choices.add(choice);
             }
 

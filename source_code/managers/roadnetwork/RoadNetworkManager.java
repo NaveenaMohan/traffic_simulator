@@ -77,8 +77,8 @@ public class RoadNetworkManager implements IRoadNetworkManager {
         boolean canIntersect = false;
         //check if the road is going right
         double difference = Common.getAngleDifference(
-                Common.getRoadBackwardDirection(prevRUnit),
-                Common.getRoadBackwardDirection(currentRUnit)
+                Common.getRoadBackwardDirection(prevRUnit,5),
+                Common.getRoadBackwardDirection(currentRUnit,5)
         );
 
 //        System.out.println("(" + Common.getNthPrevRUnit(prevRUnit, 5).getX() + "," + Common.getNthPrevRUnit(prevRUnit, 5).getY() +

@@ -30,7 +30,6 @@ public class DrawingBoard implements ActionListener {
     private int currentX, currentY;
     private Set<Coordinates> singleLaneCoordinates = new LinkedHashSet<Coordinates>();
     private Set<Coordinates> doubleLaneCoordinates = new LinkedHashSet<Coordinates>();
-    private Set<Coordinates> doubleLaneChangeableCoordinates = new LinkedHashSet<Coordinates>();
     private List<Coordinates> vehicleFactoryCoordinates = new ArrayList<Coordinates>();
     private Map<String, Coordinates> trafficLightCoordinates = new HashMap<String, Coordinates>();
     private Map<String, Coordinates> zebraCrossingCoordinates = new HashMap<String, Coordinates>();
@@ -51,7 +50,6 @@ public class DrawingBoard implements ActionListener {
     private RUnit previousRUnit;
     private RUnit previousChangeableRunit;
     private Image rUnitImage;
-    private Image changeableRUnitImage;
     private Image trafficLightImage;
     private Image carImage;
     private Image doubleRoad;
@@ -99,13 +97,12 @@ public class DrawingBoard implements ActionListener {
     }
 
     public void initialize() {
-        rUnitImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/road.jpg"));
-        changeableRUnitImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/black.jpg"));
-        doubleRoad = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/doubleRoad.jpg"));
+        rUnitImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/road.gif"));
+        doubleRoad = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/doubleRoad.gif"));
         trafficLightImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/lightMini.png"));
         carImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/car.png"));
         truckImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/truck.png"));
-        emergencyVehicleImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/emergency.png"));
+        emergencyVehicleImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/emergency.gif"));
         zebraCrossingImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/zebraCrossingMini.png"));
         blockageImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/blockMini.png"));
         stopImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/stopMini.png"));
@@ -138,7 +135,7 @@ public class DrawingBoard implements ActionListener {
         roadGraphics.drawImage(rUnitImage, 0, 0, drawingBoardPanel);
 
         MediaTracker changeableRoadMediaTracker = new MediaTracker(drawingBoardPanel);
-        changeableRoadMediaTracker.addImage(changeableRUnitImage, 1);
+        changeableRoadMediaTracker.addImage(doubleRoad, 1);
         try {
             changeableRoadMediaTracker.waitForAll();
         } catch (Exception e) {
@@ -147,7 +144,7 @@ public class DrawingBoard implements ActionListener {
         bufferedChangeableRoadImage = new BufferedImage(20, 20,
                 BufferedImage.TYPE_INT_ARGB);
         Graphics2D b = bufferedChangeableRoadImage.createGraphics();
-        b.drawImage(changeableRUnitImage, 0, 0, drawingBoardPanel);
+        b.drawImage(doubleRoad, 0, 0, drawingBoardPanel);
 
     }
 
@@ -190,7 +187,6 @@ public class DrawingBoard implements ActionListener {
                         (!A.equals(new Coordinates(previousRUnit.getX(), previousRUnit.getY())) && !changeableA.equals(new Coordinates(previousChangeableRunit.getX(), previousChangeableRunit.getY())))) {
                     //Add and Return RUnit for double lane and store it as previous RUnit
                     doubleLaneCoordinates.add(A);
-                    doubleLaneChangeableCoordinates.add(changeableA);
                     Map<String, RUnit> prevRUnitMap = roadNetworkManager.addDoubleLane(A.getX(), A.getY(), changeableA.getX(), changeableA.getY(), previousRUnit, previousChangeableRunit);
                     if (prevRUnitMap != null) {
                         previousRUnit = prevRUnitMap.get("runit");
@@ -479,29 +475,49 @@ public class DrawingBoard implements ActionListener {
     public void paint(Graphics g) {
         Graphics2D g2D = (Graphics2D) g;
 
+//        //Drawing single road
+//        for (Coordinates coordinate : singleLaneCoordinates) {
+//            g2D.drawImage(rUnitImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
+//            g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+//            BasicStroke bs = new BasicStroke(2);
+//            g2D.setStroke(bs);
+//        }
+
         //Drawing single road
         for (Coordinates coordinate : singleLaneCoordinates) {
+            AffineTransform affineTransform = g2D.getTransform();
+            RUnit rUnit = getRUnitWithCoordinates(coordinate.getX(), coordinate.getY());
+            double angle = Common.getRoadBackwardDirection(rUnit,15);
+            if (angle < 0) {
+                angle = angle + 360;
+            }
+            g2D.rotate(Math.toRadians(-20), coordinate.getX(), coordinate.getY());
+            g2D.rotate(Math.toRadians(angle), coordinate.getX(), coordinate.getY());
             g2D.drawImage(rUnitImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             BasicStroke bs = new BasicStroke(2);
             g2D.setStroke(bs);
+            g2D.setTransform(affineTransform) ;
         }
+
 
         //Drawing double road
         for (Coordinates coordinate : doubleLaneCoordinates) {
-            g2D.drawImage(rUnitImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
+            AffineTransform affineTransform = g2D.getTransform();
+            RUnit rUnit = getRUnitWithCoordinates(coordinate.getX(), coordinate.getY());
+            double angle = Common.getRoadBackwardDirection(rUnit,15);
+            if (angle < 0) {
+                angle = angle + 360;
+            }
+            g2D.rotate(Math.toRadians(-20), coordinate.getX(), coordinate.getY());
+            g2D.rotate(Math.toRadians(angle), coordinate.getX(), coordinate.getY());
+            g2D.drawImage(doubleRoad, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             BasicStroke bs = new BasicStroke(2);
             g2D.setStroke(bs);
+            g2D.setTransform(affineTransform) ;
         }
 
-        //Drawing double changeable road
-        for (Coordinates coordinate : doubleLaneChangeableCoordinates) {
-            g2D.drawImage(changeableRUnitImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-            g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            BasicStroke bs = new BasicStroke(2);
-            g2D.setStroke(bs);
-        }
 
         //Drawing traffic lights
         for (Coordinates coordinate : trafficLightCoordinates.values()) {
@@ -626,6 +642,12 @@ public class DrawingBoard implements ActionListener {
         currentSecondValue.setText(String.valueOf(simEngine.getDataAndStructures().getGlobalConfigManager().getCurrentSecond()));
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
+    }
+
+    private double getRoadAngle(int x1, int y1, int x2, int y2) {
+        int difX=x2-x1;
+        int difY=y2-y1;
+        return (Math.atan2(difY, difX)*180)/Math.PI;
     }
 
     @Override
@@ -757,7 +779,6 @@ public class DrawingBoard implements ActionListener {
         model.setRowCount(0);
         singleLaneCoordinates.clear();
         doubleLaneCoordinates.clear();
-        doubleLaneChangeableCoordinates.clear(); // TODO : remove later
         trafficLightCoordinates.clear();
         zebraCrossingCoordinates.clear();
         blockageCoordinates.clear();
@@ -799,5 +820,15 @@ public class DrawingBoard implements ActionListener {
 
     public void setDrawingBoardPanel(JPanel drawingBoardPanel) {
         this.drawingBoardPanel = drawingBoardPanel;
+    }
+
+    private RUnit getRUnitWithCoordinates(int x , int y){
+        Coordinates coordinates = new Coordinates(x,y);
+        for(RUnit runit: simEngine.getDataAndStructures().getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()){
+            if(coordinates.equals(new Coordinates(runit.getX(),runit.getY()))){
+                return runit;
+            }
+        }
+        return null;
     }
 }
