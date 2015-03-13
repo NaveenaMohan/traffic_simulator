@@ -27,6 +27,36 @@ public class Common {
         return (double) tmp / factor;
     }
 
+    public static double getAngle(int x1, int y1, int x2, int y2)
+    {
+        /*
+        This function returns an angle between two points in the range from -179 to 180 deg
+         */
+        return (Math.atan2(y2-y1, x2-x1)*180)/Math.PI;
+    }
+
+    public static double getAngleDifference(double angle1, double angle2)
+    {
+        /*
+        This function returns the difference between the angle and bearing
+         */
+        return ((((angle2 - angle1) % 360) + 540) % 360) - 180;
+    }
+    public static double getRoadForwardDirection(IRUnitManager rUnit)
+    {
+        /*
+        This function gets the angle of the road by getting the angle between the given rUnit and it's next ones
+         */
+        return getAngle(rUnit.getX(), rUnit.getY(), getNthNextRUnit(rUnit,5).getX(), getNthNextRUnit(rUnit,5).getY());
+    }
+    public static double getRoadBackwardDirection(IRUnitManager rUnit)
+    {
+        /*
+        This function gets the angle of the road by getting the angle between the given rUnit and it's prevs ones
+         */
+        return getAngle(getNthPrevRUnit(rUnit, 5).getX(), getNthPrevRUnit(rUnit, 5).getY(), rUnit.getX(), rUnit.getY());
+    }
+
     public static Coordinates getNextPointFromTo(Coordinates A, Coordinates B)
     {
         /*
@@ -93,7 +123,7 @@ public class Common {
          */
 
         //get the angle of line from A to B
-        double ABAngle=(Math.atan2(B.getY()-A.getY(), B.getX()-A.getX())*180)/Math.PI;
+        double ABAngle=getAngle(A.getX(), A.getY(), B.getX(), B.getY());
 
         //add bearing to angle and normalize to -179 to 180
         double newAngle = normalizeAngle(ABAngle + bearing);

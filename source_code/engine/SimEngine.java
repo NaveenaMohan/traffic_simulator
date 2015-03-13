@@ -1,6 +1,5 @@
 package engine;
 
-import common.Common;
 import dataAndStructures.DataAndStructures;
 import managers.globalconfig.*;
 import managers.roadnetwork.RoadNetwork;
@@ -69,6 +68,9 @@ public class SimEngine {
     }
 
     public void CleanAll() {
+        /*
+    this function cleans all the data structures and sets them to their initial state
+     */
         RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
         VehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
         GlobalConfigManager globalConfigManager = new GlobalConfigManager(
@@ -131,15 +133,15 @@ public class SimEngine {
 
            // if((int)dataAndStructures.getGlobalConfigManager().getCurrentSecond()>previousSecond)
 //            {
-                for(IVehicleManager veh : dataAndStructures.getVehicles())
-//               // if(veh.getVehicle().getObjectInSpace().getVehicleType() == VehicleType.emergency)
-                //if(veh.getVehID()==1)
-                //if(veh.getVehicle().getCurrentStrategy().length()>10)
-                    System.out.println(Common.round(dataAndStructures.getGlobalConfigManager().getCurrentSecond(), 2) + " " +
-                            veh.getVehID() + " " + " s: " + Common.round(veh.getVehicle().getCurrentVelocity(), 2)
-                             + " rUnit:"
-                            + veh.getVehicle().getrUnit().getId() + " " + veh.getVehicle().getCurrentStrategy());
-//            //}
+//                for(IVehicleManager veh : dataAndStructures.getVehicles())
+////               // if(veh.getVehicle().getObjectInSpace().getVehicleType() == VehicleType.emergency)
+//                //if(veh.getVehID()==1)
+//                //if(veh.getVehicle().getCurrentStrategy().length()>10)
+//                    System.out.println(Common.round(dataAndStructures.getGlobalConfigManager().getCurrentSecond(), 2) + " " +
+//                            veh.getVehID() + " " + " s: " + Common.round(veh.getVehicle().getCurrentVelocity(), 2)
+//                             + " rUnit:"
+//                            + veh.getVehicle().getrUnit().getId() + " " + veh.getVehicle().getCurrentStrategy());
+////            //}
             previousSecond = (int) dataAndStructures.getGlobalConfigManager().getCurrentSecond();
         }
    }
