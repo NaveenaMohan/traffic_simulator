@@ -21,45 +21,34 @@ public class SimEngine {
 
     private Timer timer;
     private DataAndStructures dataAndStructures;
-    private int previousSecond=0;//use this to make a move every second
     private boolean pause;
     private DCP dcp;
 
-    int prevSec = -1;
-    private int maxCars =10000 ;
 
     public SimEngine(DataAndStructures dataAndStructures, DCP dcp) {
         this.dataAndStructures = dataAndStructures;
         this.dcp = dcp;
     }
 
-    public SimEngine(DataAndStructures dataAndStructures, DCP dcp, int maxCars) {
-        this.dataAndStructures = dataAndStructures;
-        this.dcp=dcp;
-        this.maxCars=maxCars;
-    }
-
-
-
     public void Play(ActionListener actionListener) {
 
         //initialise timer
-        if(timer==null) {
+        if (timer == null) {
             timer = new Timer(5, actionListener);
             timer.start();
         }
     }
 
-    public void Pause(){
+    public void Pause() {
         pause = true;
     }
 
-    public void Unpause(){
-        pause=false;
+    public void Unpause() {
+        pause = false;
     }
 
     public void SpeedUp() {
-        dataAndStructures.getGlobalConfigManager().setTicksPerSecond(Math.max(1,
+        dataAndStructures.getGlobalConfigManager().setTicksPerSecond(Math.max(5,
                 dataAndStructures.getGlobalConfigManager().getTicksPerSecond() / 2));
     }
 
@@ -83,72 +72,42 @@ public class SimEngine {
         );
         dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
 
-        if(timer !=null){
+        if (timer != null) {
             timer.stop();
         }
     }
 
     public void CleanVehicles() {
         dataAndStructures.setVehicleManagerList((new ArrayList<IVehicleManager>()));
-        if(timer != null){
+        if (timer != null) {
             timer.stop();
         }
     }
-
-    //TODO do clear vehicles
-
     public void performAction() {
-
-        if(!pause) {
-
-            //FABIAN
-            dataAndStructures.getGlobalConfigManager().incrementTick();//adds one to tick with every action performed
-
-            //Report Update
+        if (!pause) {
+            //increment tick
+            dataAndStructures.getGlobalConfigManager().incrementTick();
+            //update Report data
             dcp.updateReportingInfo(dataAndStructures);
-            if (!dcp.firstTimeOpen && !dcp.isFrameClosed)//if report window is still open then it refreshes its data
-                if(((int) dataAndStructures.getGlobalConfigManager().getCurrentSecond())%30==0 &&
-                        prevSec!= ((int) dataAndStructures.getGlobalConfigManager().getCurrentSecond())%30) {
-                    dcp.reportInformation();
-                }
-            prevSec = (int) dataAndStructures.getGlobalConfigManager().getCurrentSecond()%30;
-
-            //create new vehicles
-            if (dataAndStructures.getVehicles().size() < maxCars & 1==1) {
-                IVehicleManager newVehicle =
-                        dataAndStructures.getVehicleFactoryManager().createVehicle(dataAndStructures);
-
-                //newVehicle can be null if the factory decided to not produce the vehicle
-                if (newVehicle != null) {
-                    dataAndStructures.getVehicles().add(newVehicle);
-                }
+            //create a new vehicle
+            IVehicleManager newVehicle =
+                    dataAndStructures.getVehicleFactoryManager().createVehicle(dataAndStructures);
+            //newVehicle can be null if the factory decided to not produce the vehicle
+            if (newVehicle != null) {
+                dataAndStructures.getVehicles().add(newVehicle);
             }
-
             //move the vehicles
             for (IVehicleManager vehicle : dataAndStructures.getVehicles()) {
-                if(vehicle.isVisible())
+                if (vehicle.isVisible())
                     vehicle.move(dataAndStructures.getSpaceManager(),
                             dataAndStructures.getGlobalConfigManager().getCurrentSecond(),//time
                             dataAndStructures);//global config
             }
-
             //change traffic lights
-            dataAndStructures.getRoadNetworkManager().changeLight(dataAndStructures.getGlobalConfigManager().getCurrentSecond());
-
-           // if((int)dataAndStructures.getGlobalConfigManager().getCurrentSecond()>previousSecond)
-//            {
-//                for(IVehicleManager veh : dataAndStructures.getVehicles())
-////               // if(veh.getVehicle().getObjectInSpace().getVehicleType() == VehicleType.emergency)
-//                //if(veh.getVehID()==1)
-//                //if(veh.getVehicle().getCurrentStrategy().length()>10)
-//                    System.out.println(Common.round(dataAndStructures.getGlobalConfigManager().getCurrentSecond(), 2) + " " +
-//                            veh.getVehID() + " " + " s: " + Common.round(veh.getVehicle().getCurrentVelocity(), 2)
-//                             + " rUnit:"
-//                            + veh.getVehicle().getrUnit().getId() + " " + veh.getVehicle().getCurrentStrategy());
-////            //}
-            previousSecond = (int) dataAndStructures.getGlobalConfigManager().getCurrentSecond();
+            dataAndStructures.getRoadNetworkManager().changeLight(dataAndStructures.getGlobalConfigManager()
+                    .getCurrentSecond());
         }
-   }
+    }
 
 
     public DataAndStructures getDataAndStructures() {

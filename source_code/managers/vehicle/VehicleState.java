@@ -13,8 +13,6 @@ public class VehicleState {
 
 
     private List<VehicleMemoryObject> objectsAhead = new ArrayList<VehicleMemoryObject>();
-    private DirectionSignType nextDirection;
-    private String destination;
 
     private DirectionSignType nextDirectionAtDecisionPoint;
     private IRUnitManager nextRUnitAfterDecisionPoint;
@@ -47,64 +45,46 @@ public class VehicleState {
     }
 
     public VehicleMemoryObject nextObjectWithin(double metres, boolean isEmergency, boolean inLeft) {
-
+        /*
+        Returns the next object within metres metres
+         */
         for (int i = 0; i < objectsAhead.size(); i++) {
             if (objectsAhead.get(i).getDistance() <= metres) {
-                if(objectsAhead.get(i).isInLeft()==inLeft)
+                if (objectsAhead.get(i).isInLeft() == inLeft)
                     if (!(isEmergency &
-
                             (objectsAhead.get(i).getObject() instanceof TrafficLight |
                                     objectsAhead.get(i).getObject() instanceof SpeedLimitSign))) {
                         return objectsAhead.get(i);
                     }
-            }
-                else
-                    break;
+            } else
+                break;
         }
-
         return null;
     }
 
-    public VehicleMemoryObject getNextVehicleObject(double metres, boolean inLeft)
-    {
+    public VehicleMemoryObject getNextVehicleObject(double metres, boolean inLeft) {
         for (int i = 0; i < objectsAhead.size(); i++) {
             if (objectsAhead.get(i).getDistance() <= metres) {
-                if(objectsAhead.get(i).isInLeft()==inLeft & objectsAhead.get(i).getObject() instanceof Vehicle)
+                if (objectsAhead.get(i).isInLeft() == inLeft & objectsAhead.get(i).getObject() instanceof Vehicle)
                     return objectsAhead.get(i);
-            }
-            else
+            } else
                 break;
         }
 
         return null;
     }
 
-    public VehicleMemoryObject getNextRoadDecisionPoint(double metres)
-    {
+
+    public VehicleMemoryObject getNextSpeedAffectingRoadElement(double metres, boolean inLeft) {
         for (int i = 0; i < objectsAhead.size(); i++) {
             if (objectsAhead.get(i).getDistance() <= metres) {
-                if(objectsAhead.get(i).getObject() instanceof RoadDecisionPoint)
-                    return objectsAhead.get(i);
-            }
-            else
-                break;
-        }
-
-        return null;
-    }
-
-    public VehicleMemoryObject getNextSpeedAffectingRoadElement(double metres, boolean inLeft)
-    {
-        for (int i = 0; i < objectsAhead.size(); i++) {
-            if (objectsAhead.get(i).getDistance() <= metres) {
-                if(objectsAhead.get(i).isInLeft()==inLeft &
+                if (objectsAhead.get(i).isInLeft() == inLeft &
                         (objectsAhead.get(i).getObject() instanceof SpeedLimitSign |
                                 objectsAhead.get(i).getObject() instanceof TrafficLight |
                                 objectsAhead.get(i).getObject() instanceof ZebraCrossing |
                                 objectsAhead.get(i).getObject() instanceof StopSign))
                     return objectsAhead.get(i);
-            }
-            else
+            } else
                 break;
         }
 
@@ -122,7 +102,7 @@ public class VehicleState {
             if (obj.getDistance() > metres)
                 break;
 
-            if(obj.isInLeft()==inLeft) {
+            if (obj.isInLeft() == inLeft) {
                 if (slowestObject == null & !(isEmergency &
                         (obj.getObject() instanceof TrafficLight |
                                 obj.getObject() instanceof SpeedLimitSign))) {

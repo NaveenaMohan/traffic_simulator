@@ -12,9 +12,8 @@ import managers.space.ObjectInSpace;
 public class VehiclePerception {
 
 
-    public void See(int vehID, IRUnitManager rUnit, double maxVision, VehicleState vehicleState,
-                    ISpaceManager spaceManager, IDataAndStructures dataAndStructures, ObjectInSpace myObject,
-                    String myDestination, double currentTime) {
+    public void see(int vehID, IRUnitManager rUnit, double maxVision, VehicleState vehicleState,
+                    ISpaceManager spaceManager, IDataAndStructures dataAndStructures, ObjectInSpace myObject) {
         IRUnitManager temp = rUnit;
 
 //        if (temp.getNextRUnitList().size() > 0)
@@ -91,7 +90,7 @@ public class VehiclePerception {
 
             //go to next rUnit
             if (temp.getNextRUnitList().size() > 0)
-                temp = temp.getNextRUnitList().get(0);//VehicleMotor.chooseNext(temp, vehicleState);
+                temp = VehicleMotor.chooseNext(temp, vehicleState);
             else
                 break;
 

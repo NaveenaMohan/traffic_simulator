@@ -74,20 +74,18 @@ public class Vehicle implements IVehicleManager {
 
 
         //perceive the world and update your state
-        vehiclePerception.See(
+        vehiclePerception.see(
                 vehID,
                 rUnit,//your position
                 driver.getVision(100, dataAndStructures.getGlobalConfigManager().getClimaticCondition().getVisibility()), //rUnits of vision
                 vehicleState,
                 spaceManager,
                 dataAndStructures,
-                vehicleMotor.getObjectInSpace(),
-                vehicleMotor.getDestination(),
-                dataAndStructures.getGlobalConfigManager().getCurrentSecond()
+                vehicleMotor.getObjectInSpace()
         );
 
         //prepare the acceleration and rUnit position
-        rUnit = vehicleMotor.PrepareAction(
+        rUnit = vehicleMotor.prepareAction(
                 rUnit,
                 driver,
                 vehicleState,

@@ -38,7 +38,6 @@ public class Driver {
 
     public double getStopDistance(double slipperinessOffset, VehicleMemoryObject obstacle)
     {
-
         //if the obstacle is not passable - maintain a safe distance
         if(!obstacle.isPassable())
             switch(driverBehaviorType)

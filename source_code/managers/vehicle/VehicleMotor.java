@@ -62,7 +62,7 @@ public class VehicleMotor {
         return currentVelocity;
     }
 
-    public IRUnitManager PrepareAction(IRUnitManager rUnit, Driver driver, VehicleState vehicleState
+    public IRUnitManager prepareAction(IRUnitManager rUnit, Driver driver, VehicleState vehicleState
             , double slipperinessOffset, ISpaceManager spaceManager, double time) {
         if (nextCheckTime == 0 || nextCheckTime < time) {
             nextCheckTime = time + 2;
@@ -430,22 +430,17 @@ public class VehicleMotor {
         return chosenUnit;
     }
 
-    public IRUnitManager chooseNext(IRUnitManager rUnit, VehicleState vehicleState) {
-        currentStrategy += "[chooseNext]";
+    public static IRUnitManager chooseNext(IRUnitManager rUnit, VehicleState vehicleState) {
         /*
         This function chooses the nextRUnit in the intersection
          */
 
         IRUnitManager temp = rUnit;
         if (rUnit.getNextRUnitList().size() > 0) {
-            currentStrategy += "{>0}";
             temp = rUnit.getNextRUnitList().get(Common.randIntegerBetween(0, rUnit.getNextRUnitList().size() - 1));
             if (rUnit.getNextRUnitList().size() > 1) {
-                currentStrategy += "{>1}";
                 if (vehicleState.getNextRUnitAfterDecisionPoint() != null) {
-                    currentStrategy += "{" + vehicleState.getNextRUnitAfterDecisionPoint().getId() + "}";
                     if (rUnit.getNextRUnitList().contains(vehicleState.getNextRUnitAfterDecisionPoint())) {
-                        currentStrategy += "{contains}";
                         temp = vehicleState.getNextRUnitAfterDecisionPoint();
                     }
                 }

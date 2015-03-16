@@ -31,12 +31,9 @@ public class VehicleFactory{
     public Vehicle addVehicle(int vehID, VehicleType vehicleType, Driver driver, String destination, ISpaceManager spaceManager, double time) {
         //vehicle factory creates vehicles, it sets their driver and objectInSpace
 
-
-
         //create object in space based on the vehicle type
         ObjectInSpace objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), VehicleTypeStats.getWidth(vehicleType)
                 ,VehicleTypeStats.getLength(vehicleType),VehicleTypeStats.getHeight(vehicleType),null, vehicleType);
-
 
         //only add the new vehicle if it fits in the space outside the factory
         if(spaceManager.checkFit(objectInSpace.getId(), objectInSpace.getX(), objectInSpace.getY(), 10,10)) {
