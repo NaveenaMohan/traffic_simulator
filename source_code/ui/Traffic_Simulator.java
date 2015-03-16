@@ -47,6 +47,7 @@ public class  Traffic_Simulator {
     private SimEngine simEngine = new SimEngine(dataAndStructures,dcp);
     private DefaultTableModel model;
 
+
     /**
      * Create the application.
      */
@@ -976,30 +977,29 @@ public class  Traffic_Simulator {
         uploadImageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                File file;
-                BufferedImage image;
+               File file;
+                BufferedImage originalimage;
                 JFileChooser fileChooser = new JFileChooser();
                 int returnValue = fileChooser.showOpenDialog(null);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     try {
                         file = fileChooser.getSelectedFile();
-                        image = ImageIO.read(file);
-                        ImageIcon icon = new ImageIcon(image);
+                        originalimage = ImageIO.read(file);
+                        Image scaledImage = originalimage.getScaledInstance(drawingBoardPanel.getWidth(),drawingBoardPanel.getHeight(),Image.SCALE_SMOOTH);
+                        ImageIcon icon = new ImageIcon(scaledImage);
                         JLabel picLabel = new JLabel(icon);
+                        drawingBoardPanel.setLayout(new GridLayout());
                         drawingBoardPanel.add(picLabel);
                         drawingBoardPanel.revalidate();
                         drawingBoardPanel.repaint();
 
-                        int w = image.getWidth(null);
-                        int h = image.getHeight(null);
-                        BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-                        Graphics g = bi.getGraphics();
-                        g.drawImage(image, 0, 0, null);
+
                     } catch (IOException e1) {
                         e1.printStackTrace();
 
                     }
                 }
+
             }
         });
     }
