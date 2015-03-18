@@ -41,16 +41,5 @@ public class RoadNetwork {
         this.changeableRUnitHashtable = changeableRUnitHashtable;
     }
 
-    public void printTrafficLights(){
-        int max=50;
-        for(int i=0;i<max;i++) {
-            if (rUnitHashtable.containsKey(i + ""))
-                System.out.println("ID: " + rUnitHashtable.get(i + "").getId() + " X: " + rUnitHashtable.get(i + "").getX() + " Y: " + rUnitHashtable.get(i + "").getY() +
-                        " Prev: " + (rUnitHashtable.get(i + "").getPrevsRUnitList().size() > 0 ? rUnitHashtable.get(i + "").getPrevsRUnitList().get(0).getId() : "none") +
-                        " Next: " + (rUnitHashtable.get(i + "").getNextRUnitList().size() > 0 ? rUnitHashtable.get(i + "").getNextRUnitList().get(0).getId() : "none") +
-                        " Traffic Light ID: " + (rUnitHashtable.get(i+"").getTrafficLight() != null ? rUnitHashtable.get(i+"").getTrafficLight().getTrafficLightID() : " No traffic Light ") +
-                        " Traffic Light Current Color: " + (rUnitHashtable.get(i+"").getTrafficLight() != null ? ((rUnitHashtable.get(i+"").getTrafficLight().isGreen()) ? " Green" : " Red") : "Default colour, Green"));
 
-        }
-    }
 }
