@@ -39,7 +39,6 @@ public class RoadNetworkManager implements IRoadNetworkManager {
 
         for (RUnit rUnit : rUnits) {
             if (rUnit.getX() == intersectionCoordinates.getX() & rUnit.getY() == intersectionCoordinates.getY() & rUnit.getId()!=id) {
-                // System.out.println("INTERSECTION " + rUnit.getX() + " " + rUnit.getY() + " old: " + rUnit.getId());
                 return rUnit;
             }
         }

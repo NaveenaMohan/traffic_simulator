@@ -3,12 +3,13 @@ package managers.roadnetwork;
 import managers.runit.RUnit;
 import managers.runit.TrafficLight;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 
 /**
  * Created by naveena on 09/02/15.
  */
-public class RoadNetwork {
+public class RoadNetwork implements Serializable {
 
 
     private Hashtable<String, RUnit> rUnitHashtable = new Hashtable<String, RUnit>();
@@ -40,6 +41,4 @@ public class RoadNetwork {
     public void setChangeableRUnitHashtable(Hashtable<String, RUnit> changeableRUnitHashtable) {
         this.changeableRUnitHashtable = changeableRUnitHashtable;
     }
-
-
 }

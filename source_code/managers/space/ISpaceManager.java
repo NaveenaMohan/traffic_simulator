@@ -1,11 +1,12 @@
 package managers.space;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by naveena on 08/02/15.
  */
-public interface ISpaceManager {
+public interface ISpaceManager extends Serializable {
 
     void addObjectToSpace(ObjectInSpace objectInSpace);
 
@@ -15,4 +16,6 @@ public interface ISpaceManager {
     ObjectInSpace getObjectAt(int myID, int x, int y);
 
     public List<ObjectInSpace> getObjects();
+
+    public void setObjects(List<ObjectInSpace> objectInSpaces);
 }

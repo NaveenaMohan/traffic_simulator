@@ -28,8 +28,8 @@ public class DrawingBoard implements ActionListener {
     BufferedImage bufferedRoadImage;
     BufferedImage bufferedChangeableRoadImage;
     private int currentX, currentY;
-    private Set<Coordinates> singleLaneCoordinates = new LinkedHashSet<Coordinates>();
-    private Set<Coordinates> doubleLaneCoordinates = new LinkedHashSet<Coordinates>();
+    private Set<RUnit> singleLaneRUnits = new LinkedHashSet<RUnit>();
+    private Set<RUnit> doubleLaneRUnits = new LinkedHashSet<RUnit>();
     private List<Coordinates> vehicleFactoryCoordinates = new ArrayList<Coordinates>();
     private Map<String, Coordinates> trafficLightCoordinates = new HashMap<String, Coordinates>();
     private Map<String, Coordinates> zebraCrossingCoordinates = new HashMap<String, Coordinates>();
@@ -161,8 +161,8 @@ public class DrawingBoard implements ActionListener {
             do {
                 if (previousRUnit == null || !A.equals(new Coordinates(previousRUnit.getX(),previousRUnit.getY()))) {
                     //Add and Return RUnit for single lane and store it as previous RUnit
-                    singleLaneCoordinates.add(A);
                     previousRUnit = roadNetworkManager.addSingleLane(A.getX(), A.getY(), previousRUnit);
+                    singleLaneRUnits.add(previousRUnit);
                     g2D.drawImage(bufferedRoadImage, currentX, currentY, drawingBoardPanel);
                 }
                 A = new Coordinates(Common.getNextPointFromTo(A, B).getX(), Common.getNextPointFromTo(A,B).getY());
@@ -186,12 +186,12 @@ public class DrawingBoard implements ActionListener {
                 if ((previousRUnit == null && previousChangeableRunit == null) ||
                         (!A.equals(new Coordinates(previousRUnit.getX(), previousRUnit.getY())) && !changeableA.equals(new Coordinates(previousChangeableRunit.getX(), previousChangeableRunit.getY())))) {
                     //Add and Return RUnit for double lane and store it as previous RUnit
-                    doubleLaneCoordinates.add(A);
                     Map<String, RUnit> prevRUnitMap = roadNetworkManager.addDoubleLane(A.getX(), A.getY(), changeableA.getX(), changeableA.getY(), previousRUnit, previousChangeableRunit);
                     if (prevRUnitMap != null) {
                         previousRUnit = prevRUnitMap.get("runit");
                         previousChangeableRunit = prevRUnitMap.get("changeableRunit");
                     }
+                    doubleLaneRUnits.add(previousRUnit);
                     //g2d.drawImage(bufferedChangeableRoadImage, currentX, currentY, drawingBoardPanel);
                     g2d.drawImage(bufferedRoadImage, currentX, currentY, drawingBoardPanel);
                     g2d.drawImage(bufferedChangeableRoadImage, currentChangeableX, currentChangeableY, drawingBoardPanel);
@@ -476,7 +476,7 @@ public class DrawingBoard implements ActionListener {
         Graphics2D g2D = (Graphics2D) g;
 
 //        //Drawing single road
-//        for (Coordinates coordinate : singleLaneCoordinates) {
+//        for (Coordinates coordinate : singleLaneRUnits) {
 //            g2D.drawImage(rUnitImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
 //            g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 //            BasicStroke bs = new BasicStroke(2);
@@ -484,18 +484,15 @@ public class DrawingBoard implements ActionListener {
 //        }
 
         //Drawing single road
-        for (Coordinates coordinate : singleLaneCoordinates) {
+        for (RUnit rUnit : singleLaneRUnits) {
             AffineTransform affineTransform = g2D.getTransform();
-            RUnit rUnit = getRUnitWithCoordinates(coordinate.getX(), coordinate.getY());
-            double angle = Common.getRoadBackwardDirection(rUnit,2);
+            double angle = Common.getRoadBackwardDirection(rUnit,15);
             if (angle < 0) {
                 angle = angle + 360;
             }
-            //g2D.rotate(Math.toRadians(), coordinate.getX(), coordinate.getY());
-            //g2D.rotate(Math.toRadians(angle), coordinate.getX(), coordinate.getY());
-            int x = coordinate.getX()-(10) / 2;
-            int y = coordinate.getY()-(10) / 2;
-            g2D.drawImage(rUnitImage, x, y, drawingBoardPanel);
+            g2D.rotate(Math.toRadians(-20), rUnit.getX(), rUnit.getY());
+            g2D.rotate(Math.toRadians(angle), rUnit.getX(), rUnit.getY());
+            g2D.drawImage(rUnitImage, rUnit.getX(), rUnit.getY(), drawingBoardPanel);
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             BasicStroke bs = new BasicStroke(2);
             g2D.setStroke(bs);
@@ -504,16 +501,15 @@ public class DrawingBoard implements ActionListener {
 
 
         //Drawing double road
-        for (Coordinates coordinate : doubleLaneCoordinates) {
+        for (RUnit rUnit : doubleLaneRUnits) {
             AffineTransform affineTransform = g2D.getTransform();
-            RUnit rUnit = getRUnitWithCoordinates(coordinate.getX(), coordinate.getY());
             double angle = Common.getRoadBackwardDirection(rUnit,15);
             if (angle < 0) {
                 angle = angle + 360;
             }
-            g2D.rotate(Math.toRadians(-20), coordinate.getX(), coordinate.getY());
-            g2D.rotate(Math.toRadians(angle), coordinate.getX(), coordinate.getY());
-            g2D.drawImage(doubleRoad, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
+            g2D.rotate(Math.toRadians(-20), rUnit.getX(), rUnit.getY());
+            g2D.rotate(Math.toRadians(angle), rUnit.getX(), rUnit.getY());
+            g2D.drawImage(doubleRoad, rUnit.getX(), rUnit.getY(), drawingBoardPanel);
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             BasicStroke bs = new BasicStroke(2);
             g2D.setStroke(bs);
@@ -646,12 +642,6 @@ public class DrawingBoard implements ActionListener {
         g.dispose();
     }
 
-    private double getRoadAngle(int x1, int y1, int x2, int y2) {
-        int difX=x2-x1;
-        int difY=y2-y1;
-        return (Math.atan2(difY, difX)*180)/Math.PI;
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         simEngine.performAction();
@@ -779,8 +769,8 @@ public class DrawingBoard implements ActionListener {
     public void clean() {
         //Deleting traffic light configuration table
         model.setRowCount(0);
-        singleLaneCoordinates.clear();
-        doubleLaneCoordinates.clear();
+        singleLaneRUnits.clear();
+        doubleLaneRUnits.clear();
         trafficLightCoordinates.clear();
         zebraCrossingCoordinates.clear();
         blockageCoordinates.clear();
@@ -797,7 +787,7 @@ public class DrawingBoard implements ActionListener {
         speed90Coordinates.clear();
         vehicleFactoryCoordinates.clear();
         drawingBoardPanel.removeAll();
-        drawingBoardPanel.updateUI();
+        drawingBoardPanel.repaint();
     }
 
     public boolean isSimulationStarted() {
@@ -824,13 +814,163 @@ public class DrawingBoard implements ActionListener {
         this.drawingBoardPanel = drawingBoardPanel;
     }
 
-    private RUnit getRUnitWithCoordinates(int x , int y){
-        Coordinates coordinates = new Coordinates(x,y);
-        for(RUnit runit: simEngine.getDataAndStructures().getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()){
-            if(coordinates.equals(new Coordinates(runit.getX(),runit.getY()))){
-                return runit;
-            }
-        }
-        return null;
+    public Set<RUnit> getSingleLaneRUnits() {
+        return singleLaneRUnits;
+    }
+
+    public void setSingleLaneRUnits(Set<RUnit> singleLaneRUnits) {
+        this.singleLaneRUnits = singleLaneRUnits;
+    }
+
+    public Set<RUnit> getDoubleLaneRUnits() {
+        return doubleLaneRUnits;
+    }
+
+    public void setDoubleLaneRUnits(Set<RUnit> doubleLaneRUnits) {
+        this.doubleLaneRUnits = doubleLaneRUnits;
+    }
+
+    public List<Coordinates> getVehicleFactoryCoordinates() {
+        return vehicleFactoryCoordinates;
+    }
+
+    public void setVehicleFactoryCoordinates(List<Coordinates> vehicleFactoryCoordinates) {
+        this.vehicleFactoryCoordinates = vehicleFactoryCoordinates;
+    }
+
+    public Map<String, Coordinates> getTrafficLightCoordinates() {
+        return trafficLightCoordinates;
+    }
+
+    public void setTrafficLightCoordinates(Map<String, Coordinates> trafficLightCoordinates) {
+        this.trafficLightCoordinates = trafficLightCoordinates;
+    }
+
+    public Map<String, Coordinates> getZebraCrossingCoordinates() {
+        return zebraCrossingCoordinates;
+    }
+
+    public void setZebraCrossingCoordinates(Map<String, Coordinates> zebraCrossingCoordinates) {
+        this.zebraCrossingCoordinates = zebraCrossingCoordinates;
+    }
+
+    public List<Coordinates> getBlockageCoordinates() {
+        return blockageCoordinates;
+    }
+
+    public void setBlockageCoordinates(List<Coordinates> blockageCoordinates) {
+        this.blockageCoordinates = blockageCoordinates;
+    }
+
+    public List<Coordinates> getStopCoordinates() {
+        return stopCoordinates;
+    }
+
+    public void setStopCoordinates(List<Coordinates> stopCoordinates) {
+        this.stopCoordinates = stopCoordinates;
+    }
+
+    public Map<Coordinates, String> getLeftCoordinates() {
+        return leftCoordinates;
+    }
+
+    public void setLeftCoordinates(Map<Coordinates, String> leftCoordinates) {
+        this.leftCoordinates = leftCoordinates;
+    }
+
+    public Map<Coordinates, String> getStraightCoordinates() {
+        return straightCoordinates;
+    }
+
+    public void setStraightCoordinates(Map<Coordinates, String> straightCoordinates) {
+        this.straightCoordinates = straightCoordinates;
+    }
+
+    public Map<Coordinates, String> getRightCoordinates() {
+        return rightCoordinates;
+    }
+
+    public void setRightCoordinates(Map<Coordinates, String> rightCoordinates) {
+        this.rightCoordinates = rightCoordinates;
+    }
+
+    public List<Coordinates> getSpeed20Coordinates() {
+        return speed20Coordinates;
+    }
+
+    public void setSpeed20Coordinates(List<Coordinates> speed20Coordinates) {
+        this.speed20Coordinates = speed20Coordinates;
+    }
+
+    public List<Coordinates> getSpeed30Coordinates() {
+        return speed30Coordinates;
+    }
+
+    public void setSpeed30Coordinates(List<Coordinates> speed30Coordinates) {
+        this.speed30Coordinates = speed30Coordinates;
+    }
+
+    public List<Coordinates> getSpeed50Coordinates() {
+        return speed50Coordinates;
+    }
+
+    public void setSpeed50Coordinates(List<Coordinates> speed50Coordinates) {
+        this.speed50Coordinates = speed50Coordinates;
+    }
+
+    public List<Coordinates> getSpeed60Coordinates() {
+        return speed60Coordinates;
+    }
+
+    public void setSpeed60Coordinates(List<Coordinates> speed60Coordinates) {
+        this.speed60Coordinates = speed60Coordinates;
+    }
+
+    public List<Coordinates> getSpeed70Coordinates() {
+        return speed70Coordinates;
+    }
+
+    public void setSpeed70Coordinates(List<Coordinates> speed70Coordinates) {
+        this.speed70Coordinates = speed70Coordinates;
+    }
+
+    public List<Coordinates> getSpeed90Coordinates() {
+        return speed90Coordinates;
+    }
+
+    public void setSpeed90Coordinates(List<Coordinates> speed90Coordinates) {
+        this.speed90Coordinates = speed90Coordinates;
+    }
+
+    public Map<Coordinates, String> getWelcomeCoordinates() {
+        return welcomeCoordinates;
+    }
+
+    public void setWelcomeCoordinates(Map<Coordinates, String> welcomeCoordinates) {
+        this.welcomeCoordinates = welcomeCoordinates;
+    }
+
+    public DefaultTableModel getModel() {
+        return model;
+    }
+
+    public void setModel(DefaultTableModel model) {
+        this.model = model;
+    }
+
+    public RoadNetworkManager getRoadNetworkManager() {
+        return roadNetworkManager;
+    }
+
+    public void setRoadNetworkManager(RoadNetworkManager roadNetworkManager) {
+        this.roadNetworkManager = roadNetworkManager;
+    }
+
+    public SimEngine getSimEngine() {
+        return simEngine;
+    }
+
+    public void setSimEngine(SimEngine simEngine) {
+        this.simEngine = simEngine;
     }
 }

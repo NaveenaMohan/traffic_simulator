@@ -4,19 +4,21 @@ import dataAndStructures.DataAndStructures;
 import managers.globalconfig.*;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
+import managers.space.ObjectInSpace;
 import managers.vehicle.IVehicleManager;
 import managers.vehiclefactory.VehicleFactoryManager;
 import reports.DCP;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
 /**
  * Created by Fabians on 12/02/2015.
  */
-public class SimEngine {
+public class SimEngine implements Serializable {
 
 
     private Timer timer;
@@ -43,7 +45,7 @@ public class SimEngine {
 //            System.out.println("id: " + rUnit.getId() + " x: " + rUnit.getX() + " y: " + rUnit.getY() + " N(" + ns + ") P(" + ps + ")");
 //        }
         //initialise timer
-        if (timer == null) {
+        if(timer==null || !timer.isRunning()) {
             timer = new Timer(5, actionListener);
             timer.start();
         }
@@ -67,32 +69,20 @@ public class SimEngine {
     }
 
     public void CleanAll() {
-        /*
-    this function cleans all the data structures and sets them to their initial state
-     */
-        RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
-        VehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
-        GlobalConfigManager globalConfigManager = new GlobalConfigManager(
-                dataAndStructures.getGlobalConfigManager().getTicksPerSecond(),//ticks per second
-                dataAndStructures.getGlobalConfigManager().getMetresPerRUnit(),//metres per RUnit
-                new ClimaticCondition(),
-                new DriverBehavior(),
-                new VehicleDensity(),
-                new Route()
-        );
-        dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
-
-        if (timer != null) {
+        if(timer !=null){
             timer.stop();
         }
     }
 
     public void CleanVehicles() {
         dataAndStructures.setVehicleManagerList((new ArrayList<IVehicleManager>()));
-        if (timer != null) {
+        dataAndStructures.getSpaceManager().setObjects(new ArrayList<ObjectInSpace>());
+        if(timer != null){
             timer.stop();
         }
     }
+
+    //TODO do clear vehicles
 
     public void performAction() {
         if (!pause) {
@@ -116,6 +106,7 @@ public class SimEngine {
                             dataAndStructures.getGlobalConfigManager().getCurrentSecond(),//time
                             dataAndStructures);//global config
             }
+
             //change traffic lights
             dataAndStructures.getRoadNetworkManager().changeLight(dataAndStructures.getGlobalConfigManager()
                     .getCurrentSecond());

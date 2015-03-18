@@ -3,11 +3,12 @@ package managers.space;
 import managers.globalconfig.VehicleType;
 
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * Created by naveena on 08/02/15.
  */
-public class ObjectInSpace {
+public class ObjectInSpace implements Serializable {
 
     private int id;
     private int x;

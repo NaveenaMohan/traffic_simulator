@@ -1,9 +1,11 @@
 package managers.globalconfig;
 
+import java.io.Serializable;
+
 /**
  * Created by Fabians on 03/03/2015.
  */
-public class VehicleTypeStats {
+public class VehicleTypeStats implements Serializable {
     //this class contains all the standard types for all vehicle types
     public static int getWidth(VehicleType vehicleType)
     {

@@ -1,12 +1,13 @@
 package managers.runit;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by naveena on 08/02/15.
  */
-public class TrafficLight {
+public class TrafficLight implements Serializable {
 
     private List<Boolean> cycle = new ArrayList<Boolean>();
     private String trafficLightID; // Should be string as its prefixed with TL or ZTL

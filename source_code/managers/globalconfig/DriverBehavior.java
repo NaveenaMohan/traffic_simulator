@@ -3,10 +3,12 @@ package managers.globalconfig;
 import common.Common;
 import managers.vehicle.Driver;
 
+import java.io.Serializable;
+
 /**
  * Created by naveena on 09/02/15.
  */
-public class DriverBehavior {
+public class DriverBehavior implements Serializable {
 
     private double percentageReckless;
     private double percentageNormal;

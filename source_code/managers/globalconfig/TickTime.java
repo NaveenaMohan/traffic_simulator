@@ -1,9 +1,11 @@
 package managers.globalconfig;
 
+import java.io.Serializable;
+
 /**
  * Created by Fabians on 13/02/2015.
  */
-public class TickTime {
+public class TickTime implements Serializable {
     private int ratio;
     private long currentTick;
     private double currentSecond;
