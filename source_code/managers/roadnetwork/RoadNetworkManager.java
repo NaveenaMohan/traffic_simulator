@@ -26,8 +26,9 @@ public class RoadNetworkManager implements IRoadNetworkManager {
         RUnit currentRUnit = getNext(x, y, prevRUnit, false);
         if (!roadNetwork.getrUnitHashtable().contains(currentRUnit)) {
             roadNetwork.getrUnitHashtable().put(String.valueOf(rUnitId), currentRUnit);
-            if(prevRUnit!=null)
-            manageIntersections(prevRUnit);
+            if(prevRUnit!=null){
+                manageIntersections(prevRUnit);
+            }
         }
 
 
@@ -213,8 +214,10 @@ public class RoadNetworkManager implements IRoadNetworkManager {
         currentRUnit.setChangeAbleRUnit(currentChangeableRUnit);
         currentChangeableRUnit.setChangeAbleRUnit(currentRUnit);
 
-        manageIntersections(currentRUnit);
-        manageIntersections(currentChangeableRUnit);
+        if(prevRUnit!=null && changeablePrevRunit !=null){
+            manageIntersections(prevRUnit);
+            manageIntersections(changeablePrevRunit);
+        }
 
         Map<String, RUnit> prevRUnitMap = new HashMap<String, RUnit>();
         prevRUnitMap.put("runit", currentRUnit);
