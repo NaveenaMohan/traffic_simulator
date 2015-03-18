@@ -1,5 +1,6 @@
 package reports;
 
+import common.Common;
 import dataAndStructures.DataAndStructures;
 import managers.space.ObjectInSpace;
 import managers.vehicle.IVehicleManager;
@@ -22,7 +23,7 @@ public class DCP extends JPanel{
     private Map<String, Integer> numberOfTimes = new HashMap<String, Integer>();
     private Map<String, Double> averageVehiclesVelocity = new HashMap<String, Double>();
     private double avgVelocityTotalVehicles=0, slipperiness=0, visibility=0, percentageMadeDest=0, rate=0,
-    avgTimeToDestination=0, vehiclesEnroute =0;
+    avgTimeToDestination=0;
     protected JTextArea textArea;
     private StyledDocument document;
     private final static String newline = "\n";
@@ -32,7 +33,7 @@ public class DCP extends JPanel{
     StyleContext context3 = new StyleContext();
     Style style, style2, style3;
     public boolean firstTimeOpen =true, isFrameClosed =false;
-    int refresh=0;
+    int refresh=0, vehiclesEnroute =0;;
     JFrame frame;
     JTextPane textPane;
 
@@ -91,15 +92,17 @@ public class DCP extends JPanel{
        StyleConstants.setLeftIndent(style3, (float) 2.5);
 
        try {
-           document.insertString(document.getLength(), "Vehicles Information: " + newline, style);
+           document.insertString(document.getLength(), "Vehicles Information " + newline, style);
            getVehiclesDensity(); // reports total of different types of vehicles
-           document.insertString(document.getLength(), "Climatic Conditions: " + newline, style);
+           document.insertString(document.getLength(), "Forecast " + newline, style);
            getHowWasTheDay(); //reports the climatic conditions
-           document.insertString(document.getLength(), "Traffic Information: " + newline, style);
+           document.insertString(document.getLength(), "Traffic Information " + newline, style);
            getAvgVelocityTotalVehicles(); //reports average velocity of total of cars
            congestionRate();
-           document.insertString(document.getLength(), "Destination: " + newline, style);
-           vehiclesMadeDestination(); // reports percentage of vehicles that made it to their destination along with the avg time it took them to get there
+           if (dataAndStructures.getGlobalConfigManager().getRoute().getDestination()!="") {
+               document.insertString(document.getLength(), "Destination " + newline, style);
+               vehiclesMadeDestination(); // reports percentage of vehicles that made it to their destination along with the avg time it took them to get there
+           }
        } catch (BadLocationException badLocationException) {
            System.err.println("Error");
        }
@@ -107,7 +110,7 @@ public class DCP extends JPanel{
        textPane.setEditable(false);
        JScrollPane scrollPane = new JScrollPane(textPane);
        frame.add(scrollPane, BorderLayout.CENTER);
-       frame.setSize(800, 990);
+       frame.setSize(900, 1050);
        frame.setVisible(true);
        firstTimeOpen = false;
        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -160,6 +163,7 @@ public class DCP extends JPanel{
     }
 
     public void getVehiclesDensity() {
+        int carsNoVisible=0, heavyLoadsNoVisible=0, emergenciesNoVisible=0;
 
         if (dataAndStructures.getVehicles()!=null) {
             if (dataAndStructures.getVehicles().size() != 0) {
@@ -177,18 +181,35 @@ public class DCP extends JPanel{
                                 break;
                         }
                     }
+                    if (!vehicle.isVisible()) {
+                        switch (vehicle.getVehicleType()) {
+                            case car:
+                                carsNoVisible++;
+                                break;
+                            case heavyLoad:
+                                heavyLoadsNoVisible++;
+                                break;
+                            case emergency:
+                                emergenciesNoVisible++;
+                                break;
+                        }
+                    }
                 }
                 try {
                     int vehiclesVisible=cars+heavyLoads+emergencies;
-                    document.insertString(document.getLength(), "Total of vehicles: ", style2);
-                    document.insertString(document.getLength(), this.dataAndStructures.getVehicles().size() + newline , style3);
+                    int totalCars=carsNoVisible+cars;
+                    int totalHeavy=heavyLoadsNoVisible+heavyLoads;
+                    int totalEmergency=emergenciesNoVisible+emergencies;
+                    document.insertString(document.getLength(), "Total of created vehicles: ", style2);
+                    document.insertString(document.getLength(), this.dataAndStructures.getVehicles().size() +" (Cars: "  +
+                            totalCars+ ", Emergency vehicles: " +totalEmergency + ", Public Transportation: " +totalHeavy +")"+ newline, style3);
                     document.insertString(document.getLength(), "Total of vehicles still on the road network: ", style2);
                     document.insertString(document.getLength(), vehiclesVisible + newline , style3);
-                    document.insertString(document.getLength(), "Cars: ", style2);
+                    document.insertString(document.getLength(), "Cars driving: ", style2);
                     document.insertString(document.getLength(), cars + newline, style3);
-                    document.insertString(document.getLength(), "Ambulances & Police Vehicles: ", style2);
+                    document.insertString(document.getLength(), "Ambulances & Police Vehicles driving: ", style2);
                     document.insertString(document.getLength(), emergencies + newline, style3);
-                    document.insertString(document.getLength(), "Public Transportation: ", style2);
+                    document.insertString(document.getLength(), "Public Transportation driving: ", style2);
                     document.insertString(document.getLength(), heavyLoads + newline + newline + newline, style3);
                 } catch (BadLocationException e) {
                     e.printStackTrace();
@@ -197,49 +218,47 @@ public class DCP extends JPanel{
             }
     }
 
-    public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
 
-        long factor = (long) Math.pow(10, places);
-        value = value * factor;
-        long tmp = Math.round(value);
-        return (double) tmp / factor;
-    }
 
     private void vehiclesMadeDestination() {
-       // dataAndStructures.getGlobalConfigManager().getRoute().setDestination("London");
-       // dataAndStructures.getGlobalConfigManager().getRoute().setTrafficPercent(1);
-        if(dataAndStructures.getGlobalConfigManager().getRoute().getDestination()!="") {
+        int vehiclesWithDest=0, vehiclesLost=0;
+        if(dataAndStructures.getGlobalConfigManager().getRoute().getDestination()!="" && dataAndStructures.getVehicles().size()!=0) {
             for (IVehicleManager vehicle : dataAndStructures.getVehicles()) {
-                if(vehicle.getVehicle().getDestination()!="")
-                    vehiclesEnroute++;
+                if(vehicle.getVehicle().getDestination()!="" && vehicle.isVisible() && !vehicle.getVehicle().getMadeDestination())
+                    vehiclesEnroute++; //counts vehicles that are still visible and going to their destination
+                if(vehicle.getVehicle().getDestination()!="" && !vehicle.isVisible() && !vehicle.getVehicle().getMadeDestination())
+                    vehiclesLost++;
                 if (vehicle.getVehicle().getMadeDestination()) {
-                    percentageMadeDest++;
+                    percentageMadeDest++;//counts vehicles that already made it to their destination
                     avgTimeToDestination = (avgTimeToDestination + (vehicle.getVehicle().getArrivalDestTime()-vehicle.getVehicle().getTimeCreated()));
                 }
+                if (vehicle.getVehicle().getDestination()!="")
+                    vehiclesWithDest++;
             }
-            avgTimeToDestination=round((avgTimeToDestination / percentageMadeDest), 2);
+            avgTimeToDestination=Common.round((avgTimeToDestination / percentageMadeDest), 2);
             avgTimeToDestination=avgTimeToDestination/60; //to give time in minutes
-
             try {
 
                 document.insertString(document.getLength(), "Destination Name: ", style2);
                 document.insertString(document.getLength(), dataAndStructures.getGlobalConfigManager().getRoute().getDestination() + newline, style3);
 
-                document.insertString(document.getLength(), "Vehicles going to " + dataAndStructures.getGlobalConfigManager().getRoute().getDestination()+ ": ", style2);
-                document.insertString(document.getLength(), vehiclesEnroute+ " (" +dataAndStructures.getGlobalConfigManager().getRoute().getTrafficPercent()*100 + "%)" + newline, style3);
+                document.insertString(document.getLength(), "Total vehicles with destination " + dataAndStructures.getGlobalConfigManager().getRoute().getDestination()+ ": ", style2);
+                document.insertString(document.getLength(), vehiclesWithDest + " (" + Common.round(((vehiclesWithDest * 100) / dataAndStructures.getVehicles().size()),2) + "%)" + newline, style3);
 
                 document.insertString(document.getLength(), "Vehicles that made it to " + dataAndStructures.getGlobalConfigManager().getRoute().getDestination()+ ": ", style2);
-                document.insertString(document.getLength(), percentageMadeDest +" (", style3);
-                percentageMadeDest = round((percentageMadeDest * dataAndStructures.getGlobalConfigManager().getRoute().getTrafficPercent()*100) / dataAndStructures.getVehicles().size(), 2);
+                document.insertString(document.getLength(), percentageMadeDest/1 +" (", style3);
+
+                percentageMadeDest = Common.round((percentageMadeDest * dataAndStructures.getGlobalConfigManager().getRoute().getTrafficPercent()*100) / vehiclesWithDest, 2);
                 document.insertString(document.getLength(), percentageMadeDest+"%)" + newline, style3);
 
-                vehiclesEnroute=vehiclesEnroute-percentageMadeDest;
-                document.insertString(document.getLength(), "Vehicles enroute to " + dataAndStructures.getGlobalConfigManager().getRoute().getDestination()+ ": ", style2);
-                document.insertString(document.getLength(), vehiclesEnroute+ newline, style3);
-
                 document.insertString(document.getLength(), "Avg. Time for vehicles to get " + dataAndStructures.getGlobalConfigManager().getRoute().getDestination() + ": ", style2);
-                document.insertString(document.getLength(), round(avgTimeToDestination,2) +" mins" + newline, style3);
+                document.insertString(document.getLength(), Common.round(avgTimeToDestination, 2) +" mins" + newline, style3);
+
+                document.insertString(document.getLength(), "Vehicles still enroute to " + dataAndStructures.getGlobalConfigManager().getRoute().getDestination()+ ": ", style2);
+                document.insertString(document.getLength(), vehiclesEnroute +" (" + Common.round((vehiclesEnroute * 100) / vehiclesWithDest, 2)+ "%)"+ newline, style3);
+
+                document.insertString(document.getLength(), "Vehicles got lost, did not make it to " + dataAndStructures.getGlobalConfigManager().getRoute().getDestination() + ": ", style2);
+                document.insertString(document.getLength(), vehiclesLost+" (" + Common.round((vehiclesLost * 100) / vehiclesWithDest, 2)+ "%)"+ newline, style3);
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }
@@ -283,7 +302,7 @@ public class DCP extends JPanel{
                 if (vehicle.getVehID() != 0 && vehicle.isVisible()) {
                     if (vehiclesVelocity.containsKey(vehicle.getVehID() + "")) {
                         vehiclesVelocity.put(vehicle.getVehID() + "", (vehiclesVelocity.get(vehicle.getVehID() + "") + vehicle.getCurrentVelocity()));
-                        numberOfTimes.put(vehicle.getVehID() + "", (numberOfTimes.get(vehicle.getVehID() + "") + 1));
+                        numberOfTimes.put(vehicle.getVehID() + "", (numberOfTimes.get(vehicle.getVehID() + "")+1));
                     } else {
                         vehiclesVelocity.put(vehicle.getVehID() + "", vehicle.getCurrentVelocity()); //first time adding a car with its velocities into the hash-map
                         numberOfTimes.put(vehicle.getVehID() + "", 1);
@@ -294,24 +313,27 @@ public class DCP extends JPanel{
     }
     private void congestionRate(){
         int vehiclesVisible=0;
+        rate=0;
         for (IVehicleManager vehicle : dataAndStructures.getVehicles()) {
             if (vehicle.getVehID() != 0 && vehicle.isVisible()) {
                     vehiclesVisible++;
                     rate=rate +(vehicle.getVehicle().getVehicleMotor().getMaximumVelocity()-vehicle.getVehicle().getCurrentVelocity());
             }
         }
-        rate=round(rate/vehiclesVisible,2);
+        rate=Common.round(rate/vehiclesVisible,1);
         try {
             document.insertString(document.getLength(), "Traffic Intensity: ", style2);
-            if (rate>=0 && rate<11)
+            if (rate>=0 && rate<16)
                 document.insertString(document.getLength(), "Uncongested, No Traffic", style3);
-            if (rate>=11 && rate<20)
-                document.insertString(document.getLength(), "Roads a bit congested", style3);
-            if (rate>=20)
+            if (rate>=16 && rate<26)
+                document.insertString(document.getLength(), "A bit congested", style3);
+            if (rate>=26 && rate<36)
+                document.insertString(document.getLength(), "Congested", style3);
+            if (rate>=36)
                 document.insertString(document.getLength(), "Traffic jam", style3);
             document.insertString(document.getLength(), newline, style3);
-            document.insertString(document.getLength(), "Congestion Rate (max speed - current velocity): ", style2);
-            document.insertString(document.getLength(), rate + newline, style3);
+            document.insertString(document.getLength(), "Average Congestion Rate (max speed - current velocity): ", style2);
+            document.insertString(document.getLength(), rate +" Km/Hour below max limit speed"+ newline, style3);
             document.insertString(document.getLength(), newline + newline, style3);
         } catch (BadLocationException e) {
             e.printStackTrace();
@@ -324,7 +346,7 @@ public class DCP extends JPanel{
         for (Map.Entry<String, Double> velocityRecordsPerVehicle : averageVehiclesVelocity.entrySet()) {
             avgVelocityTotalVehicles =avgVelocityTotalVehicles+velocityRecordsPerVehicle.getValue();
         }
-        avgVelocityTotalVehicles=round(((avgVelocityTotalVehicles/averageVehiclesVelocity.size())*3600/1000), 2);
+        avgVelocityTotalVehicles=Common.round(((avgVelocityTotalVehicles/averageVehiclesVelocity.size())*3600/1000), 2);
         try {
             document.insertString(document.getLength(), "Average Velocity: ", style2);
             document.insertString(document.getLength(),  avgVelocityTotalVehicles +" Km/Hour" + newline, style3);
@@ -337,10 +359,10 @@ public class DCP extends JPanel{
         //UNCOMMENT THE FOLLOWING IF AVERAGE VEL PER VEHICLE IS NEEDED
         for (Map.Entry<String, Double> velocityRecordsPerVehicle : vehiclesVelocity.entrySet()) {
            // textArea.append("Vehicle ID: " + velocityRecordsPerVehicle.getKey() + "");
-           // textArea.append(" Vehicle Average Velocity: " + round(velocityRecordsPerVehicle.getValue()/numberOfTimes.get(velocityRecordsPerVehicle.getKey()+""),2));
+            // textArea.append(" Vehicle Average Velocity: " + round(velocityRecordsPerVehicle.getValue()/numberOfTimes.get(velocityRecordsPerVehicle.getKey()+""),2));
            // textArea.append(" Driver is: " + dataAndStructures.getVehicles().get(Integer.parseInt(velocityRecordsPerVehicle.getKey())-1).getVehicle().getDriver().getDriverBehaviorType() + newline);
 
-            averageVehiclesVelocity.put(velocityRecordsPerVehicle.getKey() + "", (round((velocityRecordsPerVehicle.getValue() / numberOfTimes.get(velocityRecordsPerVehicle.getKey())), 2)));
+            averageVehiclesVelocity.put(velocityRecordsPerVehicle.getKey() + "", (Common.round((velocityRecordsPerVehicle.getValue() / numberOfTimes.get(velocityRecordsPerVehicle.getKey())), 2)));
         }
 
     }
