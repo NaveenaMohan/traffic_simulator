@@ -26,7 +26,8 @@ public class RoadNetworkManager implements IRoadNetworkManager {
         RUnit currentRUnit = getNext(x, y, prevRUnit, false);
         if (!roadNetwork.getrUnitHashtable().contains(currentRUnit)) {
             roadNetwork.getrUnitHashtable().put(String.valueOf(rUnitId), currentRUnit);
-            manageIntersections(currentRUnit);
+            if(prevRUnit!=null)
+            manageIntersections(prevRUnit);
         }
 
 
@@ -77,17 +78,10 @@ public class RoadNetworkManager implements IRoadNetworkManager {
         boolean canIntersect = false;
         //check if the road is going right
         double difference = Common.getAngleDifference(
-                Common.getRoadBackwardDirection(prevRUnit),
-                Common.getRoadBackwardDirection(currentRUnit)
+                Common.getRoadBackwardDirection(prevRUnit,5),
+                Common.getRoadBackwardDirection(currentRUnit,5)
         );
 
-//        System.out.println("(" + Common.getNthPrevRUnit(prevRUnit, 5).getX() + "," + Common.getNthPrevRUnit(prevRUnit, 5).getY() +
-//                " . " + prevRUnit.getX() + "," + prevRUnit.getY() + ") " +
-//                Common.getRoadBackwardDirection(prevRUnit) + "+" +
-//                "(" + Common.getNthPrevRUnit(currentRUnit, 5).getX() + "," + Common.getNthPrevRUnit(currentRUnit, 5).getY() + " . " +
-//                " . " + currentRUnit.getX() + "," + currentRUnit.getY() + ") " +
-//                Common.getRoadBackwardDirection(currentRUnit) + "=" +
-//                difference);
         boolean isCurrentSingleLane = (currentRUnit.getChangeAbleRUnit() == null ? true : false);
         boolean isPrevSingleLane = (prevRUnit.getChangeAbleRUnit() == null ? true : false);
         //if difference is positive it is going left
@@ -95,24 +89,14 @@ public class RoadNetworkManager implements IRoadNetworkManager {
 
             boolean isPrevLeftLane = (prevRUnit.isLeft());
             boolean isCurrentLeftLane = (currentRUnit.isLeft());
-            System.out.println(isPrevSingleLane + " " + isPrevLeftLane+ " " +isCurrentSingleLane + " " +isCurrentLeftLane);
-            if ((isPrevSingleLane | isPrevLeftLane) & (isCurrentSingleLane | isCurrentLeftLane)) {
-                System.out.println("current: " + currentRUnit.getId() + " left: " + currentRUnit.isLeft() + " x: " +
-                        currentRUnit.getX() + " y: " + currentRUnit.getY() + " intersected with prev: " +
-                        prevRUnit.getId() + " left: " + prevRUnit.isLeft() + " x: " +
-                        prevRUnit.getX() + " y: " + prevRUnit.getY() + " BECAUSE LEFT");
-                canIntersect = true;
+             if ((isPrevSingleLane | isPrevLeftLane) & (isCurrentSingleLane | isCurrentLeftLane)) {
+                 canIntersect = true;
             }
         } else {//going right
             boolean isPrevRightLane = (!prevRUnit.isLeft());
             boolean isCurrentRightLane = (!currentRUnit.isLeft());
-            System.out.println(isPrevSingleLane + " " + isPrevRightLane+ " " +isCurrentSingleLane + " " +isCurrentRightLane);
             if ((isPrevSingleLane | isPrevRightLane) & (isCurrentSingleLane | isCurrentRightLane)) {
-                System.out.println("current: " + currentRUnit.getId() + " left: " + currentRUnit.isLeft() + " x: " +
-                        currentRUnit.getX() + " y: " + currentRUnit.getY() + " intersected with prev: " +
-                        prevRUnit.getId() + " left: " + prevRUnit.isLeft() + " x: " +
-                        prevRUnit.getX() + " y: " + prevRUnit.getY() + " BECAUSE RIGHT");
-                canIntersect = true;
+                 canIntersect = true;
             }
         }
 
@@ -121,15 +105,17 @@ public class RoadNetworkManager implements IRoadNetworkManager {
 
     private void connectNext(RUnit prev, RUnit next)
     {
-        //Assigning the current Runit's previous Runitist with previous Runit
-        if (!next.getPrevsRUnitList().contains(prev)) {
-            next.getPrevsRUnitList().add(prev);
-        }
-
         //Assigning the previous Runit's next Runitist with current Runit
         if (!prev.getNextRUnitList().contains(next)) {
             prev.getNextRUnitList().add(next);
         }
+
+        //Assigning the current Runit's previous Runitist with previous Runit
+        if (!next.getPrevsRUnitList().contains(prev) & !next.getNextRUnitList().contains(prev)) {
+            next.getPrevsRUnitList().add(prev);
+        }
+
+
     }
     private void manageIntersections(RUnit currentRUnit)
     {
@@ -147,9 +133,6 @@ public class RoadNetworkManager implements IRoadNetworkManager {
 
         m+="[1gotach"+(intersected!=null ? intersected.getId() : "null")+"]";
         //checks if the intersection was caused by accidental mouse drag
-        if(intersected!=null)
-            if(!checkForRoadDensityCollisions(intersected, currentRUnit))
-                intersected=null;
         m+="[2gotach"+(intersected!=null ? intersected.getId() : "null")+"]";
         if(intersected!=null)
         {
@@ -160,6 +143,14 @@ public class RoadNetworkManager implements IRoadNetworkManager {
             {
                 m+="[koko]";
                 connectNext(currentRUnit, intersected);
+                String nexts="";
+                for (RUnit n : currentRUnit.getNextRUnitList())
+                    nexts += n.getId() + " ";
+                String prevs="";
+                for (RUnit p : currentRUnit.getPrevsRUnitList())
+                    prevs += p.getId() + " ";
+                m+="id: " + currentRUnit.getId() + " x:" + currentRUnit.getX() + " y:" + currentRUnit.getY() + " n("+currentRUnit.getNextRUnitList().size() +
+                        "){"+ nexts + "} p(" + currentRUnit.getPrevsRUnitList().size() + "){"+ prevs + "}";
             }
 
             //connect intersected to incoming
@@ -167,12 +158,19 @@ public class RoadNetworkManager implements IRoadNetworkManager {
             {
                 m+="[kuku]";
                 connectNext(intersected, currentRUnit);
+                String nexts="";
+                for (RUnit n : currentRUnit.getNextRUnitList())
+                    nexts += n.getId() + " ";
+                String prevs="";
+                for (RUnit p : currentRUnit.getPrevsRUnitList())
+                    prevs += p.getId() + " ";
+                m+="id: " + currentRUnit.getId() + " x:" + currentRUnit.getX() + " y:" + currentRUnit.getY() + " n("+currentRUnit.getNextRUnitList().size() +
+                        "){"+ nexts + "} p(" + currentRUnit.getPrevsRUnitList().size() + "){"+ prevs + "}";
             }
 
         }
         m+="[manageIntersections-END]";
-        System.out.println(m);
-
+        //System.out.println(m);
     }
     private RUnit getNext(int x, int y, RUnit prevRUnit, boolean isDoubleLane) {
 

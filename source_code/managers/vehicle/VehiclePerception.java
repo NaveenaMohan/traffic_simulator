@@ -12,9 +12,8 @@ import managers.space.ObjectInSpace;
 public class VehiclePerception {
 
 
-    public void See(int vehID, IRUnitManager rUnit, double maxVision, VehicleState vehicleState,
-                    ISpaceManager spaceManager, IDataAndStructures dataAndStructures, ObjectInSpace myObject,
-                    String myDestination, double currentTime) {
+    public void see(int vehID, IRUnitManager rUnit, double maxVision, VehicleState vehicleState,
+                    ISpaceManager spaceManager, IDataAndStructures dataAndStructures, ObjectInSpace myObject) {
         IRUnitManager temp = rUnit;
 
 //        if (temp.getNextRUnitList().size() > 0)
@@ -91,7 +90,7 @@ public class VehiclePerception {
 
             //go to next rUnit
             if (temp.getNextRUnitList().size() > 0)
-                temp = temp.getNextRUnitList().get(0);//VehicleMotor.chooseNext(temp, vehicleState);
+                temp = VehicleMotor.chooseNext(temp, vehicleState);
             else
                 break;
 
@@ -124,6 +123,10 @@ public class VehiclePerception {
         //check for traffic signs
         if (rUnit.getTrafficSign() != null)
             return rUnit.getTrafficSign();
+
+        //check for traffic signs
+        if (rUnit.getBlockage() != null)
+            return rUnit.getBlockage();
 
         return rUnit;
     }
@@ -165,7 +168,7 @@ public class VehiclePerception {
         else if (obj instanceof ZebraCrossing)//check for zebra crossing
             return 0;
         else if (obj instanceof StopSign)//check for stop sign
-            return 0;
+            return 1;
         else if (obj instanceof SpeedLimitSign)//check for speed sign and do the conversion from km/h to m/s
             return (((SpeedLimitSign) obj).getSpeedLimit() * 1000) / 3600;
         else if (obj instanceof DirectionSign)//check for Direction Sign

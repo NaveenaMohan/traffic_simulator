@@ -42,19 +42,24 @@ public class Common {
          */
         return ((((angle2 - angle1) % 360) + 540) % 360) - 180;
     }
-    public static double getRoadForwardDirection(IRUnitManager rUnit)
+    public static double getRoadForwardDirection(IRUnitManager rUnit,int displacement)
     {
         /*
         This function gets the angle of the road by getting the angle between the given rUnit and it's next ones
          */
-        return getAngle(rUnit.getX(), rUnit.getY(), getNthNextRUnit(rUnit,5).getX(), getNthNextRUnit(rUnit,5).getY());
+        return getAngle(rUnit.getX(), rUnit.getY(), getNthNextRUnit(rUnit,displacement).getX(), getNthNextRUnit(rUnit,displacement).getY());
     }
-    public static double getRoadBackwardDirection(IRUnitManager rUnit)
+    public static double getRoadBackwardDirection(IRUnitManager rUnit,int displacement)
     {
         /*
         This function gets the angle of the road by getting the angle between the given rUnit and it's prevs ones
          */
-        return getAngle(getNthPrevRUnit(rUnit, 5).getX(), getNthPrevRUnit(rUnit, 5).getY(), rUnit.getX(), rUnit.getY());
+        try{
+            return getAngle(getNthPrevRUnit(rUnit, displacement).getX(), getNthPrevRUnit(rUnit, displacement).getY(), rUnit.getX(), rUnit.getY());
+        }catch (NullPointerException ex){
+            System.out.println("Null pointer exception" + ex);
+        }
+        return 0;
     }
 
     public static Coordinates getNextPointFromTo(Coordinates A, Coordinates B)
@@ -85,16 +90,20 @@ public class Common {
         /*
         This function returns the nth next rUnit. It should not go out of range
          */
+        String m = "("+rUnit.getId()+")";
         if(rUnit==null)
             return null;
 
         IRUnitManager temp = rUnit;
         if(n>0)
             for (int i = 0; i < n; i++) {
-                if(temp.getNextRUnitList().size()>0)
+                if(temp.getNextRUnitList().size()>0) {
                     temp = temp.getNextRUnitList().get(0);
+                    m+="("+temp.getId()+")";
+                }
             }
 
+        //System.out.println(m);
         return temp;
     }
 
