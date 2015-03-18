@@ -1,9 +1,11 @@
 package managers.globalconfig;
 
+import java.io.Serializable;
+
 /**
  * Created by naveena on 09/02/15.
  */
-public class ClimaticCondition {
+public class ClimaticCondition implements Serializable{
 
     private double visibility;
     private double slipperiness;

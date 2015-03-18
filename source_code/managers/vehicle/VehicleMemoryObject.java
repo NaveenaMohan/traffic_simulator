@@ -2,11 +2,13 @@ package managers.vehicle;
 
 import managers.runit.IRUnitManager;
 
+import java.io.Serializable;
+
 /**
  * Created by Fabians on 18/02/2015.
  * used by VehiclePerception, state and motor to recognise objects and assign distances to them
  */
-public class VehicleMemoryObject<T> {
+public class VehicleMemoryObject<T> implements Serializable {
     private IRUnitManager rUnit;
     private T object;
     private double distance;

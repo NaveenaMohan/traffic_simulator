@@ -1,4 +1,4 @@
-package managers.vehiclefactory;
+package ui.components;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +12,7 @@ public class NoVehicleFactoryDialogBox extends JDialog {
 
     public final void vehicleFactoryDialog() {
 
-        ImageIcon icon = new ImageIcon(managers.vehiclefactory.NoVehicleFactoryDialogBox.class.getResource("RUnitError.png"));
+        ImageIcon icon = new ImageIcon(NoVehicleFactoryDialogBox.class.getResource("/resources/RUnitError.png"));
         getContentPane().setLayout(null);
         JLabel label = new JLabel(icon);
         label.setBounds(6, 23, 50, 50);

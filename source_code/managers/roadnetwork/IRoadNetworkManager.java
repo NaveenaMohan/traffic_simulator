@@ -4,13 +4,14 @@ import managers.runit.DirectionSignType;
 import managers.runit.RUnit;
 import managers.runit.TrafficLight;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by naveena on 08/02/15.
  */
-public interface IRoadNetworkManager {
+public interface IRoadNetworkManager extends Serializable {
 
     RUnit addSingleLane(int x, int y, RUnit prevRUnit);
 

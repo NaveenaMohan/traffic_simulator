@@ -5,11 +5,15 @@ import engine.SimEngine;
 import managers.globalconfig.*;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
-import managers.vehiclefactory.NoVehicleFactoryDialogBox;
+import managers.runit.TrafficLight;
+import managers.space.ObjectInSpace;
+import managers.vehicle.IVehicleManager;
 import managers.vehiclefactory.VehicleFactoryManager;
 import reports.DCP;
 import ui.components.DrawingBoard;
+import ui.components.NoVehicleFactoryDialogBox;
 import ui.components.RangeSlider;
+import ui.fileops.ExportImportObject;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -23,8 +27,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 
 public class  Traffic_Simulator {
 
@@ -40,7 +44,7 @@ public class  Traffic_Simulator {
             new VehicleDensity(),
             new Route()
     );
-    final DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
+    DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
     private DCP dcp=new DCP(dataAndStructures);
     private boolean openReport=false;
     private SimEngine simEngine = new SimEngine(dataAndStructures,dcp);
@@ -271,10 +275,6 @@ public class  Traffic_Simulator {
         simulationConfigPanel.add(pauseButton);
 
         JButton stopButton = new JButton();
-        stopButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
         stopButton.setToolTipText("Stop");
         stopButton.setBounds(170, 0, 70, 70);
         stopButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("/resources/stop_music.png")));
@@ -310,17 +310,6 @@ public class  Traffic_Simulator {
         uploadImageButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("/resources/upload.png")));
         simulationConfigPanel.add(uploadImageButton);
 
-        JButton importConfigButton = new JButton();
-        importConfigButton.setToolTipText("Import Configuration");
-        importConfigButton.setBounds(498, 0, 70, 70);
-        importConfigButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("/resources/import.png")));
-        simulationConfigPanel.add(importConfigButton);
-
-        JButton exportConfigButton = new JButton();
-        exportConfigButton.setToolTipText("Export Configuration");
-        exportConfigButton.setBounds(580, 0, 70, 70);
-        exportConfigButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("/resources/export.png")));
-        simulationConfigPanel.add(exportConfigButton);
 
         JButton reportButton = new JButton();
         reportButton.setToolTipText("Generate Report");
@@ -486,7 +475,7 @@ public class  Traffic_Simulator {
         vehicleProductionRateSlider.setMaximum(20);
         vehicleProductionRateSlider.setMajorTickSpacing(20);
         vehicleProductionRateSlider.setValue((int) (globalConfigManager.getVehicleDensity().getCreationRatePerSecond() * 10.0));
-                vehicleProductionRateSlider.setBounds(165, 47, 155, 133);
+        vehicleProductionRateSlider.setBounds(165, 47, 155, 133);
         trafficPatternPanel.add(vehicleProductionRateSlider);
         vehicleProductionRateSlider.addChangeListener(new ChangeListener() {
             @Override
@@ -548,30 +537,30 @@ public class  Traffic_Simulator {
         trafficPatternPanel.add(lblDestinationDensity);
 
 
-        final JTextField locationTxtField = new JTextField(globalConfigManager.getRoute().getDestination());
-        locationTxtField.setForeground(Color.LIGHT_GRAY);
-        locationTxtField.setFont(new Font("Copperplate Gothic Bold", Font.ITALIC, 13));
-        trafficPatternPanel.add(locationTxtField);
-        locationTxtField.setBounds(183, 189, 145, 50);
-        locationTxtField.addActionListener(new ActionListener() {
+        final JTextField destinationTxtBoxField = new JTextField(globalConfigManager.getRoute().getDestination());
+        destinationTxtBoxField.setForeground(Color.LIGHT_GRAY);
+        destinationTxtBoxField.setFont(new Font("Copperplate Gothic Bold", Font.ITALIC, 13));
+        trafficPatternPanel.add(destinationTxtBoxField);
+        destinationTxtBoxField.setBounds(183, 189, 145, 50);
+        destinationTxtBoxField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                globalConfigManager.getRoute().setDestination(locationTxtField.getText());
+                globalConfigManager.getRoute().setDestination(destinationTxtBoxField.getText());
             }
         });
 
-        final JSlider routeDensitySlider = new JSlider();
-        routeDensitySlider.setBounds(325, 143, 155, 133);
-        routeDensitySlider.setPaintTicks(true);
-        routeDensitySlider.setMajorTickSpacing(10);
-        routeDensitySlider.setMinimum(0);
-        routeDensitySlider.setMaximum(100);
-        routeDensitySlider.setValue((int) (globalConfigManager.getRoute().getTrafficPercent() * 100.0));
-        trafficPatternPanel.add(routeDensitySlider);
-        routeDensitySlider.addChangeListener(new ChangeListener() {
+        final JSlider destinationDensitySlider = new JSlider();
+        destinationDensitySlider.setBounds(325, 143, 155, 133);
+        destinationDensitySlider.setPaintTicks(true);
+        destinationDensitySlider.setMajorTickSpacing(10);
+        destinationDensitySlider.setMinimum(0);
+        destinationDensitySlider.setMaximum(100);
+        destinationDensitySlider.setValue((int) (globalConfigManager.getRoute().getTrafficPercent() * 100.0));
+        trafficPatternPanel.add(destinationDensitySlider);
+        destinationDensitySlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                globalConfigManager.getRoute().setTrafficPercent(routeDensitySlider.getValue() / 100.0);
+                globalConfigManager.getRoute().setTrafficPercent(destinationDensitySlider.getValue() / 100.0);
             }
         });
 
@@ -606,8 +595,7 @@ public class  Traffic_Simulator {
                 return getValueAt(0, column).getClass();
             }
         };
-
-
+        table.setModel(model);
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
@@ -620,7 +608,6 @@ public class  Traffic_Simulator {
             }
 
         });
-        table.setModel(model);
         scrollPane.setViewportView(table);
         trafficLightConfigPanel.add(scrollPane);
 
@@ -799,6 +786,7 @@ public class  Traffic_Simulator {
                 if(drawingBoard.isSimulationStarted()){
                     simEngine.Unpause();
                     drawingBoard.setSimulationPlaying(true);
+                    simEngine.Play(drawingBoard);
                 }else {
                     if (vehicleFactoryManager.vehicleFactoryList.isEmpty()) {
                         NoVehicleFactoryDialogBox vehicleFactoryDialogBox = new NoVehicleFactoryDialogBox();
@@ -829,9 +817,25 @@ public class  Traffic_Simulator {
             @Override
             public void actionPerformed(ActionEvent e) {
                 simEngine.CleanAll();
-                drawingBoard.clean();
                 drawingBoard.setSimulationPlaying(false);
                 drawingBoard.setSimulationStarted(false);
+
+                roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
+                vehicleFactoryManager = new VehicleFactoryManager();
+                climaticCondition = new ClimaticCondition();
+                globalConfigManager = new GlobalConfigManager(
+                        100,//ticks per second
+                        0.5,//metres per RUnit
+                        climaticCondition,
+                        new DriverBehavior(),
+                        new VehicleDensity(),
+                        new Route()
+                );
+                dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
+                dcp=new DCP(dataAndStructures);
+                simEngine = new SimEngine(dataAndStructures,dcp);
+                drawingBoard.clean();
+
             }
         });
 
@@ -877,30 +881,122 @@ public class  Traffic_Simulator {
             public void actionPerformed(ActionEvent e) {
                 drawingBoard.setSimulationPlaying(false);
                 simEngine.CleanVehicles();
-                drawingBoardPanel.updateUI();
+                drawingBoardPanel.repaint();
             }
         });
 
-        JButton clearAllButton = new JButton();
-        clearAllButton.setToolTipText("Clear All");
-        clearAllButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("/resources/clearAll.png")));
-         clearAllButton.setBounds(408, 85, 65, 65);
-        trafficPatternPanel.add(clearAllButton);
 
-        JPanel panel = new JPanel();
-        panel.setBackground(Color.WHITE);
-        panel.setBounds(296, 83, 965, 339);
-        trafficSimulatorFrame.getContentPane().add(panel);
-        clearAllButton.addActionListener(new ActionListener() {
+        JButton importConfigButton = new JButton();
+        importConfigButton.setToolTipText("Import Configuration");
+        importConfigButton.setBounds(498, 0, 70, 70);
+        importConfigButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("/resources/import.png")));
+        simulationConfigPanel.add(importConfigButton);
+        importConfigButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawingBoard.setSimulationPlaying(false);
-                simEngine.CleanVehicles();
-                simEngine.CleanAll();
-                drawingBoard.clean();
+                FileInputStream fin = null;
+                try {
+                    fin = new FileInputStream("object.dat");
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
+                ObjectInputStream ois = null;
+                try {
+                    ois = new ObjectInputStream(fin);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                try {
+                    simEngine.CleanVehicles();
+                    simEngine.CleanAll();
+                    drawingBoard.clean();
+
+                    ExportImportObject exportImportObject = (ExportImportObject) ois.readObject();
+                    roadNetworkManager = (RoadNetworkManager) exportImportObject.getEngineDataStructures().getRoadNetworkManager();
+                    vehicleFactoryManager = (VehicleFactoryManager) exportImportObject.getEngineDataStructures().getVehicleFactoryManager();
+                    climaticCondition = exportImportObject.getEngineDataStructures().getGlobalConfigManager().getClimaticCondition();
+                    globalConfigManager = (GlobalConfigManager) exportImportObject.getEngineDataStructures().getGlobalConfigManager();
+                    dataAndStructures = exportImportObject.getEngineDataStructures();
+                    dcp=new DCP(dataAndStructures);
+                    simEngine = new SimEngine(dataAndStructures,dcp);
+
+                    drawingBoard.setSingleLaneRUnits(exportImportObject.getUiDataStructures().getSingleLaneRUnits());
+                    drawingBoard.setDoubleLaneRUnits(exportImportObject.getUiDataStructures().getDoubleLaneRUnits());
+                    drawingBoard.setTrafficLightCoordinates(exportImportObject.getUiDataStructures().getTrafficLightCoordinates());
+                    drawingBoard.setZebraCrossingCoordinates(exportImportObject.getUiDataStructures().getZebraCrossingCoordinates());
+                    drawingBoard.setStopCoordinates(exportImportObject.getUiDataStructures().getStopCoordinates());
+                    drawingBoard.setBlockageCoordinates(exportImportObject.getUiDataStructures().getBlockageCoordinates());
+                    drawingBoard.setVehicleFactoryCoordinates(exportImportObject.getUiDataStructures().getVehicleFactoryCoordinates());
+                    drawingBoard.setLeftCoordinates(exportImportObject.getUiDataStructures().getLeftCoordinates());
+                    drawingBoard.setRightCoordinates(exportImportObject.getUiDataStructures().getRightCoordinates());
+                    drawingBoard.setStraightCoordinates(exportImportObject.getUiDataStructures().getStraightCoordinates());
+                    drawingBoard.setSpeed20Coordinates(exportImportObject.getUiDataStructures().getSpeed20Coordinates());
+                    drawingBoard.setSpeed30Coordinates(exportImportObject.getUiDataStructures().getSpeed30Coordinates());
+                    drawingBoard.setSpeed50Coordinates(exportImportObject.getUiDataStructures().getSpeed50Coordinates());
+                    drawingBoard.setSpeed60Coordinates(exportImportObject.getUiDataStructures().getSpeed60Coordinates());
+                    drawingBoard.setSpeed70Coordinates(exportImportObject.getUiDataStructures().getSpeed70Coordinates());
+                    drawingBoard.setSpeed90Coordinates(exportImportObject.getUiDataStructures().getSpeed90Coordinates());
+                    drawingBoard.setWelcomeCoordinates(exportImportObject.getUiDataStructures().getWelcomeCoordinates());
+                    drawingBoard.setSimEngine(simEngine);
+                    drawingBoard.setRoadNetworkManager(roadNetworkManager);
+
+                    driverBehaviourRangeSlider.setValue((int) (globalConfigManager.getDriverBehaviour().getPercentageCautious() * 100.0));
+                    driverBehaviourRangeSlider.setUpperValue((int) ((globalConfigManager.getDriverBehaviour().getPercentageCautious() + (globalConfigManager.getDriverBehaviour().getPercentageNormal())) * 100.0));
+                    trafficDensityRangeSlider.setValue((int) (globalConfigManager.getVehicleDensity().getCarDensity() * 100.0));
+                    trafficDensityRangeSlider.setUpperValue((int) ((globalConfigManager.getVehicleDensity().getCarDensity() + globalConfigManager.getVehicleDensity().getHeavyVehicleDensity() ) * 100.0));
+                    slippery_slider.setValue((int) (climaticCondition.getSlipperiness() * 100.0));
+                    visibility_slider.setValue((int) (climaticCondition.getVisibility() * 100.0));
+                    destinationDensitySlider.setValue((int) (globalConfigManager.getRoute().getTrafficPercent() * 100.0));
+                    destinationTxtBoxField.setText(globalConfigManager.getRoute().getDestination());
+                    populateTrafficLightTableModel();
+                    drawingBoard.setModel(model);
+                    drawingBoard.getDrawingBoardPanel().repaint();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (ClassNotFoundException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
 
+        JButton exportConfigButton = new JButton();
+        exportConfigButton.setToolTipText("Export Configuration");
+        exportConfigButton.setBounds(580, 0, 70, 70);
+        exportConfigButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("/resources/export.png")));
+        simulationConfigPanel.add(exportConfigButton);
+        exportConfigButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                ExportImportObject exportImportObject = new ExportImportObject(dataAndStructures,drawingBoard);
+                FileOutputStream fout = null;
+                try {
+                    fout = new FileOutputStream("object.dat");
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                }
+                ObjectOutputStream oos;
+                try {
+                    oos = new ObjectOutputStream(fout);
+                    oos.writeObject(exportImportObject);
+                    oos.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+
+    }
+
+    private void populateTrafficLightTableModel(){
+        if(model != null){
+            for(TrafficLight trafficLight : roadNetworkManager.getRoadNetwork().getTrafficLightHashtable().values()){
+                model.addRow(new Object[]{trafficLight.getTrafficLightID(), trafficLight.getCycle().get(0), trafficLight.getCycle().get(1),
+                        trafficLight.getCycle().get(2), trafficLight.getCycle().get(3), trafficLight.getCycle().get(4), trafficLight.getCycle().get(5),
+                        trafficLight.getCycle().get(6), trafficLight.getCycle().get(7), trafficLight.getCycle().get(8), trafficLight.getCycle().get(9)});
+            }
+        }
     }
 
     @SuppressWarnings("serial")

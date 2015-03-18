@@ -8,7 +8,9 @@ import managers.space.ObjectInSpace;
 import managers.space.Space;
 import managers.space.VehicleDirection;
 
-public interface IVehicleManager {
+import java.io.Serializable;
+
+public interface IVehicleManager extends Serializable {
 
     void move(ISpaceManager spaceManager, double time, IDataAndStructures dataAndStructures);
 

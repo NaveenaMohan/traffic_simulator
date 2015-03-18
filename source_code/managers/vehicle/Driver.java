@@ -2,10 +2,12 @@ package managers.vehicle;
 
 import managers.globalconfig.DriverBehaviorType;
 
+import java.io.Serializable;
+
 /**
  * Created by naveena on 09/02/15.
  */
-public class Driver {
+public class Driver implements Serializable {
 
     private double speedOffset=1;
     private double visionOffset=1;

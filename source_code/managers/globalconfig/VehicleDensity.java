@@ -1,9 +1,11 @@
 package managers.globalconfig;
 
+import java.io.Serializable;
+
 /**
  * Created by naveena on 09/02/15.
  */
-public class VehicleDensity {
+public class VehicleDensity implements Serializable {
 
     private double carDensity=0.65;
     private double heavyVehicleDensity=0.3;

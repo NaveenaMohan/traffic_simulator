@@ -2,13 +2,14 @@ package managers.vehicle;
 
 import managers.runit.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * This method holds all the information that the vehicle knows about the road and objects ahead
  */
-public class VehicleState {
+public class VehicleState implements Serializable {
 //this object holds the information about the state of the environment around the vehicle
 
 
@@ -35,7 +36,6 @@ public class VehicleState {
 
     public void registerObject(VehicleMemoryObject obj) {
 
-        //System.out.println("=registered "+obj.getObject().getClass() + " d:" + obj.getDistance() +"m, s:" + obj.getVelocity());
         //saves the given object to its list of objects
         objectsAhead.add(obj);
     }

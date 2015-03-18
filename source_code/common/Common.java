@@ -57,7 +57,7 @@ public class Common {
         try{
             return getAngle(getNthPrevRUnit(rUnit, displacement).getX(), getNthPrevRUnit(rUnit, displacement).getY(), rUnit.getX(), rUnit.getY());
         }catch (NullPointerException ex){
-            System.out.println("Null pointer exception" + ex);
+            //System.out.println("Null pointer exception" + ex);
         }
         return 0;
     }

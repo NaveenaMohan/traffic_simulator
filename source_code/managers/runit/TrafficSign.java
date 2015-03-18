@@ -1,9 +1,11 @@
 package managers.runit;
 
+import java.io.Serializable;
+
 /**
  * Created by naveena on 09/02/15.
  */
-public abstract class TrafficSign {
+public abstract class TrafficSign implements Serializable {
 
     private RUnit rUnit;
 

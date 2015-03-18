@@ -10,10 +10,14 @@ import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
 import managers.space.VehicleDirection;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Fabians on 18/02/2015.
  */
-public class VehicleMotor {
+public class VehicleMotor implements Serializable {
     //this objects holds the information required to move on the map. It also provides functions for moving on the map
 
     private double maxAcceleration;//maximum acceleration the car can get

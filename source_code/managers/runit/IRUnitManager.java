@@ -1,11 +1,12 @@
 package managers.runit;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by naveena on 08/02/15.
  */
-public interface IRUnitManager {
+public interface IRUnitManager extends Serializable {
 
     void addTrafficLight(TrafficLight trafficLight);
 

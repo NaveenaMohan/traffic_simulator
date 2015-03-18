@@ -2,10 +2,12 @@ package managers.space;
 
 import common.Common;
 
+import java.io.Serializable;
+
 /**
  * Created by naveena on 08/02/15.
  */
-public class VehicleDirection {
+public class VehicleDirection implements Serializable {
 
     private double angle;
 

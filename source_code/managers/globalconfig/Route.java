@@ -1,9 +1,11 @@
 package managers.globalconfig;
 
+import java.io.Serializable;
+
 /**
  * Created by naveena on 09/02/15.
  */
-public class Route {
+public class Route implements Serializable {
 
     //TODO remove the defaults
     private String destination="London";

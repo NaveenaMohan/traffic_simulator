@@ -8,11 +8,13 @@ import managers.space.ObjectInSpace;
 import managers.vehicle.Driver;
 import managers.vehicle.Vehicle;
 
+import java.io.Serializable;
+
 
 /**
  * Created by naveena on 09/02/15.
  */
-public class VehicleFactory{
+public class VehicleFactory implements Serializable {
 
     private RUnit rUnit;
 

@@ -26,9 +26,7 @@ public class SpaceManager implements ISpaceManager {
             if (objectToCheck.getId() != obj.getId())
                 if (objectToCheck.getBounds().intersects(obj.getBounds())) //check if you intersect that object
                     return false;
-            //System.out.print("-object the same");
         }
-        // System.out.println(" !! Good - true");
         return true;
     }
 
@@ -51,6 +49,11 @@ public class SpaceManager implements ISpaceManager {
     @Override
     public List<ObjectInSpace> getObjects() {
         return space.getObjects();
+    }
+
+    @Override
+    public void setObjects(List<ObjectInSpace> objectInSpaces){
+        space.setObjects(objectInSpaces);
     }
 
 

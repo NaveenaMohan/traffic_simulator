@@ -10,10 +10,12 @@ import managers.space.ISpaceManager;
 import managers.space.SpaceManager;
 import managers.vehicle.Vehicle;
 
+import java.io.Serializable;
+
 /**
  * Created by naveena on 08/02/15.
  */
-public interface IVehicleFactoryManager {
+public interface IVehicleFactoryManager extends Serializable {
 
     void addVehicleFactory(RUnit rUnit);
 

@@ -5,11 +5,13 @@ import managers.runit.*;
 import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
 
+import java.io.Serializable;
+
 /**
  * Created by Fabians on 18/02/2015.
  * this class is responsible for collecting the information about the world
  */
-public class VehiclePerception {
+public class VehiclePerception implements Serializable {
 
 
     public void see(int vehID, IRUnitManager rUnit, double maxVision, VehicleState vehicleState,
