@@ -32,6 +32,16 @@ public class SimEngine {
 
     public void Play(ActionListener actionListener) {
 
+//
+//        for (IRUnitManager rUnit : dataAndStructures.getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()) {
+//            String ns = "";
+//            for (IRUnitManager nexts : rUnit.getNextRUnitList())
+//                ns += nexts.getId() + " ";
+//            String ps = "";
+//            for (IRUnitManager prevs : rUnit.getNextRUnitList())
+//                ps = prevs.getId() + " ";
+//            System.out.println("id: " + rUnit.getId() + " x: " + rUnit.getX() + " y: " + rUnit.getY() + " N(" + ns + ") P(" + ps + ")");
+//        }
         //initialise timer
         if (timer == null) {
             timer = new Timer(5, actionListener);
@@ -83,12 +93,14 @@ public class SimEngine {
             timer.stop();
         }
     }
+
     public void performAction() {
         if (!pause) {
             //increment tick
             dataAndStructures.getGlobalConfigManager().incrementTick();
             //update Report data
             dcp.updateReportingInfo(dataAndStructures);
+
             //create a new vehicle
             IVehicleManager newVehicle =
                     dataAndStructures.getVehicleFactoryManager().createVehicle(dataAndStructures);
@@ -96,6 +108,7 @@ public class SimEngine {
             if (newVehicle != null) {
                 dataAndStructures.getVehicles().add(newVehicle);
             }
+
             //move the vehicles
             for (IVehicleManager vehicle : dataAndStructures.getVehicles()) {
                 if (vehicle.isVisible())

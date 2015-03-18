@@ -487,13 +487,15 @@ public class DrawingBoard implements ActionListener {
         for (Coordinates coordinate : singleLaneCoordinates) {
             AffineTransform affineTransform = g2D.getTransform();
             RUnit rUnit = getRUnitWithCoordinates(coordinate.getX(), coordinate.getY());
-            double angle = Common.getRoadBackwardDirection(rUnit,15);
+            double angle = Common.getRoadBackwardDirection(rUnit,2);
             if (angle < 0) {
                 angle = angle + 360;
             }
-            g2D.rotate(Math.toRadians(-20), coordinate.getX(), coordinate.getY());
-            g2D.rotate(Math.toRadians(angle), coordinate.getX(), coordinate.getY());
-            g2D.drawImage(rUnitImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
+            //g2D.rotate(Math.toRadians(), coordinate.getX(), coordinate.getY());
+            //g2D.rotate(Math.toRadians(angle), coordinate.getX(), coordinate.getY());
+            int x = coordinate.getX()-(10) / 2;
+            int y = coordinate.getY()-(10) / 2;
+            g2D.drawImage(rUnitImage, x, y, drawingBoardPanel);
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             BasicStroke bs = new BasicStroke(2);
             g2D.setStroke(bs);

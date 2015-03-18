@@ -2,13 +2,13 @@ package managers.vehicle;
 
 import common.Common;
 import dataAndStructures.IDataAndStructures;
-import managers.runit.*;
+import managers.runit.DirectionSign;
+import managers.runit.IRUnitManager;
+import managers.runit.SpeedLimitSign;
+import managers.runit.WelcomeSign;
 import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
 import managers.space.VehicleDirection;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Fabians on 18/02/2015.
@@ -101,7 +101,8 @@ public class VehicleMotor {
             if(vehicleState.getNextDirectionAtDecisionPoint()==null) {
                 VehicleMemoryObject vehicleInLeft = vehicleState.getNextVehicleObject(20, true);
                 VehicleMemoryObject vehicleInRight = vehicleState.getNextVehicleObject(20, false);
-                VehicleMemoryObject speedAffectingRoadElement = (isEmergency ? null : vehicleState.getNextSpeedAffectingRoadElement(100, true));
+                VehicleMemoryObject speedAffectingRoadElement =
+                        (isEmergency ? null : vehicleState.getNextSpeedAffectingRoadElement(100, true));
 
                 double achievableSpeed = Math.min(
                         (speedAffectingRoadElement != null ? speedAffectingRoadElement.getVelocity() : desiredSpeed),
@@ -202,10 +203,7 @@ public class VehicleMotor {
         for (int i = 0; i < RUnitsTravelled; i++) {//go through as many metres as many you have travelled since last move
 
             //advance
-            currentStrategy = "";
-            currentStrategy += "choices(" + rUnit.getNextRUnitList().size() + ") " + vehicleState.getNextDirectionAtDecisionPoint();
-
-            rUnit = chooseNext(rUnit, vehicleState);
+           rUnit = chooseNext(rUnit, vehicleState);
 
             //see and process the objects we have just passed
             processObjectPassed(rUnit, vehicleState, dataAndStructures.getGlobalConfigManager().getCurrentSecond());
@@ -229,7 +227,6 @@ public class VehicleMotor {
         //the only plan the the vehicle can currently have is to choose it's next turn if it has a set destination
         //if you have a destination
         if (!destination.isEmpty()) {
-
             //if the next object is a direction sign
             if (nextObject.getObject() instanceof DirectionSign) {
                 //if the destination on the sign matches your destination
@@ -238,15 +235,12 @@ public class VehicleMotor {
                     vehicleState.setNextDirectionAtDecisionPoint(((DirectionSign) nextObject.getObject()).getDirectionSignType());
                 }
             }
-
             //if next object is a decision point
             if (nextObject.getObject() instanceof RoadDecisionPoint) {
                 //if you have next direction set
                 if (vehicleState.getNextDirectionAtDecisionPoint() != null) {
                     //set your nextRUnit
-                    System.out.println("REPLAN " + nextObject.getrUnit().getId());
                     vehicleState.setNextRUnitAfterDecisionPoint(getNextForDirection(nextObject.getrUnit(), vehicleState));
-                    System.out.println("2REPLAN " + vehicleState.getNextRUnitAfterDecisionPoint().getId());
                 }
             }
         }
@@ -305,6 +299,7 @@ public class VehicleMotor {
 
         }
     }
+
 
 
     private double aimForSpeed(double requiredVelocity, double safeStopDistance, double distance)//returns the acceleration
@@ -375,51 +370,49 @@ public class VehicleMotor {
     }
 
     private IRUnitManager getNextForDirection(IRUnitManager rUnit, VehicleState vehicleState) {
+        System.out.println("[getNextForDirection("+vehicleState.getNextDirectionAtDecisionPoint() + ")]");
         /*
         This function chooses the nextRUnit at an intersection if you have a direction set
          */
         //go through all nexts and compare their angle with the decision point node
         //choose the one that is the biggest
         VehicleDirection directionPriorToTurn = new VehicleDirection(
-                Common.getNthPrevRUnit(rUnit, 2).getX(),
-                Common.getNthPrevRUnit(rUnit, 2).getY(),
+                Common.getNthPrevRUnit(rUnit, 5).getX(),
+                Common.getNthPrevRUnit(rUnit, 5).getY(),
                 rUnit.getX(),
                 rUnit.getY()
         );
 
+//        System.out.println("{directionPriorToTurn("+directionPriorToTurn.getAngle() + ")]");
+//        System.out.println("rUnit:"+rUnit.getId());
         IRUnitManager chosenUnit = rUnit.getNextRUnitList().get(0);
         for (IRUnitManager currentUnit : rUnit.getNextRUnitList()) {
 
-            VehicleDirection chosenAngle = new VehicleDirection(
-                    rUnit.getX(),
-                    rUnit.getY(),
-                    Common.getNthNextRUnit(chosenUnit, 3).getX(),
-                    Common.getNthNextRUnit(chosenUnit, 3).getY());
-            VehicleDirection currentAngle = new VehicleDirection(
-                    rUnit.getX(),
-                    rUnit.getY(),
-                    Common.getNthNextRUnit(currentUnit, 3).getX(),
-                    Common.getNthNextRUnit(currentUnit, 3).getY());
 
-            //angle of last
+            double chosenAngle = Common.getRoadForwardDirection(chosenUnit, 10);
+            double currentAngle = Common.getRoadForwardDirection(currentUnit, 10);
+//            System.out.println("chosenAngle:"+chosenAngle + " id: "+ chosenUnit.getId() + " x1: " + chosenUnit.getX()+ " y1: " + chosenUnit.getY() +
+//                    " id:" + Common.getNthNextRUnit(chosenUnit, 10).getId() + " x2: " +Common.getNthNextRUnit(chosenUnit, 10).getX() + " y2:" + Common.getNthNextRUnit(chosenUnit, 10).getY());
+//            System.out.println("currentAngle:"+currentAngle + " id: "+ currentUnit.getId() + " x1: " + currentUnit.getX()+ " y1: " + currentUnit.getY() +
+//                    " id:" + Common.getNthNextRUnit(currentUnit, 10).getId() + " x2: " +Common.getNthNextRUnit(currentUnit, 10).getX() + " y2:" + Common.getNthNextRUnit(currentUnit, 10).getY());         //angle of last
             switch (vehicleState.getNextDirectionAtDecisionPoint()) {
                 case left:
 
                     //to the left means going up in degrees
-                    if (directionPriorToTurn.getDifference(currentAngle.getAngle()) <
-                            directionPriorToTurn.getDifference(chosenAngle.getAngle()))
+                    if (directionPriorToTurn.getDifference(currentAngle) <
+                            directionPriorToTurn.getDifference(chosenAngle))
                         chosenUnit = currentUnit;
                     break;
                 case right:
                     //to the right means going down in degrees
-                    if (directionPriorToTurn.getDifference(currentAngle.getAngle()) >
-                            directionPriorToTurn.getDifference(chosenAngle.getAngle()))
+                    if (directionPriorToTurn.getDifference(currentAngle) >
+                            directionPriorToTurn.getDifference(chosenAngle))
                         chosenUnit = currentUnit;
                     break;
                 case straight:
                     //closer to 0 difference is straight
-                    if (Math.abs(directionPriorToTurn.getDifference(currentAngle.getAngle())) <=
-                            Math.abs(directionPriorToTurn.getDifference(chosenAngle.getAngle())))
+                    if (Math.abs(directionPriorToTurn.getDifference(currentAngle)) <=
+                            Math.abs(directionPriorToTurn.getDifference(chosenAngle)))
                         chosenUnit = currentUnit;
                     break;
                 default:
@@ -447,65 +440,6 @@ public class VehicleMotor {
             }
         }
         return temp;
-    }
-
-    private static List<RUnit> lawfulIntersectionChoices(IRUnitManager rUnit) {
-        /*
-        This function returns a list of next rUnits that are lawfully feasible.
-        The rules are if you are
-        -can't turn left from changeable lane
-        -can't turn right if you have a changeable lane (if you are in the left)
-         */
-
-        if (1 == 1)
-            return rUnit.getNextRUnitList();
-
-        List<RUnit> choices = new ArrayList<RUnit>();
-
-        if (rUnit.getNextRUnitList().size() < 2) {
-            choices.add(rUnit.getNextRUnitList().get(0));
-            return choices;
-        }
-
-        boolean isLeft = true;
-
-        //decide whether you are in the left lane
-        if (rUnit.getChangeAbleRUnit() != null) {
-            if (Common.getAngleDifference(Common.getRoadBackwardDirection(rUnit,5),
-                    Common.getAngle(rUnit.getX(), rUnit.getY(), rUnit.getChangeAbleRUnit().getX(), rUnit.getChangeAbleRUnit().getY())) > 0) {
-                isLeft = false;
-            }
-        }
-
-
-        System.out.println("------------------------------------START" + isLeft);
-        //if you are in the changeable lane remove the left most choice
-
-        if (!isLeft) {
-            for (RUnit choice : rUnit.getNextRUnitList()) {
-                //left is on the positive side
-                if (Common.getAngleDifference(Common.getRoadBackwardDirection(rUnit,5), Common.getRoadForwardDirection(choice)) > -10)
-                    choices.add(choice);
-            }
-
-        } else if (rUnit.getChangeAbleRUnit() != null)//if you are in the left lane and you have a changeable
-        {
-            for (RUnit choice : rUnit.getNextRUnitList()) {
-                //left is on the positive side
-                System.out.println(rUnit.getId() + "-" + Common.getRoadBackwardDirection(rUnit,5) + ", " + choice.getId() + "-" + Common.getRoadForwardDirection(choice)
-                        + " = " + Common.getAngleDifference(Common.getRoadBackwardDirection(rUnit,5), Common.getRoadForwardDirection(choice)) +
-                        " " + (Common.getAngleDifference(Common.getRoadBackwardDirection(rUnit,5), Common.getRoadForwardDirection(choice)) < 10));
-
-                if (Common.getAngleDifference(Common.getRoadBackwardDirection(rUnit,5), Common.getRoadForwardDirection(choice)) < 10)
-                    choices.add(choice);
-            }
-
-        }
-
-        if (choices.size() == 0)
-            choices.add(rUnit.getNextRUnitList().get(1));
-        System.out.println("------------------------------------END");
-        return choices;
     }
 
     private double additionalDistances() {
