@@ -40,7 +40,7 @@ public class VehicleDensity implements Serializable {
         return creationRatePerSecond;
     }
 
-    public void setCreationRatePerSecond(int creationRatePerSecond) {
+    public void setCreationRatePerSecond(double creationRatePerSecond) {
         this.creationRatePerSecond = creationRatePerSecond;
     }
 }
