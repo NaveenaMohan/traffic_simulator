@@ -99,8 +99,8 @@ public class DrawingBoard implements ActionListener {
     }
 
     public void initialize() {
-        rUnitImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/road.gif"));
-        rUnitImage2 = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/road2.gif"));
+        rUnitImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/leftLane.png"));
+        rUnitImage2 = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/rightLane.png"));
         doubleRoad = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/doubleRoad.gif"));
         trafficLightImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/lightMini.png"));
         carImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/car.png"));
@@ -177,17 +177,26 @@ public class DrawingBoard implements ActionListener {
         if (configButtonSelected.equals(ConfigButtonSelected.addDoubleLane)) {
             Graphics2D g2d = (Graphics2D) g;
 
+            //previous coordinates
             Coordinates A = new Coordinates((previousRUnit == null ? currentX : previousRUnit.getX()),
                     (previousRUnit == null ? currentY : previousRUnit.getY()));
+
+            //current coordinates
             Coordinates B = new Coordinates(currentX, currentY);
-            int currentChangeableX = Common.getAdjacentPointToB(A, B, 15, 90).getX();
-            int currentChangeableY = Common.getAdjacentPointToB(A, B, 15, 90).getY();
+
+            //changeable coordinates
+            int currentChangeableX = Common.getAdjacentPointToB(A, B, 10, 90).getX();
+            int currentChangeableY = Common.getAdjacentPointToB(A, B, 10, 90).getY();
+
+            double directionChangeable = 1000;
+            if(previousChangeableRunit!=null)
+                directionChangeable=Common.getAngle(previousChangeableRunit.getX(), previousChangeableRunit.getY(), currentChangeableX, currentChangeableY);
+
             Coordinates changeableA = new Coordinates((previousChangeableRunit == null ? currentChangeableX : previousChangeableRunit.getX()),
                     (previousChangeableRunit == null ? currentChangeableY : previousChangeableRunit.getY()));
-            Coordinates changeableB = new Coordinates(currentChangeableX, currentChangeableY);
             do {
                 if ((previousRUnit == null && previousChangeableRunit == null) ||
-                        (!A.equals(new Coordinates(previousRUnit.getX(), previousRUnit.getY())) && !changeableA.equals(new Coordinates(previousChangeableRunit.getX(), previousChangeableRunit.getY())))) {
+                        (!A.equals(new Coordinates(previousRUnit.getX(), previousRUnit.getY())))) {
                     //Add and Return RUnit for double lane and store it as previous RUnit
                     Map<String, RUnit> prevRUnitMap = roadNetworkManager.addDoubleLane(A.getX(), A.getY(), changeableA.getX(), changeableA.getY(), previousRUnit, previousChangeableRunit);
                     if (prevRUnitMap != null) {
@@ -199,8 +208,31 @@ public class DrawingBoard implements ActionListener {
                     g2d.drawImage(bufferedRoadImage, currentX, currentY, drawingBoardPanel); // TODO : change the image
                     g2d.drawImage(bufferedChangeableRoadImage, currentChangeableX, currentChangeableY, drawingBoardPanel);
                 }
+
+                //remember the previous A coordinate for getting the correct adjecent point
+                Coordinates oldA = new Coordinates(Common.getNthPrevRUnit(previousRUnit,3).getX(),
+                        Common.getNthPrevRUnit(previousRUnit,3).getY());
+
+                //get the next point from A to B
                 A = new Coordinates(Common.getNextPointFromTo(A, B).getX(), Common.getNextPointFromTo(A, B).getY());
-                changeableA = new Coordinates(Common.getNextPointFromTo(changeableA, changeableB).getX(), Common.getNextPointFromTo(changeableA,changeableB).getY());
+
+
+                //get new changeable coordinates
+                currentChangeableX = Common.getAdjacentPointToB(oldA, A, 10, 90).getX();
+                currentChangeableY = Common.getAdjacentPointToB(oldA, A, 10, 90).getY();
+
+                //get the new direction of changeable coordinates
+                if(true | directionChangeable == 1000 | Math.abs(directionChangeable-
+                        Common.getAngle(changeableA.getX(), changeableA.getY(), currentChangeableX, currentChangeableY))<90) {
+                    //set new changeable
+
+
+                    changeableA = new Coordinates(currentChangeableX, currentChangeableY);
+
+                 }
+                directionChangeable = Common.getAngle(changeableA.getX(), changeableA.getY(), currentChangeableX, currentChangeableY);
+
+
             } while (A.getY() != B.getY() & A.getX() != B.getX());
         }
 

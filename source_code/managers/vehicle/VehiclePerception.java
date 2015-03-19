@@ -32,6 +32,7 @@ public class VehiclePerception implements Serializable {
 
             //check for decision points
             if (temp.getNextRUnitList().size() > 1) {
+
                 vehicleState.registerObject(new VehicleMemoryObject(temp, new RoadDecisionPoint(), distance, getObjectVelocity(new RoadDecisionPoint()), true, true));
                 vehicleState.registerObject(new VehicleMemoryObject(temp, new RoadDecisionPoint(), distance, getObjectVelocity(new RoadDecisionPoint()), true, false));
 
