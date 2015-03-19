@@ -6,8 +6,6 @@ import managers.globalconfig.*;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
 import managers.runit.TrafficLight;
-import managers.space.ObjectInSpace;
-import managers.vehicle.IVehicleManager;
 import managers.vehiclefactory.VehicleFactoryManager;
 import reports.DCP;
 import ui.components.DrawingBoard;
@@ -28,10 +26,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
 
 public class  Traffic_Simulator {
-
+    private static Traffic_Simulator window;
     private JFrame trafficSimulatorFrame;
     private RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
     private VehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
@@ -64,7 +61,7 @@ public class  Traffic_Simulator {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    Traffic_Simulator window = new Traffic_Simulator();
+                    window = new Traffic_Simulator();
                     window.trafficSimulatorFrame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -791,67 +788,66 @@ public class  Traffic_Simulator {
         importConfigButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FileInputStream fin = null;
-                try {
-                    fin = new FileInputStream("object.dat");
-                } catch (FileNotFoundException e1) {
-                    e1.printStackTrace();
-                }
-                ObjectInputStream ois = null;
-                try {
-                    ois = new ObjectInputStream(fin);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                try {
-                    simEngine.CleanVehicles();
-                    simEngine.CleanAll();
-                    drawingBoard.clean();
-
-                    ExportImportObject exportImportObject = (ExportImportObject) ois.readObject();
-                    roadNetworkManager = (RoadNetworkManager) exportImportObject.getEngineDataStructures().getRoadNetworkManager();
-                    vehicleFactoryManager = (VehicleFactoryManager) exportImportObject.getEngineDataStructures().getVehicleFactoryManager();
-                    climaticCondition = exportImportObject.getEngineDataStructures().getGlobalConfigManager().getClimaticCondition();
-                    globalConfigManager = (GlobalConfigManager) exportImportObject.getEngineDataStructures().getGlobalConfigManager();
-                    dataAndStructures = exportImportObject.getEngineDataStructures();
-                    dcp=new DCP(dataAndStructures);
-                    simEngine = new SimEngine(dataAndStructures,dcp);
-
-                    drawingBoard.setSingleLaneRUnits(exportImportObject.getUiDataStructures().getSingleLaneRUnits());
-                    drawingBoard.setDoubleLaneRUnits(exportImportObject.getUiDataStructures().getDoubleLaneRUnits());
-                    drawingBoard.setTrafficLightCoordinates(exportImportObject.getUiDataStructures().getTrafficLightCoordinates());
-                    drawingBoard.setZebraCrossingCoordinates(exportImportObject.getUiDataStructures().getZebraCrossingCoordinates());
-                    drawingBoard.setStopCoordinates(exportImportObject.getUiDataStructures().getStopCoordinates());
-                    drawingBoard.setBlockageCoordinates(exportImportObject.getUiDataStructures().getBlockageCoordinates());
-                    drawingBoard.setVehicleFactoryCoordinates(exportImportObject.getUiDataStructures().getVehicleFactoryCoordinates());
-                    drawingBoard.setLeftCoordinates(exportImportObject.getUiDataStructures().getLeftCoordinates());
-                    drawingBoard.setRightCoordinates(exportImportObject.getUiDataStructures().getRightCoordinates());
-                    drawingBoard.setStraightCoordinates(exportImportObject.getUiDataStructures().getStraightCoordinates());
-                    drawingBoard.setSpeed20Coordinates(exportImportObject.getUiDataStructures().getSpeed20Coordinates());
-                    drawingBoard.setSpeed30Coordinates(exportImportObject.getUiDataStructures().getSpeed30Coordinates());
-                    drawingBoard.setSpeed50Coordinates(exportImportObject.getUiDataStructures().getSpeed50Coordinates());
-                    drawingBoard.setSpeed60Coordinates(exportImportObject.getUiDataStructures().getSpeed60Coordinates());
-                    drawingBoard.setSpeed70Coordinates(exportImportObject.getUiDataStructures().getSpeed70Coordinates());
-                    drawingBoard.setSpeed90Coordinates(exportImportObject.getUiDataStructures().getSpeed90Coordinates());
-                    drawingBoard.setWelcomeCoordinates(exportImportObject.getUiDataStructures().getWelcomeCoordinates());
-                    drawingBoard.setSimEngine(simEngine);
-                    drawingBoard.setRoadNetworkManager(roadNetworkManager);
-
-                    driverBehaviourRangeSlider.setValue((int) (globalConfigManager.getDriverBehaviour().getPercentageCautious() * 100.0));
-                    driverBehaviourRangeSlider.setUpperValue((int) ((globalConfigManager.getDriverBehaviour().getPercentageCautious() + (globalConfigManager.getDriverBehaviour().getPercentageNormal())) * 100.0));
-                    trafficDensityRangeSlider.setValue((int) (globalConfigManager.getVehicleDensity().getCarDensity() * 100.0));
-                    trafficDensityRangeSlider.setUpperValue((int) ((globalConfigManager.getVehicleDensity().getCarDensity() + globalConfigManager.getVehicleDensity().getHeavyVehicleDensity() ) * 100.0));
-                    slippery_slider.setValue((int) (climaticCondition.getSlipperiness() * 100.0));
-                    visibility_slider.setValue((int) (climaticCondition.getVisibility() * 100.0));
-                    destinationDensitySlider.setValue((int) (globalConfigManager.getRoute().getTrafficPercent() * 100.0));
-                    destinationTxtBoxField.setText(globalConfigManager.getRoute().getDestination());
-                    populateTrafficLightTableModel();
-                    drawingBoard.setModel(model);
-                    drawingBoard.getDrawingBoardPanel().repaint();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                } catch (ClassNotFoundException e1) {
-                    e1.printStackTrace();
+                JFileChooser fileChooser = new JFileChooser();
+                int returnValue = fileChooser.showOpenDialog(null);
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    FileInputStream fin = null;
+                    try {
+                        fin = new FileInputStream(fileChooser.getSelectedFile().getPath());
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
+                    ObjectInputStream ois = null;
+                    try {
+                        ois = new ObjectInputStream(fin);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    try {
+                        drawingBoard.clean();
+                        ExportImportObject exportImportObject = (ExportImportObject) ois.readObject();
+                        roadNetworkManager = (RoadNetworkManager) exportImportObject.getEngineDataStructures().getRoadNetworkManager();
+                        vehicleFactoryManager = (VehicleFactoryManager) exportImportObject.getEngineDataStructures().getVehicleFactoryManager();
+                        climaticCondition = exportImportObject.getEngineDataStructures().getGlobalConfigManager().getClimaticCondition();
+                        globalConfigManager = (GlobalConfigManager) exportImportObject.getEngineDataStructures().getGlobalConfigManager();
+                        dataAndStructures = exportImportObject.getEngineDataStructures();
+                        dcp=new DCP(dataAndStructures);
+                        simEngine = new SimEngine(dataAndStructures,dcp);
+                        drawingBoard.setSingleLaneRUnits(exportImportObject.getUiDataStructures().getSingleLaneRUnits());
+                        drawingBoard.setDoubleLaneRUnits(exportImportObject.getUiDataStructures().getDoubleLaneRUnits());
+                        drawingBoard.setTrafficLightCoordinates(exportImportObject.getUiDataStructures().getTrafficLightCoordinates());
+                        drawingBoard.setZebraCrossingCoordinates(exportImportObject.getUiDataStructures().getZebraCrossingCoordinates());
+                        drawingBoard.setStopCoordinates(exportImportObject.getUiDataStructures().getStopCoordinates());
+                        drawingBoard.setBlockageCoordinates(exportImportObject.getUiDataStructures().getBlockageCoordinates());
+                        drawingBoard.setVehicleFactoryCoordinates(exportImportObject.getUiDataStructures().getVehicleFactoryCoordinates());
+                        drawingBoard.setLeftCoordinates(exportImportObject.getUiDataStructures().getLeftCoordinates());
+                        drawingBoard.setRightCoordinates(exportImportObject.getUiDataStructures().getRightCoordinates());
+                        drawingBoard.setStraightCoordinates(exportImportObject.getUiDataStructures().getStraightCoordinates());
+                        drawingBoard.setSpeed20Coordinates(exportImportObject.getUiDataStructures().getSpeed20Coordinates());
+                        drawingBoard.setSpeed30Coordinates(exportImportObject.getUiDataStructures().getSpeed30Coordinates());
+                        drawingBoard.setSpeed50Coordinates(exportImportObject.getUiDataStructures().getSpeed50Coordinates());
+                        drawingBoard.setSpeed60Coordinates(exportImportObject.getUiDataStructures().getSpeed60Coordinates());
+                        drawingBoard.setSpeed70Coordinates(exportImportObject.getUiDataStructures().getSpeed70Coordinates());
+                        drawingBoard.setSpeed90Coordinates(exportImportObject.getUiDataStructures().getSpeed90Coordinates());
+                        drawingBoard.setWelcomeCoordinates(exportImportObject.getUiDataStructures().getWelcomeCoordinates());
+                        drawingBoard.setSimEngine(simEngine);
+                        drawingBoard.setRoadNetworkManager(roadNetworkManager);
+                        driverBehaviourRangeSlider.setValue((int) (globalConfigManager.getDriverBehaviour().getPercentageCautious() * 100.0));
+                        driverBehaviourRangeSlider.setUpperValue((int) ((globalConfigManager.getDriverBehaviour().getPercentageCautious() + (globalConfigManager.getDriverBehaviour().getPercentageNormal())) * 100.0));
+                        trafficDensityRangeSlider.setValue((int) (globalConfigManager.getVehicleDensity().getCarDensity() * 100.0));
+                        trafficDensityRangeSlider.setUpperValue((int) ((globalConfigManager.getVehicleDensity().getCarDensity() + globalConfigManager.getVehicleDensity().getHeavyVehicleDensity() ) * 100.0));
+                        slippery_slider.setValue((int) (climaticCondition.getSlipperiness() * 100.0));
+                        visibility_slider.setValue((int) (climaticCondition.getVisibility() * 100.0));
+                        destinationDensitySlider.setValue((int) (globalConfigManager.getRoute().getTrafficPercent() * 100.0));
+                        destinationTxtBoxField.setText(globalConfigManager.getRoute().getDestination());
+                        populateTrafficLightTableModel();
+                        drawingBoard.setModel(model);
+                        drawingBoard.getDrawingBoardPanel().repaint();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    } catch (ClassNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         });
@@ -861,15 +857,16 @@ public class  Traffic_Simulator {
         exportConfigButton.setBounds(580, 0, 70, 70);
         exportConfigButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("/resources/export.png")));
         simulationConfigPanel.add(exportConfigButton);
-        exportConfigButton.setEnabled(false);
         exportConfigButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                FileDialog fDialog = new FileDialog(trafficSimulatorFrame, "Save", FileDialog.SAVE);
+                fDialog.setVisible(true);
+                String path = fDialog.getDirectory() + fDialog.getFile();
                 ExportImportObject exportImportObject = new ExportImportObject(dataAndStructures,drawingBoard);
                 FileOutputStream fout = null;
                 try {
-                    fout = new FileOutputStream("object.dat");
+                    fout = new FileOutputStream(path);
                 } catch (FileNotFoundException ex) {
                     ex.printStackTrace();
                 }
@@ -969,35 +966,8 @@ public class  Traffic_Simulator {
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                simEngine.CleanAll();
-                drawingBoard.setSimulationPlaying(false);
-                drawingBoard.setSimulationStarted(false);
-
-                roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
-                vehicleFactoryManager = new VehicleFactoryManager();
-                climaticCondition = new ClimaticCondition();
-                globalConfigManager = new GlobalConfigManager(
-                        100,//ticks per second
-                        0.5,//metres per RUnit
-                        climaticCondition,
-                        new DriverBehavior(),
-                        new VehicleDensity(),
-                        new Route()
-                );
-                dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
-                dcp=new DCP(dataAndStructures);
-                simEngine = new SimEngine(dataAndStructures,dcp);
-                drawingBoard.clean();
-                playButton.setEnabled(true);
-                pauseButton.setEnabled(false);
-                stopButton.setEnabled(false);
-                slowButton.setEnabled(false);
-                fastButton.setEnabled(false);
-                uploadImageButton.setEnabled(true);
-                importConfigButton.setEnabled(true);
-                exportConfigButton.setEnabled(false);
-                reportButton.setEnabled(false);
-                clearVehicleFactoryButton.setEnabled(false);
+                window = new Traffic_Simulator();
+                window.trafficSimulatorFrame.setVisible(true);
             }
         });
 
