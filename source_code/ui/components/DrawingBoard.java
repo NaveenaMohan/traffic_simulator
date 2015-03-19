@@ -193,8 +193,7 @@ public class DrawingBoard implements ActionListener {
                     }
                     doubleLaneRUnits.add(previousRUnit);
                     //g2d.drawImage(bufferedChangeableRoadImage, currentX, currentY, drawingBoardPanel);
-                    g2d.drawImage(bufferedRoadImage, currentX, currentY, drawingBoardPanel);
-                    g2d.drawImage(bufferedChangeableRoadImage, currentChangeableX, currentChangeableY, drawingBoardPanel);
+                    g2d.drawImage(bufferedChangeableRoadImage, currentX, currentY, drawingBoardPanel);
                 }
                 A = new Coordinates(Common.getNextPointFromTo(A, B).getX(), Common.getNextPointFromTo(A, B).getY());
                 changeableA = new Coordinates(Common.getNextPointFromTo(changeableA, changeableB).getX(), Common.getNextPointFromTo(changeableA,changeableB).getY());
