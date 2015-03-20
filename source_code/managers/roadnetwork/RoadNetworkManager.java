@@ -46,7 +46,7 @@ public class RoadNetworkManager implements IRoadNetworkManager {
         return null;
     }
 
-    public static boolean checkForRoadDensityCollisions(RUnit currentRUnit, RUnit prevRUnit) {
+    public static boolean checkForRoadDensityCollisions(IRUnitManager currentRUnit, IRUnitManager prevRUnit) {
         /*
         This function rejects an intersection if it was created by accidental mouse drags.
         It does that by checking if currentRUnit and prevRUnit are within x of ID distance from each other
