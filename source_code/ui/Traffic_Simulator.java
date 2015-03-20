@@ -968,6 +968,7 @@ public class  Traffic_Simulator {
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                window.trafficSimulatorFrame.setVisible(false);
                 window = new Traffic_Simulator();
                 window.trafficSimulatorFrame.setVisible(true);
             }

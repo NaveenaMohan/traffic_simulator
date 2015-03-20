@@ -166,7 +166,8 @@ public class DrawingBoard implements ActionListener {
                     //Add and Return RUnit for single lane and store it as previous RUnit
                     previousRUnit = roadNetworkManager.addSingleLane(A.getX(), A.getY(), previousRUnit);
                     singleLaneRUnits.add(previousRUnit);
-                    g2D.drawImage(bufferedRoadImage, currentX, currentY, drawingBoardPanel);
+                    Coordinates coordinates = getRepositionedImageCoordinates(bufferedRoadImage, currentX, currentY);
+                    g2D.drawImage(bufferedRoadImage,coordinates.getX() ,coordinates.getY(), drawingBoardPanel);
                 }
                 A = new Coordinates(Common.getNextPointFromTo(A, B).getX(), Common.getNextPointFromTo(A,B).getY());
             }while(A.getY()!=B.getY() & A.getX() != B.getX());
@@ -205,8 +206,10 @@ public class DrawingBoard implements ActionListener {
                     }
                     doubleLaneRUnits.add(previousRUnit);
                     changeAbleLaneRUnits.add(previousChangeableRunit);
-                    g2d.drawImage(bufferedRoadImage, currentX, currentY, drawingBoardPanel); // TODO : change the image
-                    g2d.drawImage(bufferedChangeableRoadImage, currentChangeableX, currentChangeableY, drawingBoardPanel);
+                    Coordinates coordinates = getRepositionedImageCoordinates(bufferedRoadImage,currentX,currentY);
+                    g2d.drawImage(bufferedRoadImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel); // TODO : change the image
+                    coordinates = getRepositionedImageCoordinates(bufferedChangeableRoadImage,currentChangeableX,currentChangeableY);
+                    g2d.drawImage(bufferedChangeableRoadImage,coordinates.getX(), coordinates.getY() , drawingBoardPanel);
                 }
 
                 //remember the previous A coordinate for getting the correct adjecent point
@@ -241,22 +244,22 @@ public class DrawingBoard implements ActionListener {
             String trafficLightId = "TL-" + trafficLightIdIndex;
             RUnit bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
+                if (model != null) {
+                    model.addRow(new Object[]{trafficLightId, false, false, false, false, false, false, false, false, false, false});
+                    trafficLightCoordinates.put(trafficLightId, new Coordinates(bestMatchRUnit.getX(), bestMatchRUnit.getY()));
+                    trafficLightIdIndex++;
+                }
                 //Updating the best match rUnit with the traffic Light
                 TrafficLight trafficLight = new TrafficLight();
                 trafficLight.setTrafficLightID(trafficLightId);
                 simEngine.getDataAndStructures().getRoadNetworkManager().addTrafficLight(bestMatchRUnit, trafficLight);
                 //Drawing the traffic Light and adding the traffic light cycle configuration
                 JButton tl = new JButton();
-                tl.setBounds(bestMatchRUnit.getX(), bestMatchRUnit.getY(), 15, 15);
+                Coordinates coordinates = getRepositionedImageCoordinates(trafficLightImage,bestMatchRUnit.getX(),bestMatchRUnit.getY());
+                tl.setBounds(coordinates.getX(), coordinates.getY(), trafficLightImage.getWidth(drawingBoardPanel),trafficLightImage.getHeight(drawingBoardPanel));
                 tl.setToolTipText("Traffic Light: " + trafficLightIdIndex);
                 tl.setIcon(new ImageIcon(trafficLightImage));
                 drawingBoardPanel.add(tl);
-
-                if (model != null) {
-                    model.addRow(new Object[]{trafficLightId, false, false, false, false, false, false, false, false, false, false});
-                    trafficLightCoordinates.put(trafficLightId, new Coordinates(bestMatchRUnit.getX(), bestMatchRUnit.getY()));
-                    trafficLightIdIndex++;
-                }
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -266,21 +269,21 @@ public class DrawingBoard implements ActionListener {
             RUnit bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
                 //Updating the best match rUnit with the zebra crossing
+                if (model != null) {
+                    model.addRow(new Object[]{trafficLightId, false, false, false, false, false, false, false, false, false, false});
+                    zebraCrossingCoordinates.put(trafficLightId, new Coordinates(bestMatchRUnit.getX(), bestMatchRUnit.getY()));
+                    zebraCrossingTrafficLightIdIndex++;
+                }
                 TrafficLight trafficLight = new TrafficLight();
                 trafficLight.setTrafficLightID(trafficLightId);
                 simEngine.getDataAndStructures().getRoadNetworkManager().addZebraCrossing(bestMatchRUnit, trafficLight);
                 //Drawing the zebra crossing with traffic light configuration
                 JButton ztl = new JButton();
                 ztl.setToolTipText("Zebra Crossing Traffic Light: " + zebraCrossingTrafficLightIdIndex);
-                ztl.setBounds(bestMatchRUnit.getX(), bestMatchRUnit.getY(), 15, 15);
+                Coordinates coordinates = getRepositionedImageCoordinates(zebraCrossingImage,bestMatchRUnit.getX(),bestMatchRUnit.getY());
+                ztl.setBounds(coordinates.getX(), coordinates.getY(), zebraCrossingImage.getWidth(drawingBoardPanel),zebraCrossingImage.getHeight(drawingBoardPanel));
                 ztl.setIcon(new ImageIcon(zebraCrossingImage));
                 drawingBoardPanel.add(ztl);
-
-                if (model != null) {
-                    model.addRow(new Object[]{trafficLightId, false, false, false, false, false, false, false, false, false, false});
-                    zebraCrossingCoordinates.put(trafficLightId, new Coordinates(bestMatchRUnit.getX(), bestMatchRUnit.getY()));
-                    zebraCrossingTrafficLightIdIndex++;
-                }
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -291,7 +294,8 @@ public class DrawingBoard implements ActionListener {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addBlockage(bestMatchRUnit);
                 //Drawing the blockage
-                g.drawImage(blockageImage, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
+                Coordinates coordinates = getRepositionedImageCoordinates(blockageImage,bestMatchRUnit.getX(),bestMatchRUnit.getY());
+                g.drawImage(blockageImage, coordinates.getX(), coordinates.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -303,7 +307,8 @@ public class DrawingBoard implements ActionListener {
                 //Adding vehicle factory and dataStructures
                 simEngine.getDataAndStructures().getVehicleFactoryManager().addVehicleFactory(roadNetworkManager.getRoadNetwork().getrUnitHashtable().get(String.valueOf(bestMatchRUnit.getId())));
                 //Drawing the vehicleFactory
-                g.drawImage(vehicleFactoryImage, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
+                Coordinates coordinates = getRepositionedImageCoordinates(vehicleFactoryImage,bestMatchRUnit.getX(),bestMatchRUnit.getY());
+                g.drawImage(vehicleFactoryImage, coordinates.getX(), coordinates.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -315,7 +320,8 @@ public class DrawingBoard implements ActionListener {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addStopSign(bestMatchRUnit);
                 //Drawing the stop image
-                g.drawImage(stopImage, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
+                Coordinates coordinates = getRepositionedImageCoordinates(stopImage,bestMatchRUnit.getX(),bestMatchRUnit.getY());
+                g.drawImage(stopImage, coordinates.getX(), coordinates.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -334,7 +340,8 @@ public class DrawingBoard implements ActionListener {
                     //Drawing the left sign
                     JButton left = new JButton();
                     left.setToolTipText("Take left to go to " + destination);
-                    left.setBounds(bestMatchRUnit.getX(), bestMatchRUnit.getY(), 15, 15);
+                    Coordinates coordinates = getRepositionedImageCoordinates(leftSignImage,bestMatchRUnit.getX(),bestMatchRUnit.getY());
+                    left.setBounds(coordinates.getX(), coordinates.getY(), leftSignImage.getWidth(drawingBoardPanel), leftSignImage.getHeight(drawingBoardPanel));
                     left.setIcon(new ImageIcon(leftSignImage));
                     drawingBoardPanel.add(left);
                 }
@@ -356,7 +363,8 @@ public class DrawingBoard implements ActionListener {
                     //Drawing the right sign
                     JButton right = new JButton();
                     right.setToolTipText("Take right to go to " + destination);
-                    right.setBounds(bestMatchRUnit.getX(), bestMatchRUnit.getY(), 15, 15);
+                    Coordinates coordinates = getRepositionedImageCoordinates(rightSignImage,bestMatchRUnit.getX(),bestMatchRUnit.getY());
+                    right.setBounds(coordinates.getX(), coordinates.getY(), rightSignImage.getWidth(drawingBoardPanel), rightSignImage.getHeight(drawingBoardPanel));
                     right.setIcon(new ImageIcon(rightSignImage));
                     drawingBoardPanel.add(right);
                 }
@@ -378,7 +386,8 @@ public class DrawingBoard implements ActionListener {
                     //Drawing the straight sign
                     JButton straight = new JButton();
                     straight.setToolTipText("Go straight to go to " + destination);
-                    straight.setBounds(bestMatchRUnit.getX(), bestMatchRUnit.getY(), 15, 15);
+                    Coordinates coordinates = getRepositionedImageCoordinates(straightSignImage,bestMatchRUnit.getX(),bestMatchRUnit.getY());
+                    straight.setBounds(coordinates.getX(), coordinates.getY(), straightSignImage.getWidth(drawingBoardPanel), straightSignImage.getHeight(drawingBoardPanel));
                     straight.setIcon(new ImageIcon(straightSignImage));
                     drawingBoardPanel.add(straight);                }
             }
@@ -391,7 +400,8 @@ public class DrawingBoard implements ActionListener {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 20);
                 //Drawing the speed limit
-                g.drawImage(speed20Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
+                Coordinates coordinates = getRepositionedImageCoordinates(speed20Image,bestMatchRUnit.getX(),bestMatchRUnit.getY());
+                g.drawImage(speed20Image, coordinates.getX(), coordinates.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -402,7 +412,8 @@ public class DrawingBoard implements ActionListener {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 30);
                 //Drawing the speed limit
-                g.drawImage(speed30Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
+                Coordinates coordinates = getRepositionedImageCoordinates(speed30Image,bestMatchRUnit.getX(),bestMatchRUnit.getY());
+                g.drawImage(speed30Image, coordinates.getX(), coordinates.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -413,7 +424,8 @@ public class DrawingBoard implements ActionListener {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 50);
                 //Drawing the speed limit
-                g.drawImage(speed50Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
+                Coordinates coordinates = getRepositionedImageCoordinates(speed50Image,bestMatchRUnit.getX(),bestMatchRUnit.getY());
+                g.drawImage(speed50Image, coordinates.getX(), coordinates.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -424,7 +436,8 @@ public class DrawingBoard implements ActionListener {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 60);
                 //Drawing the speed limit
-                g.drawImage(speed60Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
+                Coordinates coordinates = getRepositionedImageCoordinates(speed60Image,bestMatchRUnit.getX(),bestMatchRUnit.getY());
+                g.drawImage(speed60Image, coordinates.getX(), coordinates.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -435,7 +448,8 @@ public class DrawingBoard implements ActionListener {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 70);
                 //Drawing the speed limit
-                g.drawImage(speed70Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
+                Coordinates coordinates = getRepositionedImageCoordinates(speed70Image,bestMatchRUnit.getX(),bestMatchRUnit.getY());
+                g.drawImage(speed70Image, coordinates.getX(), coordinates.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -445,7 +459,8 @@ public class DrawingBoard implements ActionListener {
             if (bestMatchRUnit != null) {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 90);
-                g.drawImage(speed90Image, bestMatchRUnit.getX(), bestMatchRUnit.getY(), 5, 5, drawingBoardPanel);
+                Coordinates coordinates = getRepositionedImageCoordinates(speed90Image,bestMatchRUnit.getX(),bestMatchRUnit.getY());
+                g.drawImage(speed90Image, coordinates.getX(), coordinates.getY(), 5, 5, drawingBoardPanel);
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
@@ -463,7 +478,8 @@ public class DrawingBoard implements ActionListener {
                     simEngine.getDataAndStructures().getRoadNetworkManager().addWelcomeSign(bestMatchRUnit, destination);
                     JButton dest = new JButton();
                     dest.setToolTipText("Welcome to " + destination);
-                    dest.setBounds(bestMatchRUnit.getX(), bestMatchRUnit.getY(), 15, 15);
+                    Coordinates coordinates = getRepositionedImageCoordinates(welcomeImage,bestMatchRUnit.getX(),bestMatchRUnit.getY());
+                    dest.setBounds(coordinates.getX(), coordinates.getY(), welcomeImage.getWidth(drawingBoardPanel), welcomeImage.getHeight(drawingBoardPanel));
                     dest.setIcon(new ImageIcon(welcomeImage));
                     drawingBoardPanel.add(dest);
                 }
@@ -485,7 +501,7 @@ public class DrawingBoard implements ActionListener {
 
     private RUnit fetchAndAddBestMatchRUnit(List<Coordinates> coordinates) {
         for (RUnit rUnit : simEngine.getDataAndStructures().getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()) {
-            Rectangle rectangle = new Rectangle(rUnit.getX(), rUnit.getY(), doubleRoad.getWidth(drawingBoardPanel), doubleRoad.getHeight(drawingBoardPanel));
+            Rectangle rectangle = new Rectangle(rUnit.getX(), rUnit.getY(), rUnitImage.getWidth(drawingBoardPanel) + 5, rUnitImage.getHeight(drawingBoardPanel) + 5);
             if (rectangle.contains(currentX, currentY)) {
                 if (coordinates != null) {
                     coordinates.add(new Coordinates(rUnit.getX(), rUnit.getY()));
@@ -498,7 +514,7 @@ public class DrawingBoard implements ActionListener {
 
     private RUnit fetchBestMatchRUnit() {
         for (RUnit rUnit : simEngine.getDataAndStructures().getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()) {
-            Rectangle rectangle = new Rectangle(rUnit.getX(), rUnit.getY(), doubleRoad.getWidth(drawingBoardPanel), doubleRoad.getHeight(drawingBoardPanel));
+            Rectangle rectangle = new Rectangle(rUnit.getX(), rUnit.getY(), rUnitImage.getWidth(drawingBoardPanel) + 5, rUnitImage.getHeight(drawingBoardPanel) + 5);
             if (rectangle.contains(currentX, currentY)) {
                 return rUnit;
             }
@@ -541,75 +557,90 @@ public class DrawingBoard implements ActionListener {
 
         //Drawing traffic lights
         for (Coordinates coordinate : trafficLightCoordinates.values()) {
+            coordinate = getRepositionedImageCoordinates(trafficLightImage,coordinate.getX(),coordinate.getY());
             g2D.drawImage(trafficLightImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing zebra crossing
         for (Coordinates coordinate : zebraCrossingCoordinates.values()) {
+            coordinate = getRepositionedImageCoordinates(zebraCrossingImage,coordinate.getX(),coordinate.getY());
             g2D.drawImage(zebraCrossingImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing vehicle factories
         for (Coordinates coordinate : vehicleFactoryCoordinates) {
+            coordinate = getRepositionedImageCoordinates(vehicleFactoryImage,coordinate.getX(),coordinate.getY());
             g2D.drawImage(vehicleFactoryImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing blockages
         for (Coordinates coordinate : blockageCoordinates) {
+            coordinate = getRepositionedImageCoordinates(blockageImage,coordinate.getX(),coordinate.getY());
             g2D.drawImage(blockageImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing stop signs
         for (Coordinates coordinate : stopCoordinates) {
+            coordinate = getRepositionedImageCoordinates(stopImage,coordinate.getX(),coordinate.getY());
             g2D.drawImage(stopImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing left signs
         for (Coordinates coordinate : leftCoordinates.keySet()) {
+            coordinate = getRepositionedImageCoordinates(leftSignImage,coordinate.getX(),coordinate.getY());
             g2D.drawImage(leftSignImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing right signs
         for (Coordinates coordinate : rightCoordinates.keySet()) {
+            coordinate = getRepositionedImageCoordinates(rightSignImage,coordinate.getX(),coordinate.getY());
             g2D.drawImage(rightSignImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing straight signs
         for (Coordinates coordinate : straightCoordinates.keySet()) {
+            coordinate = getRepositionedImageCoordinates(straightSignImage,coordinate.getX(),coordinate.getY());
             g2D.drawImage(straightSignImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing speed20 signs
         for (Coordinates coordinate : speed20Coordinates) {
+            coordinate = getRepositionedImageCoordinates(speed20Image,coordinate.getX(),coordinate.getY());
             g2D.drawImage(speed20Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing speed30 signs
         for (Coordinates coordinate : speed30Coordinates) {
+            coordinate = getRepositionedImageCoordinates(speed30Image,coordinate.getX(),coordinate.getY());
             g2D.drawImage(speed30Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing speed50 signs
         for (Coordinates coordinate : speed50Coordinates) {
+            coordinate = getRepositionedImageCoordinates(speed50Image,coordinate.getX(),coordinate.getY());
             g2D.drawImage(speed50Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing speed60 signs
         for (Coordinates coordinate : speed60Coordinates) {
+            coordinate = getRepositionedImageCoordinates(speed60Image,coordinate.getX(),coordinate.getY());
             g2D.drawImage(speed60Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
         //Drawing speed70 signs
         for (Coordinates coordinate : speed70Coordinates) {
+            coordinate = getRepositionedImageCoordinates(speed70Image,coordinate.getX(),coordinate.getY());
             g2D.drawImage(speed70Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing speed90 signs
         for (Coordinates coordinate : speed90Coordinates) {
+            coordinate = getRepositionedImageCoordinates(speed90Image,coordinate.getX(),coordinate.getY());
             g2D.drawImage(speed90Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
         //Drawing welcome signs
         for (Coordinates coordinate : welcomeCoordinates.keySet()) {
+            coordinate = getRepositionedImageCoordinates(welcomeImage,coordinate.getX(),coordinate.getY());
             g2D.drawImage(welcomeImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
@@ -646,15 +677,19 @@ public class DrawingBoard implements ActionListener {
                 TrafficLight trafficLight = roadNetworkManager.getRoadNetwork().getTrafficLightHashtable().get(trafficLightId);
                 if (trafficLight.getTrafficLightCurrentColor()) {
                     if (trafficLightCoordinates.get(trafficLightId) != null) {
-                        g2d.drawImage(greenLightImage, trafficLightCoordinates.get(trafficLightId).getX(), trafficLightCoordinates.get(trafficLightId).getY(), drawingBoardPanel);
+                        Coordinates coordinate = getRepositionedImageCoordinates(trafficLightImage,trafficLightCoordinates.get(trafficLightId).getX(),trafficLightCoordinates.get(trafficLightId).getY());
+                        g2d.drawImage(greenLightImage,coordinate.getX() ,coordinate.getY() , drawingBoardPanel);
                     } else {
-                        g2d.drawImage(greenLightZebraImage, zebraCrossingCoordinates.get(trafficLightId).getX(), zebraCrossingCoordinates.get(trafficLightId).getY(), drawingBoardPanel);
+                        Coordinates coordinate = getRepositionedImageCoordinates(zebraCrossingImage,zebraCrossingCoordinates.get(trafficLightId).getX(),zebraCrossingCoordinates.get(trafficLightId).getY());
+                        g2d.drawImage(greenLightZebraImage, coordinate.getX() ,coordinate.getY()  , drawingBoardPanel);
                     }
                 } else {
                     if (trafficLightCoordinates.get(trafficLightId) != null) {
-                        g2d.drawImage(redLightImage, trafficLightCoordinates.get(trafficLightId).getX(), trafficLightCoordinates.get(trafficLightId).getY(), drawingBoardPanel);
+                        Coordinates coordinate = getRepositionedImageCoordinates(trafficLightImage,trafficLightCoordinates.get(trafficLightId).getX(),trafficLightCoordinates.get(trafficLightId).getY());
+                        g2d.drawImage(redLightImage, coordinate.getX() , coordinate.getY(), drawingBoardPanel);
                     } else {
-                        g2d.drawImage(redLightZebraImage, zebraCrossingCoordinates.get(trafficLightId).getX(), zebraCrossingCoordinates.get(trafficLightId).getY(), drawingBoardPanel);
+                        Coordinates coordinate = getRepositionedImageCoordinates(zebraCrossingImage,zebraCrossingCoordinates.get(trafficLightId).getX(),zebraCrossingCoordinates.get(trafficLightId).getY());
+                        g2d.drawImage(redLightZebraImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
                     }
                 }
             }
