@@ -29,10 +29,10 @@ import java.io.*;
 
 public class  Traffic_Simulator {
     private static Traffic_Simulator window;
+    ClimaticCondition climaticCondition = new ClimaticCondition();
     private JFrame trafficSimulatorFrame;
     private RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
     private VehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
-    ClimaticCondition climaticCondition = new ClimaticCondition();
     private GlobalConfigManager globalConfigManager = new GlobalConfigManager(
             100,//ticks per second
             0.5,//metres per RUnit
@@ -515,7 +515,7 @@ public class  Traffic_Simulator {
         lblEmergencyVehicles.setFont(new Font("Copperplate Gothic", Font.BOLD, 11));
         trafficPatternPanel.add(lblEmergencyVehicles);
 
-        JLabel lblCautions = new JLabel("Cautions");
+        JLabel lblCautions = new JLabel("Cautious");
         lblCautions.setForeground(UIManager.getColor("Button.light"));
         lblCautions.setBounds(6, 227, 56, 18);
         lblCautions.setFont(new Font("Copperplate Gothic", Font.BOLD, 11));
@@ -597,6 +597,8 @@ public class  Traffic_Simulator {
                 return getValueAt(0, column).getClass();
             }
         };
+
+
         table.setModel(model);
         table.addMouseListener(new MouseAdapter() {
             @Override
@@ -608,7 +610,6 @@ public class  Traffic_Simulator {
                 scrollPane.repaint();
 
             }
-
         });
         scrollPane.setViewportView(table);
         trafficLightConfigPanel.add(scrollPane);
