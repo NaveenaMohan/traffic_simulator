@@ -2,6 +2,7 @@ package managers.vehicle;
 
 import common.Common;
 import dataAndStructures.IDataAndStructures;
+import managers.roadnetwork.RoadNetworkManager;
 import managers.runit.*;
 import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
@@ -201,7 +202,7 @@ public class VehicleMotor implements Serializable {
             rUnit = chooseNext(rUnit, vehicleState);
 
             //see and process the objects we have just passed
-            processObjectPassed(rUnit, vehicleState, dataAndStructures.getGlobalConfigManager().getCurrentSecond());
+            rUnit = processObjectPassed(rUnit, vehicleState, dataAndStructures.getGlobalConfigManager().getCurrentSecond());
         }
 
         //adjust your position in space
@@ -324,7 +325,37 @@ public class VehicleMotor implements Serializable {
                 currentVelocity + currentAcceleration * timePassed));
     }
 
-    private void processObjectPassed(IRUnitManager rUnit, VehicleState vehicleState, double currentTime) {
+    private IRUnitManager getPreviousIntersection(IRUnitManager rUnit, int backwardsMagnitude)
+    {
+        //this function looks backwardsMagnitude steps ahead and returns true if there was an intersection
+        IRUnitManager temp = rUnit.getPrevsRUnitList().get(0);
+        for(int i=0; i<backwardsMagnitude; i++)
+        {
+            //if this was an intersection
+            if(temp.getNextRUnitList().size()>1)
+                return temp;
+            if(temp.getChangeAbleRUnit()!=null && temp.getChangeAbleRUnit().getNextRUnitList().size()>1)
+                return temp.getChangeAbleRUnit();
+            if(temp.getPrevsRUnitList().size() > 0)
+            {
+                temp = temp.getPrevsRUnitList().get(0);
+            }
+        }
+        return null;
+    }
+    private IRUnitManager retakeIntersection(IRUnitManager intersectedRUnit, IRUnitManager currentRUnit)
+    {
+        //this function looks at the intersection and returns the exit that does not lead to currentRUnit
+        for(IRUnitManager exit : intersectedRUnit.getNextRUnitList())
+        {
+            if(RoadNetworkManager.checkForRoadDensityCollisions(exit, currentRUnit))
+                return exit;
+        }
+
+        //if no other rUnit found return the one that you came in with
+        return currentRUnit;
+    }
+    private IRUnitManager processObjectPassed(IRUnitManager rUnit, VehicleState vehicleState, double currentTime) {
         Object obj = VehiclePerception.getObjectForDoubleLane(rUnit);
         //if you have just passed a speed sign update your maxSpeedLimit
         if (obj instanceof SpeedLimitSign) {
@@ -333,6 +364,13 @@ public class VehicleMotor implements Serializable {
 
         //if you have just passed end of road - disappear
         if (!(rUnit.getNextRUnitList().size() > 0)) {
+            //a workaround for intersection disappearing cars
+            //get the last intersection within 10 rUnits
+            IRUnitManager lastIntersection = getPreviousIntersection(rUnit, 20);
+            //if there was an intersection
+            if(lastIntersection!=null)
+                return retakeIntersection(lastIntersection, rUnit);
+            else
             objectInSpace.setVisible(false);
         }
 
@@ -352,6 +390,8 @@ public class VehicleMotor implements Serializable {
                 arrivalDestTime = currentTime;
             }
         }
+
+        return rUnit;
     }
 
     public double getCurrentAcceleration() { //ADDED BY LORENA TO TEST ACCELERATION IN THE REPORTS
