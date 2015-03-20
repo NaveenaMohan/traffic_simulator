@@ -6,8 +6,6 @@ import managers.globalconfig.*;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
 import managers.runit.TrafficLight;
-import managers.space.ObjectInSpace;
-import managers.vehicle.IVehicleManager;
 import managers.vehiclefactory.VehicleFactoryManager;
 import reports.DCP;
 import ui.components.DrawingBoard;
@@ -28,7 +26,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
 
 public class  Traffic_Simulator {
 
@@ -480,7 +477,7 @@ public class  Traffic_Simulator {
         vehicleProductionRateSlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                globalConfigManager.getVehicleDensity().setCreationRatePerSecond((int) (vehicleProductionRateSlider.getValue()/10.00));
+                globalConfigManager.getVehicleDensity().setCreationRatePerSecond((vehicleProductionRateSlider.getValue()/10.00));
             }
         });
 
