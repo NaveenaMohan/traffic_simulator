@@ -90,7 +90,6 @@ public class Common {
         /*
         This function returns the nth next rUnit. It should not go out of range
          */
-        String m = "("+rUnit.getId()+")";
         if(rUnit==null)
             return null;
 
@@ -99,11 +98,9 @@ public class Common {
             for (int i = 0; i < n; i++) {
                 if(temp.getNextRUnitList().size()>0) {
                     temp = temp.getNextRUnitList().get(0);
-                    m+="("+temp.getId()+")";
                 }
             }
 
-        //System.out.println(m);
         return temp;
     }
 

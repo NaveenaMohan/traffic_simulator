@@ -404,7 +404,6 @@ public class VehicleMotor implements Serializable {
     }
 
     private IRUnitManager getNextForDirection(IRUnitManager rUnit, VehicleState vehicleState) {
-        System.out.println("[getNextForDirection(" + vehicleState.getNextDirectionAtDecisionPoint() + ")]");
         /*
         This function chooses the nextRUnit at an intersection if you have a direction set
          */

@@ -20,10 +20,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
@@ -903,6 +900,14 @@ public class  Traffic_Simulator {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                drawingBoard.setDraw(false);
+                // Remove all listeners
+                for(MouseListener mouseListener: drawingBoardPanel.getMouseListeners()){
+                    drawingBoardPanel.removeMouseListener(mouseListener);
+                }
+                for(MouseMotionListener mouseListener: drawingBoardPanel.getMouseMotionListeners()){
+                    drawingBoardPanel.removeMouseMotionListener(mouseListener);
+                }
                 if(drawingBoard.isSimulationStarted()){
                     simEngine.Unpause();
                     drawingBoard.setSimulationPlaying(true);
@@ -968,6 +973,7 @@ public class  Traffic_Simulator {
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                window.trafficSimulatorFrame.setVisible(false);
                 window = new Traffic_Simulator();
                 window.trafficSimulatorFrame.setVisible(true);
             }
