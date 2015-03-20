@@ -122,14 +122,10 @@ public class RoadNetworkManager implements IRoadNetworkManager {
     }
     private void manageIntersections(RUnit currentRUnit)
     {
-        String m = "";
-        m+=currentRUnit.getId() + "[manageIntersections]";
         Coordinates intersectionCoordinates = new Coordinates(currentRUnit.getX(), currentRUnit.getY());
         //Check for intersection in Single Lane Coordinates
         RUnit intersected = checkIntersectionAndReturnIntersectedRUnit(roadNetwork.getrUnitHashtable().values(),intersectionCoordinates, currentRUnit.getId());
-        m+=(intersected!=null ? "[SingleIntersected]" : "[NOT SingleIntersected]");
         if(intersected == null){
-            m+=(intersected!=null ? "[DoubleIntersected]" : "[NOT DoubleIntersected]");
             //Check for intersection in Double Lane Changeable Coordinates
             intersected = checkIntersectionAndReturnIntersectedRUnit(roadNetwork.getChangeableRUnitHashtable().values(),intersectionCoordinates, currentRUnit.getId());
         }
@@ -144,8 +140,6 @@ public class RoadNetworkManager implements IRoadNetworkManager {
             //connect incoming to intersected
             if(checkIntersectionIsLawful(currentRUnit, intersected))
             {
-                m+="[koko]";
-
                 connectNext(currentRUnit, (intersected.getNextRUnitList().size() > 0 ? intersected.getNextRUnitList().get(0) : intersected));
 
                 String nexts="";
@@ -154,15 +148,11 @@ public class RoadNetworkManager implements IRoadNetworkManager {
                 String prevs="";
                 for (RUnit p : currentRUnit.getPrevsRUnitList())
                     prevs += p.getId() + " ";
-                m+="id: " + currentRUnit.getId() + " x:" + currentRUnit.getX() + " y:" + currentRUnit.getY() + " n("+currentRUnit.getNextRUnitList().size() +
-                        "){"+ nexts + "} p(" + currentRUnit.getPrevsRUnitList().size() + "){"+ prevs + "}";
             }
 
             //connect intersected to incoming
             if(checkIntersectionIsLawful(intersected, currentRUnit))
             {
-                m+="[kuku]";
-
                 connectNext(intersected, (currentRUnit.getNextRUnitList().size() > 0 ? currentRUnit.getNextRUnitList().get(0) : currentRUnit));
 
                 String nexts="";
@@ -171,13 +161,9 @@ public class RoadNetworkManager implements IRoadNetworkManager {
                 String prevs="";
                 for (RUnit p : intersected.getPrevsRUnitList())
                     prevs += p.getId() + " ";
-                m+="id: " + intersected.getId() + " x:" + intersected.getX() + " y:" + intersected.getY() + " n("+intersected.getNextRUnitList().size() +
-                        "){"+ nexts + "} p(" + intersected.getPrevsRUnitList().size() + "){"+ prevs + "}";
             }
 
         }
-        m+="[manageIntersections-END]";
-        System.out.println(m);
     }
     private RUnit getNext(int x, int y, RUnit prevRUnit, boolean isDoubleLane) {
 

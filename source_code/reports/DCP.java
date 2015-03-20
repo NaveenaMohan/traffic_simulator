@@ -104,7 +104,7 @@ public class DCP extends JPanel{
                vehiclesMadeDestination(); // reports percentage of vehicles that made it to their destination along with the avg time it took them to get there
            }
        } catch (BadLocationException badLocationException) {
-           System.err.println("Error");
+           System.err.println("Error" + badLocationException.getMessage());
        }
        textPane = new JTextPane(document);
        textPane.setEditable(false);

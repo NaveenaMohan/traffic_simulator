@@ -154,7 +154,7 @@ public class DrawingBoard implements ActionListener {
     //Configuration Phase - Drawing road and configuring other traffic elements
     public void paintComponent(Graphics g) {
         //Add single lane
-        if (configButtonSelected.equals(ConfigButtonSelected.addSingleLane)) {
+        if (isDraw() && configButtonSelected.equals(ConfigButtonSelected.addSingleLane)) {
             Graphics2D g2D = (Graphics2D) g;
 
             Coordinates A = new Coordinates((previousRUnit==null ? currentX : previousRUnit.getX()),
@@ -175,7 +175,7 @@ public class DrawingBoard implements ActionListener {
 
         //Add double lane
 
-        if (configButtonSelected.equals(ConfigButtonSelected.addDoubleLane)) {
+        if (isDraw() && configButtonSelected.equals(ConfigButtonSelected.addDoubleLane)) {
             Graphics2D g2d = (Graphics2D) g;
 
             //previous coordinates
