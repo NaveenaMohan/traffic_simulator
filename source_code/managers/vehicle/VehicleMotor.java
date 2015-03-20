@@ -146,7 +146,7 @@ public class VehicleMotor implements Serializable {
             if (vehicleState.getNextDirectionAtDecisionPoint() == null) {
                 VehicleMemoryObject vehicleInLeft = vehicleState.getNextVehicleObject(100, true);
                 if (vehicleInLeft == null) {
-                    if (VehiclePerception.isChangeableClear(temp, spaceManager, objectInSpace, 30, 5)) {
+                    if (VehiclePerception.isChangeableClear(temp, spaceManager, objectInSpace, 40, 10)) {
                         temp = temp.getChangeAbleRUnit();
                     }
                 }
