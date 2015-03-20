@@ -482,7 +482,7 @@ public class  Traffic_Simulator {
         vehicleProductionRateSlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                globalConfigManager.getVehicleDensity().setCreationRatePerSecond((int) (vehicleProductionRateSlider.getValue()/10.00));
+                globalConfigManager.getVehicleDensity().setCreationRatePerSecond((vehicleProductionRateSlider.getValue()/10.00));
             }
         });
 

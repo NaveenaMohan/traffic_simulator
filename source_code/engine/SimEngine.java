@@ -1,12 +1,8 @@
 package engine;
 
 import dataAndStructures.DataAndStructures;
-import managers.globalconfig.*;
-import managers.roadnetwork.RoadNetwork;
-import managers.roadnetwork.RoadNetworkManager;
 import managers.space.ObjectInSpace;
 import managers.vehicle.IVehicleManager;
-import managers.vehiclefactory.VehicleFactoryManager;
 import reports.DCP;
 
 import javax.swing.*;
@@ -91,14 +87,15 @@ public class SimEngine implements Serializable {
             //update Report data
             dcp.updateReportingInfo(dataAndStructures);
 
-            //create a new vehicle
-            IVehicleManager newVehicle =
-                    dataAndStructures.getVehicleFactoryManager().createVehicle(dataAndStructures);
-            //newVehicle can be null if the factory decided to not produce the vehicle
-            if (newVehicle != null) {
-                dataAndStructures.getVehicles().add(newVehicle);
+            if(dataAndStructures.getVehicles().size()<1000) {
+                //create a new vehicle
+                IVehicleManager newVehicle =
+                        dataAndStructures.getVehicleFactoryManager().createVehicle(dataAndStructures);
+                //newVehicle can be null if the factory decided to not produce the vehicle
+                if (newVehicle != null) {
+                    dataAndStructures.getVehicles().add(newVehicle);
+                }
             }
-
             //move the vehicles
             for (IVehicleManager vehicle : dataAndStructures.getVehicles()) {
                 if (vehicle.isVisible())
