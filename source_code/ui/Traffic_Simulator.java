@@ -101,14 +101,14 @@ public class Traffic_Simulator {
         txtrRoadInfrastructure.setText("                   ROAD INFRASTRUCTURE");
         roadInfraStructurePanel.add(txtrRoadInfrastructure);
 
-        JButton single_lane = new JButton();
+        final JButton single_lane = new JButton();
         single_lane.setBounds(26, 27, 70, 70);
         single_lane.setToolTipText("Add a Single Lane Road");
         single_lane.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("/resources/Single Lane.jpg")));
         roadInfraStructurePanel.add(single_lane);
 
 
-        JButton double_lane = new JButton();
+        final JButton double_lane = new JButton();
         double_lane.setBounds(108, 27, 70, 70);
         double_lane.setToolTipText("Add a Double Lane Road");
         double_lane.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("/resources/Double Lane.jpg")));
@@ -924,6 +924,8 @@ public class Traffic_Simulator {
                     exportConfigButton.setEnabled(false);
                     reportButton.setEnabled(false);
                     clearVehicleFactoryButton.setEnabled(false);
+                    single_lane.setEnabled(false);
+                    double_lane.setEnabled(false);
                 } else {
                     if (vehicleFactoryManager.getVehicleFactoryList().isEmpty()) {
                         NoVehicleFactoryDialogBox vehicleFactoryDialogBox = new NoVehicleFactoryDialogBox();
@@ -943,6 +945,8 @@ public class Traffic_Simulator {
                         exportConfigButton.setEnabled(false);
                         reportButton.setEnabled(false);
                         clearVehicleFactoryButton.setEnabled(false);
+                        single_lane.setEnabled(false);
+                        double_lane.setEnabled(false);
                     }
                 }
             }
