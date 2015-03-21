@@ -1,11 +1,14 @@
 package ui;
 
 import dataAndStructures.DataAndStructures;
+import dataAndStructures.IDataAndStructures;
 import engine.SimEngine;
 import managers.globalconfig.*;
+import managers.roadnetwork.IRoadNetworkManager;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
 import managers.runit.TrafficLight;
+import managers.vehiclefactory.IVehicleFactoryManager;
 import managers.vehiclefactory.VehicleFactoryManager;
 import reports.DCP;
 import ui.components.DrawingBoard;
@@ -28,9 +31,9 @@ public class  Traffic_Simulator {
     private static Traffic_Simulator window;
     ClimaticCondition climaticCondition = new ClimaticCondition();
     private JFrame trafficSimulatorFrame;
-    private RoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
-    private VehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
-    private GlobalConfigManager globalConfigManager = new GlobalConfigManager(
+    private IRoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
+    private IVehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
+    private IGlobalConfigManager globalConfigManager = new GlobalConfigManager(
             100,//ticks per second
             0.5,//metres per RUnit
             climaticCondition,
@@ -38,7 +41,7 @@ public class  Traffic_Simulator {
             new VehicleDensity(),
             new Route()
     );
-    DataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
+    IDataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
     private DCP dcp=new DCP(dataAndStructures);
     private boolean openReport=false;
     private SimEngine simEngine = new SimEngine(dataAndStructures,dcp);
@@ -805,10 +808,10 @@ public class  Traffic_Simulator {
                     try {
                         drawingBoard.clean();
                         ExportImportObject exportImportObject = (ExportImportObject) ois.readObject();
-                        roadNetworkManager = (RoadNetworkManager) exportImportObject.getEngineDataStructures().getRoadNetworkManager();
-                        vehicleFactoryManager = (VehicleFactoryManager) exportImportObject.getEngineDataStructures().getVehicleFactoryManager();
+                        roadNetworkManager = exportImportObject.getEngineDataStructures().getRoadNetworkManager();
+                        vehicleFactoryManager = exportImportObject.getEngineDataStructures().getVehicleFactoryManager();
                         climaticCondition = exportImportObject.getEngineDataStructures().getGlobalConfigManager().getClimaticCondition();
-                        globalConfigManager = (GlobalConfigManager) exportImportObject.getEngineDataStructures().getGlobalConfigManager();
+                        globalConfigManager = exportImportObject.getEngineDataStructures().getGlobalConfigManager();
                         dataAndStructures = exportImportObject.getEngineDataStructures();
                         dcp=new DCP(dataAndStructures);
                         simEngine = new SimEngine(dataAndStructures,dcp);
@@ -923,7 +926,7 @@ public class  Traffic_Simulator {
                     reportButton.setEnabled(false);
                     clearVehicleFactoryButton.setEnabled(false);
                 }else {
-                    if (vehicleFactoryManager.vehicleFactoryList.isEmpty()) {
+                    if (vehicleFactoryManager.getVehicleFactoryList().isEmpty()) {
                         NoVehicleFactoryDialogBox vehicleFactoryDialogBox = new NoVehicleFactoryDialogBox();
                         vehicleFactoryDialogBox.vehicleFactoryDialog();
                         vehicleFactoryDialogBox.setVisible(true);

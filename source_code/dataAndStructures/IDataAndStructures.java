@@ -19,4 +19,7 @@ public interface IDataAndStructures extends Serializable {
     public List<IVehicleManager> getVehicles();
     public IGlobalConfigManager getGlobalConfigManager();
     public ISpaceManager getSpaceManager();
+
+    public void setVehicleManagerList(List<IVehicleManager> vehicleManagerList);
+
 }

@@ -7,13 +7,13 @@ import java.io.Serializable;
  */
 public abstract class TrafficSign implements Serializable {
 
-    private RUnit rUnit;
+    private IRUnitManager rUnit;
 
-    public RUnit getrUnit() {
+    public IRUnitManager getrUnit() {
         return rUnit;
     }
 
-    public void setrUnit(RUnit rUnit) {
+    public void setrUnit(IRUnitManager rUnit) {
         this.rUnit = rUnit;
     }
 }

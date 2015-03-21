@@ -38,9 +38,9 @@ public interface IRUnitManager extends Serializable {
 
     String getId();
 
-    List<RUnit> getNextRUnitList();
+    List<IRUnitManager> getNextRUnitList();
 
-    List<RUnit> getPrevsRUnitList();
+    List<IRUnitManager> getPrevsRUnitList();
 
     boolean isLeft();
 
@@ -48,7 +48,15 @@ public interface IRUnitManager extends Serializable {
 
     public void ChangeLight(boolean color, String trafficLightID, int index);
 
-    RUnit getChangeAbleRUnit();
+    IRUnitManager getChangeAbleRUnit();
+
     public boolean go();
 
+    void setChangeAbleRUnit(IRUnitManager currentChangeableRUnit);
+
+    void setZebraCrossing(ZebraCrossing zebraCrossing);
+
+    void setBlockage(Blockage blockage);
+
+    void setTrafficSign(TrafficSign trafficSign);
 }

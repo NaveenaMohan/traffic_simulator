@@ -164,8 +164,8 @@ public class VehiclePerception implements Serializable {
     private static double getObjectVelocity(Object obj) {//return the speed of the object
         if (obj instanceof Blockage)//check for blockage
             return 0;
-        else if (obj instanceof Vehicle)//check for vehicle
-            return ((Vehicle) obj).getCurrentVelocity();
+        else if (obj instanceof IVehicleManager)//check for vehicle
+            return ((IVehicleManager) obj).getCurrentVelocity();
         else if (obj instanceof TrafficLight)//check for traffic light
             return 0;
         else if (obj instanceof ZebraCrossing)//check for zebra crossing

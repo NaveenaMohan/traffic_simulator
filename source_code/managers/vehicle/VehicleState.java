@@ -65,7 +65,7 @@ public class VehicleState implements Serializable {
     public VehicleMemoryObject getNextVehicleObject(double metres, boolean inLeft) {
         for (int i = 0; i < objectsAhead.size(); i++) {
             if (objectsAhead.get(i).getDistance() <= metres) {
-                if (objectsAhead.get(i).isInLeft() == inLeft & objectsAhead.get(i).getObject() instanceof Vehicle)
+                if (objectsAhead.get(i).isInLeft() == inLeft & objectsAhead.get(i).getObject() instanceof IVehicleManager)
                     return objectsAhead.get(i);
             } else
                 break;

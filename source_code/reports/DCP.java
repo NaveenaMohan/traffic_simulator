@@ -1,24 +1,24 @@
 package reports;
 
 import common.Common;
-import dataAndStructures.DataAndStructures;
+import dataAndStructures.IDataAndStructures;
 import managers.space.ObjectInSpace;
 import managers.vehicle.IVehicleManager;
 
 import javax.swing.*;
 import javax.swing.text.*;
+import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.HashMap;
 import java.util.Map;
-import java.awt.*;
 
 /**
  * Created by Guera_000 on 23/02/2015.
  */
 public class DCP extends JPanel{
 
-    private DataAndStructures dataAndStructures;
+    private IDataAndStructures dataAndStructures;
     private Map<String, Double> vehiclesVelocity = new HashMap<String, Double>();
     private Map<String, Integer> numberOfTimes = new HashMap<String, Integer>();
     private Map<String, Double> averageVehiclesVelocity = new HashMap<String, Double>();
@@ -37,12 +37,12 @@ public class DCP extends JPanel{
     JFrame frame;
     JTextPane textPane;
 
-    public DCP(DataAndStructures dataAndStructures) {
+    public DCP(IDataAndStructures dataAndStructures) {
         this.dataAndStructures=dataAndStructures;
 
     }
 
-    public void updateReportingInfo(DataAndStructures dataAndStructures){  // to be called every tick
+    public void updateReportingInfo(IDataAndStructures dataAndStructures) {  // to be called every tick
         this.dataAndStructures=dataAndStructures;
         getVehiclesInformation(); //gets the info of all of the cars
     }

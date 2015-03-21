@@ -3,7 +3,6 @@ package managers.vehicle;
 import dataAndStructures.IDataAndStructures;
 import managers.globalconfig.VehicleType;
 import managers.runit.IRUnitManager;
-import managers.runit.RUnit;
 import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
 import managers.space.VehicleDirection;
@@ -26,7 +25,7 @@ public class Vehicle implements IVehicleManager {
 
     private double previousTime;
 
-    public Vehicle(int vehID, RUnit rUnit, Driver driver, int initialSpeed, String destination
+    public Vehicle(int vehID, IRUnitManager rUnit, Driver driver, int initialSpeed, String destination
             , ObjectInSpace objectInSpace, double maxAcceleration, double maxDeceleration, double timeCreated, double maximumVelocity) {
         this.vehID = vehID;
         this.rUnit = rUnit;
@@ -52,7 +51,7 @@ public class Vehicle implements IVehicleManager {
         return rUnit;
     }
 
-    public void setrUnit(RUnit rUnit) {
+    public void setrUnit(IRUnitManager rUnit) {
         this.rUnit = rUnit;
     }
 
@@ -115,7 +114,7 @@ public class Vehicle implements IVehicleManager {
     }
 
     @Override
-    public Vehicle getVehicle() {
+    public IVehicleManager getVehicle() {
         return this;
     }
 

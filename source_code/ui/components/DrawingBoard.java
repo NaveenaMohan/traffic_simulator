@@ -3,9 +3,9 @@ package ui.components;
 import common.Common;
 import engine.SimEngine;
 import managers.globalconfig.VehicleType;
-import managers.roadnetwork.RoadNetworkManager;
+import managers.roadnetwork.IRoadNetworkManager;
 import managers.runit.DirectionSignType;
-import managers.runit.RUnit;
+import managers.runit.IRUnitManager;
 import managers.runit.TrafficLight;
 import managers.space.ObjectInSpace;
 import ui.ConfigButtonSelected;
@@ -28,9 +28,9 @@ public class DrawingBoard implements ActionListener {
     BufferedImage bufferedRoadImage;
     BufferedImage bufferedChangeableRoadImage;
     private int currentX, currentY;
-    private Set<RUnit> singleLaneRUnits = new LinkedHashSet<RUnit>();
-    private Set<RUnit> doubleLaneRUnits = new LinkedHashSet<RUnit>();
-    private Set<RUnit> changeAbleLaneRUnits = new LinkedHashSet<RUnit>();
+    private Set<IRUnitManager> singleLaneRUnits = new LinkedHashSet<IRUnitManager>();
+    private Set<IRUnitManager> doubleLaneRUnits = new LinkedHashSet<IRUnitManager>();
+    private Set<IRUnitManager> changeAbleLaneRUnits = new LinkedHashSet<IRUnitManager>();
     private List<Coordinates> vehicleFactoryCoordinates = new ArrayList<Coordinates>();
     private Map<String, Coordinates> trafficLightCoordinates = new HashMap<String, Coordinates>();
     private Map<String, Coordinates> zebraCrossingCoordinates = new HashMap<String, Coordinates>();
@@ -46,10 +46,10 @@ public class DrawingBoard implements ActionListener {
     private List<Coordinates> speed70Coordinates = new ArrayList<Coordinates>();
     private List<Coordinates> speed90Coordinates = new ArrayList<Coordinates>();
     private Map<Coordinates, String> welcomeCoordinates = new HashMap<Coordinates, String>();
-    private RoadNetworkManager roadNetworkManager;
+    private IRoadNetworkManager roadNetworkManager;
     private SimEngine simEngine;
-    private RUnit previousRUnit;
-    private RUnit previousChangeableRunit;
+    private IRUnitManager previousRUnit;
+    private IRUnitManager previousChangeableRunit;
     private Image rUnitImage;
     private Image rUnitImage2;
     private Image trafficLightImage;
@@ -83,7 +83,7 @@ public class DrawingBoard implements ActionListener {
     private JLabel currentSecondValue;
     private JPanel drawingBoardPanel;
 
-    public DrawingBoard(DefaultTableModel model, RoadNetworkManager roadNetworkManager, SimEngine simEngine, JLabel currentSecondValue) {
+    public DrawingBoard(DefaultTableModel model, IRoadNetworkManager roadNetworkManager, SimEngine simEngine, JLabel currentSecondValue) {
         this.model = model;
         this.roadNetworkManager = roadNetworkManager;
         this.simEngine = simEngine;
@@ -199,7 +199,7 @@ public class DrawingBoard implements ActionListener {
                 if ((previousRUnit == null && previousChangeableRunit == null) ||
                         (!A.equals(new Coordinates(previousRUnit.getX(), previousRUnit.getY())))) {
                     //Add and Return RUnit for double lane and store it as previous RUnit
-                    Map<String, RUnit> prevRUnitMap = roadNetworkManager.addDoubleLane(A.getX(), A.getY(), changeableA.getX(), changeableA.getY(), previousRUnit, previousChangeableRunit);
+                    Map<String, IRUnitManager> prevRUnitMap = roadNetworkManager.addDoubleLane(A.getX(), A.getY(), changeableA.getX(), changeableA.getY(), previousRUnit, previousChangeableRunit);
                     if (prevRUnitMap != null) {
                         previousRUnit = prevRUnitMap.get("runit");
                         previousChangeableRunit = prevRUnitMap.get("changeableRunit");
@@ -236,7 +236,7 @@ public class DrawingBoard implements ActionListener {
 
         if (configButtonSelected.equals(ConfigButtonSelected.trafficLight)) {
             String trafficLightId = "TL-" + trafficLightIdIndex;
-            RUnit bestMatchRUnit = fetchBestMatchRUnit();
+            IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
                 if (model != null) {
                     model.addRow(new Object[]{trafficLightId, false, false, false, false, false, false, false, false, false, false});
@@ -250,7 +250,7 @@ public class DrawingBoard implements ActionListener {
                 //Drawing the traffic Light and adding the traffic light cycle configuration
                 JButton tl = new JButton();
                 Coordinates coordinates = getRepositionedImageCoordinates(trafficLightImage,bestMatchRUnit.getX(),bestMatchRUnit.getY());
-                tl.setBounds(coordinates.getX(), coordinates.getY(), trafficLightImage.getWidth(drawingBoardPanel),trafficLightImage.getHeight(drawingBoardPanel));
+                tl.setBounds(coordinates.getX(), coordinates.getY(), trafficLightImage.getWidth(drawingBoardPanel), trafficLightImage.getHeight(drawingBoardPanel));
                 tl.setToolTipText("Traffic Light: " + trafficLightIdIndex);
                 tl.setIcon(new ImageIcon(trafficLightImage));
                 drawingBoardPanel.add(tl);
@@ -260,7 +260,7 @@ public class DrawingBoard implements ActionListener {
 
         if (configButtonSelected.equals(ConfigButtonSelected.zebraCrossing)) {
             String trafficLightId = "ZTL-" + zebraCrossingTrafficLightIdIndex;
-            RUnit bestMatchRUnit = fetchBestMatchRUnit();
+            IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
                 //Updating the best match rUnit with the zebra crossing
                 if (model != null) {
@@ -275,7 +275,7 @@ public class DrawingBoard implements ActionListener {
                 JButton ztl = new JButton();
                 ztl.setToolTipText("Zebra Crossing Traffic Light: " + zebraCrossingTrafficLightIdIndex);
                 Coordinates coordinates = getRepositionedImageCoordinates(zebraCrossingImage,bestMatchRUnit.getX(),bestMatchRUnit.getY());
-                ztl.setBounds(coordinates.getX(), coordinates.getY(), zebraCrossingImage.getWidth(drawingBoardPanel),zebraCrossingImage.getHeight(drawingBoardPanel));
+                ztl.setBounds(coordinates.getX(), coordinates.getY(), zebraCrossingImage.getWidth(drawingBoardPanel), zebraCrossingImage.getHeight(drawingBoardPanel));
                 ztl.setIcon(new ImageIcon(zebraCrossingImage));
                 drawingBoardPanel.add(ztl);
             }
@@ -283,7 +283,7 @@ public class DrawingBoard implements ActionListener {
         }
 
         if (configButtonSelected.equals(ConfigButtonSelected.blockage)) {
-            RUnit bestMatchRUnit = fetchAndAddBestMatchRUnit(blockageCoordinates);
+            IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(blockageCoordinates);
             if (bestMatchRUnit != null) {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addBlockage(bestMatchRUnit);
@@ -296,7 +296,7 @@ public class DrawingBoard implements ActionListener {
 
 
         if (configButtonSelected.equals(ConfigButtonSelected.vehicleFactory)) {
-            RUnit bestMatchRUnit = fetchAndAddBestMatchRUnit(vehicleFactoryCoordinates);
+            IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(vehicleFactoryCoordinates);
             if (bestMatchRUnit != null) {
                 //Adding vehicle factory and dataStructures
                 simEngine.getDataAndStructures().getVehicleFactoryManager().addVehicleFactory(roadNetworkManager.getRoadNetwork().getrUnitHashtable().get(String.valueOf(bestMatchRUnit.getId())));
@@ -309,7 +309,7 @@ public class DrawingBoard implements ActionListener {
 
 
         if (configButtonSelected.equals(ConfigButtonSelected.stop)) {
-            RUnit bestMatchRUnit = fetchAndAddBestMatchRUnit(stopCoordinates);
+            IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(stopCoordinates);
             if (bestMatchRUnit != null) {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addStopSign(bestMatchRUnit);
@@ -321,7 +321,7 @@ public class DrawingBoard implements ActionListener {
         }
 
         if (configButtonSelected.equals(ConfigButtonSelected.left)) {
-            RUnit bestMatchRUnit = fetchBestMatchRUnit();
+            IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
                 LocationDialog locationDialog = new LocationDialog();
                 locationDialog.initUI();
@@ -344,7 +344,7 @@ public class DrawingBoard implements ActionListener {
         }
 
         if (configButtonSelected.equals(ConfigButtonSelected.right)) {
-            RUnit bestMatchRUnit = fetchBestMatchRUnit();
+            IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
                 LocationDialog locationDialog = new LocationDialog();
                 locationDialog.initUI();
@@ -367,7 +367,7 @@ public class DrawingBoard implements ActionListener {
         }
 
         if (configButtonSelected.equals(ConfigButtonSelected.straight)) {
-            RUnit bestMatchRUnit = fetchBestMatchRUnit();
+            IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
                 LocationDialog locationDialog = new LocationDialog();
                 locationDialog.initUI();
@@ -390,7 +390,7 @@ public class DrawingBoard implements ActionListener {
         }
 
         if (configButtonSelected.equals(ConfigButtonSelected.speed20)) {
-            RUnit bestMatchRUnit = fetchAndAddBestMatchRUnit(speed20Coordinates);
+            IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(speed20Coordinates);
             if (bestMatchRUnit != null) {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 20);
@@ -402,7 +402,7 @@ public class DrawingBoard implements ActionListener {
         }
 
         if (configButtonSelected.equals(ConfigButtonSelected.speed30)) {
-            RUnit bestMatchRUnit = fetchAndAddBestMatchRUnit(speed30Coordinates);
+            IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(speed30Coordinates);
             if (bestMatchRUnit != null) {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 30);
@@ -414,7 +414,7 @@ public class DrawingBoard implements ActionListener {
         }
 
         if (configButtonSelected.equals(ConfigButtonSelected.speed50)) {
-            RUnit bestMatchRUnit = fetchAndAddBestMatchRUnit(speed50Coordinates);
+            IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(speed50Coordinates);
             if (bestMatchRUnit != null) {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 50);
@@ -426,7 +426,7 @@ public class DrawingBoard implements ActionListener {
         }
 
         if (configButtonSelected.equals(ConfigButtonSelected.speed60)) {
-            RUnit bestMatchRUnit = fetchAndAddBestMatchRUnit(speed60Coordinates);
+            IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(speed60Coordinates);
             if (bestMatchRUnit != null) {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 60);
@@ -438,7 +438,7 @@ public class DrawingBoard implements ActionListener {
         }
 
         if (configButtonSelected.equals(ConfigButtonSelected.speed70)) {
-            RUnit bestMatchRUnit = fetchAndAddBestMatchRUnit(speed70Coordinates);
+            IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(speed70Coordinates);
             if (bestMatchRUnit != null) {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 70);
@@ -450,7 +450,7 @@ public class DrawingBoard implements ActionListener {
         }
 
         if (configButtonSelected.equals(ConfigButtonSelected.speed90)) {
-            RUnit bestMatchRUnit = fetchAndAddBestMatchRUnit(speed90Coordinates);
+            IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(speed90Coordinates);
             if (bestMatchRUnit != null) {
                 //Updating the best match rUnit with the blockage
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 90);
@@ -461,7 +461,7 @@ public class DrawingBoard implements ActionListener {
         }
 
         if (configButtonSelected.equals(ConfigButtonSelected.welcome)) {
-            RUnit bestMatchRUnit = fetchBestMatchRUnit();
+            IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
                 DestinationDialog destinationDialog = new DestinationDialog();
                 destinationDialog.initUI();
@@ -494,8 +494,8 @@ public class DrawingBoard implements ActionListener {
         }
     }
 
-    private RUnit fetchAndAddBestMatchRUnit(List<Coordinates> coordinates) {
-        for (RUnit rUnit : simEngine.getDataAndStructures().getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()) {
+    private IRUnitManager fetchAndAddBestMatchRUnit(List<Coordinates> coordinates) {
+        for (IRUnitManager rUnit : simEngine.getDataAndStructures().getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()) {
             Rectangle rectangle = new Rectangle(rUnit.getX(), rUnit.getY(), rUnitImage.getWidth(drawingBoardPanel) + 5, rUnitImage.getHeight(drawingBoardPanel) + 5);
             if (rectangle.contains(currentX, currentY)) {
                 if (coordinates != null) {
@@ -507,8 +507,8 @@ public class DrawingBoard implements ActionListener {
         return null;
     }
 
-    private RUnit fetchBestMatchRUnit() {
-        for (RUnit rUnit : simEngine.getDataAndStructures().getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()) {
+    private IRUnitManager fetchBestMatchRUnit() {
+        for (IRUnitManager rUnit : simEngine.getDataAndStructures().getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()) {
             Rectangle rectangle = new Rectangle(rUnit.getX(), rUnit.getY(), rUnitImage.getWidth(drawingBoardPanel) + 5, rUnitImage.getHeight(drawingBoardPanel) + 5);
             if (rectangle.contains(currentX, currentY)) {
                 return rUnit;
@@ -522,7 +522,7 @@ public class DrawingBoard implements ActionListener {
         Graphics2D g2D = (Graphics2D) g;
 
         //Drawing single road
-        for (RUnit rUnit : singleLaneRUnits) {
+        for (IRUnitManager rUnit : singleLaneRUnits) {
             Coordinates coordinates = getRepositionedImageCoordinates(rUnitImage, rUnit.getX(), rUnit.getY());
             g2D.drawImage(rUnitImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -532,7 +532,7 @@ public class DrawingBoard implements ActionListener {
 
 
         //Drawing double road
-        for (RUnit rUnit : doubleLaneRUnits) {
+        for (IRUnitManager rUnit : doubleLaneRUnits) {
             Coordinates coordinates = getRepositionedImageCoordinates(rUnitImage, rUnit.getX(), rUnit.getY()); // TODO : Change image
             g2D.drawImage(rUnitImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel); // TODO : change image
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -541,7 +541,7 @@ public class DrawingBoard implements ActionListener {
         }
 
         //Drawing double road - Changeable TODO : Remove
-        for (RUnit rUnit : changeAbleLaneRUnits) {
+        for (IRUnitManager rUnit : changeAbleLaneRUnits) {
             Coordinates coordinates = getRepositionedImageCoordinates(rUnitImage2, rUnit.getX(), rUnit.getY());
             g2D.drawImage(rUnitImage2, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -809,19 +809,19 @@ public class DrawingBoard implements ActionListener {
         drawingBoardPanel.addMouseListener(new WelcomeDestinationButtonListener(this));
     }
 
-    public RUnit getPreviousRUnit() {
+    public IRUnitManager getPreviousRUnit() {
         return previousRUnit;
     }
 
-    public void setPreviousRUnit(RUnit previousRUnit) {
+    public void setPreviousRUnit(IRUnitManager previousRUnit) {
         this.previousRUnit = previousRUnit;
     }
 
-    public RUnit getPreviousChangeableRunit() {
+    public IRUnitManager getPreviousChangeableRunit() {
         return previousChangeableRunit;
     }
 
-    public void setPreviousChangeableRunit(RUnit previousChangeableRunit) {
+    public void setPreviousChangeableRunit(IRUnitManager previousChangeableRunit) {
         this.previousChangeableRunit = previousChangeableRunit;
     }
 
@@ -873,19 +873,19 @@ public class DrawingBoard implements ActionListener {
         this.drawingBoardPanel = drawingBoardPanel;
     }
 
-    public Set<RUnit> getSingleLaneRUnits() {
+    public Set<IRUnitManager> getSingleLaneRUnits() {
         return singleLaneRUnits;
     }
 
-    public void setSingleLaneRUnits(Set<RUnit> singleLaneRUnits) {
+    public void setSingleLaneRUnits(Set<IRUnitManager> singleLaneRUnits) {
         this.singleLaneRUnits = singleLaneRUnits;
     }
 
-    public Set<RUnit> getDoubleLaneRUnits() {
+    public Set<IRUnitManager> getDoubleLaneRUnits() {
         return doubleLaneRUnits;
     }
 
-    public void setDoubleLaneRUnits(Set<RUnit> doubleLaneRUnits) {
+    public void setDoubleLaneRUnits(Set<IRUnitManager> doubleLaneRUnits) {
         this.doubleLaneRUnits = doubleLaneRUnits;
     }
 
@@ -1017,11 +1017,11 @@ public class DrawingBoard implements ActionListener {
         this.model = model;
     }
 
-    public RoadNetworkManager getRoadNetworkManager() {
+    public IRoadNetworkManager getRoadNetworkManager() {
         return roadNetworkManager;
     }
 
-    public void setRoadNetworkManager(RoadNetworkManager roadNetworkManager) {
+    public void setRoadNetworkManager(IRoadNetworkManager roadNetworkManager) {
         this.roadNetworkManager = roadNetworkManager;
     }
 

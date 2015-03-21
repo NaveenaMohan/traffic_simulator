@@ -1,6 +1,6 @@
 package engine;
 
-import dataAndStructures.DataAndStructures;
+import dataAndStructures.IDataAndStructures;
 import managers.space.ObjectInSpace;
 import managers.vehicle.IVehicleManager;
 import reports.DCP;
@@ -18,12 +18,12 @@ public class SimEngine implements Serializable {
 
 
     private Timer timer;
-    private DataAndStructures dataAndStructures;
+    private IDataAndStructures dataAndStructures;
     private boolean pause;
     private DCP dcp;
 
 
-    public SimEngine(DataAndStructures dataAndStructures, DCP dcp) {
+    public SimEngine(IDataAndStructures dataAndStructures, DCP dcp) {
         this.dataAndStructures = dataAndStructures;
         this.dcp = dcp;
     }
@@ -111,7 +111,7 @@ public class SimEngine implements Serializable {
     }
 
 
-    public DataAndStructures getDataAndStructures() {
+    public IDataAndStructures getDataAndStructures() {
         return dataAndStructures;
     }
 }

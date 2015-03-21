@@ -5,7 +5,7 @@ import junit.framework.Assert;
 import managers.roadnetwork.IRoadNetworkManager;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
-import managers.runit.RUnit;
+import managers.runit.IRUnitManager;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,7 +23,7 @@ public class CommonTest {
     @Before
     public void setUp() throws Exception {
         roadNetwork = new RoadNetworkManager(new RoadNetwork());
-        RUnit prev = null;
+        IRUnitManager prev = null;
 
         //build a road of rUnits
         for (int i = 0; i < 20; i++) {

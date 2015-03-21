@@ -1,6 +1,6 @@
 package ui.fileops;
 
-import dataAndStructures.DataAndStructures;
+import dataAndStructures.IDataAndStructures;
 import managers.space.ObjectInSpace;
 import managers.vehicle.IVehicleManager;
 import ui.components.DrawingBoard;
@@ -12,10 +12,10 @@ import java.util.ArrayList;
  * Created by naveena on 15/03/15.
  */
 public class ExportImportObject implements Serializable {
-    private DataAndStructures engineDataStructures ;
+    private IDataAndStructures engineDataStructures;
     private UIDataStructures uiDataStructures = new UIDataStructures();
 
-    public ExportImportObject(DataAndStructures dataAndStructures, DrawingBoard drawingBoard) {
+    public ExportImportObject(IDataAndStructures dataAndStructures, DrawingBoard drawingBoard) {
         engineDataStructures = dataAndStructures;
         engineDataStructures.setVehicleManagerList((new ArrayList<IVehicleManager>()));
         engineDataStructures.getSpaceManager().setObjects(new ArrayList<ObjectInSpace>());
@@ -40,11 +40,11 @@ public class ExportImportObject implements Serializable {
         uiDataStructures.setWelcomeCoordinates(drawingBoard.getWelcomeCoordinates());
     }
 
-    public DataAndStructures getEngineDataStructures() {
+    public IDataAndStructures getEngineDataStructures() {
         return engineDataStructures;
     }
 
-    public void setEngineDataStructures(DataAndStructures engineDataStructures) {
+    public void setEngineDataStructures(IDataAndStructures engineDataStructures) {
         this.engineDataStructures = engineDataStructures;
     }
 

@@ -25,6 +25,7 @@ public class DataAndStructures implements IDataAndStructures {
         return spaceManager;
     }
 
+    @Override
     public void setVehicleManagerList(List<IVehicleManager> vehicleManagerList) {
         this.vehicleManagerList = vehicleManagerList;
     }

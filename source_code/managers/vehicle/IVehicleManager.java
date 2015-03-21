@@ -1,11 +1,8 @@
 package managers.vehicle;
 
 import dataAndStructures.IDataAndStructures;
-import managers.globalconfig.ClimaticCondition;
-import managers.globalconfig.IGlobalConfigManager;
 import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
-import managers.space.Space;
 import managers.space.VehicleDirection;
 
 import java.io.Serializable;
@@ -16,7 +13,7 @@ public interface IVehicleManager extends Serializable {
 
     boolean isVisible(int minX, int maxX, int minY, int maxY);
 
-    Vehicle getVehicle();
+    IVehicleManager getVehicle();
 
     ObjectInSpace getObjectInSpace();
 
@@ -25,8 +22,20 @@ public interface IVehicleManager extends Serializable {
     int getVehID();
 
     double getCurrentAcceleration();
-boolean isVisible();
+
+    boolean isVisible();
 
     public VehicleDirection getDirection();
 
+    double getDepthInCurrentRUnit();
+
+    String getDestination();
+
+    boolean getMadeDestination();
+
+    double getArrivalDestTime();
+
+    VehicleMotor getVehicleMotor();
+
+    double getTimeCreated();
 }

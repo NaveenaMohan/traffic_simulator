@@ -1,18 +1,15 @@
 package tests;
 
+import managers.roadnetwork.IRoadNetworkManager;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
-import managers.runit.RUnit;
 import managers.runit.TrafficLight;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class RoadNetworkManagerTest {
 
@@ -20,7 +17,7 @@ public class RoadNetworkManagerTest {
     RoadNetwork roadNetwork;
     List<Boolean> cycle = new ArrayList<Boolean>();
     List<Boolean> cycle2 = new ArrayList<Boolean>();
-    RoadNetworkManager roadNetworkManager;
+    IRoadNetworkManager roadNetworkManager;
 
 
     @Before

@@ -1,7 +1,7 @@
 package managers.roadnetwork;
 
 import managers.runit.DirectionSignType;
-import managers.runit.RUnit;
+import managers.runit.IRUnitManager;
 import managers.runit.TrafficLight;
 
 import java.io.Serializable;
@@ -13,31 +13,31 @@ import java.util.Map;
  */
 public interface IRoadNetworkManager extends Serializable {
 
-    RUnit addSingleLane(int x, int y, RUnit prevRUnit);
+    IRUnitManager addSingleLane(int x, int y, IRUnitManager prevIRUnitManager);
 
-    Map<String, RUnit> addDoubleLane(int x, int y, int changeableX, int changeableY, RUnit prevRUnit, RUnit changeablePrevRunit);
+    Map<String, IRUnitManager> addDoubleLane(int x, int y, int changeableX, int changeableY, IRUnitManager prevIRUnitManager, IRUnitManager changeablePrevRunit);
 
-    void addTrafficLight(RUnit rUnit, TrafficLight trafficLight);
+    void addTrafficLight(IRUnitManager rUnit, TrafficLight trafficLight);
 
-    void addZebraCrossing(RUnit rUnit, TrafficLight trafficLight);
+    void addZebraCrossing(IRUnitManager rUnit, TrafficLight trafficLight);
 
-    void addBlockage(RUnit rUnit);
+    void addBlockage(IRUnitManager rUnit);
 
-    void addSpeedLimit(RUnit rUnit, int speedLimit);
+    void addSpeedLimit(IRUnitManager rUnit, int speedLimit);
 
-    void addStopSign(RUnit rUnit);
+    void addStopSign(IRUnitManager rUnit);
 
-    void addWelcomeSign(RUnit rUnit, String location);
+    void addWelcomeSign(IRUnitManager rUnit, String location);
 
-    void addDirectionSign(RUnit rUnit, String location, DirectionSignType directionSignType);
+    void addDirectionSign(IRUnitManager rUnit, String location, DirectionSignType directionSignType);
 
-    void addVehicleFactory(RUnit rUnit);
+    void addVehicleFactory(IRUnitManager rUnit);
 
     void addTrafficLightBehavior(String trafficLightId, List<Boolean> trafficLightPattern);
 
     public void changeLight(double currentSecond);
-    
-    RUnit getRUnitByID(String ID);
+
+    IRUnitManager getIRUnitManagerByID(String ID);
 
     TrafficLight getTrafficLightByID(String ID);
 

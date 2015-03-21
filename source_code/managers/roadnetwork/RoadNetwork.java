@@ -1,6 +1,6 @@
 package managers.roadnetwork;
 
-import managers.runit.RUnit;
+import managers.runit.IRUnitManager;
 import managers.runit.TrafficLight;
 
 import java.io.Serializable;
@@ -12,17 +12,17 @@ import java.util.Hashtable;
 public class RoadNetwork implements Serializable {
 
 
-    private Hashtable<String, RUnit> rUnitHashtable = new Hashtable<String, RUnit>();
+    private Hashtable<String, IRUnitManager> rUnitHashtable = new Hashtable<String, IRUnitManager>();
 
-    private Hashtable<String, RUnit> changeableRUnitHashtable = new Hashtable<String, RUnit>();
+    private Hashtable<String, IRUnitManager> changeableRUnitHashtable = new Hashtable<String, IRUnitManager>();
 
     private Hashtable<String, TrafficLight> trafficLightHashtable = new Hashtable<String, TrafficLight>();
 
-    public Hashtable<String, RUnit> getrUnitHashtable() {
+    public Hashtable<String, IRUnitManager> getrUnitHashtable() {
         return rUnitHashtable;
     }
 
-    public void setrUnitHashtable(Hashtable<String, RUnit> rUnitHashtable) {
+    public void setrUnitHashtable(Hashtable<String, IRUnitManager> rUnitHashtable) {
         this.rUnitHashtable = rUnitHashtable;
     }
 
@@ -34,11 +34,11 @@ public class RoadNetwork implements Serializable {
         this.trafficLightHashtable = trafficLightHashtable;
     }
 
-    public Hashtable<String, RUnit> getChangeableRUnitHashtable() {
+    public Hashtable<String, IRUnitManager> getChangeableRUnitHashtable() {
         return changeableRUnitHashtable;
     }
 
-    public void setChangeableRUnitHashtable(Hashtable<String, RUnit> changeableRUnitHashtable) {
+    public void setChangeableRUnitHashtable(Hashtable<String, IRUnitManager> changeableRUnitHashtable) {
         this.changeableRUnitHashtable = changeableRUnitHashtable;
     }
 }
