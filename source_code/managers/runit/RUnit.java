@@ -35,11 +35,6 @@ public class RUnit implements IRUnitManager{
         this.nextRUnitList = nextRUnitList;
     }
 
-    @Override
-    public void ChangeLight(boolean color, String trafficLightID, int index) {
-        //TODO change cycle element for traffic light
-    }
-
     public int getX() {
         return x;
     }

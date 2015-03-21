@@ -54,7 +54,6 @@ public class DrawingBoard implements ActionListener {
     private Image rUnitImage2;
     private Image trafficLightImage;
     private Image carImage;
-    private Image doubleRoad;
     private Image truckImage;
     private Image emergencyVehicleImage;
     private Image zebraCrossingImage;
@@ -101,7 +100,6 @@ public class DrawingBoard implements ActionListener {
     public void initialize() {
         rUnitImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/leftLane.png"));
         rUnitImage2 = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/rightLane.png"));
-        doubleRoad = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/doubleRoad.gif"));
         trafficLightImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/lightMini.png"));
         carImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/car.png"));
         truckImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/truck.png"));
@@ -138,16 +136,16 @@ public class DrawingBoard implements ActionListener {
         roadGraphics.drawImage(rUnitImage, 0, 0, drawingBoardPanel);
 
         MediaTracker changeableRoadMediaTracker = new MediaTracker(drawingBoardPanel);
-        changeableRoadMediaTracker.addImage(doubleRoad, 1);
+        changeableRoadMediaTracker.addImage(rUnitImage2, 1);
         try {
             changeableRoadMediaTracker.waitForAll();
         } catch (Exception e) {
             System.out.println("Exception while loading DoubleRoadImage");
         }
-        bufferedChangeableRoadImage = new BufferedImage(20, 20, // TODO : Change to 40, 40 after testing
+        bufferedChangeableRoadImage = new BufferedImage(rUnitImage2.getWidth(drawingBoardPanel), rUnitImage2.getHeight(drawingBoardPanel),
                 BufferedImage.TYPE_INT_ARGB);
         Graphics2D b = bufferedChangeableRoadImage.createGraphics();
-        b.drawImage(rUnitImage2, 0, 0, drawingBoardPanel); // TODO : change to doubleRoad image
+        b.drawImage(rUnitImage2, 0, 0, drawingBoardPanel);
 
     }
 
@@ -207,7 +205,7 @@ public class DrawingBoard implements ActionListener {
                     doubleLaneRUnits.add(previousRUnit);
                     changeAbleLaneRUnits.add(previousChangeableRunit);
                     Coordinates coordinates = getRepositionedImageCoordinates(bufferedRoadImage,currentX,currentY);
-                    g2d.drawImage(bufferedRoadImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel); // TODO : change the image
+                    g2d.drawImage(bufferedRoadImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
                     coordinates = getRepositionedImageCoordinates(bufferedChangeableRoadImage,currentChangeableX,currentChangeableY);
                     g2d.drawImage(bufferedChangeableRoadImage,coordinates.getX(), coordinates.getY() , drawingBoardPanel);
                 }
@@ -533,14 +531,14 @@ public class DrawingBoard implements ActionListener {
 
         //Drawing double road
         for (IRUnitManager rUnit : doubleLaneRUnits) {
-            Coordinates coordinates = getRepositionedImageCoordinates(rUnitImage, rUnit.getX(), rUnit.getY()); // TODO : Change image
-            g2D.drawImage(rUnitImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel); // TODO : change image
+            Coordinates coordinates = getRepositionedImageCoordinates(rUnitImage, rUnit.getX(), rUnit.getY());
+            g2D.drawImage(rUnitImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             BasicStroke bs = new BasicStroke(2);
             g2D.setStroke(bs);
         }
 
-        //Drawing double road - Changeable TODO : Remove
+        //Drawing double road - Changeable
         for (IRUnitManager rUnit : changeAbleLaneRUnits) {
             Coordinates coordinates = getRepositionedImageCoordinates(rUnitImage2, rUnit.getX(), rUnit.getY());
             g2D.drawImage(rUnitImage2, coordinates.getX(), coordinates.getY(), drawingBoardPanel);

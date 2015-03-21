@@ -3,7 +3,10 @@ package managers.vehicle;
 import common.Common;
 import dataAndStructures.IDataAndStructures;
 import managers.roadnetwork.RoadNetworkManager;
-import managers.runit.*;
+import managers.runit.DirectionSign;
+import managers.runit.IRUnitManager;
+import managers.runit.SpeedLimitSign;
+import managers.runit.WelcomeSign;
 import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
 import managers.space.VehicleDirection;
@@ -29,9 +32,6 @@ public class VehicleMotor implements Serializable {
     private String destination;
     private boolean isEmergency;
     private double nextCheckTime;
-
-    //TODO: delete this
-    public String currentStrategy;
 
     public VehicleMotor(double maxAcceleration, double maxDeceleration, int initialSpeed, String destination
             , ObjectInSpace objectInSpace, double maximumVelocity, boolean isEmergency) {
@@ -415,19 +415,12 @@ public class VehicleMotor implements Serializable {
                 rUnit.getX(),
                 rUnit.getY()
         );
-
-//        System.out.println("{directionPriorToTurn("+directionPriorToTurn.getAngle() + ")]");
-//        System.out.println("rUnit:"+rUnit.getId());
         IRUnitManager chosenUnit = rUnit.getNextRUnitList().get(0);
         for (IRUnitManager currentUnit : rUnit.getNextRUnitList()) {
 
 
             double chosenAngle = Common.getRoadForwardDirection(chosenUnit, 10);
             double currentAngle = Common.getRoadForwardDirection(currentUnit, 10);
-//            System.out.println("chosenAngle:"+chosenAngle + " id: "+ chosenUnit.getId() + " x1: " + chosenUnit.getX()+ " y1: " + chosenUnit.getY() +
-//                    " id:" + Common.getNthNextRUnit(chosenUnit, 10).getId() + " x2: " +Common.getNthNextRUnit(chosenUnit, 10).getX() + " y2:" + Common.getNthNextRUnit(chosenUnit, 10).getY());
-//            System.out.println("currentAngle:"+currentAngle + " id: "+ currentUnit.getId() + " x1: " + currentUnit.getX()+ " y1: " + currentUnit.getY() +
-//                    " id:" + Common.getNthNextRUnit(currentUnit, 10).getId() + " x2: " +Common.getNthNextRUnit(currentUnit, 10).getX() + " y2:" + Common.getNthNextRUnit(currentUnit, 10).getY());         //angle of last
             switch (vehicleState.getNextDirectionAtDecisionPoint()) {
                 case left:
 

@@ -29,17 +29,6 @@ public class SimEngine implements Serializable {
     }
 
     public void Play(ActionListener actionListener) {
-
-//
-//        for (IRUnitManager rUnit : dataAndStructures.getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()) {
-//            String ns = "";
-//            for (IRUnitManager nexts : rUnit.getNextRUnitList())
-//                ns += nexts.getId() + " ";
-//            String ps = "";
-//            for (IRUnitManager prevs : rUnit.getNextRUnitList())
-//                ps = prevs.getId() + " ";
-//            System.out.println("id: " + rUnit.getId() + " x: " + rUnit.getX() + " y: " + rUnit.getY() + " N(" + ns + ") P(" + ps + ")");
-//        }
         //initialise timer
         if(timer==null || !timer.isRunning()) {
             timer = new Timer(5, actionListener);
@@ -77,8 +66,6 @@ public class SimEngine implements Serializable {
             timer.stop();
         }
     }
-
-    //TODO do clear vehicles
 
     public void performAction() {
         if (!pause) {

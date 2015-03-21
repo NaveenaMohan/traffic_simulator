@@ -46,7 +46,6 @@ public interface IRUnitManager extends Serializable {
 
     void setLeft(boolean isLeft);
 
-    public void ChangeLight(boolean color, String trafficLightID, int index);
 
     IRUnitManager getChangeAbleRUnit();
 
