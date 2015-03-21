@@ -16,7 +16,6 @@ import java.util.ArrayList;
  */
 public class SimEngine implements Serializable {
 
-
     private Timer timer;
     private IDataAndStructures dataAndStructures;
     private boolean pause;

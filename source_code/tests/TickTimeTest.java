@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class TickTimeTest {
 
-    TickTime tickTime;
+    private TickTime tickTime;
 
     @Before
     public void setUp() throws Exception {

@@ -12,9 +12,9 @@ import java.util.List;
  */
 public interface IVehicleFactoryManager extends Serializable {
 
-    void addVehicleFactory(IRUnitManager rUnit);
+    public void addVehicleFactory(IRUnitManager rUnit);
 
-    IVehicleManager createVehicle(IDataAndStructures dataAndStructures);
+    public IVehicleManager createVehicle(IDataAndStructures dataAndStructures);
 
     public List<VehicleFactory> getVehicleFactoryList();
 }

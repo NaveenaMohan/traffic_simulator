@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class SpaceManagerTest {
 
-    ISpaceManager spaceManager;
+    private ISpaceManager spaceManager;
 
     @Before
     public void setUp() throws Exception {

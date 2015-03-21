@@ -8,12 +8,12 @@ import java.util.List;
  */
 public interface ISpaceManager extends Serializable {
 
-    void addObjectToSpace(ObjectInSpace objectInSpace);
+    public void addObjectToSpace(ObjectInSpace objectInSpace);
 
-    boolean checkFit(int id, int x, int y, int width, int length);
+    public boolean checkFit(int id, int x, int y, int width, int length);
 
     //returns the first object that has its centre at these coordinates
-    ObjectInSpace getObjectAt(int myID, int x, int y);
+    public ObjectInSpace getObjectAt(int myID, int x, int y);
 
     public List<ObjectInSpace> getObjects();
 

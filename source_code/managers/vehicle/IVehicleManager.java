@@ -9,33 +9,33 @@ import java.io.Serializable;
 
 public interface IVehicleManager extends Serializable {
 
-    void move(ISpaceManager spaceManager, double time, IDataAndStructures dataAndStructures);
+    public void move(ISpaceManager spaceManager, double time, IDataAndStructures dataAndStructures);
 
-    boolean isVisible(int minX, int maxX, int minY, int maxY);
+    public boolean isVisible(int minX, int maxX, int minY, int maxY);
 
-    IVehicleManager getVehicle();
+    public IVehicleManager getVehicle();
 
-    ObjectInSpace getObjectInSpace();
+    public ObjectInSpace getObjectInSpace();
 
-    double getCurrentVelocity();
+    public double getCurrentVelocity();
 
-    int getVehID();
+    public int getVehID();
 
-    double getCurrentAcceleration();
+    public double getCurrentAcceleration();
 
-    boolean isVisible();
+    public boolean isVisible();
 
     public VehicleDirection getDirection();
 
-    double getDepthInCurrentRUnit();
+    public double getDepthInCurrentRUnit();
 
-    String getDestination();
+    public String getDestination();
 
-    boolean getMadeDestination();
+    public boolean getMadeDestination();
 
-    double getArrivalDestTime();
+    public double getArrivalDestTime();
 
-    VehicleMotor getVehicleMotor();
+    public VehicleMotor getVehicleMotor();
 
-    double getTimeCreated();
+    public double getTimeCreated();
 }

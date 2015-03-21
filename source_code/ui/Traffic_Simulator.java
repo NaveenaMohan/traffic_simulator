@@ -29,7 +29,7 @@ import java.io.*;
 
 public class Traffic_Simulator {
     private static Traffic_Simulator window;
-    ClimaticCondition climaticCondition = new ClimaticCondition();
+    private ClimaticCondition climaticCondition = new ClimaticCondition();
     private JFrame trafficSimulatorFrame;
     private IRoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
     private IVehicleFactoryManager vehicleFactoryManager = new VehicleFactoryManager();
@@ -41,7 +41,7 @@ public class Traffic_Simulator {
             new VehicleDensity(),
             new Route()
     );
-    IDataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
+    private IDataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
     private DCP dcp = new DCP(dataAndStructures);
     private boolean openReport = false;
     private SimEngine simEngine = new SimEngine(dataAndStructures, dcp);

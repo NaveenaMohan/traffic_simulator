@@ -13,31 +13,31 @@ import java.util.Map;
  */
 public interface IRoadNetworkManager extends Serializable {
 
-    IRUnitManager addSingleLane(int x, int y, IRUnitManager prevIRUnitManager);
+    public IRUnitManager addSingleLane(int x, int y, IRUnitManager prevIRUnitManager);
 
-    Map<String, IRUnitManager> addDoubleLane(int x, int y, int changeableX, int changeableY, IRUnitManager prevIRUnitManager, IRUnitManager changeablePrevRunit);
+    public Map<String, IRUnitManager> addDoubleLane(int x, int y, int changeableX, int changeableY, IRUnitManager prevIRUnitManager, IRUnitManager changeablePrevRunit);
 
-    void addTrafficLight(IRUnitManager rUnit, TrafficLight trafficLight);
+    public void addTrafficLight(IRUnitManager rUnit, TrafficLight trafficLight);
 
-    void addZebraCrossing(IRUnitManager rUnit, TrafficLight trafficLight);
+    public void addZebraCrossing(IRUnitManager rUnit, TrafficLight trafficLight);
 
-    void addBlockage(IRUnitManager rUnit);
+    public void addBlockage(IRUnitManager rUnit);
 
-    void addSpeedLimit(IRUnitManager rUnit, int speedLimit);
+    public void addSpeedLimit(IRUnitManager rUnit, int speedLimit);
 
-    void addStopSign(IRUnitManager rUnit);
+    public void addStopSign(IRUnitManager rUnit);
 
-    void addWelcomeSign(IRUnitManager rUnit, String location);
+    public void addWelcomeSign(IRUnitManager rUnit, String location);
 
-    void addDirectionSign(IRUnitManager rUnit, String location, DirectionSignType directionSignType);
+    public void addDirectionSign(IRUnitManager rUnit, String location, DirectionSignType directionSignType);
 
-    void addTrafficLightBehavior(String trafficLightId, List<Boolean> trafficLightPattern);
+    public void addTrafficLightBehavior(String trafficLightId, List<Boolean> trafficLightPattern);
 
     public void changeLight(double currentSecond);
 
-    IRUnitManager getIRUnitManagerByID(String ID);
+    public IRUnitManager getIRUnitManagerByID(String ID);
 
-    TrafficLight getTrafficLightByID(String ID);
+    public TrafficLight getTrafficLightByID(String ID);
 
-    RoadNetwork getRoadNetwork();
+    public RoadNetwork getRoadNetwork();
 }

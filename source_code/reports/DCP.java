@@ -19,14 +19,13 @@ import java.util.Map;
 public class DCP extends JPanel {
 
     private final static String newline = "\n";
-    public boolean firstTimeOpen = true, isFrameClosed = false;
-    StyleContext context = new StyleContext();
-    StyleContext context2 = new StyleContext();
-    StyleContext context3 = new StyleContext();
-    Style style, style2, style3;
-    int refresh = 0, vehiclesEnroute = 0;
-    JFrame frame;
-    JTextPane textPane;
+    private boolean firstTimeOpen = true;
+    private boolean isFrameClosed = false;
+    private StyleContext context3 = new StyleContext();
+    private Style style2;
+    private Style style3;
+    private int vehiclesEnroute = 0;
+    private JFrame frame;
     private IDataAndStructures dataAndStructures;
     private Map<String, Double> vehiclesVelocity = new HashMap<String, Double>();
     private Map<String, Integer> numberOfTimes = new HashMap<String, Integer>();
@@ -59,15 +58,14 @@ public class DCP extends JPanel {
         emergencies = 0;
         heavyLoads = 0;
         rate = 0;
-        refresh = 0;
         vehiclesEnroute = 0;
 
         frame = new JFrame("Traffic Report");
-        context = new StyleContext();
-        context2 = new StyleContext();
+        StyleContext context = new StyleContext();
+        StyleContext context2 = new StyleContext();
         document = new DefaultStyledDocument(context3);
 
-        style = context.getStyle(StyleContext.DEFAULT_STYLE);
+        Style style = context.getStyle(StyleContext.DEFAULT_STYLE);
         StyleConstants.setAlignment(style, StyleConstants.ALIGN_CENTER);
         StyleConstants.setFontSize(style, 25);
         StyleConstants.setSpaceAbove(style, 4);
@@ -105,7 +103,7 @@ public class DCP extends JPanel {
         } catch (BadLocationException badLocationException) {
             System.err.println("Error" + badLocationException.getMessage());
         }
-        textPane = new JTextPane(document);
+        JTextPane textPane = new JTextPane(document);
         textPane.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textPane);
         frame.add(scrollPane, BorderLayout.CENTER);

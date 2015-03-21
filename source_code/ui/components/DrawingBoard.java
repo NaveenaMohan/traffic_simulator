@@ -25,8 +25,8 @@ import java.util.List;
 public class DrawingBoard implements ActionListener {
     private static int trafficLightIdIndex = 1;
     private static int zebraCrossingTrafficLightIdIndex = 1;
-    BufferedImage bufferedRoadImage;
-    BufferedImage bufferedChangeableRoadImage;
+    private BufferedImage bufferedRoadImage;
+    private BufferedImage bufferedChangeableRoadImage;
     private int currentX, currentY;
     private Set<IRUnitManager> singleLaneRUnits = new LinkedHashSet<IRUnitManager>();
     private Set<IRUnitManager> doubleLaneRUnits = new LinkedHashSet<IRUnitManager>();
