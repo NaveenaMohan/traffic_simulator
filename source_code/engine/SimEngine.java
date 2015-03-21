@@ -30,7 +30,7 @@ public class SimEngine implements Serializable {
 
     public void Play(ActionListener actionListener) {
         //initialise timer
-        if(timer==null || !timer.isRunning()) {
+        if (timer == null || !timer.isRunning()) {
             timer = new Timer(5, actionListener);
             timer.start();
         }
@@ -54,7 +54,7 @@ public class SimEngine implements Serializable {
     }
 
     public void CleanAll() {
-        if(timer !=null){
+        if (timer != null) {
             timer.stop();
         }
     }
@@ -62,7 +62,7 @@ public class SimEngine implements Serializable {
     public void CleanVehicles() {
         dataAndStructures.setVehicleManagerList((new ArrayList<IVehicleManager>()));
         dataAndStructures.getSpaceManager().setObjects(new ArrayList<ObjectInSpace>());
-        if(timer != null){
+        if (timer != null) {
             timer.stop();
         }
     }
@@ -74,7 +74,7 @@ public class SimEngine implements Serializable {
             //update Report data
             dcp.updateReportingInfo(dataAndStructures);
 
-            if(dataAndStructures.getVehicles().size()<1000) {
+            if (dataAndStructures.getVehicles().size() < 1000) {
                 //create a new vehicle
                 IVehicleManager newVehicle =
                         dataAndStructures.getVehicleFactoryManager().createVehicle(dataAndStructures);

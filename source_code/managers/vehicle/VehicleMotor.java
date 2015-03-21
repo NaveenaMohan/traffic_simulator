@@ -49,10 +49,28 @@ public class VehicleMotor implements Serializable {
         objectInSpace.setDirection(new VehicleDirection(1, 1, 1, 1));
     }
 
+    public static IRUnitManager chooseNext(IRUnitManager rUnit, VehicleState vehicleState) {
+        /*
+        This function chooses the nextRUnit in the intersection
+         */
+
+        IRUnitManager temp = rUnit;
+        if (rUnit.getNextRUnitList().size() > 0) {
+            temp = rUnit.getNextRUnitList().get(Common.randIntegerBetween(0, rUnit.getNextRUnitList().size() - 1));
+            if (rUnit.getNextRUnitList().size() > 1) {
+                if (vehicleState.getNextRUnitAfterDecisionPoint() != null) {
+                    if (rUnit.getNextRUnitList().contains(vehicleState.getNextRUnitAfterDecisionPoint())) {
+                        temp = vehicleState.getNextRUnitAfterDecisionPoint();
+                    }
+                }
+            }
+        }
+        return temp;
+    }
+
     public ObjectInSpace getObjectInSpace() {
         return objectInSpace;
     }
-
 
     public String getDestination() {
         return destination;
@@ -218,7 +236,6 @@ public class VehicleMotor implements Serializable {
         return rUnit;
     }
 
-
     private void replan(VehicleMemoryObject nextObject, VehicleState vehicleState) {
         //the only plan the the vehicle can currently have is to choose it's next turn if it has a set destination
         //if you have a destination
@@ -296,7 +313,6 @@ public class VehicleMotor implements Serializable {
         }
     }
 
-
     private double aimForSpeed(double requiredVelocity, double safeStopDistance, double distance)//returns the acceleration
     {
         //this function gradually changes the vehicle speed to match the requiredSpeed in distance metres
@@ -318,43 +334,39 @@ public class VehicleMotor implements Serializable {
         return Math.max(Math.min(acceleration, maxAcceleration), maxDeceleration);
     }
 
-
     private void updateVelocity(double timePassed) {
         //velocity can't be below 0
         currentVelocity = Math.min(maximumVelocity, Math.max(0,
                 currentVelocity + currentAcceleration * timePassed));
     }
 
-    private IRUnitManager getPreviousIntersection(IRUnitManager rUnit, int backwardsMagnitude)
-    {
+    private IRUnitManager getPreviousIntersection(IRUnitManager rUnit, int backwardsMagnitude) {
         //this function looks backwardsMagnitude steps ahead and returns true if there was an intersection
         IRUnitManager temp = rUnit.getPrevsRUnitList().get(0);
-        for(int i=0; i<backwardsMagnitude; i++)
-        {
+        for (int i = 0; i < backwardsMagnitude; i++) {
             //if this was an intersection
-            if(temp.getNextRUnitList().size()>1)
+            if (temp.getNextRUnitList().size() > 1)
                 return temp;
-            if(temp.getChangeAbleRUnit()!=null && temp.getChangeAbleRUnit().getNextRUnitList().size()>1)
+            if (temp.getChangeAbleRUnit() != null && temp.getChangeAbleRUnit().getNextRUnitList().size() > 1)
                 return temp.getChangeAbleRUnit();
-            if(temp.getPrevsRUnitList().size() > 0)
-            {
+            if (temp.getPrevsRUnitList().size() > 0) {
                 temp = temp.getPrevsRUnitList().get(0);
             }
         }
         return null;
     }
-    private IRUnitManager retakeIntersection(IRUnitManager intersectedRUnit, IRUnitManager currentRUnit)
-    {
+
+    private IRUnitManager retakeIntersection(IRUnitManager intersectedRUnit, IRUnitManager currentRUnit) {
         //this function looks at the intersection and returns the exit that does not lead to currentRUnit
-        for(IRUnitManager exit : intersectedRUnit.getNextRUnitList())
-        {
-            if(RoadNetworkManager.checkForRoadDensityCollisions(exit, currentRUnit))
+        for (IRUnitManager exit : intersectedRUnit.getNextRUnitList()) {
+            if (RoadNetworkManager.checkForRoadDensityCollisions(exit, currentRUnit))
                 return exit;
         }
 
         //if no other rUnit found return the one that you came in with
         return currentRUnit;
     }
+
     private IRUnitManager processObjectPassed(IRUnitManager rUnit, VehicleState vehicleState, double currentTime) {
         Object obj = VehiclePerception.getObjectForDoubleLane(rUnit);
         //if you have just passed a speed sign update your maxSpeedLimit
@@ -368,10 +380,10 @@ public class VehicleMotor implements Serializable {
             //get the last intersection within 10 rUnits
             IRUnitManager lastIntersection = getPreviousIntersection(rUnit, 20);
             //if there was an intersection
-            if(lastIntersection!=null)
+            if (lastIntersection != null)
                 return retakeIntersection(lastIntersection, rUnit);
             else
-            objectInSpace.setVisible(false);
+                objectInSpace.setVisible(false);
         }
 
         //if you have just passed a decision Point
@@ -397,7 +409,6 @@ public class VehicleMotor implements Serializable {
     public double getCurrentAcceleration() { //ADDED BY LORENA TO TEST ACCELERATION IN THE REPORTS
         return currentAcceleration;
     }
-
 
     public double getDepthInCurrentRUnit() {
         return depthInCurrentRUnit;
@@ -447,25 +458,6 @@ public class VehicleMotor implements Serializable {
         }
 
         return chosenUnit;
-    }
-
-    public static IRUnitManager chooseNext(IRUnitManager rUnit, VehicleState vehicleState) {
-        /*
-        This function chooses the nextRUnit in the intersection
-         */
-
-        IRUnitManager temp = rUnit;
-        if (rUnit.getNextRUnitList().size() > 0) {
-            temp = rUnit.getNextRUnitList().get(Common.randIntegerBetween(0, rUnit.getNextRUnitList().size() - 1));
-            if (rUnit.getNextRUnitList().size() > 1) {
-                if (vehicleState.getNextRUnitAfterDecisionPoint() != null) {
-                    if (rUnit.getNextRUnitList().contains(vehicleState.getNextRUnitAfterDecisionPoint())) {
-                        temp = vehicleState.getNextRUnitAfterDecisionPoint();
-                    }
-                }
-            }
-        }
-        return temp;
     }
 
     private double additionalDistances() {

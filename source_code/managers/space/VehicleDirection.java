@@ -13,7 +13,7 @@ public class VehicleDirection implements Serializable {
 
     public VehicleDirection(int x1, int y1, int x2, int y2) {
 
-        angle= Common.getAngle(x1,y1,x2,y2);
+        angle = Common.getAngle(x1, y1, x2, y2);
     }
 
     public double getAngle() {
@@ -21,6 +21,6 @@ public class VehicleDirection implements Serializable {
     }
 
     public double getDifference(double bearing) {
-        return Common.getAngleDifference(angle,bearing);
+        return Common.getAngleDifference(angle, bearing);
     }
 }

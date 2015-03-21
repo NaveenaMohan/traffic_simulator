@@ -1,7 +1,6 @@
 package managers.globalconfig;
 
 
-
 import java.util.Map;
 
 /**
@@ -17,13 +16,13 @@ public class GlobalConfigManager implements IGlobalConfigManager {
     private Route route;
 
     public GlobalConfigManager(int tickRatio, double metresPerRUnit, ClimaticCondition climaticCondition, DriverBehavior driverBehavior
-    ,VehicleDensity vehicleDensity, Route route) {
-        this.tickTime=new TickTime(tickRatio);
+            , VehicleDensity vehicleDensity, Route route) {
+        this.tickTime = new TickTime(tickRatio);
         this.distancesScale = new DistancesScale(metresPerRUnit);
-        this.climaticCondition=climaticCondition;
-        this.driverBehavior=driverBehavior;
-        this.vehicleDensity=vehicleDensity;
-        this.route= route;
+        this.climaticCondition = climaticCondition;
+        this.driverBehavior = driverBehavior;
+        this.vehicleDensity = vehicleDensity;
+        this.route = route;
     }
 
     @Override

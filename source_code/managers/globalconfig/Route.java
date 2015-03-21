@@ -8,8 +8,8 @@ import java.io.Serializable;
 public class Route implements Serializable {
 
     //TODO remove the defaults
-    private String destination="London";
-    private double trafficPercent=1;
+    private String destination = "London";
+    private double trafficPercent = 1;
 
     public Route() {
     }
@@ -32,8 +32,8 @@ public class Route implements Serializable {
     }
 
     public void setTrafficPercent(double trafficPercent) {
-        if(trafficPercent>=0 && trafficPercent<=1){
+        if (trafficPercent >= 0 && trafficPercent <= 1) {
             this.trafficPercent = trafficPercent;
-        }else throw new IllegalArgumentException("Error setting traffic percentage");
+        } else throw new IllegalArgumentException("Error setting traffic percentage");
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by naveena on 08/02/15.
  */
-public class RUnit implements IRUnitManager{
+public class RUnit implements IRUnitManager {
 
     private int x;
     private int y;
@@ -71,6 +71,10 @@ public class RUnit implements IRUnitManager{
         return prevsRUnitList;
     }
 
+    public void setPrevsRUnitList(List<IRUnitManager> prevsRUnitList) {
+        this.prevsRUnitList = prevsRUnitList;
+    }
+
     @Override
     public boolean isLeft() {
         return isLeft;
@@ -79,10 +83,6 @@ public class RUnit implements IRUnitManager{
     @Override
     public void setLeft(boolean isLeft) {
         this.isLeft = isLeft;
-    }
-
-    public void setPrevsRUnitList(List<IRUnitManager> prevsRUnitList) {
-        this.prevsRUnitList = prevsRUnitList;
     }
 
     public IRUnitManager getChangeAbleRUnit() {
@@ -139,14 +139,12 @@ public class RUnit implements IRUnitManager{
     }
 
     @Override
-    public boolean go(){
-        if (this.getTrafficLight()!=null) {
+    public boolean go() {
+        if (this.getTrafficLight() != null) {
             if (this.getTrafficLight().isGreen()) {
                 return true; //if traffic Light is green
-            }
-            else return false; //if traffic Light is red
-        }
-        else
+            } else return false; //if traffic Light is red
+        } else
             return true; //if no traffic Light then vehicles can continue, treated as if it would be green.
     }
 

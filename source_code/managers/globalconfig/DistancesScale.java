@@ -12,18 +12,15 @@ public class DistancesScale implements Serializable {
         this.metresPerRUnit = metresPerRUnit;
     }
 
-    public double getMetresPerRUnit()
-    {
+    public double getMetresPerRUnit() {
         return metresPerRUnit;
     }
 
-    public double getLengthMetres(int rUnits)
-    {
-        return rUnits*metresPerRUnit;
+    public double getLengthMetres(int rUnits) {
+        return rUnits * metresPerRUnit;
     }
 
-    public double getLengthRUnits(double metres)
-    {
-        return metres/metresPerRUnit;
+    public double getLengthRUnits(double metres) {
+        return metres / metresPerRUnit;
     }
 }

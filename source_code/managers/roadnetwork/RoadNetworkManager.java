@@ -22,41 +22,14 @@ public class RoadNetworkManager implements IRoadNetworkManager {
         this.roadNetwork = roadNetwork;
     }
 
-
-    @Override
-    public IRUnitManager addSingleLane(int x, int y, IRUnitManager prevRUnit) {
-        //Populate Current RUnit
-        IRUnitManager currentRUnit = getNext(x, y, prevRUnit, false);
-        if (!roadNetwork.getrUnitHashtable().contains(currentRUnit)) {
-            roadNetwork.getrUnitHashtable().put(String.valueOf(rUnitId), currentRUnit);
-            if(prevRUnit!=null){
-                manageIntersections(prevRUnit);
-            }
-        }
-
-
-
-        return currentRUnit;
-    }
-
-    private IRUnitManager checkIntersectionAndReturnIntersectedRUnit(Collection<IRUnitManager> rUnits, Coordinates intersectionCoordinates, String id) {
-
-        for (IRUnitManager rUnit : rUnits) {
-            if (rUnit.getX() == intersectionCoordinates.getX() & rUnit.getY() == intersectionCoordinates.getY() & rUnit.getId()!=id) {
-                return rUnit;
-            }
-        }
-        return null;
-    }
-
     public static boolean checkForRoadDensityCollisions(IRUnitManager currentRUnit, IRUnitManager prevRUnit) {
         /*
         This function rejects an intersection if it was created by accidental mouse drags.
         It does that by checking if currentRUnit and prevRUnit are within x of ID distance from each other
          */
 
-        if(prevRUnit==null)
-         return true;
+        if (prevRUnit == null)
+            return true;
 
         int collisionDistance = 30;
 
@@ -84,8 +57,8 @@ public class RoadNetworkManager implements IRoadNetworkManager {
         boolean canIntersect = false;
         //check if the road is going right
         double difference = Common.getAngleDifference(
-                Common.getRoadBackwardDirection(prevRUnit,5),
-                Common.getRoadBackwardDirection(currentRUnit,5)
+                Common.getRoadBackwardDirection(prevRUnit, 5),
+                Common.getRoadBackwardDirection(currentRUnit, 5)
         );
 
         boolean isCurrentSingleLane = (currentRUnit.getChangeAbleRUnit() == null ? true : false);
@@ -95,22 +68,46 @@ public class RoadNetworkManager implements IRoadNetworkManager {
 
             boolean isPrevLeftLane = (prevRUnit.isLeft());
             boolean isCurrentLeftLane = (currentRUnit.isLeft());
-             if ((isPrevSingleLane | isPrevLeftLane) & (isCurrentSingleLane | isCurrentLeftLane)) {
-                 canIntersect = true;
+            if ((isPrevSingleLane | isPrevLeftLane) & (isCurrentSingleLane | isCurrentLeftLane)) {
+                canIntersect = true;
             }
         } else {//going right
             boolean isPrevRightLane = (!prevRUnit.isLeft());
             boolean isCurrentRightLane = (!currentRUnit.isLeft());
             if ((isPrevSingleLane | isPrevRightLane) & (isCurrentSingleLane | isCurrentRightLane)) {
-                 canIntersect = true;
+                canIntersect = true;
             }
         }
 
         return canIntersect;
     }
 
-    private void connectNext(IRUnitManager prev, IRUnitManager next)
-    {
+    @Override
+    public IRUnitManager addSingleLane(int x, int y, IRUnitManager prevRUnit) {
+        //Populate Current RUnit
+        IRUnitManager currentRUnit = getNext(x, y, prevRUnit, false);
+        if (!roadNetwork.getrUnitHashtable().contains(currentRUnit)) {
+            roadNetwork.getrUnitHashtable().put(String.valueOf(rUnitId), currentRUnit);
+            if (prevRUnit != null) {
+                manageIntersections(prevRUnit);
+            }
+        }
+
+
+        return currentRUnit;
+    }
+
+    private IRUnitManager checkIntersectionAndReturnIntersectedRUnit(Collection<IRUnitManager> rUnits, Coordinates intersectionCoordinates, String id) {
+
+        for (IRUnitManager rUnit : rUnits) {
+            if (rUnit.getX() == intersectionCoordinates.getX() & rUnit.getY() == intersectionCoordinates.getY() & rUnit.getId() != id) {
+                return rUnit;
+            }
+        }
+        return null;
+    }
+
+    private void connectNext(IRUnitManager prev, IRUnitManager next) {
         //Assigning the previous Runit's next Runitist with current Runit
         if (!prev.getNextRUnitList().contains(next) & !prev.getPrevsRUnitList().contains(next)) {
             prev.getNextRUnitList().add(next);
@@ -124,45 +121,41 @@ public class RoadNetworkManager implements IRoadNetworkManager {
 
     }
 
-    private void manageIntersections(IRUnitManager currentRUnit)
-    {
+    private void manageIntersections(IRUnitManager currentRUnit) {
         Coordinates intersectionCoordinates = new Coordinates(currentRUnit.getX(), currentRUnit.getY());
         //Check for intersection in Single Lane Coordinates
         IRUnitManager intersected = checkIntersectionAndReturnIntersectedRUnit(roadNetwork.getrUnitHashtable().values(), intersectionCoordinates, currentRUnit.getId());
-        if(intersected == null){
+        if (intersected == null) {
             //Check for intersection in Double Lane Changeable Coordinates
             intersected = checkIntersectionAndReturnIntersectedRUnit(roadNetwork.getChangeableRUnitHashtable().values(), intersectionCoordinates, currentRUnit.getId());
         }
 
-        if(!checkForRoadDensityCollisions(currentRUnit, intersected))
-            intersected=null;
+        if (!checkForRoadDensityCollisions(currentRUnit, intersected))
+            intersected = null;
 
-        if(intersected!=null)
-        {
+        if (intersected != null) {
             //once you have found an intersected coordinate connect it up
 
             //connect incoming to intersected
-            if(checkIntersectionIsLawful(currentRUnit, intersected))
-            {
+            if (checkIntersectionIsLawful(currentRUnit, intersected)) {
                 connectNext(currentRUnit, (intersected.getNextRUnitList().size() > 0 ? intersected.getNextRUnitList().get(0) : intersected));
 
-                String nexts="";
+                String nexts = "";
                 for (IRUnitManager n : currentRUnit.getNextRUnitList())
                     nexts += n.getId() + " ";
-                String prevs="";
+                String prevs = "";
                 for (IRUnitManager p : currentRUnit.getPrevsRUnitList())
                     prevs += p.getId() + " ";
             }
 
             //connect intersected to incoming
-            if(checkIntersectionIsLawful(intersected, currentRUnit))
-            {
+            if (checkIntersectionIsLawful(intersected, currentRUnit)) {
                 connectNext(intersected, (currentRUnit.getNextRUnitList().size() > 0 ? currentRUnit.getNextRUnitList().get(0) : currentRUnit));
 
-                String nexts="";
+                String nexts = "";
                 for (IRUnitManager n : intersected.getNextRUnitList())
                     nexts += n.getId() + " ";
-                String prevs="";
+                String prevs = "";
                 for (IRUnitManager p : intersected.getPrevsRUnitList())
                     prevs += p.getId() + " ";
             }
@@ -212,7 +205,7 @@ public class RoadNetworkManager implements IRoadNetworkManager {
         currentRUnit.setChangeAbleRUnit(currentChangeableRUnit);
         currentChangeableRUnit.setChangeAbleRUnit(currentRUnit);
 
-        if(prevRUnit!=null && changeablePrevRunit !=null){
+        if (prevRUnit != null && changeablePrevRunit != null) {
             manageIntersections(prevRUnit);
             manageIntersections(changeablePrevRunit);
         }

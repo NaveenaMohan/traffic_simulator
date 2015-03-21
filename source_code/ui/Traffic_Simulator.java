@@ -27,7 +27,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
-public class  Traffic_Simulator {
+public class Traffic_Simulator {
     private static Traffic_Simulator window;
     ClimaticCondition climaticCondition = new ClimaticCondition();
     private JFrame trafficSimulatorFrame;
@@ -42,9 +42,9 @@ public class  Traffic_Simulator {
             new Route()
     );
     IDataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
-    private DCP dcp=new DCP(dataAndStructures);
-    private boolean openReport=false;
-    private SimEngine simEngine = new SimEngine(dataAndStructures,dcp);
+    private DCP dcp = new DCP(dataAndStructures);
+    private boolean openReport = false;
+    private SimEngine simEngine = new SimEngine(dataAndStructures, dcp);
     private DefaultTableModel model;
 
 
@@ -341,7 +341,6 @@ public class  Traffic_Simulator {
         trafficPatternPanel.add(lblWeather);
 
 
-
         JLabel lblVisibility = new JLabel("VISIBILITY");
         lblVisibility.setBounds(248, 15, 85, 25);
         lblVisibility.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 12));
@@ -374,7 +373,7 @@ public class  Traffic_Simulator {
         slippery_slider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                climaticCondition.setSlipperiness(slippery_slider.getValue()/100.0);
+                climaticCondition.setSlipperiness(slippery_slider.getValue() / 100.0);
             }
         });
 
@@ -429,7 +428,7 @@ public class  Traffic_Simulator {
         trafficDensityRangeSlider.setMinimum(0);
         trafficDensityRangeSlider.setMaximum(100);
         trafficDensityRangeSlider.setValue((int) (globalConfigManager.getVehicleDensity().getCarDensity() * 100.0));
-        trafficDensityRangeSlider.setUpperValue((int) ((globalConfigManager.getVehicleDensity().getCarDensity() + globalConfigManager.getVehicleDensity().getHeavyVehicleDensity() ) * 100.0));
+        trafficDensityRangeSlider.setUpperValue((int) ((globalConfigManager.getVehicleDensity().getCarDensity() + globalConfigManager.getVehicleDensity().getHeavyVehicleDensity()) * 100.0));
         trafficPatternPanel.add(trafficDensityRangeSlider);
         trafficDensityRangeSlider.addChangeListener(new ChangeListener() {
             @Override
@@ -482,7 +481,7 @@ public class  Traffic_Simulator {
         vehicleProductionRateSlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                globalConfigManager.getVehicleDensity().setCreationRatePerSecond((vehicleProductionRateSlider.getValue()/10.00));
+                globalConfigManager.getVehicleDensity().setCreationRatePerSecond((vehicleProductionRateSlider.getValue() / 10.00));
             }
         });
 
@@ -615,7 +614,7 @@ public class  Traffic_Simulator {
         trafficLightConfigPanel.add(scrollPane);
 
         //Drawing Board Panel
-        final DrawingBoard drawingBoard = new DrawingBoard(model, roadNetworkManager, simEngine,currentSecondValue);
+        final DrawingBoard drawingBoard = new DrawingBoard(model, roadNetworkManager, simEngine, currentSecondValue);
         final JPanel drawingBoardPanel = new JPanel() {
 
             @Override
@@ -813,8 +812,8 @@ public class  Traffic_Simulator {
                         climaticCondition = exportImportObject.getEngineDataStructures().getGlobalConfigManager().getClimaticCondition();
                         globalConfigManager = exportImportObject.getEngineDataStructures().getGlobalConfigManager();
                         dataAndStructures = exportImportObject.getEngineDataStructures();
-                        dcp=new DCP(dataAndStructures);
-                        simEngine = new SimEngine(dataAndStructures,dcp);
+                        dcp = new DCP(dataAndStructures);
+                        simEngine = new SimEngine(dataAndStructures, dcp);
                         drawingBoard.setSingleLaneRUnits(exportImportObject.getUiDataStructures().getSingleLaneRUnits());
                         drawingBoard.setDoubleLaneRUnits(exportImportObject.getUiDataStructures().getDoubleLaneRUnits());
                         drawingBoard.setTrafficLightCoordinates(exportImportObject.getUiDataStructures().getTrafficLightCoordinates());
@@ -837,7 +836,7 @@ public class  Traffic_Simulator {
                         driverBehaviourRangeSlider.setValue((int) (globalConfigManager.getDriverBehaviour().getPercentageCautious() * 100.0));
                         driverBehaviourRangeSlider.setUpperValue((int) ((globalConfigManager.getDriverBehaviour().getPercentageCautious() + (globalConfigManager.getDriverBehaviour().getPercentageNormal())) * 100.0));
                         trafficDensityRangeSlider.setValue((int) (globalConfigManager.getVehicleDensity().getCarDensity() * 100.0));
-                        trafficDensityRangeSlider.setUpperValue((int) ((globalConfigManager.getVehicleDensity().getCarDensity() + globalConfigManager.getVehicleDensity().getHeavyVehicleDensity() ) * 100.0));
+                        trafficDensityRangeSlider.setUpperValue((int) ((globalConfigManager.getVehicleDensity().getCarDensity() + globalConfigManager.getVehicleDensity().getHeavyVehicleDensity()) * 100.0));
                         slippery_slider.setValue((int) (climaticCondition.getSlipperiness() * 100.0));
                         visibility_slider.setValue((int) (climaticCondition.getVisibility() * 100.0));
                         destinationDensitySlider.setValue((int) (globalConfigManager.getRoute().getTrafficPercent() * 100.0));
@@ -865,7 +864,7 @@ public class  Traffic_Simulator {
                 FileDialog fDialog = new FileDialog(trafficSimulatorFrame, "Save", FileDialog.SAVE);
                 fDialog.setVisible(true);
                 String path = fDialog.getDirectory() + fDialog.getFile();
-                ExportImportObject exportImportObject = new ExportImportObject(dataAndStructures,drawingBoard);
+                ExportImportObject exportImportObject = new ExportImportObject(dataAndStructures, drawingBoard);
                 FileOutputStream fout = null;
                 try {
                     fout = new FileOutputStream(path);
@@ -905,13 +904,13 @@ public class  Traffic_Simulator {
             public void actionPerformed(ActionEvent e) {
                 drawingBoard.setDraw(false);
                 // Remove all listeners
-                for(MouseListener mouseListener: drawingBoardPanel.getMouseListeners()){
+                for (MouseListener mouseListener : drawingBoardPanel.getMouseListeners()) {
                     drawingBoardPanel.removeMouseListener(mouseListener);
                 }
-                for(MouseMotionListener mouseListener: drawingBoardPanel.getMouseMotionListeners()){
+                for (MouseMotionListener mouseListener : drawingBoardPanel.getMouseMotionListeners()) {
                     drawingBoardPanel.removeMouseMotionListener(mouseListener);
                 }
-                if(drawingBoard.isSimulationStarted()){
+                if (drawingBoard.isSimulationStarted()) {
                     simEngine.Unpause();
                     drawingBoard.setSimulationPlaying(true);
                     simEngine.Play(drawingBoard);
@@ -925,12 +924,12 @@ public class  Traffic_Simulator {
                     exportConfigButton.setEnabled(false);
                     reportButton.setEnabled(false);
                     clearVehicleFactoryButton.setEnabled(false);
-                }else {
+                } else {
                     if (vehicleFactoryManager.getVehicleFactoryList().isEmpty()) {
                         NoVehicleFactoryDialogBox vehicleFactoryDialogBox = new NoVehicleFactoryDialogBox();
                         vehicleFactoryDialogBox.vehicleFactoryDialog();
                         vehicleFactoryDialogBox.setVisible(true);
-                    } else{
+                    } else {
                         simEngine.Play(drawingBoard);
                         drawingBoard.setSimulationStarted(true);
                         drawingBoard.setSimulationPlaying(true);
@@ -950,12 +949,11 @@ public class  Traffic_Simulator {
         });
 
 
-
         //Pause Simulation
         pauseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(drawingBoard.isSimulationPlaying()){
+                if (drawingBoard.isSimulationPlaying()) {
                     simEngine.Pause();
                     drawingBoard.setSimulationPlaying(false);
                     playButton.setEnabled(true);
@@ -987,7 +985,7 @@ public class  Traffic_Simulator {
         uploadImageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               File file;
+                File file;
                 BufferedImage originalimage;
                 JFileChooser fileChooser = new JFileChooser();
                 int returnValue = fileChooser.showOpenDialog(null);
@@ -995,7 +993,7 @@ public class  Traffic_Simulator {
                     try {
                         file = fileChooser.getSelectedFile();
                         originalimage = ImageIO.read(file);
-                        Image scaledImage = originalimage.getScaledInstance(drawingBoardPanel.getWidth(),drawingBoardPanel.getHeight(),Image.SCALE_SMOOTH);
+                        Image scaledImage = originalimage.getScaledInstance(drawingBoardPanel.getWidth(), drawingBoardPanel.getHeight(), Image.SCALE_SMOOTH);
                         ImageIcon icon = new ImageIcon(scaledImage);
                         JLabel picLabel = new JLabel(icon);
                         drawingBoardPanel.setLayout(new GridLayout());
@@ -1014,9 +1012,9 @@ public class  Traffic_Simulator {
         });
     }
 
-    private void populateTrafficLightTableModel(){
-        if(model != null){
-            for(TrafficLight trafficLight : roadNetworkManager.getRoadNetwork().getTrafficLightHashtable().values()){
+    private void populateTrafficLightTableModel() {
+        if (model != null) {
+            for (TrafficLight trafficLight : roadNetworkManager.getRoadNetwork().getTrafficLightHashtable().values()) {
                 model.addRow(new Object[]{trafficLight.getTrafficLightID(), trafficLight.getCycle().get(0), trafficLight.getCycle().get(1),
                         trafficLight.getCycle().get(2), trafficLight.getCycle().get(3), trafficLight.getCycle().get(4), trafficLight.getCycle().get(5),
                         trafficLight.getCycle().get(6), trafficLight.getCycle().get(7), trafficLight.getCycle().get(8), trafficLight.getCycle().get(9)});

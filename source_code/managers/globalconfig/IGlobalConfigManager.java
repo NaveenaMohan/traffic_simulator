@@ -1,7 +1,6 @@
 package managers.globalconfig;
 
 
-
 import java.io.Serializable;
 import java.util.Map;
 

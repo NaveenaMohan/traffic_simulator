@@ -31,12 +31,12 @@ public class Vehicle implements IVehicleManager {
         this.rUnit = rUnit;
         this.driver = driver;
         this.timeCreated = timeCreated;
-        previousTime=timeCreated;
+        previousTime = timeCreated;
 
         this.vehicleMotor = new VehicleMotor(maxAcceleration, maxDeceleration, initialSpeed, destination, objectInSpace, maximumVelocity,
-                (objectInSpace.getVehicleType()==VehicleType.emergency ? true : false));
-        this. vehicleState = new VehicleState();
-        this.vehiclePerception=new VehiclePerception();
+                (objectInSpace.getVehicleType() == VehicleType.emergency ? true : false));
+        this.vehicleState = new VehicleState();
+        this.vehiclePerception = new VehiclePerception();
     }
 
     public double getTimeCreated() {
@@ -91,12 +91,12 @@ public class Vehicle implements IVehicleManager {
         );
 
         //move
-        rUnit = vehicleMotor.performAction(time-previousTime,dataAndStructures,rUnit, vehicleState);
+        rUnit = vehicleMotor.performAction(time - previousTime, dataAndStructures, rUnit, vehicleState);
 
         //clear state objects
         vehicleState.cleanObjectsAhead();
 
-       previousTime= time;
+        previousTime = time;
 
     }
 
@@ -105,10 +105,11 @@ public class Vehicle implements IVehicleManager {
         return false;
     }
 
-    public boolean getMadeDestination(){
+    public boolean getMadeDestination() {
         return vehicleMotor.isMadeDestination();
     }
-    public double getArrivalDestTime(){
+
+    public double getArrivalDestTime() {
         return vehicleMotor.getArrivalDestTime();
     }
 

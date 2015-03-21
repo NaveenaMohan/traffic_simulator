@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by naveena on 09/02/15.
  */
-public class ClimaticCondition implements Serializable{
+public class ClimaticCondition implements Serializable {
 
     private double visibility;
     private double slipperiness;
@@ -16,17 +16,20 @@ public class ClimaticCondition implements Serializable{
     }
 
     public void setWeatherType(WeatherType weatherType) {
-        switch (weatherType){
+        switch (weatherType) {
             //0 is not slippery
             //0 means very good visibility
 
-            case rainy: this.setSlipperiness(0.5);
+            case rainy:
+                this.setSlipperiness(0.5);
                 this.setVisibility(0.5);
                 break;
-            case snowy: this.setSlipperiness(0.9);
+            case snowy:
+                this.setSlipperiness(0.9);
                 this.setVisibility(0.7);
                 break;
-            case sunny: this.setSlipperiness(0);
+            case sunny:
+                this.setSlipperiness(0);
                 this.setVisibility(0);
                 break;
         }

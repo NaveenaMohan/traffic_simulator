@@ -35,17 +35,17 @@ public class VehicleFactory implements Serializable {
         //vehicle factory creates vehicles, it sets their driver and objectInSpace
 
         //create object in space based on the vehicle type
-        ObjectInSpace objectInSpace = new ObjectInSpace(vehID,rUnit.getX(), rUnit.getY(), rUnit.getZ(), VehicleTypeStats.getWidth(vehicleType)
-                ,VehicleTypeStats.getLength(vehicleType),VehicleTypeStats.getHeight(vehicleType),null, vehicleType);
+        ObjectInSpace objectInSpace = new ObjectInSpace(vehID, rUnit.getX(), rUnit.getY(), rUnit.getZ(), VehicleTypeStats.getWidth(vehicleType)
+                , VehicleTypeStats.getLength(vehicleType), VehicleTypeStats.getHeight(vehicleType), null, vehicleType);
 
         //only add the new vehicle if it fits in the space outside the factory
-        if(spaceManager.checkFit(objectInSpace.getId(), objectInSpace.getX(), objectInSpace.getY(), 10,10)) {
+        if (spaceManager.checkFit(objectInSpace.getId(), objectInSpace.getX(), objectInSpace.getY(), 10, 10)) {
             spaceManager.addObjectToSpace(objectInSpace);
             IVehicleManager vehicle = new Vehicle(
                     vehID,//vehicle ID
                     rUnit,//vehicle starting point
                     driver,
-                    (90*1000)/3600,//initial speed
+                    (90 * 1000) / 3600,//initial speed
                     destination,
                     objectInSpace,
                     VehicleTypeStats.getMaxAcceleration(vehicleType),//maximum acceleration in metres per second.

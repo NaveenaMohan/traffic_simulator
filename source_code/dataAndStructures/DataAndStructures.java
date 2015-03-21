@@ -21,15 +21,6 @@ public class DataAndStructures implements IDataAndStructures {
     private IGlobalConfigManager globalConfigManager;
     private ISpaceManager spaceManager;
 
-    public ISpaceManager getSpaceManager() {
-        return spaceManager;
-    }
-
-    @Override
-    public void setVehicleManagerList(List<IVehicleManager> vehicleManagerList) {
-        this.vehicleManagerList = vehicleManagerList;
-    }
-
     public DataAndStructures() {
     }
 
@@ -37,7 +28,16 @@ public class DataAndStructures implements IDataAndStructures {
         this.roadNetworkManager = roadNetworkManager;
         this.vehicleFactoryManager = vehicleFactoryManager;
         this.globalConfigManager = globalConfigManager;
-        spaceManager=new SpaceManager();
+        spaceManager = new SpaceManager();
+    }
+
+    public ISpaceManager getSpaceManager() {
+        return spaceManager;
+    }
+
+    @Override
+    public void setVehicleManagerList(List<IVehicleManager> vehicleManagerList) {
+        this.vehicleManagerList = vehicleManagerList;
     }
 
     @Override

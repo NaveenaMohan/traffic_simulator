@@ -16,7 +16,7 @@ public class Space implements Serializable {
         objects.remove(objectInSpace);
     }
 
-    public  List<ObjectInSpace> getObjects(){
+    public List<ObjectInSpace> getObjects() {
         return objects;
     }
 

@@ -24,17 +24,23 @@ public interface IRUnitManager extends Serializable {
 
     ZebraCrossing getZebraCrossing();
 
+    void setZebraCrossing(ZebraCrossing zebraCrossing);
+
     TrafficLight getTrafficLight();
 
     Blockage getBlockage();
 
+    void setBlockage(Blockage blockage);
+
     TrafficSign getTrafficSign();
 
-     int getX();
+    void setTrafficSign(TrafficSign trafficSign);
 
-     int getY();
+    int getX();
 
-     int getZ();
+    int getY();
+
+    int getZ();
 
     String getId();
 
@@ -46,16 +52,9 @@ public interface IRUnitManager extends Serializable {
 
     void setLeft(boolean isLeft);
 
-
     IRUnitManager getChangeAbleRUnit();
-
-    public boolean go();
 
     void setChangeAbleRUnit(IRUnitManager currentChangeableRUnit);
 
-    void setZebraCrossing(ZebraCrossing zebraCrossing);
-
-    void setBlockage(Blockage blockage);
-
-    void setTrafficSign(TrafficSign trafficSign);
+    public boolean go();
 }

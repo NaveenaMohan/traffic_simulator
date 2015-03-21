@@ -15,9 +15,13 @@ import java.util.List;
 public interface IDataAndStructures extends Serializable {
 
     public IRoadNetworkManager getRoadNetworkManager();
+
     public IVehicleFactoryManager getVehicleFactoryManager();
+
     public List<IVehicleManager> getVehicles();
+
     public IGlobalConfigManager getGlobalConfigManager();
+
     public ISpaceManager getSpaceManager();
 
     public void setVehicleManagerList(List<IVehicleManager> vehicleManagerList);

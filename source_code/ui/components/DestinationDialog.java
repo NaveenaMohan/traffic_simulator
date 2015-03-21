@@ -46,8 +46,8 @@ public class DestinationDialog extends JDialog {
                 dispose();
             }
         });
-        
-     
+
+
         close.setAlignmentX(0.5f);
         getContentPane().add(close);
 
@@ -59,4 +59,4 @@ public class DestinationDialog extends JDialog {
         setSize(300, 250);
     }
 }
-	
+
