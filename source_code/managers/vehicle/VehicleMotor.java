@@ -226,7 +226,7 @@ public class VehicleMotor implements Serializable {
         //adjust your position in space
         objectInSpace.setX(rUnit.getX());
         objectInSpace.setY(rUnit.getY());
-        if (previousrUnit.getId() != rUnit.getId())
+        if (!previousrUnit.getId().equals(rUnit.getId()))
             objectInSpace.setDirection(new VehicleDirection(
                     Common.getNthPrevRUnit(previousrUnit, 5).getX(),
                     Common.getNthPrevRUnit(previousrUnit, 5).getY(),

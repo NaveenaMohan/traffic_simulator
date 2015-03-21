@@ -1,7 +1,5 @@
 package managers.runit;
 
-import managers.vehiclefactory.VehicleFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,12 +25,6 @@ public class RUnit implements IRUnitManager {
         this.id = id;
         this.x = x;
         this.y = y;
-    }
-
-    public RUnit(String id, List<IRUnitManager> prevsRUnitList, List<IRUnitManager> nextRUnitList) {
-        this.id = id;
-        this.prevsRUnitList = prevsRUnitList;
-        this.nextRUnitList = nextRUnitList;
     }
 
     public int getX() {
@@ -125,10 +117,6 @@ public class RUnit implements IRUnitManager {
         this.blockage = blockage;
     }
 
-    public VehicleFactory addVehicleFactory() {
-        return null;
-    }
-
     public TrafficLight getTrafficLight() {
         return trafficLight;
     }
@@ -140,42 +128,7 @@ public class RUnit implements IRUnitManager {
 
     @Override
     public boolean go() {
-        if (this.getTrafficLight() != null) {
-            if (this.getTrafficLight().isGreen()) {
-                return true; //if traffic Light is green
-            } else return false; //if traffic Light is red
-        } else
-            return true; //if no traffic Light then vehicles can continue, treated as if it would be green.
-    }
-
-
-    @Override
-    public void addZebraCrossing() {
-
-    }
-
-    @Override
-    public void addBlockage() {
-
-    }
-
-    @Override
-    public void addSpeedLimit() {
-
-    }
-
-    @Override
-    public void addStopSign() {
-
-    }
-
-    @Override
-    public void addWelcomeSign() {
-
-    }
-
-    @Override
-    public void addDirectionSign() {
-
+        //if no traffic Light then vehicles can continue, treated as if it would be green.
+        return this.getTrafficLight() == null || this.getTrafficLight().isGreen();
     }
 }

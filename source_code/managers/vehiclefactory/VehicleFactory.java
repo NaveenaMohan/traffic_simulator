@@ -41,7 +41,7 @@ public class VehicleFactory implements Serializable {
         //only add the new vehicle if it fits in the space outside the factory
         if (spaceManager.checkFit(objectInSpace.getId(), objectInSpace.getX(), objectInSpace.getY(), 10, 10)) {
             spaceManager.addObjectToSpace(objectInSpace);
-            IVehicleManager vehicle = new Vehicle(
+            return new Vehicle(
                     vehID,//vehicle ID
                     rUnit,//vehicle starting point
                     driver,
@@ -53,7 +53,6 @@ public class VehicleFactory implements Serializable {
                     time,
                     VehicleTypeStats.getMaxVelocity(vehicleType)
             );
-            return vehicle;
         }
         return null;//return null if vehicle creation was not possible
     }

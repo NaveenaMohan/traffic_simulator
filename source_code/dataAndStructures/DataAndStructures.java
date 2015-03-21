@@ -21,9 +21,6 @@ public class DataAndStructures implements IDataAndStructures {
     private IGlobalConfigManager globalConfigManager;
     private ISpaceManager spaceManager;
 
-    public DataAndStructures() {
-    }
-
     public DataAndStructures(IRoadNetworkManager roadNetworkManager, IVehicleFactoryManager vehicleFactoryManager, IGlobalConfigManager globalConfigManager) {
         this.roadNetworkManager = roadNetworkManager;
         this.vehicleFactoryManager = vehicleFactoryManager;

@@ -10,18 +10,6 @@ public interface IRUnitManager extends Serializable {
 
     void addTrafficLight(TrafficLight trafficLight);
 
-    void addZebraCrossing();
-
-    void addBlockage();
-
-    void addSpeedLimit();
-
-    void addStopSign();
-
-    void addWelcomeSign();
-
-    void addDirectionSign();
-
     ZebraCrossing getZebraCrossing();
 
     void setZebraCrossing(ZebraCrossing zebraCrossing);

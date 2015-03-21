@@ -48,13 +48,13 @@ public class VehicleState implements Serializable {
         /*
         Returns the next object within metres metres
          */
-        for (int i = 0; i < objectsAhead.size(); i++) {
-            if (objectsAhead.get(i).getDistance() <= metres) {
-                if (objectsAhead.get(i).isInLeft() == inLeft)
+        for (VehicleMemoryObject anObjectsAhead : objectsAhead) {
+            if (anObjectsAhead.getDistance() <= metres) {
+                if (anObjectsAhead.isInLeft() == inLeft)
                     if (!(isEmergency &
-                            (objectsAhead.get(i).getObject() instanceof TrafficLight |
-                                    objectsAhead.get(i).getObject() instanceof SpeedLimitSign))) {
-                        return objectsAhead.get(i);
+                            (anObjectsAhead.getObject() instanceof TrafficLight |
+                                    anObjectsAhead.getObject() instanceof SpeedLimitSign))) {
+                        return anObjectsAhead;
                     }
             } else
                 break;
@@ -63,10 +63,10 @@ public class VehicleState implements Serializable {
     }
 
     public VehicleMemoryObject getNextVehicleObject(double metres, boolean inLeft) {
-        for (int i = 0; i < objectsAhead.size(); i++) {
-            if (objectsAhead.get(i).getDistance() <= metres) {
-                if (objectsAhead.get(i).isInLeft() == inLeft & objectsAhead.get(i).getObject() instanceof IVehicleManager)
-                    return objectsAhead.get(i);
+        for (VehicleMemoryObject anObjectsAhead : objectsAhead) {
+            if (anObjectsAhead.getDistance() <= metres) {
+                if (anObjectsAhead.isInLeft() == inLeft & anObjectsAhead.getObject() instanceof IVehicleManager)
+                    return anObjectsAhead;
             } else
                 break;
         }
@@ -76,14 +76,14 @@ public class VehicleState implements Serializable {
 
 
     public VehicleMemoryObject getNextSpeedAffectingRoadElement(double metres, boolean inLeft) {
-        for (int i = 0; i < objectsAhead.size(); i++) {
-            if (objectsAhead.get(i).getDistance() <= metres) {
-                if (objectsAhead.get(i).isInLeft() == inLeft &
-                        (objectsAhead.get(i).getObject() instanceof SpeedLimitSign |
-                                objectsAhead.get(i).getObject() instanceof TrafficLight |
-                                objectsAhead.get(i).getObject() instanceof ZebraCrossing |
-                                objectsAhead.get(i).getObject() instanceof StopSign))
-                    return objectsAhead.get(i);
+        for (VehicleMemoryObject anObjectsAhead : objectsAhead) {
+            if (anObjectsAhead.getDistance() <= metres) {
+                if (anObjectsAhead.isInLeft() == inLeft &
+                        (anObjectsAhead.getObject() instanceof SpeedLimitSign |
+                                anObjectsAhead.getObject() instanceof TrafficLight |
+                                anObjectsAhead.getObject() instanceof ZebraCrossing |
+                                anObjectsAhead.getObject() instanceof StopSign))
+                    return anObjectsAhead;
             } else
                 break;
         }
@@ -94,8 +94,6 @@ public class VehicleState implements Serializable {
     public VehicleMemoryObject getSlowestWithin(double metres, boolean isEmergency, boolean inLeft) {
         //returns the slowest object within metres metres
 
-
-        int currentIndex = 0;
         VehicleMemoryObject slowestObject = null;
 
         for (VehicleMemoryObject obj : objectsAhead) {

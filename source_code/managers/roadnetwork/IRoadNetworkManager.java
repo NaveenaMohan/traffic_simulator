@@ -31,8 +31,6 @@ public interface IRoadNetworkManager extends Serializable {
 
     void addDirectionSign(IRUnitManager rUnit, String location, DirectionSignType directionSignType);
 
-    void addVehicleFactory(IRUnitManager rUnit);
-
     void addTrafficLightBehavior(String trafficLightId, List<Boolean> trafficLightPattern);
 
     public void changeLight(double currentSecond);

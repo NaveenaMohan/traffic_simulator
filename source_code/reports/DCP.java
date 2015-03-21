@@ -20,7 +20,6 @@ public class DCP extends JPanel {
 
     private final static String newline = "\n";
     public boolean firstTimeOpen = true, isFrameClosed = false;
-    protected JTextArea textArea;
     StyleContext context = new StyleContext();
     StyleContext context2 = new StyleContext();
     StyleContext context3 = new StyleContext();
@@ -34,7 +33,6 @@ public class DCP extends JPanel {
     private Map<String, Double> averageVehiclesVelocity = new HashMap<String, Double>();
     private double avgVelocityTotalVehicles = 0, slipperiness = 0, visibility = 0, percentageMadeDest = 0, rate = 0,
             avgTimeToDestination = 0;
-    ;
     private StyledDocument document;
     private int cars = 0, emergencies = 0, heavyLoads = 0;
 
@@ -100,7 +98,7 @@ public class DCP extends JPanel {
             document.insertString(document.getLength(), "Traffic Information " + newline, style);
             getAvgVelocityTotalVehicles(); //reports average velocity of total of cars
             congestionRate();
-            if (dataAndStructures.getGlobalConfigManager().getRoute().getDestination() != "") {
+            if (!dataAndStructures.getGlobalConfigManager().getRoute().getDestination().equals("")) {
                 document.insertString(document.getLength(), "Destination " + newline, style);
                 vehiclesMadeDestination(); // reports percentage of vehicles that made it to their destination along with the avg time it took them to get there
             }
@@ -222,17 +220,17 @@ public class DCP extends JPanel {
 
     private void vehiclesMadeDestination() {
         int vehiclesWithDest = 0, vehiclesLost = 0;
-        if (dataAndStructures.getGlobalConfigManager().getRoute().getDestination() != "" && dataAndStructures.getVehicles().size() != 0) {
+        if (!dataAndStructures.getGlobalConfigManager().getRoute().getDestination().equals("") && dataAndStructures.getVehicles().size() != 0) {
             for (IVehicleManager vehicle : dataAndStructures.getVehicles()) {
-                if (vehicle.getVehicle().getDestination() != "" && vehicle.isVisible() && !vehicle.getVehicle().getMadeDestination())
+                if (!vehicle.getVehicle().getDestination().equals("") && vehicle.isVisible() && !vehicle.getVehicle().getMadeDestination())
                     vehiclesEnroute++; //counts vehicles that are still visible and going to their destination
-                if (vehicle.getVehicle().getDestination() != "" && !vehicle.isVisible() && !vehicle.getVehicle().getMadeDestination())
+                if (!vehicle.getVehicle().getDestination().equals("") && !vehicle.isVisible() && !vehicle.getVehicle().getMadeDestination())
                     vehiclesLost++;
                 if (vehicle.getVehicle().getMadeDestination()) {
                     percentageMadeDest++;//counts vehicles that already made it to their destination
                     avgTimeToDestination = (avgTimeToDestination + (vehicle.getVehicle().getArrivalDestTime() - vehicle.getVehicle().getTimeCreated()));
                 }
-                if (vehicle.getVehicle().getDestination() != "")
+                if (!vehicle.getVehicle().getDestination().equals(""))
                     vehiclesWithDest++;
             }
             avgTimeToDestination = Common.round((avgTimeToDestination / percentageMadeDest), 2);

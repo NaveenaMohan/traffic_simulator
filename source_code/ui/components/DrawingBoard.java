@@ -89,14 +89,6 @@ public class DrawingBoard implements ActionListener {
         this.currentSecondValue = currentSecondValue;
     }
 
-    private static int getTrafficLightIdIndex() {
-        return trafficLightIdIndex;
-    }
-
-    public static void setTrafficLightIdIndex(int trafficLightIdIndex) {
-        DrawingBoard.trafficLightIdIndex = trafficLightIdIndex;
-    }
-
     public void initialize() {
         rUnitImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/leftLane.png"));
         rUnitImage2 = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/rightLane.png"));
@@ -188,9 +180,9 @@ public class DrawingBoard implements ActionListener {
             int currentChangeableY = Common.getAdjacentPointToB(A, B, 10, 90).getY();
 
             double directionChangeable = 1000;
-            if (previousChangeableRunit != null)
+            if (previousChangeableRunit != null) {
                 directionChangeable = Common.getAngle(previousChangeableRunit.getX(), previousChangeableRunit.getY(), currentChangeableX, currentChangeableY);
-
+            }
             Coordinates changeableA = new Coordinates((previousChangeableRunit == null ? currentChangeableX : previousChangeableRunit.getX()),
                     (previousChangeableRunit == null ? currentChangeableY : previousChangeableRunit.getY()));
             do {

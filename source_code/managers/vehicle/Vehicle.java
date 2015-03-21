@@ -18,7 +18,6 @@ public class Vehicle implements IVehicleManager {
     private VehicleMotor vehicleMotor;
     private VehicleState vehicleState;
     private VehiclePerception vehiclePerception;
-    private VehicleType vehicleType;
 
     private double timeCreated;
 
@@ -34,7 +33,7 @@ public class Vehicle implements IVehicleManager {
         previousTime = timeCreated;
 
         this.vehicleMotor = new VehicleMotor(maxAcceleration, maxDeceleration, initialSpeed, destination, objectInSpace, maximumVelocity,
-                (objectInSpace.getVehicleType() == VehicleType.emergency ? true : false));
+                (objectInSpace.getVehicleType() == VehicleType.emergency));
         this.vehicleState = new VehicleState();
         this.vehiclePerception = new VehiclePerception();
     }

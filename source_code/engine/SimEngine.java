@@ -53,12 +53,6 @@ public class SimEngine implements Serializable {
         dataAndStructures.getGlobalConfigManager().setTicksPerSecond(dataAndStructures.getGlobalConfigManager().getTicksPerSecond() * 2);
     }
 
-    public void CleanAll() {
-        if (timer != null) {
-            timer.stop();
-        }
-    }
-
     public void CleanVehicles() {
         dataAndStructures.setVehicleManagerList((new ArrayList<IVehicleManager>()));
         dataAndStructures.getSpaceManager().setObjects(new ArrayList<ObjectInSpace>());

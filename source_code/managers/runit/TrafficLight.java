@@ -13,7 +13,6 @@ public class TrafficLight implements Serializable {
     private String trafficLightID; // Should be string as its prefixed with TL or ZTL
     private boolean trafficLightCurrentColor = false;
     private boolean isGreen = false;
-    private TrafficLightSynchronisation trafficLightSynchronisation;
 
     public boolean getTrafficLightCurrentColor() {
         return trafficLightCurrentColor;
@@ -40,14 +39,6 @@ public class TrafficLight implements Serializable {
 
     public void setTrafficLightID(String trafficLightID) {
         this.trafficLightID = trafficLightID;
-    }
-
-    public TrafficLightSynchronisation getTrafficLightSynchronisation() {
-        return trafficLightSynchronisation;
-    }
-
-    public void setTrafficLightSynchronisation(TrafficLightSynchronisation trafficLightSynchronisation) {
-        this.trafficLightSynchronisation = trafficLightSynchronisation;
     }
 
     public boolean isGreen() {

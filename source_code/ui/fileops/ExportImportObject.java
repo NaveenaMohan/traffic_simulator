@@ -44,16 +44,8 @@ public class ExportImportObject implements Serializable {
         return engineDataStructures;
     }
 
-    public void setEngineDataStructures(IDataAndStructures engineDataStructures) {
-        this.engineDataStructures = engineDataStructures;
-    }
-
     public UIDataStructures getUiDataStructures() {
         return uiDataStructures;
-    }
-
-    public void setUiDataStructures(UIDataStructures uiDataStructures) {
-        this.uiDataStructures = uiDataStructures;
     }
 
     @Override

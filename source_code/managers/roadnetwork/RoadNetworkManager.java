@@ -36,10 +36,7 @@ public class RoadNetworkManager implements IRoadNetworkManager {
         int currentID = Integer.parseInt(currentRUnit.getId().replace("c", ""));
         int previousID = Integer.parseInt(prevRUnit.getId().replace("c", ""));
 
-        if (Math.abs(currentID - previousID) < collisionDistance)
-            return false;
-        else
-            return true;
+        return Math.abs(currentID - previousID) >= collisionDistance;
     }
 
     public static boolean checkIntersectionIsLawful(IRUnitManager currentRUnit, IRUnitManager prevRUnit) {
@@ -61,8 +58,8 @@ public class RoadNetworkManager implements IRoadNetworkManager {
                 Common.getRoadBackwardDirection(currentRUnit, 5)
         );
 
-        boolean isCurrentSingleLane = (currentRUnit.getChangeAbleRUnit() == null ? true : false);
-        boolean isPrevSingleLane = (prevRUnit.getChangeAbleRUnit() == null ? true : false);
+        boolean isCurrentSingleLane = (currentRUnit.getChangeAbleRUnit() == null);
+        boolean isPrevSingleLane = (prevRUnit.getChangeAbleRUnit() == null);
         //if difference is positive it is going left
         if (difference >= 0) {
 
@@ -100,7 +97,7 @@ public class RoadNetworkManager implements IRoadNetworkManager {
     private IRUnitManager checkIntersectionAndReturnIntersectedRUnit(Collection<IRUnitManager> rUnits, Coordinates intersectionCoordinates, String id) {
 
         for (IRUnitManager rUnit : rUnits) {
-            if (rUnit.getX() == intersectionCoordinates.getX() & rUnit.getY() == intersectionCoordinates.getY() & rUnit.getId() != id) {
+            if (rUnit.getX() == intersectionCoordinates.getX() & rUnit.getY() == intersectionCoordinates.getY() & !rUnit.getId().equals(id)) {
                 return rUnit;
             }
         }
@@ -139,33 +136,18 @@ public class RoadNetworkManager implements IRoadNetworkManager {
             //connect incoming to intersected
             if (checkIntersectionIsLawful(currentRUnit, intersected)) {
                 connectNext(currentRUnit, (intersected.getNextRUnitList().size() > 0 ? intersected.getNextRUnitList().get(0) : intersected));
-
-                String nexts = "";
-                for (IRUnitManager n : currentRUnit.getNextRUnitList())
-                    nexts += n.getId() + " ";
-                String prevs = "";
-                for (IRUnitManager p : currentRUnit.getPrevsRUnitList())
-                    prevs += p.getId() + " ";
             }
 
             //connect intersected to incoming
             if (checkIntersectionIsLawful(intersected, currentRUnit)) {
                 connectNext(intersected, (currentRUnit.getNextRUnitList().size() > 0 ? currentRUnit.getNextRUnitList().get(0) : currentRUnit));
-
-                String nexts = "";
-                for (IRUnitManager n : intersected.getNextRUnitList())
-                    nexts += n.getId() + " ";
-                String prevs = "";
-                for (IRUnitManager p : intersected.getPrevsRUnitList())
-                    prevs += p.getId() + " ";
             }
-
         }
     }
 
     private IRUnitManager getNext(int x, int y, IRUnitManager prevRUnit, boolean isDoubleLane) {
 
-        IRUnitManager currentRUnit = null;
+        IRUnitManager currentRUnit;
 
         //Create new RUnit Object if it does not intersect with any existing lane coordinates
         if (isDoubleLane) {
@@ -227,7 +209,7 @@ public class RoadNetworkManager implements IRoadNetworkManager {
     @Override
     public void changeLight(double currentSecond) {
         TrafficLight currentTL;
-        int t = 0;
+        int t;
         t = (int) (currentSecond % 120); //to know the corresponding column of the cycle at a particular current second
         if ((t >= 1) && (t <= 12)) t = 0;
         if ((t >= 13) && (t <= 24)) t = 1;
@@ -283,10 +265,6 @@ public class RoadNetworkManager implements IRoadNetworkManager {
     @Override
     public void addDirectionSign(IRUnitManager rUnit, String location, DirectionSignType directionSignType) {
         roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).setTrafficSign(new DirectionSign(location, directionSignType));
-    }
-
-    @Override
-    public void addVehicleFactory(IRUnitManager rUnit) {
     }
 
     @Override
