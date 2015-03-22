@@ -4,6 +4,7 @@ package ui;
  * Created by naveena on 18/02/15.
  */
 public enum ConfigButtonSelected {
+    //Enum values to maintain the state of the button selected for the action listeners
     addSingleLane,
     addDoubleLane,
     trafficLight,

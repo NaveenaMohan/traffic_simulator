@@ -90,6 +90,7 @@ public class DrawingBoard implements ActionListener {
     }
 
     public void initialize() {
+        //Loading all images for various UI components
         rUnitImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/leftLane.png"));
         rUnitImage2 = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/rightLane.png"));
         trafficLightImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/lightMini.png"));
@@ -115,6 +116,7 @@ public class DrawingBoard implements ActionListener {
         speed90Image = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/90mini.png"));
         welcomeImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/welcomeMini.png"));
 
+        //Loading and populating BufferedImages for the Roads to dyanmically draw and provision them in the UI and backend
         MediaTracker roadMediaTracker = new MediaTracker(drawingBoardPanel);
         roadMediaTracker.addImage(rUnitImage, 1);
         try {
@@ -136,31 +138,35 @@ public class DrawingBoard implements ActionListener {
         }
         bufferedChangeableRoadImage = new BufferedImage(rUnitImage2.getWidth(drawingBoardPanel), rUnitImage2.getHeight(drawingBoardPanel),
                 BufferedImage.TYPE_INT_ARGB);
-        Graphics2D b = bufferedChangeableRoadImage.createGraphics();
-        b.drawImage(rUnitImage2, 0, 0, drawingBoardPanel);
+        Graphics2D changeableRoadGraphics = bufferedChangeableRoadImage.createGraphics();
+        changeableRoadGraphics.drawImage(rUnitImage2, 0, 0, drawingBoardPanel);
 
     }
 
-    //Configuration Phase - Drawing road and configuring other traffic elements
+    //Configuration Phase - Drawing road and adding other traffic elements
+    //This function paints/draws the component when the component is drawn or added initially
     public void paintComponent(Graphics g) {
+
         //Add single lane
         if (isDraw() && configButtonSelected.equals(ConfigButtonSelected.addSingleLane)) {
             Graphics2D g2D = (Graphics2D) g;
 
-            Coordinates A = new Coordinates((previousRUnit == null ? currentX : previousRUnit.getX()),
+            Coordinates prevOrCurCoordinates = new Coordinates((previousRUnit == null ? currentX : previousRUnit.getX()),
                     (previousRUnit == null ? currentY : previousRUnit.getY()));
-            Coordinates B = new Coordinates(currentX, currentY);
-
+            Coordinates currentCoordinates = new Coordinates(currentX, currentY);
+            //Smart Drawing feature to enable auto completion of smooth roads when clicked at 2 points in the drawing panel.
             do {
-                if (previousRUnit == null || !A.equals(new Coordinates(previousRUnit.getX(), previousRUnit.getY()))) {
+                if (previousRUnit == null || !prevOrCurCoordinates.equals(new Coordinates(previousRUnit.getX(), previousRUnit.getY()))) {
                     //Add and Return RUnit for single lane and store it as previous RUnit
-                    previousRUnit = roadNetworkManager.addSingleLane(A.getX(), A.getY(), previousRUnit);
+                    previousRUnit = roadNetworkManager.addSingleLane(prevOrCurCoordinates.getX(), prevOrCurCoordinates.getY(), previousRUnit);
                     singleLaneRUnits.add(previousRUnit);
+                    //Drawing the road with repositioned coordinates
                     Coordinates coordinates = getRepositionedImageCoordinates(bufferedRoadImage, currentX, currentY);
                     g2D.drawImage(bufferedRoadImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
                 }
-                A = new Coordinates(Common.getNextPointFromTo(A, B).getX(), Common.getNextPointFromTo(A, B).getY());
-            } while (A.getY() != B.getY() & A.getX() != B.getX());
+                prevOrCurCoordinates = new Coordinates(Common.getNextPointFromTo(prevOrCurCoordinates, currentCoordinates).getX(), Common.getNextPointFromTo(prevOrCurCoordinates, currentCoordinates).getY());
+            }
+            while (prevOrCurCoordinates.getY() != currentCoordinates.getY() & prevOrCurCoordinates.getX() != currentCoordinates.getX());
         }
 
         //Add double lane
@@ -169,15 +175,15 @@ public class DrawingBoard implements ActionListener {
             Graphics2D g2d = (Graphics2D) g;
 
             //previous coordinates
-            Coordinates A = new Coordinates((previousRUnit == null ? currentX : previousRUnit.getX()),
+            Coordinates prevOrCurCoordinates = new Coordinates((previousRUnit == null ? currentX : previousRUnit.getX()),
                     (previousRUnit == null ? currentY : previousRUnit.getY()));
 
             //current coordinates
-            Coordinates B = new Coordinates(currentX, currentY);
+            Coordinates currentCoordinates = new Coordinates(currentX, currentY);
 
-            //changeable coordinates
-            int currentChangeableX = Common.getAdjacentPointToB(A, B, 10, 90).getX();
-            int currentChangeableY = Common.getAdjacentPointToB(A, B, 10, 90).getY();
+            //Populate changeable coordinates
+            int currentChangeableX = Common.getAdjacentPointToB(prevOrCurCoordinates, currentCoordinates, 10, 90).getX();
+            int currentChangeableY = Common.getAdjacentPointToB(prevOrCurCoordinates, currentCoordinates, 10, 90).getY();
 
             double directionChangeable = 1000;
             if (previousChangeableRunit != null) {
@@ -185,42 +191,43 @@ public class DrawingBoard implements ActionListener {
             }
             Coordinates changeableA = new Coordinates((previousChangeableRunit == null ? currentChangeableX : previousChangeableRunit.getX()),
                     (previousChangeableRunit == null ? currentChangeableY : previousChangeableRunit.getY()));
+            //Smart Drawing feature to enable auto completion of smooth double roads when clicked at 2 points in the drawing panel.
             do {
                 if ((previousRUnit == null && previousChangeableRunit == null) ||
-                        (!A.equals(new Coordinates(previousRUnit.getX(), previousRUnit.getY())))) {
+                        (!prevOrCurCoordinates.equals(new Coordinates(previousRUnit.getX(), previousRUnit.getY())))) {
                     //Add and Return RUnit for double lane and store it as previous RUnit
-                    Map<String, IRUnitManager> prevRUnitMap = roadNetworkManager.addDoubleLane(A.getX(), A.getY(), changeableA.getX(), changeableA.getY(), previousRUnit, previousChangeableRunit);
+                    Map<String, IRUnitManager> prevRUnitMap = roadNetworkManager.addDoubleLane(prevOrCurCoordinates.getX(), prevOrCurCoordinates.getY(), changeableA.getX(), changeableA.getY(), previousRUnit, previousChangeableRunit);
                     if (prevRUnitMap != null) {
                         previousRUnit = prevRUnitMap.get("runit");
                         previousChangeableRunit = prevRUnitMap.get("changeableRunit");
                     }
                     doubleLaneRUnits.add(previousRUnit);
                     changeAbleLaneRUnits.add(previousChangeableRunit);
+                    //Drawing the road with repositioned coordinates
                     Coordinates coordinates = getRepositionedImageCoordinates(bufferedRoadImage, currentX, currentY);
                     g2d.drawImage(bufferedRoadImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
+                    //Drawing the changeable road with repositioned coordinates
                     coordinates = getRepositionedImageCoordinates(bufferedChangeableRoadImage, currentChangeableX, currentChangeableY);
                     g2d.drawImage(bufferedChangeableRoadImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
                 }
 
-                //remember the previous A coordinate for getting the correct adjecent point
+                //remember the previous A coordinate for getting the correct adjacent point
                 Coordinates oldA = new Coordinates(Common.getNthPrevRUnit(previousRUnit, 3).getX(),
                         Common.getNthPrevRUnit(previousRUnit, 3).getY());
 
                 //get the next point from A to B
-                A = new Coordinates(Common.getNextPointFromTo(A, B).getX(), Common.getNextPointFromTo(A, B).getY());
-
+                prevOrCurCoordinates = new Coordinates(Common.getNextPointFromTo(prevOrCurCoordinates, currentCoordinates).getX(), Common.getNextPointFromTo(prevOrCurCoordinates, currentCoordinates).getY());
 
                 //get new changeable coordinates
-                currentChangeableX = Common.getAdjacentPointToB(oldA, A, 10, 90).getX();
-                currentChangeableY = Common.getAdjacentPointToB(oldA, A, 10, 90).getY();
+                currentChangeableX = Common.getAdjacentPointToB(oldA, prevOrCurCoordinates, 10, 90).getX();
+                currentChangeableY = Common.getAdjacentPointToB(oldA, prevOrCurCoordinates, 10, 90).getY();
 
                 //set new changeable
-
-
                 changeableA = new Coordinates(currentChangeableX, currentChangeableY);
 
 
-            } while (A.getY() != B.getY() & A.getX() != B.getX());
+            }
+            while (prevOrCurCoordinates.getY() != currentCoordinates.getY() & prevOrCurCoordinates.getX() != currentCoordinates.getX());
         }
 
 
@@ -228,6 +235,7 @@ public class DrawingBoard implements ActionListener {
             String trafficLightId = "TL-" + trafficLightIdIndex;
             IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
+                //Dynamically adding rows to the traffic light configuration table with "RED" colored cells and corresponding traffic light ID
                 if (model != null) {
                     model.addRow(new Object[]{trafficLightId, false, false, false, false, false, false, false, false, false, false});
                     trafficLightCoordinates.put(trafficLightId, new Coordinates(bestMatchRUnit.getX(), bestMatchRUnit.getY()));
@@ -252,12 +260,13 @@ public class DrawingBoard implements ActionListener {
             String trafficLightId = "ZTL-" + zebraCrossingTrafficLightIdIndex;
             IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
-                //Updating the best match rUnit with the zebra crossing
+                //Dynamically adding rows to the traffic light configuration table with "RED" colored cells and corresponding traffic light ID
                 if (model != null) {
                     model.addRow(new Object[]{trafficLightId, false, false, false, false, false, false, false, false, false, false});
                     zebraCrossingCoordinates.put(trafficLightId, new Coordinates(bestMatchRUnit.getX(), bestMatchRUnit.getY()));
                     zebraCrossingTrafficLightIdIndex++;
                 }
+                //Updating the best match rUnit with the zebra crossing
                 TrafficLight trafficLight = new TrafficLight();
                 trafficLight.setTrafficLightID(trafficLightId);
                 simEngine.getDataAndStructures().getRoadNetworkManager().addZebraCrossing(bestMatchRUnit, trafficLight);
@@ -313,6 +322,7 @@ public class DrawingBoard implements ActionListener {
         if (configButtonSelected.equals(ConfigButtonSelected.left)) {
             IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
+                //Location Dialog Box to input the location for the sign boards
                 LocationDialog locationDialog = new LocationDialog();
                 locationDialog.initUI();
                 locationDialog.setVisible(true);
@@ -336,6 +346,7 @@ public class DrawingBoard implements ActionListener {
         if (configButtonSelected.equals(ConfigButtonSelected.right)) {
             IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
+                //Location Dialog Box to input the location for the sign boards
                 LocationDialog locationDialog = new LocationDialog();
                 locationDialog.initUI();
                 locationDialog.setVisible(true);
@@ -359,6 +370,7 @@ public class DrawingBoard implements ActionListener {
         if (configButtonSelected.equals(ConfigButtonSelected.straight)) {
             IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
+                //Location Dialog Box to input the location for the sign boards
                 LocationDialog locationDialog = new LocationDialog();
                 locationDialog.initUI();
                 locationDialog.setVisible(true);
@@ -394,7 +406,7 @@ public class DrawingBoard implements ActionListener {
         if (configButtonSelected.equals(ConfigButtonSelected.speed30)) {
             IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(speed30Coordinates);
             if (bestMatchRUnit != null) {
-                //Updating the best match rUnit with the blockage
+                //Updating the best match rUnit with the speed sign board
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 30);
                 //Drawing the speed limit
                 Coordinates coordinates = getRepositionedImageCoordinates(speed30Image, bestMatchRUnit.getX(), bestMatchRUnit.getY());
@@ -406,7 +418,7 @@ public class DrawingBoard implements ActionListener {
         if (configButtonSelected.equals(ConfigButtonSelected.speed50)) {
             IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(speed50Coordinates);
             if (bestMatchRUnit != null) {
-                //Updating the best match rUnit with the blockage
+                //Updating the best match rUnit with the speed sign board
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 50);
                 //Drawing the speed limit
                 Coordinates coordinates = getRepositionedImageCoordinates(speed50Image, bestMatchRUnit.getX(), bestMatchRUnit.getY());
@@ -418,7 +430,7 @@ public class DrawingBoard implements ActionListener {
         if (configButtonSelected.equals(ConfigButtonSelected.speed60)) {
             IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(speed60Coordinates);
             if (bestMatchRUnit != null) {
-                //Updating the best match rUnit with the blockage
+                //Updating the best match rUnit with the speed sign board
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 60);
                 //Drawing the speed limit
                 Coordinates coordinates = getRepositionedImageCoordinates(speed60Image, bestMatchRUnit.getX(), bestMatchRUnit.getY());
@@ -430,7 +442,7 @@ public class DrawingBoard implements ActionListener {
         if (configButtonSelected.equals(ConfigButtonSelected.speed70)) {
             IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(speed70Coordinates);
             if (bestMatchRUnit != null) {
-                //Updating the best match rUnit with the blockage
+                //Updating the best match rUnit with the speed sign board
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 70);
                 //Drawing the speed limit
                 Coordinates coordinates = getRepositionedImageCoordinates(speed70Image, bestMatchRUnit.getX(), bestMatchRUnit.getY());
@@ -442,8 +454,9 @@ public class DrawingBoard implements ActionListener {
         if (configButtonSelected.equals(ConfigButtonSelected.speed90)) {
             IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(speed90Coordinates);
             if (bestMatchRUnit != null) {
-                //Updating the best match rUnit with the blockage
+                //Updating the best match rUnit with the speed sign board
                 simEngine.getDataAndStructures().getRoadNetworkManager().addSpeedLimit(bestMatchRUnit, 90);
+                //Drawing the speed limit
                 Coordinates coordinates = getRepositionedImageCoordinates(speed90Image, bestMatchRUnit.getX(), bestMatchRUnit.getY());
                 g.drawImage(speed90Image, coordinates.getX(), coordinates.getY(), 5, 5, drawingBoardPanel);
             }
@@ -453,6 +466,7 @@ public class DrawingBoard implements ActionListener {
         if (configButtonSelected.equals(ConfigButtonSelected.welcome)) {
             IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
+                //Destination Dialog Box to input the destination for the welcome to destination sign board
                 DestinationDialog destinationDialog = new DestinationDialog();
                 destinationDialog.initUI();
                 destinationDialog.setVisible(true);
@@ -463,6 +477,7 @@ public class DrawingBoard implements ActionListener {
                     simEngine.getDataAndStructures().getRoadNetworkManager().addWelcomeSign(bestMatchRUnit, destination);
                     JButton dest = new JButton();
                     dest.setToolTipText("Welcome to " + destination);
+                    //Drawing the welcome to destination sign board
                     Coordinates coordinates = getRepositionedImageCoordinates(welcomeImage, bestMatchRUnit.getX(), bestMatchRUnit.getY());
                     dest.setBounds(coordinates.getX(), coordinates.getY(), welcomeImage.getWidth(drawingBoardPanel), welcomeImage.getHeight(drawingBoardPanel));
                     dest.setIcon(new ImageIcon(welcomeImage));
@@ -473,6 +488,7 @@ public class DrawingBoard implements ActionListener {
         }
 
         if (model != null) {
+            //Dynamically updating the traffic light color values in the backend data structures for each repaint() call
             for (int i = 0; i < model.getRowCount(); i++) {
                 List<Boolean> cellValues = new ArrayList<Boolean>();
                 String tlId = String.valueOf(model.getValueAt(i, 0));
@@ -484,6 +500,7 @@ public class DrawingBoard implements ActionListener {
         }
     }
 
+    //Fetches and adds the coordinates of the best match RUnit while installing any configuration on the roads
     private IRUnitManager fetchAndAddBestMatchRUnit(List<Coordinates> coordinates) {
         for (IRUnitManager rUnit : simEngine.getDataAndStructures().getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()) {
             Rectangle rectangle = new Rectangle(rUnit.getX(), rUnit.getY(), rUnitImage.getWidth(drawingBoardPanel) + 5, rUnitImage.getHeight(drawingBoardPanel) + 5);
@@ -497,6 +514,7 @@ public class DrawingBoard implements ActionListener {
         return null;
     }
 
+    //Fetches the best match RUnit while installing any configuration on the roads
     private IRUnitManager fetchBestMatchRUnit() {
         for (IRUnitManager rUnit : simEngine.getDataAndStructures().getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()) {
             Rectangle rectangle = new Rectangle(rUnit.getX(), rUnit.getY(), rUnitImage.getWidth(drawingBoardPanel) + 5, rUnitImage.getHeight(drawingBoardPanel) + 5);
@@ -508,6 +526,7 @@ public class DrawingBoard implements ActionListener {
     }
 
     //Simulation Phase - Displaying roads and other traffic elements
+    //This function paints/draws all the added components
     public void paint(Graphics g) {
         Graphics2D g2D = (Graphics2D) g;
 
@@ -635,6 +654,7 @@ public class DrawingBoard implements ActionListener {
         for (ObjectInSpace objectInSpace : simEngine.getDataAndStructures().getSpaceManager().getObjects()) {
             if (objectInSpace.isVisible()) {
                 Image vehicleImage;
+                //Identifying the vehicle type
                 if (objectInSpace.getVehicleType().equals(VehicleType.car)) {
                     vehicleImage = carImage;
                 } else if (objectInSpace.getVehicleType().equals(VehicleType.heavyLoad)) {
@@ -643,16 +663,20 @@ public class DrawingBoard implements ActionListener {
                     vehicleImage = emergencyVehicleImage;
                 }
 
+                //Rotating or aligning the vehicles wrt to the road
 
                 double angle = objectInSpace.getDirection().getAngle();
                 if (angle < 0) {
                     angle = angle + 360;
                 }
+                // Save the Affine Transformation of the Graphics
                 AffineTransform affineTransform = g2d.getTransform();
+                //Rotate the vehicle based on the angle calculated
                 g2d.rotate(Math.toRadians(angle), objectInSpace.getX(), objectInSpace.getY());
                 Coordinates coordinates = getRepositionedImageCoordinates(vehicleImage, objectInSpace.getX(), objectInSpace.getY());
-
+                //Draw the vehicle on the road based on the repositioned coordinates
                 g2d.drawImage(vehicleImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
+                //Set the Affine Transformation to the original value
                 g2d.setTransform(affineTransform);
             }
         }
@@ -680,12 +704,15 @@ public class DrawingBoard implements ActionListener {
                 }
             }
         }
+        //Update the simulation tick time
         currentSecondValue.setText(String.valueOf(simEngine.getDataAndStructures().getGlobalConfigManager().getCurrentSecond()));
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
     }
 
     private Coordinates getRepositionedImageCoordinates(Image image, int x, int y) {
+        /*The image is drawn with its top-left corner at x,y . This function fetches the repositioned coordinates of the image to draw it adjust the X and Y coordinates
+         to the centre*/
         x = x - image.getWidth(drawingBoardPanel) / 2;
         y = y - image.getHeight(drawingBoardPanel) / 2;
         return new Coordinates(x, y);
@@ -816,7 +843,7 @@ public class DrawingBoard implements ActionListener {
     }
 
     public void clean() {
-        //Deleting traffic light configuration table
+        //Deleting traffic light configuration tables holding the coordinates of various traffic elements
         model.setRowCount(0);
         singleLaneRUnits.clear();
         doubleLaneRUnits.clear();

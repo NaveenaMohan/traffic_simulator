@@ -14,6 +14,7 @@ public class GlobalErrorDialogBox extends JDialog {
 
     public GlobalErrorDialogBox(Throwable ex) {
 
+        //Initializes and populates the Error dialog box with error details
         ImageIcon icon = new ImageIcon(GlobalErrorDialogBox.class.getResource("/resources/RUnitError.png"));
         getContentPane().setLayout(null);
         JLabel label = new JLabel(icon);
@@ -29,6 +30,7 @@ public class GlobalErrorDialogBox extends JDialog {
         warning.setBounds(26, 119, 515, 41);
         getContentPane().add(warning);
 
+        //Display the exception
         JLabel exception = new JLabel("Exception : " + ex.toString());
         exception.setFont(new Font("Copperplate Gothic", Font.BOLD, 15));
         exception.setBounds(63, 23, 488, 50);
@@ -52,6 +54,7 @@ public class GlobalErrorDialogBox extends JDialog {
 
             @Override
             public void windowClosing(WindowEvent e) {
+                //Exit application
                 System.exit(0);
             }
 

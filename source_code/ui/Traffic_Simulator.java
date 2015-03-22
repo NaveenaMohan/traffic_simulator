@@ -15,7 +15,7 @@ import ui.components.DrawingBoard;
 import ui.components.GlobalErrorDialogBox;
 import ui.components.NoVehicleFactoryDialogBox;
 import ui.components.RangeSlider;
-import ui.fileops.ExportImportObject;
+import ui.serialization.ExportImportObject;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -28,6 +28,8 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
+/*Executable Class which invokes the Traffic Simulator application by loading all the UI elements, instantiating the backend simulation engine and data structures
+   wiring them all together */
 public class Traffic_Simulator {
     private static Traffic_Simulator window;
     private ClimaticCondition climaticCondition = new ClimaticCondition();
@@ -60,7 +62,8 @@ public class Traffic_Simulator {
      * Launch the application.
      */
     public static void main(String[] args) {
-
+        //Uncaught Exceptions are currently just handled by displaying a dialogue box with the exception details.
+        //Closing the dialog box leads to the exit of the application
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             public void uncaughtException(Thread t, Throwable e) {
                 GlobalErrorDialogBox globalErrorDialogBox = new GlobalErrorDialogBox(e);
@@ -74,6 +77,8 @@ public class Traffic_Simulator {
                     window = new Traffic_Simulator();
                     window.trafficSimulatorFrame.setVisible(true);
                 } catch (Throwable e) {
+                    //Any Exceptions are currently just handled by displaying a dialogue box with the exception details.
+                    //Closing the dialog box leads to the exit of the application
                     GlobalErrorDialogBox globalErrorDialogBox = new GlobalErrorDialogBox(e);
                     globalErrorDialogBox.setVisible(true);
                 }
@@ -86,6 +91,7 @@ public class Traffic_Simulator {
      */
     private void initialize() {
 
+        //Initializing the Frame
         trafficSimulatorFrame = new JFrame();
         trafficSimulatorFrame.getContentPane().setBackground(UIManager.getColor("InternalFrame.background"));
         trafficSimulatorFrame.getContentPane().setBounds(new Rectangle(900, 900, 0, 0));
@@ -96,7 +102,7 @@ public class Traffic_Simulator {
         trafficSimulatorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         trafficSimulatorFrame.getContentPane().setLayout(null);
 
-        // Road Infrastructure Panel
+        // Initialing the elements in the Road Infrastructure Panel
         JPanel roadInfraStructurePanel = new JPanel();
         roadInfraStructurePanel.setBackground(UIManager.getColor("InternalFrame.background"));
         roadInfraStructurePanel.setBounds(6, 6, 284, 416);
@@ -106,7 +112,6 @@ public class Traffic_Simulator {
         JLabel txtrRoadInfrastructure = new JLabel();
         txtrRoadInfrastructure.setBounds(6, 6, 278, 23);
         txtrRoadInfrastructure.setBackground(Color.BLACK);
-        //txtrRoadInfrastructure.setForeground(new Color(255, 255, 255));
         txtrRoadInfrastructure.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 12));
         txtrRoadInfrastructure.setText("                   ROAD INFRASTRUCTURE");
         roadInfraStructurePanel.add(txtrRoadInfrastructure);
@@ -237,7 +242,7 @@ public class Traffic_Simulator {
         welcome_board.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("/resources/Welcome Board.png")));
         roadInfraStructurePanel.add(welcome_board);
 
-        // Simulation Configuration Panel
+        // Initialing the elements in the Simulation Configuration Panel
 
         JPanel simulationConfigPanel = new JPanel();
         simulationConfigPanel.setBackground(UIManager.getColor("InternalFrame.background"));
@@ -250,7 +255,6 @@ public class Traffic_Simulator {
         trafficSimulatorFrame.getContentPane().add(txtrSimulation);
         txtrSimulation.setText("SIMULATION");
         txtrRoadInfrastructure.setBackground(Color.BLACK);
-        //txtrSimulation.setForeground(Color.WHITE);
         txtrSimulation.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 20));
         txtrSimulation.setBackground(Color.GRAY);
 
@@ -267,7 +271,6 @@ public class Traffic_Simulator {
         trafficSimulatorFrame.getContentPane().add(currentSecondPanel);
         currentSecondPanel.setLayout(null);
         currentSecondPanel.add(currentSecondLabel);
-        currentSecondPanel.add(currentSecondValue);
 
 
         final JButton playButton = new JButton();
@@ -297,6 +300,7 @@ public class Traffic_Simulator {
         slowButton.setEnabled(false);
         slowButton.addActionListener(new ActionListener() {
             @Override
+            //Invoking the slow down functionality from the SimEngine
             public void actionPerformed(ActionEvent e) {
                 simEngine.SlowDown();
             }
@@ -310,6 +314,7 @@ public class Traffic_Simulator {
         fastButton.setEnabled(false);
         fastButton.addActionListener(new ActionListener() {
             @Override
+            //Invoking the speed up functionality from the SimEngine
             public void actionPerformed(ActionEvent e) {
                 simEngine.SpeedUp();
             }
@@ -330,13 +335,14 @@ public class Traffic_Simulator {
         reportButton.setEnabled(false);
         reportButton.addActionListener(new ActionListener() {
             @Override
+            //Invoking the publishing of report
             public void actionPerformed(ActionEvent e) {
                 dcp.reportInformation();
 
             }
         });
 
-        //Traffic Pattern Panel
+        // Initialing the elements in the Traffic Pattern Panel
 
         JPanel trafficPatternPanel = new JPanel();
         trafficPatternPanel.setBackground(UIManager.getColor("InternalFrame.background"));
@@ -366,6 +372,7 @@ public class Traffic_Simulator {
         trafficPatternPanel.add(visibility_slider);
         visibility_slider.addChangeListener(new ChangeListener() {
             @Override
+            //Dynamically populates the visibility value
             public void stateChanged(ChangeEvent e) {
                 climaticCondition.setVisibility(visibility_slider.getValue() / 100.0);
             }
@@ -382,6 +389,7 @@ public class Traffic_Simulator {
         trafficPatternPanel.add(slippery_slider);
         slippery_slider.addChangeListener(new ChangeListener() {
             @Override
+            //Dynamically populates the slipperiness value
             public void stateChanged(ChangeEvent e) {
                 climaticCondition.setSlipperiness(slippery_slider.getValue() / 100.0);
             }
@@ -394,6 +402,7 @@ public class Traffic_Simulator {
         trafficPatternPanel.add(sunny_button);
         sunny_button.addActionListener(new ActionListener() {
             @Override
+            //Presets the visibility and slipperiness value for "Sunny"
             public void actionPerformed(ActionEvent e) {
                 climaticCondition.setWeatherType(WeatherType.sunny);
                 slippery_slider.setValue((int) (climaticCondition.getSlipperiness() * 100.0));
@@ -408,6 +417,7 @@ public class Traffic_Simulator {
         trafficPatternPanel.add(rainy_button);
         rainy_button.addActionListener(new ActionListener() {
             @Override
+            //Presets the visibility and slipperiness value for "Rainy"
             public void actionPerformed(ActionEvent e) {
                 climaticCondition.setWeatherType(WeatherType.rainy);
                 slippery_slider.setValue((int) (climaticCondition.getSlipperiness() * 100.0));
@@ -422,6 +432,7 @@ public class Traffic_Simulator {
         trafficPatternPanel.add(snow_button);
         snow_button.addActionListener(new ActionListener() {
             @Override
+            //Presets the visibility and slipperiness value for "Snowy"
             public void actionPerformed(ActionEvent e) {
                 climaticCondition.setWeatherType(WeatherType.snowy);
                 slippery_slider.setValue((int) (climaticCondition.getSlipperiness() * 100.0));
@@ -442,6 +453,7 @@ public class Traffic_Simulator {
         trafficPatternPanel.add(trafficDensityRangeSlider);
         trafficDensityRangeSlider.addChangeListener(new ChangeListener() {
             @Override
+            //Dynamically populates the density values for all the vehicle types
             public void stateChanged(ChangeEvent e) {
                 globalConfigManager.getVehicleDensity().setCarDensity((trafficDensityRangeSlider.getValue() - trafficDensityRangeSlider.getMinimum()) / 100.0);
                 globalConfigManager.getVehicleDensity().setHeavyVehicleDensity((trafficDensityRangeSlider.getUpperValue() - trafficDensityRangeSlider.getValue()) / 100.0);
@@ -462,6 +474,7 @@ public class Traffic_Simulator {
         trafficPatternPanel.add(driverBehaviourRangeSlider);
         driverBehaviourRangeSlider.addChangeListener(new ChangeListener() {
             @Override
+            //Dynamically populates the density values for all the driver behvior types
             public void stateChanged(ChangeEvent e) {
                 globalConfigManager.getDriverBehaviour().setPercentageCautious((driverBehaviourRangeSlider.getValue() - driverBehaviourRangeSlider.getMinimum()) / 100.0);
                 globalConfigManager.getDriverBehaviour().setPercentageNormal((driverBehaviourRangeSlider.getUpperValue() - driverBehaviourRangeSlider.getValue()) / 100.0);
@@ -490,6 +503,7 @@ public class Traffic_Simulator {
         trafficPatternPanel.add(vehicleProductionRateSlider);
         vehicleProductionRateSlider.addChangeListener(new ChangeListener() {
             @Override
+            //Dynamically populates the value for the vehicle production rare
             public void stateChanged(ChangeEvent e) {
                 globalConfigManager.getVehicleDensity().setCreationRatePerSecond((vehicleProductionRateSlider.getValue() / 10.00));
             }
@@ -555,6 +569,7 @@ public class Traffic_Simulator {
         destinationTxtBoxField.setBounds(183, 189, 145, 50);
         destinationTxtBoxField.addActionListener(new ActionListener() {
             @Override
+            //Populates the configured destination value for routing
             public void actionPerformed(ActionEvent e) {
                 globalConfigManager.getRoute().setDestination(destinationTxtBoxField.getText());
             }
@@ -570,13 +585,14 @@ public class Traffic_Simulator {
         trafficPatternPanel.add(destinationDensitySlider);
         destinationDensitySlider.addChangeListener(new ChangeListener() {
             @Override
+            //Dynamically populates the traffic percent value for the configured destination based routing
             public void stateChanged(ChangeEvent e) {
                 globalConfigManager.getRoute().setTrafficPercent(destinationDensitySlider.getValue() / 100.0);
             }
         });
 
 
-        //Traffic Light Configuration Panel
+        // Initialing the elements in the Traffic Light Configuration Panel
 
         final JPanel trafficLightConfigPanel = new JPanel();
         trafficLightConfigPanel.setBackground(UIManager.getColor("InternalFrame.background"));
@@ -609,6 +625,7 @@ public class Traffic_Simulator {
 
 
         table.setModel(model);
+        //Allows dynamic addition and modification of traffic lights and their colour change cycle
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
@@ -623,7 +640,7 @@ public class Traffic_Simulator {
         scrollPane.setViewportView(table);
         trafficLightConfigPanel.add(scrollPane);
 
-        //Drawing Board Panel
+        //Instantiating Drawing Board Panel
         final DrawingBoard drawingBoard = new DrawingBoard(model, roadNetworkManager, simEngine, currentSecondValue);
         final JPanel drawingBoardPanel = new JPanel() {
 
@@ -646,7 +663,7 @@ public class Traffic_Simulator {
         trafficSimulatorFrame.getContentPane().add(drawingBoardPanel);
         drawingBoard.initialize();//Initializing the drawing board
 
-        //Adding action listeners for all configuration buttons
+        //Adding action listeners, invoked state information and enable-disable state for all the above configuration buttons
 
         single_lane.addActionListener(new ActionListener() {
             @Override
@@ -791,6 +808,7 @@ public class Traffic_Simulator {
             }
         });
 
+        //Import Configuration Functionality
         final JButton importConfigButton = new JButton();
         importConfigButton.setToolTipText("Import Configuration");
         importConfigButton.setBounds(498, 0, 70, 70);
@@ -799,6 +817,7 @@ public class Traffic_Simulator {
         importConfigButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //File Chooser dialog box to allow the user to choose the config file
                 JFileChooser fileChooser = new JFileChooser();
                 int returnValue = fileChooser.showOpenDialog(null);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -815,8 +834,11 @@ public class Traffic_Simulator {
                         e1.printStackTrace();
                     }
                     try {
+                        //Cleaning the existing elements in the drawing board
                         drawingBoard.clean();
+                        //Reading the serialized object
                         ExportImportObject exportImportObject = (ExportImportObject) ois.readObject();
+                        //Populating the back end data structures, sim engine and report related objects
                         roadNetworkManager = exportImportObject.getEngineDataStructures().getRoadNetworkManager();
                         vehicleFactoryManager = exportImportObject.getEngineDataStructures().getVehicleFactoryManager();
                         climaticCondition = exportImportObject.getEngineDataStructures().getGlobalConfigManager().getClimaticCondition();
@@ -824,6 +846,10 @@ public class Traffic_Simulator {
                         dataAndStructures = exportImportObject.getEngineDataStructures();
                         dcp = new DCP(dataAndStructures);
                         simEngine = new SimEngine(dataAndStructures, dcp);
+
+                        //Populating the UI related data structures
+
+                        //Populating the coordinates and RUnits for various elements
                         drawingBoard.setSingleLaneRUnits(exportImportObject.getUiDataStructures().getSingleLaneRUnits());
                         drawingBoard.setDoubleLaneRUnits(exportImportObject.getUiDataStructures().getDoubleLaneRUnits());
                         drawingBoard.setTrafficLightCoordinates(exportImportObject.getUiDataStructures().getTrafficLightCoordinates());
@@ -841,6 +867,8 @@ public class Traffic_Simulator {
                         drawingBoard.setSpeed70Coordinates(exportImportObject.getUiDataStructures().getSpeed70Coordinates());
                         drawingBoard.setSpeed90Coordinates(exportImportObject.getUiDataStructures().getSpeed90Coordinates());
                         drawingBoard.setWelcomeCoordinates(exportImportObject.getUiDataStructures().getWelcomeCoordinates());
+
+                        //Populating other fields in the DrawingPanel which include backed objects, sliders, traffic light config table etc
                         drawingBoard.setSimEngine(simEngine);
                         drawingBoard.setRoadNetworkManager(roadNetworkManager);
                         driverBehaviourRangeSlider.setValue((int) (globalConfigManager.getDriverBehaviour().getPercentageCautious() * 100.0));
@@ -853,6 +881,7 @@ public class Traffic_Simulator {
                         destinationTxtBoxField.setText(globalConfigManager.getRoute().getDestination());
                         populateTrafficLightTableModel();
                         drawingBoard.setModel(model);
+
                         drawingBoard.getDrawingBoardPanel().repaint();
                     } catch (IOException e1) {
                         e1.printStackTrace();
@@ -863,6 +892,7 @@ public class Traffic_Simulator {
             }
         });
 
+        //Export Configuration Functionality
         final JButton exportConfigButton = new JButton();
         exportConfigButton.setToolTipText("Export Configuration");
         exportConfigButton.setBounds(580, 0, 70, 70);
@@ -871,6 +901,7 @@ public class Traffic_Simulator {
         exportConfigButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //File  dialog box to allow the user to choose the name and location for saving the config file
                 FileDialog fDialog = new FileDialog(trafficSimulatorFrame, "Save", FileDialog.SAVE);
                 fDialog.setVisible(true);
                 String path = fDialog.getDirectory() + fDialog.getFile();
@@ -892,6 +923,7 @@ public class Traffic_Simulator {
             }
         });
 
+        // Clears the vehicles and their space related information from the UI and backend data staructures
         final JButton clearVehicleFactoryButton = new JButton();
         clearVehicleFactoryButton.setToolTipText("Clear Vehicle Factory");
         clearVehicleFactoryButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("/resources/clearVehicleFactory.png")));
@@ -924,6 +956,7 @@ public class Traffic_Simulator {
                     simEngine.Unpause();
                     drawingBoard.setSimulationPlaying(true);
                     simEngine.Play(drawingBoard);
+                    //Enable-Disable relevant Buttons
                     playButton.setEnabled(false);
                     pauseButton.setEnabled(true);
                     stopButton.setEnabled(true);
@@ -938,6 +971,8 @@ public class Traffic_Simulator {
                     double_lane.setEnabled(false);
                 } else {
                     if (vehicleFactoryManager.getVehicleFactoryList().isEmpty()) {
+                         /*Initializes the NoVehicleFactory DialogBox UI which pops up when the simulation is played without
+                            adding any vehicle factory */
                         NoVehicleFactoryDialogBox vehicleFactoryDialogBox = new NoVehicleFactoryDialogBox();
                         vehicleFactoryDialogBox.vehicleFactoryDialog();
                         vehicleFactoryDialogBox.setVisible(true);
@@ -945,6 +980,7 @@ public class Traffic_Simulator {
                         simEngine.Play(drawingBoard);
                         drawingBoard.setSimulationStarted(true);
                         drawingBoard.setSimulationPlaying(true);
+                        //Enable-Disable relevant Buttons
                         playButton.setEnabled(false);
                         pauseButton.setEnabled(true);
                         stopButton.setEnabled(true);
@@ -970,6 +1006,7 @@ public class Traffic_Simulator {
                 if (drawingBoard.isSimulationPlaying()) {
                     simEngine.Pause();
                     drawingBoard.setSimulationPlaying(false);
+                    //Enable-Disable relevant Buttons
                     playButton.setEnabled(true);
                     pauseButton.setEnabled(false);
                     stopButton.setEnabled(true);
@@ -988,6 +1025,7 @@ public class Traffic_Simulator {
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //Restarts the application window
                 window.trafficSimulatorFrame.setVisible(false);
                 window = new Traffic_Simulator();
                 window.trafficSimulatorFrame.setVisible(true);
@@ -1005,6 +1043,7 @@ public class Traffic_Simulator {
                 int returnValue = fileChooser.showOpenDialog(null);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     try {
+                        //File Chooser dialog box to allow the user to choose the image file
                         file = fileChooser.getSelectedFile();
                         originalimage = ImageIO.read(file);
                         Image scaledImage = originalimage.getScaledInstance(drawingBoardPanel.getWidth(), drawingBoardPanel.getHeight(), Image.SCALE_SMOOTH);
@@ -1014,8 +1053,6 @@ public class Traffic_Simulator {
                         drawingBoardPanel.add(picLabel);
                         drawingBoardPanel.revalidate();
                         drawingBoardPanel.repaint();
-
-
                     } catch (IOException e1) {
                         e1.printStackTrace();
 

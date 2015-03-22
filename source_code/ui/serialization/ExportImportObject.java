@@ -1,4 +1,4 @@
-package ui.fileops;
+package ui.serialization;
 
 import dataAndStructures.IDataAndStructures;
 import managers.space.ObjectInSpace;
@@ -15,12 +15,14 @@ public class ExportImportObject implements Serializable {
     private IDataAndStructures engineDataStructures;
     private UIDataStructures uiDataStructures = new UIDataStructures();
 
+    //Populates the UI and Engine objects that have to be serialized and deserialized for the export-import configurations
     public ExportImportObject(IDataAndStructures dataAndStructures, DrawingBoard drawingBoard) {
+        //Sets the engine data structures and clears the vehicle and space details before serialization
         engineDataStructures = dataAndStructures;
         engineDataStructures.setVehicleManagerList((new ArrayList<IVehicleManager>()));
         engineDataStructures.getSpaceManager().setObjects(new ArrayList<ObjectInSpace>());
 
-
+        //Sets the UI data structures
         uiDataStructures.setSingleLaneRUnits(drawingBoard.getSingleLaneRUnits());
         uiDataStructures.setDoubleLaneRUnits(drawingBoard.getDoubleLaneRUnits());
         uiDataStructures.setTrafficLightCoordinates(drawingBoard.getTrafficLightCoordinates());

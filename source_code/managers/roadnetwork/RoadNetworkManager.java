@@ -84,6 +84,7 @@ public class RoadNetworkManager implements IRoadNetworkManager {
         //Populate Current RUnit
         IRUnitManager currentRUnit = getNext(x, y, prevRUnit, false);
         if (!roadNetwork.getrUnitHashtable().contains(currentRUnit)) {
+            //Adding current RUnit to the RUnitHashTable
             roadNetwork.getrUnitHashtable().put(String.valueOf(rUnitId), currentRUnit);
             if (prevRUnit != null) {
                 manageIntersections(prevRUnit);
@@ -171,6 +172,7 @@ public class RoadNetworkManager implements IRoadNetworkManager {
         //Populate Current RUnit
         IRUnitManager currentRUnit = getNext(x, y, prevRUnit, false);
 
+        //Adding current RUnit to the RUnitHashTable
         if (!roadNetwork.getrUnitHashtable().contains(currentRUnit)) {
             roadNetwork.getrUnitHashtable().put(currentRUnit.getId(), currentRUnit);
         }
@@ -178,7 +180,9 @@ public class RoadNetworkManager implements IRoadNetworkManager {
         //Populate changeable Current RUnit
         IRUnitManager currentChangeableRUnit = getNext(changeableX, changeableY, changeablePrevRunit, true);
         if (!roadNetwork.getChangeableRUnitHashtable().contains(currentChangeableRUnit)) {
+            //Adding changeable current RUnit to the Changeable RUnitHashTable
             roadNetwork.getChangeableRUnitHashtable().put(currentChangeableRUnit.getId(), currentChangeableRUnit);
+            //Assigning changeable RUnit's flow position as "Right"
             currentChangeableRUnit.setLeft(false);
         }
 
@@ -201,7 +205,9 @@ public class RoadNetworkManager implements IRoadNetworkManager {
 
     @Override
     public void addTrafficLight(IRUnitManager rUnit, TrafficLight trafficLight) {
+        //Adding traffic light object to the corresponding RUnit
         roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).addTrafficLight(trafficLight);
+        //Adding traffic light object to TrafficLight HashTable
         roadNetwork.getTrafficLightHashtable().put(trafficLight.getTrafficLightID(), trafficLight);
     }
 
@@ -238,37 +244,45 @@ public class RoadNetworkManager implements IRoadNetworkManager {
 
     @Override
     public void addZebraCrossing(IRUnitManager rUnit, TrafficLight trafficLight) {
+        //Adding traffic light object to the corresponding RUnit
         roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).setZebraCrossing(new ZebraCrossing(trafficLight));
+        //Adding traffic light object to TrafficLight HashTable
         roadNetwork.getTrafficLightHashtable().put(trafficLight.getTrafficLightID(), trafficLight);
     }
 
     @Override
     public void addBlockage(IRUnitManager rUnit) {
+        //Adding blockage object to the corresponding RUnit
         roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).setBlockage(new Blockage());
     }
 
     @Override
     public void addSpeedLimit(IRUnitManager rUnit, int speedLimit) {
+        //Adding speed limit sign object with the chosen speed limit to the corresponding RUnit
         roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).setTrafficSign(new SpeedLimitSign(speedLimit));
     }
 
     @Override
     public void addStopSign(IRUnitManager rUnit) {
+        //Adding stop sign object to the corresponding RUnit
         roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).setTrafficSign(new StopSign());
     }
 
     @Override
     public void addWelcomeSign(IRUnitManager rUnit, String location) {
+        //Adding welcome sign object with the inputted destination to the corresponding RUnit
         roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).setTrafficSign(new WelcomeSign(location));
     }
 
     @Override
     public void addDirectionSign(IRUnitManager rUnit, String location, DirectionSignType directionSignType) {
+        //Adding direction sign object with the inputted location to the corresponding RUnit
         roadNetwork.getrUnitHashtable().get(String.valueOf(rUnit.getId())).setTrafficSign(new DirectionSign(location, directionSignType));
     }
 
     @Override
     public void addTrafficLightBehavior(String trafficLightId, List<Boolean> trafficLightPattern) {
+        //Adding traffic light behavior consisting of the red--green light cycle for a particular traffic light
         TrafficLight trafficLight = roadNetwork.getTrafficLightHashtable().get(trafficLightId);
         if (trafficLight != null) {
             trafficLight.setCycle(trafficLightPattern);
