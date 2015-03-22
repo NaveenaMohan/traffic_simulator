@@ -12,6 +12,7 @@ import managers.vehiclefactory.IVehicleFactoryManager;
 import managers.vehiclefactory.VehicleFactoryManager;
 import reports.DCP;
 import ui.components.DrawingBoard;
+import ui.components.GlobalErrorDialogBox;
 import ui.components.NoVehicleFactoryDialogBox;
 import ui.components.RangeSlider;
 import ui.fileops.ExportImportObject;
@@ -59,13 +60,22 @@ public class Traffic_Simulator {
      * Launch the application.
      */
     public static void main(String[] args) {
+
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            public void uncaughtException(Thread t, Throwable e) {
+                GlobalErrorDialogBox globalErrorDialogBox = new GlobalErrorDialogBox(e);
+                globalErrorDialogBox.setVisible(true);
+            }
+        });
+
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
                     window = new Traffic_Simulator();
                     window.trafficSimulatorFrame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Throwable e) {
+                    GlobalErrorDialogBox globalErrorDialogBox = new GlobalErrorDialogBox(e);
+                    globalErrorDialogBox.setVisible(true);
                 }
             }
         });
