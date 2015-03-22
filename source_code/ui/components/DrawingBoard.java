@@ -159,7 +159,6 @@ public class DrawingBoard implements ActionListener {
         paintSpeedLimitComponents(g);
         paintWelcomeSignComponent();
         updateTrafficLightColor();
-
     }
 
     private void paintSingleLaneComponent(Graphics g) {
@@ -613,7 +612,6 @@ public class DrawingBoard implements ActionListener {
 
     private void drawVehiclesOnRoads(Graphics2D g2D) {
         //Move Vehicles on RUnits on UI
-
         for (ObjectInSpace objectInSpace : simEngine.getDataAndStructures().getSpaceManager().getObjects()) {
             if (objectInSpace.isVisible()) {
                 Image vehicleImage;
@@ -644,138 +642,89 @@ public class DrawingBoard implements ActionListener {
         }
     }
 
+    private void drawComponentWithCoordinates(Image componentImage, Collection<Coordinates> coordinateCollections, Graphics2D g2D) {
+        for (Coordinates coordinate : coordinateCollections) {
+            coordinate = getRepositionedImageCoordinates(componentImage, coordinate.getX(), coordinate.getY());
+            g2D.drawImage(componentImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
+        }
+    }
+
     private void drawWelcomeSignBoards(Graphics2D g2D) {
         //Drawing welcome signs
-        for (Coordinates coordinate : welcomeCoordinates.keySet()) {
-            coordinate = getRepositionedImageCoordinates(welcomeImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(welcomeImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
+        drawComponentWithCoordinates(welcomeImage, welcomeCoordinates.keySet(), g2D);
     }
 
     private void drawSpeedLimitSignBoards(Graphics2D g2D) {
         //Drawing speed20 signs
-        for (Coordinates coordinate : speed20Coordinates) {
-            coordinate = getRepositionedImageCoordinates(speed20Image, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(speed20Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
+        drawComponentWithCoordinates(speed20Image, speed20Coordinates, g2D);
 
         //Drawing speed30 signs
-        for (Coordinates coordinate : speed30Coordinates) {
-            coordinate = getRepositionedImageCoordinates(speed30Image, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(speed30Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
+        drawComponentWithCoordinates(speed30Image, speed30Coordinates, g2D);
 
         //Drawing speed50 signs
-        for (Coordinates coordinate : speed50Coordinates) {
-            coordinate = getRepositionedImageCoordinates(speed50Image, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(speed50Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
+        drawComponentWithCoordinates(speed50Image, speed50Coordinates, g2D);
 
         //Drawing speed60 signs
-        for (Coordinates coordinate : speed60Coordinates) {
-            coordinate = getRepositionedImageCoordinates(speed60Image, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(speed60Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
+        drawComponentWithCoordinates(speed60Image, speed60Coordinates, g2D);
+
         //Drawing speed70 signs
-        for (Coordinates coordinate : speed70Coordinates) {
-            coordinate = getRepositionedImageCoordinates(speed70Image, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(speed70Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
+        drawComponentWithCoordinates(speed70Image, speed70Coordinates, g2D);
 
         //Drawing speed90 signs
-        for (Coordinates coordinate : speed90Coordinates) {
-            coordinate = getRepositionedImageCoordinates(speed90Image, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(speed90Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
+        drawComponentWithCoordinates(speed90Image, speed90Coordinates, g2D);
     }
 
     private void drawDirectionSignBoards(Graphics2D g2D) {
         //Drawing left signs
-        for (Coordinates coordinate : leftCoordinates.keySet()) {
-            coordinate = getRepositionedImageCoordinates(leftSignImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(leftSignImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
+        drawComponentWithCoordinates(leftSignImage, leftCoordinates.keySet(), g2D);
 
         //Drawing right signs
-        for (Coordinates coordinate : rightCoordinates.keySet()) {
-            coordinate = getRepositionedImageCoordinates(rightSignImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(rightSignImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
+        drawComponentWithCoordinates(rightSignImage, rightCoordinates.keySet(), g2D);
 
         //Drawing straight signs
-        for (Coordinates coordinate : straightCoordinates.keySet()) {
-            coordinate = getRepositionedImageCoordinates(straightSignImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(straightSignImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
+        drawComponentWithCoordinates(straightSignImage, straightCoordinates.keySet(), g2D);
     }
 
     private void drawStopSignBoards(Graphics2D g2D) {
         //Drawing stop signs
-        for (Coordinates coordinate : stopCoordinates) {
-            coordinate = getRepositionedImageCoordinates(stopImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(stopImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
+        drawComponentWithCoordinates(stopImage, stopCoordinates, g2D);
     }
 
     private void drawBlockages(Graphics2D g2D) {
         //Drawing blockages
-        for (Coordinates coordinate : blockageCoordinates) {
-            coordinate = getRepositionedImageCoordinates(blockageImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(blockageImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
+        drawComponentWithCoordinates(blockageImage, blockageCoordinates, g2D);
     }
 
     private void drawVehicleFactories(Graphics2D g2D) {
         //Drawing vehicle factories
-        for (Coordinates coordinate : vehicleFactoryCoordinates) {
-            coordinate = getRepositionedImageCoordinates(vehicleFactoryImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(vehicleFactoryImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
+        drawComponentWithCoordinates(vehicleFactoryImage, vehicleFactoryCoordinates, g2D);
     }
 
     private void drawTrafficLights(Graphics2D g2D) {
         //Drawing traffic lights
-        for (Coordinates coordinate : trafficLightCoordinates.values()) {
-            coordinate = getRepositionedImageCoordinates(trafficLightImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(trafficLightImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
+        drawComponentWithCoordinates(trafficLightImage, trafficLightCoordinates.values(), g2D);
 
         //Drawing zebra crossing
-        for (Coordinates coordinate : zebraCrossingCoordinates.values()) {
-            coordinate = getRepositionedImageCoordinates(zebraCrossingImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(zebraCrossingImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
+        drawComponentWithCoordinates(zebraCrossingImage, zebraCrossingCoordinates.values(), g2D);
     }
 
     private void drawRoads(Graphics2D g2D) {
         //Drawing single road
-        for (IRUnitManager rUnit : singleLaneRUnits) {
-            Coordinates coordinates = getRepositionedImageCoordinates(rUnitImage, rUnit.getX(), rUnit.getY());
-            g2D.drawImage(rUnitImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
-            g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            BasicStroke bs = new BasicStroke(2);
-            g2D.setStroke(bs);
-        }
-
-
+        drawRoadComponentWithCoordinates(rUnitImage, singleLaneRUnits, g2D);
         //Drawing double road
-        for (IRUnitManager rUnit : doubleLaneRUnits) {
-            Coordinates coordinates = getRepositionedImageCoordinates(rUnitImage, rUnit.getX(), rUnit.getY());
-            g2D.drawImage(rUnitImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
+        drawRoadComponentWithCoordinates(rUnitImage, doubleLaneRUnits, g2D);
+        //Drawing Changeable road
+        drawRoadComponentWithCoordinates(rUnitImage2, changeAbleLaneRUnits, g2D);
+    }
+
+    private void drawRoadComponentWithCoordinates(Image roadImage, Set<IRUnitManager> rUnits, Graphics2D g2D) {
+        for (IRUnitManager rUnit : rUnits) {
+            Coordinates coordinates = getRepositionedImageCoordinates(roadImage, rUnit.getX(), rUnit.getY());
+            g2D.drawImage(roadImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             BasicStroke bs = new BasicStroke(2);
             g2D.setStroke(bs);
         }
-
-        //Drawing double road - Changeable
-        for (IRUnitManager rUnit : changeAbleLaneRUnits) {
-            Coordinates coordinates = getRepositionedImageCoordinates(rUnitImage2, rUnit.getX(), rUnit.getY());
-            g2D.drawImage(rUnitImage2, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
-            g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            BasicStroke bs = new BasicStroke(2);
-            g2D.setStroke(bs);
-        }
-
     }
 
     private Coordinates getRepositionedImageCoordinates(Image image, int x, int y) {
