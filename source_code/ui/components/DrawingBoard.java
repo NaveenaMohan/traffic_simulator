@@ -89,7 +89,7 @@ public class DrawingBoard implements ActionListener {
         this.currentSecondValue = currentSecondValue;
     }
 
-    public void initialize() {
+    public void initializeAndLoadImages() {
         //Loading all images for various UI components
         rUnitImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/leftLane.png"));
         rUnitImage2 = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/rightLane.png"));
@@ -146,7 +146,23 @@ public class DrawingBoard implements ActionListener {
     //Configuration Phase - Drawing road and adding other traffic elements
     //This function paints/draws the component when the component is drawn or added initially
     public void paintComponent(Graphics g) {
+        paintSingleLaneComponent(g);
+        paintDoubleLaneComponent(g);
+        paintTrafficLightComponent();
+        paintZebraCrossingComponent();
+        paintBlockageComponent(g);
+        paintVehicleFactoryComponent(g);
+        paintStopSignComponent(g);
+        paintStraightSignComponent();
+        paintLeftSignComponent();
+        paintRightSignComponent();
+        paintSpeedLimitComponents(g);
+        paintWelcomeSignComponent();
+        updateTrafficLightColor();
 
+    }
+
+    private void paintSingleLaneComponent(Graphics g) {
         //Add single lane
         if (isDraw() && configButtonSelected.equals(ConfigButtonSelected.addSingleLane)) {
             Graphics2D g2D = (Graphics2D) g;
@@ -168,7 +184,9 @@ public class DrawingBoard implements ActionListener {
             }
             while (prevOrCurCoordinates.getY() != currentCoordinates.getY() & prevOrCurCoordinates.getX() != currentCoordinates.getX());
         }
+    }
 
+    private void paintDoubleLaneComponent(Graphics g) {
         //Add double lane
 
         if (isDraw() && configButtonSelected.equals(ConfigButtonSelected.addDoubleLane)) {
@@ -229,8 +247,9 @@ public class DrawingBoard implements ActionListener {
             }
             while (prevOrCurCoordinates.getY() != currentCoordinates.getY() & prevOrCurCoordinates.getX() != currentCoordinates.getX());
         }
+    }
 
-
+    private void paintTrafficLightComponent() {
         if (configButtonSelected.equals(ConfigButtonSelected.trafficLight)) {
             String trafficLightId = "TL-" + trafficLightIdIndex;
             IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
@@ -255,7 +274,9 @@ public class DrawingBoard implements ActionListener {
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
+    }
 
+    private void paintZebraCrossingComponent() {
         if (configButtonSelected.equals(ConfigButtonSelected.zebraCrossing)) {
             String trafficLightId = "ZTL-" + zebraCrossingTrafficLightIdIndex;
             IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
@@ -280,7 +301,9 @@ public class DrawingBoard implements ActionListener {
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
+    }
 
+    private void paintBlockageComponent(Graphics g) {
         if (configButtonSelected.equals(ConfigButtonSelected.blockage)) {
             IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(blockageCoordinates);
             if (bestMatchRUnit != null) {
@@ -292,8 +315,9 @@ public class DrawingBoard implements ActionListener {
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
+    }
 
-
+    private void paintVehicleFactoryComponent(Graphics g) {
         if (configButtonSelected.equals(ConfigButtonSelected.vehicleFactory)) {
             IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(vehicleFactoryCoordinates);
             if (bestMatchRUnit != null) {
@@ -305,8 +329,9 @@ public class DrawingBoard implements ActionListener {
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
+    }
 
-
+    private void paintStopSignComponent(Graphics g) {
         if (configButtonSelected.equals(ConfigButtonSelected.stop)) {
             IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(stopCoordinates);
             if (bestMatchRUnit != null) {
@@ -318,7 +343,9 @@ public class DrawingBoard implements ActionListener {
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
+    }
 
+    private void paintLeftSignComponent() {
         if (configButtonSelected.equals(ConfigButtonSelected.left)) {
             IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
@@ -342,7 +369,9 @@ public class DrawingBoard implements ActionListener {
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
+    }
 
+    private void paintRightSignComponent() {
         if (configButtonSelected.equals(ConfigButtonSelected.right)) {
             IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
@@ -366,7 +395,9 @@ public class DrawingBoard implements ActionListener {
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
+    }
 
+    private void paintStraightSignComponent() {
         if (configButtonSelected.equals(ConfigButtonSelected.straight)) {
             IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
@@ -390,7 +421,9 @@ public class DrawingBoard implements ActionListener {
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
+    }
 
+    private void paintSpeedLimitComponents(Graphics g) {
         if (configButtonSelected.equals(ConfigButtonSelected.speed20)) {
             IRUnitManager bestMatchRUnit = fetchAndAddBestMatchRUnit(speed20Coordinates);
             if (bestMatchRUnit != null) {
@@ -462,7 +495,9 @@ public class DrawingBoard implements ActionListener {
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
+    }
 
+    private void paintWelcomeSignComponent() {
         if (configButtonSelected.equals(ConfigButtonSelected.welcome)) {
             IRUnitManager bestMatchRUnit = fetchBestMatchRUnit();
             if (bestMatchRUnit != null) {
@@ -486,7 +521,9 @@ public class DrawingBoard implements ActionListener {
             }
             configButtonSelected = ConfigButtonSelected.noOption;
         }
+    }
 
+    private void updateTrafficLightColor() {
         if (model != null) {
             //Dynamically updating the traffic light color values in the backend data structures for each repaint() call
             for (int i = 0; i < model.getRowCount(); i++) {
@@ -530,83 +567,92 @@ public class DrawingBoard implements ActionListener {
     public void paint(Graphics g) {
         Graphics2D g2D = (Graphics2D) g;
 
-        //Drawing single road
-        for (IRUnitManager rUnit : singleLaneRUnits) {
-            Coordinates coordinates = getRepositionedImageCoordinates(rUnitImage, rUnit.getX(), rUnit.getY());
-            g2D.drawImage(rUnitImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
-            g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            BasicStroke bs = new BasicStroke(2);
-            g2D.setStroke(bs);
+        drawRoads(g2D);
+        drawTrafficLights(g2D);
+        drawVehicleFactories(g2D);
+        drawBlockages(g2D);
+        drawStopSignBoards(g2D);
+        drawDirectionSignBoards(g2D);
+        drawSpeedLimitSignBoards(g2D);
+        drawWelcomeSignBoards(g2D);
+        drawVehiclesOnRoads(g2D);
+        changeColorOfTrafficLights(g2D);
+
+        //Update the simulation tick time
+        currentSecondValue.setText(String.valueOf(simEngine.getDataAndStructures().getGlobalConfigManager().getCurrentSecond()));
+        Toolkit.getDefaultToolkit().sync();
+        g.dispose();
+    }
+
+    private void changeColorOfTrafficLights(Graphics2D g2D) {
+        //Change colour of traffic lights on the UI
+        if (isSimulationPlaying) {
+            for (String trafficLightId : roadNetworkManager.getRoadNetwork().getTrafficLightHashtable().keySet()) {
+                TrafficLight trafficLight = roadNetworkManager.getRoadNetwork().getTrafficLightHashtable().get(trafficLightId);
+                if (trafficLight.getTrafficLightCurrentColor()) {
+                    if (trafficLightCoordinates.get(trafficLightId) != null) {
+                        Coordinates coordinate = getRepositionedImageCoordinates(trafficLightImage, trafficLightCoordinates.get(trafficLightId).getX(), trafficLightCoordinates.get(trafficLightId).getY());
+                        g2D.drawImage(greenLightImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
+                    } else {
+                        Coordinates coordinate = getRepositionedImageCoordinates(zebraCrossingImage, zebraCrossingCoordinates.get(trafficLightId).getX(), zebraCrossingCoordinates.get(trafficLightId).getY());
+                        g2D.drawImage(greenLightZebraImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
+                    }
+                } else {
+                    if (trafficLightCoordinates.get(trafficLightId) != null) {
+                        Coordinates coordinate = getRepositionedImageCoordinates(trafficLightImage, trafficLightCoordinates.get(trafficLightId).getX(), trafficLightCoordinates.get(trafficLightId).getY());
+                        g2D.drawImage(redLightImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
+                    } else {
+                        Coordinates coordinate = getRepositionedImageCoordinates(zebraCrossingImage, zebraCrossingCoordinates.get(trafficLightId).getX(), zebraCrossingCoordinates.get(trafficLightId).getY());
+                        g2D.drawImage(redLightZebraImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
+                    }
+                }
+            }
         }
 
+    }
 
-        //Drawing double road
-        for (IRUnitManager rUnit : doubleLaneRUnits) {
-            Coordinates coordinates = getRepositionedImageCoordinates(rUnitImage, rUnit.getX(), rUnit.getY());
-            g2D.drawImage(rUnitImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
-            g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            BasicStroke bs = new BasicStroke(2);
-            g2D.setStroke(bs);
+    private void drawVehiclesOnRoads(Graphics2D g2D) {
+        //Move Vehicles on RUnits on UI
+
+        for (ObjectInSpace objectInSpace : simEngine.getDataAndStructures().getSpaceManager().getObjects()) {
+            if (objectInSpace.isVisible()) {
+                Image vehicleImage;
+                //Identifying the vehicle type
+                if (objectInSpace.getVehicleType().equals(VehicleType.car)) {
+                    vehicleImage = carImage;
+                } else if (objectInSpace.getVehicleType().equals(VehicleType.heavyLoad)) {
+                    vehicleImage = truckImage;
+                } else {
+                    vehicleImage = emergencyVehicleImage;
+                }
+
+                //Rotating or aligning the vehicles wrt to the road
+                double angle = objectInSpace.getDirection().getAngle();
+                if (angle < 0) {
+                    angle = angle + 360;
+                }
+                // Save the Affine Transformation of the Graphics
+                AffineTransform affineTransform = g2D.getTransform();
+                //Rotate the vehicle based on the angle calculated
+                g2D.rotate(Math.toRadians(angle), objectInSpace.getX(), objectInSpace.getY());
+                Coordinates coordinates = getRepositionedImageCoordinates(vehicleImage, objectInSpace.getX(), objectInSpace.getY());
+                //Draw the vehicle on the road based on the repositioned coordinates
+                g2D.drawImage(vehicleImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
+                //Set the Affine Transformation to the original value
+                g2D.setTransform(affineTransform);
+            }
         }
+    }
 
-        //Drawing double road - Changeable
-        for (IRUnitManager rUnit : changeAbleLaneRUnits) {
-            Coordinates coordinates = getRepositionedImageCoordinates(rUnitImage2, rUnit.getX(), rUnit.getY());
-            g2D.drawImage(rUnitImage2, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
-            g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            BasicStroke bs = new BasicStroke(2);
-            g2D.setStroke(bs);
+    private void drawWelcomeSignBoards(Graphics2D g2D) {
+        //Drawing welcome signs
+        for (Coordinates coordinate : welcomeCoordinates.keySet()) {
+            coordinate = getRepositionedImageCoordinates(welcomeImage, coordinate.getX(), coordinate.getY());
+            g2D.drawImage(welcomeImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
+    }
 
-
-        //Drawing traffic lights
-        for (Coordinates coordinate : trafficLightCoordinates.values()) {
-            coordinate = getRepositionedImageCoordinates(trafficLightImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(trafficLightImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
-
-        //Drawing zebra crossing
-        for (Coordinates coordinate : zebraCrossingCoordinates.values()) {
-            coordinate = getRepositionedImageCoordinates(zebraCrossingImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(zebraCrossingImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
-
-        //Drawing vehicle factories
-        for (Coordinates coordinate : vehicleFactoryCoordinates) {
-            coordinate = getRepositionedImageCoordinates(vehicleFactoryImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(vehicleFactoryImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
-
-        //Drawing blockages
-        for (Coordinates coordinate : blockageCoordinates) {
-            coordinate = getRepositionedImageCoordinates(blockageImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(blockageImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
-
-        //Drawing stop signs
-        for (Coordinates coordinate : stopCoordinates) {
-            coordinate = getRepositionedImageCoordinates(stopImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(stopImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
-
-        //Drawing left signs
-        for (Coordinates coordinate : leftCoordinates.keySet()) {
-            coordinate = getRepositionedImageCoordinates(leftSignImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(leftSignImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
-
-        //Drawing right signs
-        for (Coordinates coordinate : rightCoordinates.keySet()) {
-            coordinate = getRepositionedImageCoordinates(rightSignImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(rightSignImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
-
-        //Drawing straight signs
-        for (Coordinates coordinate : straightCoordinates.keySet()) {
-            coordinate = getRepositionedImageCoordinates(straightSignImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(straightSignImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-        }
-
+    private void drawSpeedLimitSignBoards(Graphics2D g2D) {
         //Drawing speed20 signs
         for (Coordinates coordinate : speed20Coordinates) {
             coordinate = getRepositionedImageCoordinates(speed20Image, coordinate.getX(), coordinate.getY());
@@ -641,73 +687,95 @@ public class DrawingBoard implements ActionListener {
             coordinate = getRepositionedImageCoordinates(speed90Image, coordinate.getX(), coordinate.getY());
             g2D.drawImage(speed90Image, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
+    }
 
-        //Drawing welcome signs
-        for (Coordinates coordinate : welcomeCoordinates.keySet()) {
-            coordinate = getRepositionedImageCoordinates(welcomeImage, coordinate.getX(), coordinate.getY());
-            g2D.drawImage(welcomeImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
+    private void drawDirectionSignBoards(Graphics2D g2D) {
+        //Drawing left signs
+        for (Coordinates coordinate : leftCoordinates.keySet()) {
+            coordinate = getRepositionedImageCoordinates(leftSignImage, coordinate.getX(), coordinate.getY());
+            g2D.drawImage(leftSignImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
-        //Move Vehicles on RUnits on UI
-
-        Graphics2D g2d = (Graphics2D) g;
-        for (ObjectInSpace objectInSpace : simEngine.getDataAndStructures().getSpaceManager().getObjects()) {
-            if (objectInSpace.isVisible()) {
-                Image vehicleImage;
-                //Identifying the vehicle type
-                if (objectInSpace.getVehicleType().equals(VehicleType.car)) {
-                    vehicleImage = carImage;
-                } else if (objectInSpace.getVehicleType().equals(VehicleType.heavyLoad)) {
-                    vehicleImage = truckImage;
-                } else {
-                    vehicleImage = emergencyVehicleImage;
-                }
-
-                //Rotating or aligning the vehicles wrt to the road
-
-                double angle = objectInSpace.getDirection().getAngle();
-                if (angle < 0) {
-                    angle = angle + 360;
-                }
-                // Save the Affine Transformation of the Graphics
-                AffineTransform affineTransform = g2d.getTransform();
-                //Rotate the vehicle based on the angle calculated
-                g2d.rotate(Math.toRadians(angle), objectInSpace.getX(), objectInSpace.getY());
-                Coordinates coordinates = getRepositionedImageCoordinates(vehicleImage, objectInSpace.getX(), objectInSpace.getY());
-                //Draw the vehicle on the road based on the repositioned coordinates
-                g2d.drawImage(vehicleImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
-                //Set the Affine Transformation to the original value
-                g2d.setTransform(affineTransform);
-            }
+        //Drawing right signs
+        for (Coordinates coordinate : rightCoordinates.keySet()) {
+            coordinate = getRepositionedImageCoordinates(rightSignImage, coordinate.getX(), coordinate.getY());
+            g2D.drawImage(rightSignImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
 
-        //Change colour of traffic lights on the UI
-        if (isSimulationPlaying) {
-            for (String trafficLightId : roadNetworkManager.getRoadNetwork().getTrafficLightHashtable().keySet()) {
-                TrafficLight trafficLight = roadNetworkManager.getRoadNetwork().getTrafficLightHashtable().get(trafficLightId);
-                if (trafficLight.getTrafficLightCurrentColor()) {
-                    if (trafficLightCoordinates.get(trafficLightId) != null) {
-                        Coordinates coordinate = getRepositionedImageCoordinates(trafficLightImage, trafficLightCoordinates.get(trafficLightId).getX(), trafficLightCoordinates.get(trafficLightId).getY());
-                        g2d.drawImage(greenLightImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-                    } else {
-                        Coordinates coordinate = getRepositionedImageCoordinates(zebraCrossingImage, zebraCrossingCoordinates.get(trafficLightId).getX(), zebraCrossingCoordinates.get(trafficLightId).getY());
-                        g2d.drawImage(greenLightZebraImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-                    }
-                } else {
-                    if (trafficLightCoordinates.get(trafficLightId) != null) {
-                        Coordinates coordinate = getRepositionedImageCoordinates(trafficLightImage, trafficLightCoordinates.get(trafficLightId).getX(), trafficLightCoordinates.get(trafficLightId).getY());
-                        g2d.drawImage(redLightImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-                    } else {
-                        Coordinates coordinate = getRepositionedImageCoordinates(zebraCrossingImage, zebraCrossingCoordinates.get(trafficLightId).getX(), zebraCrossingCoordinates.get(trafficLightId).getY());
-                        g2d.drawImage(redLightZebraImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
-                    }
-                }
-            }
+        //Drawing straight signs
+        for (Coordinates coordinate : straightCoordinates.keySet()) {
+            coordinate = getRepositionedImageCoordinates(straightSignImage, coordinate.getX(), coordinate.getY());
+            g2D.drawImage(straightSignImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
         }
-        //Update the simulation tick time
-        currentSecondValue.setText(String.valueOf(simEngine.getDataAndStructures().getGlobalConfigManager().getCurrentSecond()));
-        Toolkit.getDefaultToolkit().sync();
-        g.dispose();
+    }
+
+    private void drawStopSignBoards(Graphics2D g2D) {
+        //Drawing stop signs
+        for (Coordinates coordinate : stopCoordinates) {
+            coordinate = getRepositionedImageCoordinates(stopImage, coordinate.getX(), coordinate.getY());
+            g2D.drawImage(stopImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
+        }
+    }
+
+    private void drawBlockages(Graphics2D g2D) {
+        //Drawing blockages
+        for (Coordinates coordinate : blockageCoordinates) {
+            coordinate = getRepositionedImageCoordinates(blockageImage, coordinate.getX(), coordinate.getY());
+            g2D.drawImage(blockageImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
+        }
+    }
+
+    private void drawVehicleFactories(Graphics2D g2D) {
+        //Drawing vehicle factories
+        for (Coordinates coordinate : vehicleFactoryCoordinates) {
+            coordinate = getRepositionedImageCoordinates(vehicleFactoryImage, coordinate.getX(), coordinate.getY());
+            g2D.drawImage(vehicleFactoryImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
+        }
+    }
+
+    private void drawTrafficLights(Graphics2D g2D) {
+        //Drawing traffic lights
+        for (Coordinates coordinate : trafficLightCoordinates.values()) {
+            coordinate = getRepositionedImageCoordinates(trafficLightImage, coordinate.getX(), coordinate.getY());
+            g2D.drawImage(trafficLightImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
+        }
+
+        //Drawing zebra crossing
+        for (Coordinates coordinate : zebraCrossingCoordinates.values()) {
+            coordinate = getRepositionedImageCoordinates(zebraCrossingImage, coordinate.getX(), coordinate.getY());
+            g2D.drawImage(zebraCrossingImage, coordinate.getX(), coordinate.getY(), drawingBoardPanel);
+        }
+    }
+
+    private void drawRoads(Graphics2D g2D) {
+        //Drawing single road
+        for (IRUnitManager rUnit : singleLaneRUnits) {
+            Coordinates coordinates = getRepositionedImageCoordinates(rUnitImage, rUnit.getX(), rUnit.getY());
+            g2D.drawImage(rUnitImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
+            g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            BasicStroke bs = new BasicStroke(2);
+            g2D.setStroke(bs);
+        }
+
+
+        //Drawing double road
+        for (IRUnitManager rUnit : doubleLaneRUnits) {
+            Coordinates coordinates = getRepositionedImageCoordinates(rUnitImage, rUnit.getX(), rUnit.getY());
+            g2D.drawImage(rUnitImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
+            g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            BasicStroke bs = new BasicStroke(2);
+            g2D.setStroke(bs);
+        }
+
+        //Drawing double road - Changeable
+        for (IRUnitManager rUnit : changeAbleLaneRUnits) {
+            Coordinates coordinates = getRepositionedImageCoordinates(rUnitImage2, rUnit.getX(), rUnit.getY());
+            g2D.drawImage(rUnitImage2, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
+            g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            BasicStroke bs = new BasicStroke(2);
+            g2D.setStroke(bs);
+        }
+
     }
 
     private Coordinates getRepositionedImageCoordinates(Image image, int x, int y) {

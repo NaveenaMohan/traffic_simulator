@@ -661,7 +661,7 @@ public class Traffic_Simulator {
         drawingBoardPanel.setBounds(286, 79, 1021, 348);
         drawingBoardPanel.setLayout(null);
         trafficSimulatorFrame.getContentPane().add(drawingBoardPanel);
-        drawingBoard.initialize();//Initializing the drawing board
+        drawingBoard.initializeAndLoadImages();//Initializing the drawing board
 
         //Adding action listeners, invoked state information and enable-disable state for all the above configuration buttons
 
