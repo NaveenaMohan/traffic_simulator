@@ -288,14 +288,4 @@ public class RoadNetworkManager implements IRoadNetworkManager {
             trafficLight.setCycle(trafficLightPattern);
         }
     }
-
-    @Override
-    public IRUnitManager getIRUnitManagerByID(String ID) {
-        return roadNetwork.getrUnitHashtable().get(ID);
-    }
-
-    @Override
-    public TrafficLight getTrafficLightByID(String ID) {
-        return roadNetwork.getTrafficLightHashtable().get(ID);
-    }
 }

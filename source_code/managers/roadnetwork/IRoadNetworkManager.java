@@ -35,9 +35,5 @@ public interface IRoadNetworkManager extends Serializable {
 
     public void changeLight(double currentSecond);
 
-    public IRUnitManager getIRUnitManagerByID(String ID);
-
-    public TrafficLight getTrafficLightByID(String ID);
-
     public RoadNetwork getRoadNetwork();
 }

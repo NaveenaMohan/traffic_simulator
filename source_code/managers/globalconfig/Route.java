@@ -7,7 +7,6 @@ import java.io.Serializable;
  */
 public class Route implements Serializable {
 
-    //TODO remove the defaults
     private String destination = "London";
     private double trafficPercent = 1;
 

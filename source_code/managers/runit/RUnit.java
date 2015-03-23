@@ -125,10 +125,4 @@ public class RUnit implements IRUnitManager {
     public void addTrafficLight(TrafficLight trafficLight) {
         this.trafficLight = trafficLight;
     }
-
-    @Override
-    public boolean go() {
-        //if no traffic Light then vehicles can continue, treated as if it would be green.
-        return this.getTrafficLight() == null || this.getTrafficLight().isGreen();
-    }
 }

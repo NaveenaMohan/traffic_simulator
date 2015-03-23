@@ -8,8 +8,6 @@ import java.io.Serializable;
  */
 public interface IGlobalConfigManager extends Serializable {
 
-    public void addOrUpdateWeather(ClimaticCondition climaticCondition);
-
     public ClimaticCondition getClimaticCondition();
 
     public DriverBehavior getDriverBehaviour();
@@ -22,15 +20,9 @@ public interface IGlobalConfigManager extends Serializable {
 
     public void incrementTick();
 
-    public double getLengthMetres(int rUnits);
-
-    public double getLengthRUnits(double metres);
-
     public int getTicksPerSecond();
 
     public void setTicksPerSecond(int ticksPerSecond);
-
-    public Long getCurrentTick();
 
     public double getMetresPerRUnit();
 

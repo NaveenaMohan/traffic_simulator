@@ -43,6 +43,4 @@ public interface IRUnitManager extends Serializable {
     public IRUnitManager getChangeAbleRUnit();
 
     public void setChangeAbleRUnit(IRUnitManager currentChangeableRUnit);
-
-    public boolean go();
 }
