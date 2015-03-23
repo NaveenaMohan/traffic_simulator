@@ -2,17 +2,13 @@ package managers.vehicle;
 
 import common.Common;
 import dataAndStructures.IDataAndStructures;
-import managers.runit.DirectionSign;
-import managers.runit.IRUnitManager;
-import managers.runit.SpeedLimitSign;
-import managers.runit.WelcomeSign;
+import managers.roadnetwork.RoadNetworkManager;
+import managers.runit.*;
 import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
 import managers.space.VehicleDirection;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Fabians on 18/02/2015.
@@ -102,7 +98,7 @@ public class VehicleMotor implements Serializable {
         if (temp.isLeft()) {
 
             //if there are no direction instructions change lanes according to your speed
-            if(vehicleState.getNextDirectionAtDecisionPoint()==null) {
+            if (vehicleState.getNextDirectionAtDecisionPoint() == null) {
                 VehicleMemoryObject vehicleInLeft = vehicleState.getNextVehicleObject(20, true);
                 VehicleMemoryObject vehicleInRight = vehicleState.getNextVehicleObject(20, false);
                 VehicleMemoryObject speedAffectingRoadElement =
@@ -127,17 +123,15 @@ public class VehicleMotor implements Serializable {
                         }
                     }
                 }
-            }else{
+            } else {
                 //if there are direction instructions change lanes accordingly
-                switch (vehicleState.getNextDirectionAtDecisionPoint())
-                {
+                switch (vehicleState.getNextDirectionAtDecisionPoint()) {
                     case left:
                         //stay in your lane
                         break;
                     case right:
                         //go to the right
-                        if (VehiclePerception.isChangeableClear(temp, spaceManager, objectInSpace, 10, 15))
-                        {
+                        if (VehiclePerception.isChangeableClear(temp, spaceManager, objectInSpace, 10, 15)) {
                             temp = rUnit.getChangeAbleRUnit();
                         }
                         break;
@@ -150,21 +144,19 @@ public class VehicleMotor implements Serializable {
 
         } else {//if you are in the right lane
             //if there are no direction instructions change lanes according to your speed
-            if(vehicleState.getNextDirectionAtDecisionPoint()==null) {
+            if (vehicleState.getNextDirectionAtDecisionPoint() == null) {
                 VehicleMemoryObject vehicleInLeft = vehicleState.getNextVehicleObject(100, true);
                 if (vehicleInLeft == null) {
-                    if (VehiclePerception.isChangeableClear(temp, spaceManager, objectInSpace, 30, 5)) {
+                    if (VehiclePerception.isChangeableClear(temp, spaceManager, objectInSpace, 40, 10)) {
                         temp = temp.getChangeAbleRUnit();
                     }
                 }
-            }else{//if there are direction signs to worry about
+            } else {//if there are direction signs to worry about
                 //if there are direction instructions change lanes accordingly
-                switch (vehicleState.getNextDirectionAtDecisionPoint())
-                {
+                switch (vehicleState.getNextDirectionAtDecisionPoint()) {
                     case left:
                         //go to the left lane
-                        if (VehiclePerception.isChangeableClear(temp, spaceManager, objectInSpace, 10, 15))
-                        {
+                        if (VehiclePerception.isChangeableClear(temp, spaceManager, objectInSpace, 10, 15)) {
                             temp = rUnit.getChangeAbleRUnit();
                         }
                         break;
@@ -207,10 +199,10 @@ public class VehicleMotor implements Serializable {
         for (int i = 0; i < RUnitsTravelled; i++) {//go through as many metres as many you have travelled since last move
 
             //advance
-           rUnit = chooseNext(rUnit, vehicleState);
+            rUnit = chooseNext(rUnit, vehicleState);
 
             //see and process the objects we have just passed
-            processObjectPassed(rUnit, vehicleState, dataAndStructures.getGlobalConfigManager().getCurrentSecond());
+            rUnit = processObjectPassed(rUnit, vehicleState, dataAndStructures.getGlobalConfigManager().getCurrentSecond());
         }
 
         //adjust your position in space
@@ -218,10 +210,10 @@ public class VehicleMotor implements Serializable {
         objectInSpace.setY(rUnit.getY());
         if (previousrUnit.getId() != rUnit.getId())
             objectInSpace.setDirection(new VehicleDirection(
-                    Common.getNthPrevRUnit(previousrUnit, 1).getX(),
-                    Common.getNthPrevRUnit(previousrUnit, 1).getY(),
-                    Common.getNthNextRUnit(rUnit, 3).getX(),
-                    Common.getNthNextRUnit(rUnit, 3).getY()));
+                    Common.getNthPrevRUnit(previousrUnit, 5).getX(),
+                    Common.getNthPrevRUnit(previousrUnit, 5).getY(),
+                    Common.getNthNextRUnit(rUnit, 5).getX(),
+                    Common.getNthNextRUnit(rUnit, 5).getY()));
 
         return rUnit;
     }
@@ -305,7 +297,6 @@ public class VehicleMotor implements Serializable {
     }
 
 
-
     private double aimForSpeed(double requiredVelocity, double safeStopDistance, double distance)//returns the acceleration
     {
         //this function gradually changes the vehicle speed to match the requiredSpeed in distance metres
@@ -334,7 +325,37 @@ public class VehicleMotor implements Serializable {
                 currentVelocity + currentAcceleration * timePassed));
     }
 
-    private void processObjectPassed(IRUnitManager rUnit, VehicleState vehicleState, double currentTime) {
+    private IRUnitManager getPreviousIntersection(IRUnitManager rUnit, int backwardsMagnitude)
+    {
+        //this function looks backwardsMagnitude steps ahead and returns true if there was an intersection
+        IRUnitManager temp = rUnit.getPrevsRUnitList().get(0);
+        for(int i=0; i<backwardsMagnitude; i++)
+        {
+            //if this was an intersection
+            if(temp.getNextRUnitList().size()>1)
+                return temp;
+            if(temp.getChangeAbleRUnit()!=null && temp.getChangeAbleRUnit().getNextRUnitList().size()>1)
+                return temp.getChangeAbleRUnit();
+            if(temp.getPrevsRUnitList().size() > 0)
+            {
+                temp = temp.getPrevsRUnitList().get(0);
+            }
+        }
+        return null;
+    }
+    private IRUnitManager retakeIntersection(IRUnitManager intersectedRUnit, IRUnitManager currentRUnit)
+    {
+        //this function looks at the intersection and returns the exit that does not lead to currentRUnit
+        for(IRUnitManager exit : intersectedRUnit.getNextRUnitList())
+        {
+            if(RoadNetworkManager.checkForRoadDensityCollisions(exit, currentRUnit))
+                return exit;
+        }
+
+        //if no other rUnit found return the one that you came in with
+        return currentRUnit;
+    }
+    private IRUnitManager processObjectPassed(IRUnitManager rUnit, VehicleState vehicleState, double currentTime) {
         Object obj = VehiclePerception.getObjectForDoubleLane(rUnit);
         //if you have just passed a speed sign update your maxSpeedLimit
         if (obj instanceof SpeedLimitSign) {
@@ -343,16 +364,23 @@ public class VehicleMotor implements Serializable {
 
         //if you have just passed end of road - disappear
         if (!(rUnit.getNextRUnitList().size() > 0)) {
+            //a workaround for intersection disappearing cars
+            //get the last intersection within 10 rUnits
+            IRUnitManager lastIntersection = getPreviousIntersection(rUnit, 20);
+            //if there was an intersection
+            if(lastIntersection!=null)
+                return retakeIntersection(lastIntersection, rUnit);
+            else
             objectInSpace.setVisible(false);
         }
 
         //if you have just passed a decision Point
-        if ((rUnit.getPrevsRUnitList().size() > 0)) {
-            if ((rUnit.getPrevsRUnitList().get(0).getNextRUnitList().size() > 1)) {
-                vehicleState.setNextRUnitAfterDecisionPoint(null);
-                vehicleState.setNextDirectionAtDecisionPoint(null);
-            }
+
+        if ((rUnit.getPrevsRUnitList().get(0).getNextRUnitList().size() > 1)) {
+            vehicleState.setNextRUnitAfterDecisionPoint(null);
+            vehicleState.setNextDirectionAtDecisionPoint(null);
         }
+
 
         //if you have just passed your destination
         if (obj instanceof WelcomeSign) {
@@ -362,6 +390,8 @@ public class VehicleMotor implements Serializable {
                 arrivalDestTime = currentTime;
             }
         }
+
+        return rUnit;
     }
 
     public double getCurrentAcceleration() { //ADDED BY LORENA TO TEST ACCELERATION IN THE REPORTS
@@ -374,7 +404,6 @@ public class VehicleMotor implements Serializable {
     }
 
     private IRUnitManager getNextForDirection(IRUnitManager rUnit, VehicleState vehicleState) {
-        System.out.println("[getNextForDirection("+vehicleState.getNextDirectionAtDecisionPoint() + ")]");
         /*
         This function chooses the nextRUnit at an intersection if you have a direction set
          */

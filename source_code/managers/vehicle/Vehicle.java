@@ -70,9 +70,6 @@ public class Vehicle implements IVehicleManager {
 
     @Override
     public void move(ISpaceManager spaceManager, double time, IDataAndStructures dataAndStructures) {
-
-
-
         //perceive the world and update your state
         vehiclePerception.see(
                 vehID,
