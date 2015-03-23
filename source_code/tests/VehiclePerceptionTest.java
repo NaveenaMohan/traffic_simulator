@@ -59,7 +59,7 @@ public class VehiclePerceptionTest {
         String currentRUnitNumber = "2";
         String objectRUnit = "10";
 
-        RUnit currentRUnit = roadNetwork.getRUnitByID(currentRUnitNumber);
+        RUnit currentRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(currentRUnitNumber);
 
         roadNetwork.addBlockage(roadNetwork.getRoadNetwork().getrUnitHashtable().get(objectRUnit));
 
@@ -72,7 +72,7 @@ public class VehiclePerceptionTest {
     public void test2See() throws Exception {
         String currentRUnitNumber = "2";
 
-        RUnit currentRUnit = roadNetwork.getRUnitByID(currentRUnitNumber);
+        RUnit currentRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(currentRUnitNumber);
 
         vehiclePerception.see(1,currentRUnit,100,vehicleState,spaceManager,dataAndStructures,objectInSpace);
 
@@ -85,7 +85,7 @@ public class VehiclePerceptionTest {
         String currentRUnitNumber = "2";
         String objectRUnit = "2";
 
-        RUnit currentRUnit = roadNetwork.getRUnitByID(currentRUnitNumber);
+        RUnit currentRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(currentRUnitNumber);
         int projectedDistance = Integer.parseInt(objectRUnit) - Integer.parseInt(currentRUnitNumber);
         roadNetwork.addBlockage(roadNetwork.getRoadNetwork().getrUnitHashtable().get(objectRUnit));
 
@@ -101,7 +101,7 @@ public class VehiclePerceptionTest {
         String currentRUnitNumber = "2";
         String objectRUnit = "5";
 
-        RUnit currentRUnit = roadNetwork.getRUnitByID(currentRUnitNumber);
+        RUnit currentRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(currentRUnitNumber);
 
         roadNetwork.addBlockage(roadNetwork.getRoadNetwork().getrUnitHashtable().get(objectRUnit));
 

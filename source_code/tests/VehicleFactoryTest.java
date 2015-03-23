@@ -32,14 +32,4 @@ public class VehicleFactoryTest {
             created=true;
         Assert.assertEquals(created, true);
     }
-
-
-    @Test
-    public void test2AddVehicle() throws Exception {
-        //checking if vehicles are created
-        boolean created=false;
-        if(vehicleFactory.addVehicle(1, VehicleType.car, new Driver(1,1,1,DriverBehaviorType.normal),"London",spaceManager,0.123)!=null);
-        created=true;
-        Assert.assertEquals(created, true);
-    }
 }
