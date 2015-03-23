@@ -101,7 +101,6 @@ public class Vehicle implements IVehicleManager {
 
     }
 
-    public String getCurrentStrategy(){return vehicleMotor.currentStrategy;}
     @Override
     public boolean isVisible(int minX, int maxX, int minY, int maxY) {
         return false;

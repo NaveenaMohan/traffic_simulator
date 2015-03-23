@@ -47,26 +47,6 @@ public class GlobalConfigManager implements IGlobalConfigManager {
     }
 
     @Override
-    public void addOrUpdateVehicleDensity(Map<VehicleType, Double> vehicleDensityMap, int VehicleCount) {
-
-    }
-
-    @Override
-    public void addOrUpdateWeather(ClimaticCondition climaticCondition) {
-        this.climaticCondition = climaticCondition;
-    }
-
-    @Override
-    public void addOrUpdateDriverBehavior(Map<DriverBehaviorType, Double> driverBehaviorTypeMap) {
-
-    }
-
-    @Override
-    public void addOrUpdateDestinationDensity(String destination, double density) {
-
-    }
-
-    @Override
     public double getCurrentSecond() {
         return tickTime.getCurrentSecond();
     }
@@ -77,16 +57,6 @@ public class GlobalConfigManager implements IGlobalConfigManager {
     }
 
     @Override
-    public double getLengthMetres(int rUnits) {
-        return distancesScale.getLengthMetres(rUnits);
-    }
-
-    @Override
-    public double getLengthRUnits(double metres) {
-        return distancesScale.getLengthRUnits(metres);
-    }
-
-    @Override
     public int getTicksPerSecond() {
         return tickTime.getRatio();
     }
@@ -94,11 +64,6 @@ public class GlobalConfigManager implements IGlobalConfigManager {
     @Override
     public void setTicksPerSecond(int ticksPerSecond) {
         tickTime.setRatio(ticksPerSecond);
-    }
-
-    @Override
-    public Long getCurrentTick() {
-        return tickTime.getCurrentTick();
     }
 
     @Override

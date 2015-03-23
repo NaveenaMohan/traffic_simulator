@@ -35,11 +35,6 @@ public class RUnit implements IRUnitManager{
         this.nextRUnitList = nextRUnitList;
     }
 
-    @Override
-    public void ChangeLight(boolean color, String trafficLightID, int index) {
-        //TODO change cycle element for traffic light
-    }
-
     public int getX() {
         return x;
     }
@@ -68,10 +63,6 @@ public class RUnit implements IRUnitManager{
         return nextRUnitList;
     }
 
-    public void setNextRUnitList(List<RUnit> nextRUnitList) {
-        this.nextRUnitList = nextRUnitList;
-    }
-
     public List<RUnit> getPrevsRUnitList() {
         return prevsRUnitList;
     }
@@ -84,10 +75,6 @@ public class RUnit implements IRUnitManager{
     @Override
     public void setLeft(boolean isLeft) {
         this.isLeft = isLeft;
-    }
-
-    public void setPrevsRUnitList(List<RUnit> prevsRUnitList) {
-        this.prevsRUnitList = prevsRUnitList;
     }
 
     public RUnit getChangeAbleRUnit() {
@@ -130,10 +117,6 @@ public class RUnit implements IRUnitManager{
         this.blockage = blockage;
     }
 
-    public VehicleFactory addVehicleFactory() {
-        return null;
-    }
-
     public TrafficLight getTrafficLight() {
         return trafficLight;
     }
@@ -143,46 +126,5 @@ public class RUnit implements IRUnitManager{
         this.trafficLight = trafficLight;
     }
 
-    @Override
-    public boolean go(){
-        if (this.getTrafficLight()!=null) {
-            if (this.getTrafficLight().isGreen()) {
-                return true; //if traffic Light is green
-            }
-            else return false; //if traffic Light is red
-        }
-        else
-            return true; //if no traffic Light then vehicles can continue, treated as if it would be green.
-    }
 
-
-    @Override
-    public void addZebraCrossing() {
-
-    }
-
-    @Override
-    public void addBlockage() {
-
-    }
-
-    @Override
-    public void addSpeedLimit() {
-
-    }
-
-    @Override
-    public void addStopSign() {
-
-    }
-
-    @Override
-    public void addWelcomeSign() {
-
-    }
-
-    @Override
-    public void addDirectionSign() {
-
-    }
 }

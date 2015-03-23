@@ -10,9 +10,6 @@ public class ZebraCrossing implements Serializable {
 
     private TrafficLight trafficLight;
 
-    public ZebraCrossing() {
-    }
-
     public ZebraCrossing(TrafficLight trafficLight) {
         this.trafficLight = trafficLight;
     }

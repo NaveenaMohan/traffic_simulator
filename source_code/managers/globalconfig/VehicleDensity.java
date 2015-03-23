@@ -28,10 +28,6 @@ public class VehicleDensity implements Serializable {
         this.heavyVehicleDensity = heavyVehicleDensity;
     }
 
-    public double getEmergencyVehicleDensity() {
-        return emergencyVehicleDensity;
-    }
-
     public void setEmergencyVehicleDensity(double emergencyVehicleDensity) {
         this.emergencyVehicleDensity = emergencyVehicleDensity;
     }

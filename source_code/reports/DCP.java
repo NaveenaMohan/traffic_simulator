@@ -42,8 +42,7 @@ public class DCP extends JPanel{
 
     }
 
-    public void updateReportingInfo(DataAndStructures dataAndStructures){  // to be called every tick
-        this.dataAndStructures=dataAndStructures;
+    public void updateReportingInfo(){
         getVehiclesInformation(); //gets the info of all of the cars
     }
 
@@ -162,7 +161,7 @@ public class DCP extends JPanel{
         }
     }
 
-    public void getVehiclesDensity() {
+    private void getVehiclesDensity() {
         int carsNoVisible=0, heavyLoadsNoVisible=0, emergenciesNoVisible=0;
 
         if (dataAndStructures.getVehicles()!=null) {
@@ -356,12 +355,8 @@ public class DCP extends JPanel{
     }
 
     private void getVehiclesAvgVelocity() {
-        //UNCOMMENT THE FOLLOWING IF AVERAGE VEL PER VEHICLE IS NEEDED
+        //storing the average vel per vehicle of all vehicles
         for (Map.Entry<String, Double> velocityRecordsPerVehicle : vehiclesVelocity.entrySet()) {
-           // textArea.append("Vehicle ID: " + velocityRecordsPerVehicle.getKey() + "");
-            // textArea.append(" Vehicle Average Velocity: " + round(velocityRecordsPerVehicle.getValue()/numberOfTimes.get(velocityRecordsPerVehicle.getKey()+""),2));
-           // textArea.append(" Driver is: " + dataAndStructures.getVehicles().get(Integer.parseInt(velocityRecordsPerVehicle.getKey())-1).getVehicle().getDriver().getDriverBehaviorType() + newline);
-
             averageVehiclesVelocity.put(velocityRecordsPerVehicle.getKey() + "", (Common.round((velocityRecordsPerVehicle.getValue() / numberOfTimes.get(velocityRecordsPerVehicle.getKey())), 2)));
         }
 

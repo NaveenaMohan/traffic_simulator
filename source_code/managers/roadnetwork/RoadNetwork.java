@@ -22,23 +22,11 @@ public class RoadNetwork implements Serializable {
         return rUnitHashtable;
     }
 
-    public void setrUnitHashtable(Hashtable<String, RUnit> rUnitHashtable) {
-        this.rUnitHashtable = rUnitHashtable;
-    }
-
     public Hashtable<String, TrafficLight> getTrafficLightHashtable() {
         return trafficLightHashtable;
     }
 
-    public void setTrafficLightHashtable(Hashtable<String, TrafficLight> trafficLightHashtable) {
-        this.trafficLightHashtable = trafficLightHashtable;
-    }
-
     public Hashtable<String, RUnit> getChangeableRUnitHashtable() {
         return changeableRUnitHashtable;
-    }
-
-    public void setChangeableRUnitHashtable(Hashtable<String, RUnit> changeableRUnitHashtable) {
-        this.changeableRUnitHashtable = changeableRUnitHashtable;
     }
 }

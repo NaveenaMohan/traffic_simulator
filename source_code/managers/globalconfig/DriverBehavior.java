@@ -36,17 +36,13 @@ public class DriverBehavior implements Serializable {
     private double cautiousMaxVisibilityOffset;
 
     public DriverBehavior(){
-        //Range taken:
-        //0.3 - 0.7
-        //0.8 - 1.2
-        //1.3 - 1.7
         this.percentageReckless = 0.33;
         this.percentageNormal = 0.33;
         this.percentageCautious = 0.34;
 
         this.recklessMinSpeedOffset = 1.01;
         this.recklessMaxSpeedOffset = 1.02;
-        this.recklessMinReactionTimeOffset = 0.95;//reckless decreases RUnits to look ahead when stopping
+        this.recklessMinReactionTimeOffset = 0.95;
         this.recklessMaxReactionTimeOffset = 0.99;
         this.recklessMinVisibilityOffset = 0.95;
         this.recklessMaxVisibilityOffset = 0.99;

@@ -288,24 +288,10 @@ public class RoadNetworkManager implements IRoadNetworkManager {
     }
 
     @Override
-    public void addVehicleFactory(RUnit rUnit) {
-    }
-
-    @Override
     public void addTrafficLightBehavior(String trafficLightId, List<Boolean> trafficLightPattern) {
         TrafficLight trafficLight = roadNetwork.getTrafficLightHashtable().get(trafficLightId);
         if (trafficLight != null) {
             trafficLight.setCycle(trafficLightPattern);
         }
-    }
-
-    @Override
-    public RUnit getRUnitByID(String ID) {
-        return roadNetwork.getrUnitHashtable().get(ID);
-    }
-
-    @Override
-    public TrafficLight getTrafficLightByID(String ID) {
-        return roadNetwork.getTrafficLightHashtable().get(ID);
     }
 }
