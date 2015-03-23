@@ -68,6 +68,7 @@ public class Traffic_Simulator {
             public void uncaughtException(Thread t, Throwable e) {
                 GlobalErrorDialogBox globalErrorDialogBox = new GlobalErrorDialogBox(e);
                 globalErrorDialogBox.setVisible(true);
+                e.printStackTrace();
             }
         });
 
@@ -821,15 +822,15 @@ public class Traffic_Simulator {
                 JFileChooser fileChooser = new JFileChooser();
                 int returnValue = fileChooser.showOpenDialog(null);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    FileInputStream fin = null;
+                    FileInputStream fileInputStream = null;
                     try {
-                        fin = new FileInputStream(fileChooser.getSelectedFile().getPath());
+                        fileInputStream = new FileInputStream(fileChooser.getSelectedFile().getPath());
                     } catch (FileNotFoundException e1) {
                         e1.printStackTrace();
                     }
-                    ObjectInputStream ois = null;
+                    ObjectInputStream objectInputStream = null;
                     try {
-                        ois = new ObjectInputStream(fin);
+                        objectInputStream = new ObjectInputStream(fileInputStream);
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -837,7 +838,7 @@ public class Traffic_Simulator {
                         //Cleaning the existing elements in the drawing board
                         drawingBoard.clean();
                         //Reading the serialized object
-                        ExportImportObject exportImportObject = (ExportImportObject) ois.readObject();
+                        ExportImportObject exportImportObject = (ExportImportObject) objectInputStream.readObject();
                         //Populating the back end data structures, sim engine and report related objects
                         roadNetworkManager = exportImportObject.getEngineDataStructures().getRoadNetworkManager();
                         vehicleFactoryManager = exportImportObject.getEngineDataStructures().getVehicleFactoryManager();
@@ -902,21 +903,21 @@ public class Traffic_Simulator {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //File  dialog box to allow the user to choose the name and location for saving the config file
-                FileDialog fDialog = new FileDialog(trafficSimulatorFrame, "Save", FileDialog.SAVE);
-                fDialog.setVisible(true);
-                String path = fDialog.getDirectory() + fDialog.getFile();
+                FileDialog fileDialog = new FileDialog(trafficSimulatorFrame, "Save", FileDialog.SAVE);
+                fileDialog.setVisible(true);
+                String path = fileDialog.getDirectory() + fileDialog.getFile();
                 ExportImportObject exportImportObject = new ExportImportObject(dataAndStructures, drawingBoard);
-                FileOutputStream fout = null;
+                FileOutputStream fileOutputStream = null;
                 try {
-                    fout = new FileOutputStream(path);
+                    fileOutputStream = new FileOutputStream(path);
                 } catch (FileNotFoundException ex) {
                     ex.printStackTrace();
                 }
-                ObjectOutputStream oos;
+                ObjectOutputStream objectOutputStream;
                 try {
-                    oos = new ObjectOutputStream(fout);
-                    oos.writeObject(exportImportObject);
-                    oos.close();
+                    objectOutputStream = new ObjectOutputStream(fileOutputStream);
+                    objectOutputStream.writeObject(exportImportObject);
+                    objectOutputStream.close();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
