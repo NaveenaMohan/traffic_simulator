@@ -276,7 +276,7 @@ public class  Traffic_Simulator {
         final JButton stopButton = new JButton();
         stopButton.setToolTipText("Stop");
         stopButton.setBounds(170, 0, 70, 70);
-        stopButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("/resources/stop_music.png")));
+        stopButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("/resources/clearAll.png")));
         simulationConfigPanel.add(stopButton);
 
         final JButton slowButton = new JButton();
@@ -477,7 +477,7 @@ public class  Traffic_Simulator {
         vehicleProductionRateSlider.setMaximum(20);
         vehicleProductionRateSlider.setMajorTickSpacing(20);
         vehicleProductionRateSlider.setValue((int) (globalConfigManager.getVehicleDensity().getCreationRatePerSecond() * 10.0));
-        vehicleProductionRateSlider.setBounds(165, 47, 155, 133);
+        vehicleProductionRateSlider.setBounds(250, 47, 155, 133);
         trafficPatternPanel.add(vehicleProductionRateSlider);
         vehicleProductionRateSlider.addChangeListener(new ChangeListener() {
             @Override
@@ -488,8 +488,8 @@ public class  Traffic_Simulator {
 
         JLabel vehicleCreationRate = new JLabel("Rate");
         vehicleCreationRate.setForeground(SystemColor.controlHighlight);
-        vehicleCreationRate.setFont(new Font("Times New Roman", Font.BOLD, 14));
-        vehicleCreationRate.setBounds(225, 128, 36, 18);
+        vehicleCreationRate.setFont(new Font("Copperplate Gothic", Font.BOLD, 14));
+        vehicleCreationRate.setBounds(210, 98, 36, 18);
         trafficPatternPanel.add(vehicleCreationRate);
 
         JLabel lblDriverBehavior = new JLabel("Driver Behavior");
@@ -886,7 +886,7 @@ public class  Traffic_Simulator {
         final JButton clearVehicleFactoryButton = new JButton();
         clearVehicleFactoryButton.setToolTipText("Clear Vehicle Factory");
         clearVehicleFactoryButton.setIcon(new ImageIcon(Traffic_Simulator.class.getResource("/resources/clearVehicleFactory.png")));
-        clearVehicleFactoryButton.setBounds(325, 85, 65, 65);
+        clearVehicleFactoryButton.setBounds(425, 85, 65, 65);
         trafficPatternPanel.add(clearVehicleFactoryButton);
         clearVehicleFactoryButton.setEnabled(false);
         clearVehicleFactoryButton.addActionListener(new ActionListener() {
