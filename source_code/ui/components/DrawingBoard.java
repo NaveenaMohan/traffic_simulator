@@ -26,7 +26,6 @@ public class DrawingBoard implements ActionListener {
     private static int trafficLightIdIndex = 1;
     private static int zebraCrossingTrafficLightIdIndex = 1;
     private BufferedImage bufferedRoadImage;
-    private BufferedImage bufferedChangeableRoadImage;
     private int currentX, currentY;
     private Set<IRUnitManager> singleLaneRUnits = new LinkedHashSet<IRUnitManager>();
     private Set<IRUnitManager> doubleLaneRUnits = new LinkedHashSet<IRUnitManager>();
@@ -51,7 +50,6 @@ public class DrawingBoard implements ActionListener {
     private IRUnitManager previousRUnit;
     private IRUnitManager previousChangeableRunit;
     private Image rUnitImage;
-    private Image rUnitImage2;
     private Image trafficLightImage;
     private Image carImage;
     private Image truckImage;
@@ -95,8 +93,7 @@ public class DrawingBoard implements ActionListener {
 
     public void initializeAndLoadImages() {
         //Loading all images for various UI components
-        rUnitImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/leftLane.png"));
-        rUnitImage2 = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/rightLane.png"));
+        rUnitImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/road.png"));
         trafficLightImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/lightMini.png"));
         carImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/car.png"));
         truckImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/truck.png"));
@@ -132,19 +129,6 @@ public class DrawingBoard implements ActionListener {
                 BufferedImage.TYPE_INT_ARGB);
         Graphics2D roadGraphics = bufferedRoadImage.createGraphics();
         roadGraphics.drawImage(rUnitImage, 0, 0, drawingBoardPanel);
-
-        MediaTracker changeableRoadMediaTracker = new MediaTracker(drawingBoardPanel);
-        changeableRoadMediaTracker.addImage(rUnitImage2, 1);
-        try {
-            changeableRoadMediaTracker.waitForAll();
-        } catch (Exception e) {
-            System.out.println("Exception while loading DoubleRoadImage");
-        }
-        bufferedChangeableRoadImage = new BufferedImage(rUnitImage2.getWidth(drawingBoardPanel), rUnitImage2.getHeight(drawingBoardPanel),
-                BufferedImage.TYPE_INT_ARGB);
-        Graphics2D changeableRoadGraphics = bufferedChangeableRoadImage.createGraphics();
-        changeableRoadGraphics.drawImage(rUnitImage2, 0, 0, drawingBoardPanel);
-
     }
 
     //Configuration Phase - Drawing road and adding other traffic elements
@@ -228,8 +212,8 @@ public class DrawingBoard implements ActionListener {
                     Coordinates coordinates = getRepositionedImageCoordinates(bufferedRoadImage, currentX, currentY);
                     g2d.drawImage(bufferedRoadImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
                     //Drawing the changeable road with repositioned coordinates
-                    coordinates = getRepositionedImageCoordinates(bufferedChangeableRoadImage, currentChangeableX, currentChangeableY);
-                    g2d.drawImage(bufferedChangeableRoadImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
+                    coordinates = getRepositionedImageCoordinates(bufferedRoadImage, currentChangeableX, currentChangeableY);
+                    g2d.drawImage(bufferedRoadImage, coordinates.getX(), coordinates.getY(), drawingBoardPanel);
                 }
 
                 //remember the previous A coordinate for getting the correct adjacent point
@@ -718,7 +702,7 @@ public class DrawingBoard implements ActionListener {
         //Drawing double road
         drawRoadComponentWithCoordinates(rUnitImage, doubleLaneRUnits, g2D);
         //Drawing Changeable road
-        drawRoadComponentWithCoordinates(rUnitImage2, changeAbleLaneRUnits, g2D);
+        drawRoadComponentWithCoordinates(rUnitImage, changeAbleLaneRUnits, g2D);
     }
 
     private void drawRoadComponentWithCoordinates(Image roadImage, Set<IRUnitManager> rUnits, Graphics2D g2D) {
@@ -1072,10 +1056,6 @@ public class DrawingBoard implements ActionListener {
         return bufferedRoadImage;
     }
 
-    public BufferedImage getBufferedChangeableRoadImage() {
-        return bufferedChangeableRoadImage;
-    }
-
     public int getCurrentX() {
         return currentX;
     }
@@ -1098,10 +1078,6 @@ public class DrawingBoard implements ActionListener {
 
     public Image getrUnitImage() {
         return rUnitImage;
-    }
-
-    public Image getrUnitImage2() {
-        return rUnitImage2;
     }
 
     public Image getTrafficLightImage() {

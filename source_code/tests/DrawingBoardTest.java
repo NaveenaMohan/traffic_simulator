@@ -30,7 +30,6 @@ public class DrawingBoardTest {
     public void testInitialize() {
         //Asserting whether couple of images were loaded
         Assert.assertNotNull(drawingBoard.getBufferedRoadImage());
-        Assert.assertNotNull(drawingBoard.getBufferedChangeableRoadImage());
         Assert.assertNotNull(drawingBoard.getCarImage());
         Assert.assertNotNull(drawingBoard.getSpeed20Image());
         Assert.assertNotNull(drawingBoard.getTrafficLightImage());
