@@ -19,6 +19,7 @@ import java.awt.geom.Ellipse2D;
 /**
  * UI delegate for the RangeSlider component.  RangeSliderUI paints two thumbs,
  * one for the lower value and one for the upper value.
+ *
  * @author Ernest Yu
  * @modified Jim Robinson
  */

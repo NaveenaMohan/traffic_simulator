@@ -15,8 +15,8 @@ import ui.Coordinates;
 public class CommonTest {
 
     @Rule
-    private ExpectedException illegalArgument = ExpectedException.none();
-    private IRoadNetworkManager roadNetwork;
+    public ExpectedException illegalArgument = ExpectedException.none();
+    public IRoadNetworkManager roadNetwork;
 
     @Before
     public void setUp() throws Exception {

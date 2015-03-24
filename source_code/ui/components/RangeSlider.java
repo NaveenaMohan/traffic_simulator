@@ -15,7 +15,7 @@ import javax.swing.*;
  * An extension of JSlider to select a range of values using two thumb controls.
  * The thumb controls are used to select the lower and upper value of a range
  * with predetermined minimum and maximum values.
- *
+ * <p/>
  * <p>Note that RangeSlider makes use of the default BoundedRangeModel, which
  * supports an inner range defined by a value and an extent. The upper value
  * returned by RangeSlider is simply the lower value plus the extent.</p>
