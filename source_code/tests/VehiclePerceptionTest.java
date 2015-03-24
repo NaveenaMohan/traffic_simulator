@@ -11,7 +11,7 @@ import managers.roadnetwork.IRoadNetworkManager;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
 import managers.runit.Blockage;
-import managers.runit.RUnit;
+import managers.runit.IRUnitManager;
 import managers.space.ObjectInSpace;
 import managers.space.SpaceManager;
 import managers.space.VehicleDirection;
@@ -42,8 +42,7 @@ public class VehiclePerceptionTest {
         vehicleMotor= new VehicleMotor(1, 1, 1, "", objectInSpace, 1,false);
 
 
-
-        RUnit prev = null;
+        IRUnitManager prev = null;
 
         //build a road of rUnits
         for (int i = 0; i < 30; i++) {
@@ -59,7 +58,7 @@ public class VehiclePerceptionTest {
         String currentRUnitNumber = "2";
         String objectRUnit = "10";
 
-        RUnit currentRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(currentRUnitNumber);
+        IRUnitManager currentRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(currentRUnitNumber);
 
         roadNetwork.addBlockage(roadNetwork.getRoadNetwork().getrUnitHashtable().get(objectRUnit));
 
@@ -72,7 +71,7 @@ public class VehiclePerceptionTest {
     public void test2See() throws Exception {
         String currentRUnitNumber = "2";
 
-        RUnit currentRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(currentRUnitNumber);
+        IRUnitManager currentRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(currentRUnitNumber);
 
         vehiclePerception.see(1,currentRUnit,100,vehicleState,spaceManager,dataAndStructures,objectInSpace);
 
@@ -85,7 +84,7 @@ public class VehiclePerceptionTest {
         String currentRUnitNumber = "2";
         String objectRUnit = "2";
 
-        RUnit currentRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(currentRUnitNumber);
+        IRUnitManager currentRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(currentRUnitNumber);
         int projectedDistance = Integer.parseInt(objectRUnit) - Integer.parseInt(currentRUnitNumber);
         roadNetwork.addBlockage(roadNetwork.getRoadNetwork().getrUnitHashtable().get(objectRUnit));
 
@@ -101,7 +100,7 @@ public class VehiclePerceptionTest {
         String currentRUnitNumber = "2";
         String objectRUnit = "5";
 
-        RUnit currentRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(currentRUnitNumber);
+        IRUnitManager currentRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(currentRUnitNumber);
 
         roadNetwork.addBlockage(roadNetwork.getRoadNetwork().getrUnitHashtable().get(objectRUnit));
 

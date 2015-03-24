@@ -8,7 +8,7 @@ import managers.roadnetwork.IRoadNetworkManager;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
 import managers.runit.Blockage;
-import managers.runit.RUnit;
+import managers.runit.IRUnitManager;
 import managers.runit.SpeedLimitSign;
 import managers.runit.StopSign;
 import managers.space.ObjectInSpace;
@@ -41,8 +41,7 @@ public class VehicleStateTest {
                 new VehicleDirection(1,1,2,2), VehicleType.car), 1,false);
 
 
-
-        RUnit prev = null;
+        IRUnitManager prev = null;
 
         //build a road of rUnits
         for (int i = 0; i < 30; i++) {
@@ -54,7 +53,7 @@ public class VehicleStateTest {
     public void testRegisterObject() throws Exception {
         //assert that no exception is thrown
         String rUnitID="10";
-        RUnit rUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(rUnitID);
+        IRUnitManager rUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(rUnitID);
         vehicleState.registerObject(new VehicleMemoryObject(rUnit, new Blockage(),10,0, false, true));
         vehicleState.cleanObjectsAhead();
     }
@@ -62,7 +61,7 @@ public class VehicleStateTest {
     @Test
     public void testCleanObjectsAhead() throws Exception {
         String rUnitID="10";
-        RUnit rUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(rUnitID);
+        IRUnitManager rUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(rUnitID);
         vehicleState.registerObject(new VehicleMemoryObject(rUnit, new Blockage(),10,0, false, true));
         vehicleState.cleanObjectsAhead();
 
@@ -73,7 +72,7 @@ public class VehicleStateTest {
     public void testNextObjectWithin() throws Exception {
         String blockageID="10";
 
-        RUnit blockedRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(blockageID);
+        IRUnitManager blockedRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(blockageID);
         vehicleState.registerObject(new VehicleMemoryObject(blockedRUnit, new Blockage(),10,0, false, true));
 
         Object receivedObject = vehicleState.nextObjectWithin(100, false, true).getObject();
@@ -85,7 +84,7 @@ public class VehicleStateTest {
     public void test2NextObjectWithin() throws Exception {
         String blockageID="10";
 
-        RUnit blockedRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(blockageID);
+        IRUnitManager blockedRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(blockageID);
         vehicleState.registerObject(new VehicleMemoryObject(blockedRUnit, new Blockage(),10,0, false, true));
 
         Object receivedObject = vehicleState.nextObjectWithin(2, false, true);
@@ -97,7 +96,7 @@ public class VehicleStateTest {
     public void test3NextObjectWithin() throws Exception {
         String blockageID="10";
 
-        RUnit blockedRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(blockageID);
+        IRUnitManager blockedRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(blockageID);
         vehicleState.registerObject(new VehicleMemoryObject(blockedRUnit, new Blockage(),10,0, false, true));
 
         Object receivedObject = vehicleState.nextObjectWithin(100, false, false);
@@ -109,7 +108,7 @@ public class VehicleStateTest {
     public void test4NextObjectWithin() throws Exception {
         String blockageID="10";
 
-        RUnit blockedRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(blockageID);
+        IRUnitManager blockedRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(blockageID);
         vehicleState.registerObject(new VehicleMemoryObject(blockedRUnit, new Blockage(), 10,0, false, true));
 
         Object receivedObject = vehicleState.nextObjectWithin(1, false, false);
@@ -121,7 +120,7 @@ public class VehicleStateTest {
     public void testGetNextSpeedAffectingRoadElement() throws Exception {
         String stopSignRUnitID="10";
 
-        RUnit stopsignRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(stopSignRUnitID);
+        IRUnitManager stopsignRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(stopSignRUnitID);
         vehicleState.registerObject(new VehicleMemoryObject(stopsignRUnit, new StopSign(), 10,0,true, true));
 
         Object receivedObject = vehicleState.getNextSpeedAffectingRoadElement(20, true).getObject();
@@ -133,7 +132,7 @@ public class VehicleStateTest {
     public void test2GetNextSpeedAffectingRoadElement() throws Exception {
         String speedSignRUnitID="10";
 
-        RUnit speedsignRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(speedSignRUnitID);
+        IRUnitManager speedsignRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(speedSignRUnitID);
         vehicleState.registerObject(new VehicleMemoryObject(speedsignRUnit, new SpeedLimitSign(10), 10,0,true, true));
 
         Object receivedObject = vehicleState.getNextSpeedAffectingRoadElement(20, true).getObject();
@@ -143,7 +142,7 @@ public class VehicleStateTest {
 
     @Test
      public void testGetSlowestWithin() throws Exception {
-        RUnit rUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get("10");
+        IRUnitManager rUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get("10");
 
         vehicleState.registerObject(new VehicleMemoryObject(rUnit, new Blockage(),10,0, false, true));
         vehicleState.registerObject(new VehicleMemoryObject(rUnit, new SpeedLimitSign(10),12,0, false, true));
@@ -155,7 +154,7 @@ public class VehicleStateTest {
 
     @Test
     public void test2GetSlowestWithin() throws Exception {
-        RUnit rUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get("10");
+        IRUnitManager rUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get("10");
 
         vehicleState.registerObject(new VehicleMemoryObject(rUnit, new Blockage(),10,0, false, true));
         vehicleState.registerObject(new VehicleMemoryObject(rUnit, new SpeedLimitSign(10),8,0, false, true));
@@ -167,7 +166,7 @@ public class VehicleStateTest {
 
     @Test
     public void test3GetSlowestWithin() throws Exception {
-        RUnit rUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get("10");
+        IRUnitManager rUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get("10");
 
         vehicleState.registerObject(new VehicleMemoryObject(rUnit, new Blockage(),20,0, false, true));
         vehicleState.registerObject(new VehicleMemoryObject(rUnit, new SpeedLimitSign(10),12,0, false, true));
@@ -179,7 +178,7 @@ public class VehicleStateTest {
 
     @Test
     public void test4GetSlowestWithin() throws Exception {
-        RUnit rUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get("10");
+        IRUnitManager rUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get("10");
 
         vehicleState.registerObject(new VehicleMemoryObject(rUnit, new SpeedLimitSign(20),10,0, false, true));
         vehicleState.registerObject(new VehicleMemoryObject(rUnit, new SpeedLimitSign(10),12,0, false, true));
