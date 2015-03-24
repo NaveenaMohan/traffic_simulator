@@ -13,6 +13,7 @@ public class UIDataStructures implements Serializable {
 
     private Set<IRUnitManager> singleLaneRUnits = new LinkedHashSet<IRUnitManager>();
     private Set<IRUnitManager> doubleLaneRUnits = new LinkedHashSet<IRUnitManager>();
+    private Set<IRUnitManager> changeableLaneRUnits = new LinkedHashSet<IRUnitManager>();
     private List<Coordinates> vehicleFactoryCoordinates = new ArrayList<Coordinates>();
     private Map<String, Coordinates> trafficLightCoordinates = new HashMap<String, Coordinates>();
     private Map<String, Coordinates> zebraCrossingCoordinates = new HashMap<String, Coordinates>();
@@ -174,6 +175,8 @@ public class UIDataStructures implements Serializable {
 
         if (blockageCoordinates != null ? !blockageCoordinates.equals(that.blockageCoordinates) : that.blockageCoordinates != null)
             return false;
+        if (changeableLaneRUnits != null ? !changeableLaneRUnits.equals(that.changeableLaneRUnits) : that.changeableLaneRUnits != null)
+            return false;
         if (doubleLaneRUnits != null ? !doubleLaneRUnits.equals(that.doubleLaneRUnits) : that.doubleLaneRUnits != null)
             return false;
         if (leftCoordinates != null ? !leftCoordinates.equals(that.leftCoordinates) : that.leftCoordinates != null)
@@ -214,6 +217,7 @@ public class UIDataStructures implements Serializable {
     public int hashCode() {
         int result = singleLaneRUnits != null ? singleLaneRUnits.hashCode() : 0;
         result = 31 * result + (doubleLaneRUnits != null ? doubleLaneRUnits.hashCode() : 0);
+        result = 31 * result + (changeableLaneRUnits != null ? changeableLaneRUnits.hashCode() : 0);
         result = 31 * result + (vehicleFactoryCoordinates != null ? vehicleFactoryCoordinates.hashCode() : 0);
         result = 31 * result + (trafficLightCoordinates != null ? trafficLightCoordinates.hashCode() : 0);
         result = 31 * result + (zebraCrossingCoordinates != null ? zebraCrossingCoordinates.hashCode() : 0);
@@ -230,6 +234,15 @@ public class UIDataStructures implements Serializable {
         result = 31 * result + (speed90Coordinates != null ? speed90Coordinates.hashCode() : 0);
         result = 31 * result + (welcomeCoordinates != null ? welcomeCoordinates.hashCode() : 0);
         return result;
+    }
+
+    public Set<IRUnitManager> getChangeableLaneRUnits() {
+
+        return changeableLaneRUnits;
+    }
+
+    public void setChangeableLaneRUnits(Set<IRUnitManager> changeableLaneRUnits) {
+        this.changeableLaneRUnits = changeableLaneRUnits;
     }
 
 }

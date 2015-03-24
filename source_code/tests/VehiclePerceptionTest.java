@@ -28,18 +28,18 @@ public class VehiclePerceptionTest {
     private VehiclePerception vehiclePerception = new VehiclePerception();
     private SpaceManager spaceManager = new SpaceManager();
     private VehicleMotor vehicleMotor;
-    private ObjectInSpace objectInSpace =new ObjectInSpace(1, 1, 1, 1, 1, 1, 1,
-            new VehicleDirection(1,1,2,2), VehicleType.car);
+    private ObjectInSpace objectInSpace = new ObjectInSpace(1, 1, 1, 1, 1, 1, 1,
+            new VehicleDirection(1, 1, 2, 2), VehicleType.car);
     private IDataAndStructures dataAndStructures;
     private IGlobalConfigManager globalConfigManager;
 
     @Before
     public void setUp() throws Exception {
 
-        globalConfigManager = new GlobalConfigManager(1,1,new ClimaticCondition(), null, null, null);
+        globalConfigManager = new GlobalConfigManager(1, 1, new ClimaticCondition(), null, null, null);
         roadNetwork = new RoadNetworkManager(new RoadNetwork());
-        dataAndStructures = new DataAndStructures(roadNetwork,null,globalConfigManager);
-        vehicleMotor= new VehicleMotor(1, 1, 1, "", objectInSpace, 1,false);
+        dataAndStructures = new DataAndStructures(roadNetwork, null, globalConfigManager);
+        vehicleMotor = new VehicleMotor(1, 1, 1, "", objectInSpace, 1, false);
 
 
         IRUnitManager prev = null;
@@ -48,7 +48,6 @@ public class VehiclePerceptionTest {
         for (int i = 0; i < 30; i++) {
             prev = roadNetwork.addSingleLane(10, 10 + i, prev);
         }
-
 
 
     }
@@ -62,7 +61,7 @@ public class VehiclePerceptionTest {
 
         roadNetwork.addBlockage(roadNetwork.getRoadNetwork().getrUnitHashtable().get(objectRUnit));
 
-        vehiclePerception.see(1,currentRUnit,100,vehicleState,spaceManager,dataAndStructures,objectInSpace);
+        vehiclePerception.see(1, currentRUnit, 100, vehicleState, spaceManager, dataAndStructures, objectInSpace);
         Assert.assertEquals(vehicleState.nextObjectWithin(100, false, true).getDistance(), 7.0);
         vehicleState.cleanObjectsAhead();
     }
@@ -73,7 +72,7 @@ public class VehiclePerceptionTest {
 
         IRUnitManager currentRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(currentRUnitNumber);
 
-        vehiclePerception.see(1,currentRUnit,100,vehicleState,spaceManager,dataAndStructures,objectInSpace);
+        vehiclePerception.see(1, currentRUnit, 100, vehicleState, spaceManager, dataAndStructures, objectInSpace);
 
         Assert.assertEquals(vehicleState.nextObjectWithin(100, false, true), null);
         vehicleState.cleanObjectsAhead();
@@ -88,7 +87,7 @@ public class VehiclePerceptionTest {
         int projectedDistance = Integer.parseInt(objectRUnit) - Integer.parseInt(currentRUnitNumber);
         roadNetwork.addBlockage(roadNetwork.getRoadNetwork().getrUnitHashtable().get(objectRUnit));
 
-        vehiclePerception.see(1,currentRUnit,100,vehicleState,spaceManager,dataAndStructures,objectInSpace);
+        vehiclePerception.see(1, currentRUnit, 100, vehicleState, spaceManager, dataAndStructures, objectInSpace);
 
         Assert.assertEquals(vehicleState.nextObjectWithin(100, false, true), null);
         vehicleState.cleanObjectsAhead();
@@ -104,9 +103,9 @@ public class VehiclePerceptionTest {
 
         roadNetwork.addBlockage(roadNetwork.getRoadNetwork().getrUnitHashtable().get(objectRUnit));
 
-        vehiclePerception.see(1,currentRUnit,100,vehicleState,spaceManager,dataAndStructures,objectInSpace);
+        vehiclePerception.see(1, currentRUnit, 100, vehicleState, spaceManager, dataAndStructures, objectInSpace);
 
-        Object projectedObject = vehicleState.nextObjectWithin(100, false,  true).getObject();
+        Object projectedObject = vehicleState.nextObjectWithin(100, false, true).getObject();
         Assert.assertEquals(projectedObject instanceof Blockage, true);
         vehicleState.cleanObjectsAhead();
     }

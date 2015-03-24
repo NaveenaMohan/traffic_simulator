@@ -32,6 +32,12 @@ import java.io.*;
    wiring them all together */
 public class Traffic_Simulator {
     private static Traffic_Simulator window;
+    final JSlider visibility_slider = new JSlider();
+    final JSlider slippery_slider = new JSlider();
+    final RangeSlider trafficDensityRangeSlider = new RangeSlider();
+    final RangeSlider driverBehaviourRangeSlider = new RangeSlider();
+    final JSlider vehicleProductionRateSlider = new JSlider();
+    final JSlider destinationDensitySlider = new JSlider();
     private ClimaticCondition climaticCondition = new ClimaticCondition();
     private JFrame trafficSimulatorFrame;
     private IRoadNetworkManager roadNetworkManager = new RoadNetworkManager(new RoadNetwork());
@@ -44,11 +50,12 @@ public class Traffic_Simulator {
             new VehicleDensity(),
             new Route()
     );
+    final JTextField destinationTxtBoxField = new JTextField(globalConfigManager.getRoute().getDestination());
     private IDataAndStructures dataAndStructures = new DataAndStructures(roadNetworkManager, vehicleFactoryManager, globalConfigManager);
     private DCP dcp = new DCP(dataAndStructures);
-    private boolean openReport = false;
     private SimEngine simEngine = new SimEngine(dataAndStructures, dcp);
     private DefaultTableModel model;
+    private DrawingBoard drawingBoard;
 
 
     /**
@@ -272,6 +279,7 @@ public class Traffic_Simulator {
         trafficSimulatorFrame.getContentPane().add(currentSecondPanel);
         currentSecondPanel.setLayout(null);
         currentSecondPanel.add(currentSecondLabel);
+        currentSecondPanel.add(currentSecondValue);
 
 
         final JButton playButton = new JButton();
@@ -363,7 +371,6 @@ public class Traffic_Simulator {
         lblVisibility.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 12));
         trafficPatternPanel.add(lblVisibility);
 
-        final JSlider visibility_slider = new JSlider();
         visibility_slider.setBounds(337, 14, 165, 26);
         visibility_slider.setPaintTicks(true);
         visibility_slider.setMajorTickSpacing(10);
@@ -379,7 +386,6 @@ public class Traffic_Simulator {
             }
         });
 
-        final JSlider slippery_slider = new JSlider();
         slippery_slider.setBounds(337, 47, 165, 26);
         slippery_slider.setPaintTicks(true);
         slippery_slider.setPaintTicks(true);
@@ -442,7 +448,6 @@ public class Traffic_Simulator {
         });
 
 
-        final RangeSlider trafficDensityRangeSlider = new RangeSlider();
         trafficDensityRangeSlider.setPaintTicks(true);
         trafficDensityRangeSlider.setMajorTickSpacing(10);
         trafficDensityRangeSlider.setPreferredSize(new Dimension(240, trafficDensityRangeSlider.getPreferredSize().height));
@@ -463,7 +468,6 @@ public class Traffic_Simulator {
         });
 
 
-        final RangeSlider driverBehaviourRangeSlider = new RangeSlider();
         driverBehaviourRangeSlider.setPaintTicks(true);
         driverBehaviourRangeSlider.setMajorTickSpacing(10);
         driverBehaviourRangeSlider.setPreferredSize(new Dimension(240, trafficDensityRangeSlider.getPreferredSize().height));
@@ -494,7 +498,6 @@ public class Traffic_Simulator {
         lbl_traffic_density.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 15));
         trafficPatternPanel.add(lbl_traffic_density);
 
-        final JSlider vehicleProductionRateSlider = new JSlider();
         vehicleProductionRateSlider.setPaintTicks(true);
         vehicleProductionRateSlider.setMinimum(0);
         vehicleProductionRateSlider.setMaximum(20);
@@ -563,7 +566,6 @@ public class Traffic_Simulator {
         trafficPatternPanel.add(lblDestinationDensity);
 
 
-        final JTextField destinationTxtBoxField = new JTextField(globalConfigManager.getRoute().getDestination());
         destinationTxtBoxField.setForeground(Color.LIGHT_GRAY);
         destinationTxtBoxField.setFont(new Font("Copperplate Gothic Bold", Font.ITALIC, 13));
         trafficPatternPanel.add(destinationTxtBoxField);
@@ -576,7 +578,6 @@ public class Traffic_Simulator {
             }
         });
 
-        final JSlider destinationDensitySlider = new JSlider();
         destinationDensitySlider.setBounds(325, 143, 155, 133);
         destinationDensitySlider.setPaintTicks(true);
         destinationDensitySlider.setMajorTickSpacing(10);
@@ -641,8 +642,10 @@ public class Traffic_Simulator {
         scrollPane.setViewportView(table);
         trafficLightConfigPanel.add(scrollPane);
 
+        //Drawing Board Panel
+
         //Instantiating Drawing Board Panel
-        final DrawingBoard drawingBoard = new DrawingBoard(model, roadNetworkManager, simEngine, currentSecondValue);
+        drawingBoard = new DrawingBoard(model, roadNetworkManager, simEngine, currentSecondValue);
         final JPanel drawingBoardPanel = new JPanel() {
 
             @Override
@@ -839,50 +842,7 @@ public class Traffic_Simulator {
                         drawingBoard.clean();
                         //Reading the serialized object
                         ExportImportObject exportImportObject = (ExportImportObject) objectInputStream.readObject();
-                        //Populating the back end data structures, sim engine and report related objects
-                        roadNetworkManager = exportImportObject.getEngineDataStructures().getRoadNetworkManager();
-                        vehicleFactoryManager = exportImportObject.getEngineDataStructures().getVehicleFactoryManager();
-                        climaticCondition = exportImportObject.getEngineDataStructures().getGlobalConfigManager().getClimaticCondition();
-                        globalConfigManager = exportImportObject.getEngineDataStructures().getGlobalConfigManager();
-                        dataAndStructures = exportImportObject.getEngineDataStructures();
-                        dcp = new DCP(dataAndStructures);
-                        simEngine = new SimEngine(dataAndStructures, dcp);
-
-                        //Populating the UI related data structures
-
-                        //Populating the coordinates and RUnits for various elements
-                        drawingBoard.setSingleLaneRUnits(exportImportObject.getUiDataStructures().getSingleLaneRUnits());
-                        drawingBoard.setDoubleLaneRUnits(exportImportObject.getUiDataStructures().getDoubleLaneRUnits());
-                        drawingBoard.setTrafficLightCoordinates(exportImportObject.getUiDataStructures().getTrafficLightCoordinates());
-                        drawingBoard.setZebraCrossingCoordinates(exportImportObject.getUiDataStructures().getZebraCrossingCoordinates());
-                        drawingBoard.setStopCoordinates(exportImportObject.getUiDataStructures().getStopCoordinates());
-                        drawingBoard.setBlockageCoordinates(exportImportObject.getUiDataStructures().getBlockageCoordinates());
-                        drawingBoard.setVehicleFactoryCoordinates(exportImportObject.getUiDataStructures().getVehicleFactoryCoordinates());
-                        drawingBoard.setLeftCoordinates(exportImportObject.getUiDataStructures().getLeftCoordinates());
-                        drawingBoard.setRightCoordinates(exportImportObject.getUiDataStructures().getRightCoordinates());
-                        drawingBoard.setStraightCoordinates(exportImportObject.getUiDataStructures().getStraightCoordinates());
-                        drawingBoard.setSpeed20Coordinates(exportImportObject.getUiDataStructures().getSpeed20Coordinates());
-                        drawingBoard.setSpeed30Coordinates(exportImportObject.getUiDataStructures().getSpeed30Coordinates());
-                        drawingBoard.setSpeed50Coordinates(exportImportObject.getUiDataStructures().getSpeed50Coordinates());
-                        drawingBoard.setSpeed60Coordinates(exportImportObject.getUiDataStructures().getSpeed60Coordinates());
-                        drawingBoard.setSpeed70Coordinates(exportImportObject.getUiDataStructures().getSpeed70Coordinates());
-                        drawingBoard.setSpeed90Coordinates(exportImportObject.getUiDataStructures().getSpeed90Coordinates());
-                        drawingBoard.setWelcomeCoordinates(exportImportObject.getUiDataStructures().getWelcomeCoordinates());
-
-                        //Populating other fields in the DrawingPanel which include backed objects, sliders, traffic light config table etc
-                        drawingBoard.setSimEngine(simEngine);
-                        drawingBoard.setRoadNetworkManager(roadNetworkManager);
-                        driverBehaviourRangeSlider.setValue((int) (globalConfigManager.getDriverBehaviour().getPercentageCautious() * 100.0));
-                        driverBehaviourRangeSlider.setUpperValue((int) ((globalConfigManager.getDriverBehaviour().getPercentageCautious() + (globalConfigManager.getDriverBehaviour().getPercentageNormal())) * 100.0));
-                        trafficDensityRangeSlider.setValue((int) (globalConfigManager.getVehicleDensity().getCarDensity() * 100.0));
-                        trafficDensityRangeSlider.setUpperValue((int) ((globalConfigManager.getVehicleDensity().getCarDensity() + globalConfigManager.getVehicleDensity().getHeavyVehicleDensity()) * 100.0));
-                        slippery_slider.setValue((int) (climaticCondition.getSlipperiness() * 100.0));
-                        visibility_slider.setValue((int) (climaticCondition.getVisibility() * 100.0));
-                        destinationDensitySlider.setValue((int) (globalConfigManager.getRoute().getTrafficPercent() * 100.0));
-                        destinationTxtBoxField.setText(globalConfigManager.getRoute().getDestination());
-                        populateTrafficLightTableModel();
-                        drawingBoard.setModel(model);
-
+                        populateEngineAndUIDataStructuresForImport(exportImportObject);
                         drawingBoard.getDrawingBoardPanel().repaint();
                     } catch (IOException e1) {
                         e1.printStackTrace();
@@ -1064,6 +1024,53 @@ public class Traffic_Simulator {
         });
     }
 
+    public void populateEngineAndUIDataStructuresForImport(ExportImportObject exportImportObject) {
+        //Populating the back end data structures, sim engine and report related objects
+        roadNetworkManager = exportImportObject.getEngineDataStructures().getRoadNetworkManager();
+        vehicleFactoryManager = exportImportObject.getEngineDataStructures().getVehicleFactoryManager();
+        climaticCondition = exportImportObject.getEngineDataStructures().getGlobalConfigManager().getClimaticCondition();
+        globalConfigManager = exportImportObject.getEngineDataStructures().getGlobalConfigManager();
+        dataAndStructures = exportImportObject.getEngineDataStructures();
+        dcp = new DCP(dataAndStructures);
+        simEngine = new SimEngine(dataAndStructures, dcp);
+
+        //Populating the UI related data structures
+
+        //Populating the coordinates and RUnits for various elements
+        drawingBoard.setSingleLaneRUnits(exportImportObject.getUiDataStructures().getSingleLaneRUnits());
+        drawingBoard.setDoubleLaneRUnits(exportImportObject.getUiDataStructures().getDoubleLaneRUnits());
+        drawingBoard.setChangeAbleLaneRUnitsRUnits(exportImportObject.getUiDataStructures().getChangeableLaneRUnits());
+        drawingBoard.setTrafficLightCoordinates(exportImportObject.getUiDataStructures().getTrafficLightCoordinates());
+        drawingBoard.setZebraCrossingCoordinates(exportImportObject.getUiDataStructures().getZebraCrossingCoordinates());
+        drawingBoard.setStopCoordinates(exportImportObject.getUiDataStructures().getStopCoordinates());
+        drawingBoard.setBlockageCoordinates(exportImportObject.getUiDataStructures().getBlockageCoordinates());
+        drawingBoard.setVehicleFactoryCoordinates(exportImportObject.getUiDataStructures().getVehicleFactoryCoordinates());
+        drawingBoard.setLeftCoordinates(exportImportObject.getUiDataStructures().getLeftCoordinates());
+        drawingBoard.setRightCoordinates(exportImportObject.getUiDataStructures().getRightCoordinates());
+        drawingBoard.setStraightCoordinates(exportImportObject.getUiDataStructures().getStraightCoordinates());
+        drawingBoard.setSpeed20Coordinates(exportImportObject.getUiDataStructures().getSpeed20Coordinates());
+        drawingBoard.setSpeed30Coordinates(exportImportObject.getUiDataStructures().getSpeed30Coordinates());
+        drawingBoard.setSpeed50Coordinates(exportImportObject.getUiDataStructures().getSpeed50Coordinates());
+        drawingBoard.setSpeed60Coordinates(exportImportObject.getUiDataStructures().getSpeed60Coordinates());
+        drawingBoard.setSpeed70Coordinates(exportImportObject.getUiDataStructures().getSpeed70Coordinates());
+        drawingBoard.setSpeed90Coordinates(exportImportObject.getUiDataStructures().getSpeed90Coordinates());
+        drawingBoard.setWelcomeCoordinates(exportImportObject.getUiDataStructures().getWelcomeCoordinates());
+
+        //Populating other fields in the DrawingPanel which include backed objects, sliders, traffic light config table etc
+        drawingBoard.setSimEngine(simEngine);
+        drawingBoard.setRoadNetworkManager(roadNetworkManager);
+        driverBehaviourRangeSlider.setValue((int) (globalConfigManager.getDriverBehaviour().getPercentageCautious() * 100.0));
+        driverBehaviourRangeSlider.setUpperValue((int) ((globalConfigManager.getDriverBehaviour().getPercentageCautious() + (globalConfigManager.getDriverBehaviour().getPercentageNormal())) * 100.0));
+        trafficDensityRangeSlider.setValue((int) (globalConfigManager.getVehicleDensity().getCarDensity() * 100.0));
+        trafficDensityRangeSlider.setUpperValue((int) ((globalConfigManager.getVehicleDensity().getCarDensity() + globalConfigManager.getVehicleDensity().getHeavyVehicleDensity()) * 100.0));
+        slippery_slider.setValue((int) (climaticCondition.getSlipperiness() * 100.0));
+        visibility_slider.setValue((int) (climaticCondition.getVisibility() * 100.0));
+        destinationDensitySlider.setValue((int) (globalConfigManager.getRoute().getTrafficPercent() * 100.0));
+        destinationTxtBoxField.setText(globalConfigManager.getRoute().getDestination());
+        populateTrafficLightTableModel();
+        drawingBoard.setModel(model);
+    }
+
     private void populateTrafficLightTableModel() {
         if (model != null) {
             for (TrafficLight trafficLight : roadNetworkManager.getRoadNetwork().getTrafficLightHashtable().values()) {
@@ -1072,6 +1079,74 @@ public class Traffic_Simulator {
                         trafficLight.getCycle().get(6), trafficLight.getCycle().get(7), trafficLight.getCycle().get(8), trafficLight.getCycle().get(9)});
             }
         }
+    }
+
+    public JFrame getTrafficSimulatorFrame() {
+        return trafficSimulatorFrame;
+    }
+
+    public DrawingBoard getDrawingBoard() {
+        return drawingBoard;
+    }
+
+    public ClimaticCondition getClimaticCondition() {
+        return climaticCondition;
+    }
+
+    public IRoadNetworkManager getRoadNetworkManager() {
+        return roadNetworkManager;
+    }
+
+    public IVehicleFactoryManager getVehicleFactoryManager() {
+        return vehicleFactoryManager;
+    }
+
+    public IGlobalConfigManager getGlobalConfigManager() {
+        return globalConfigManager;
+    }
+
+    public IDataAndStructures getDataAndStructures() {
+        return dataAndStructures;
+    }
+
+    public DCP getDcp() {
+        return dcp;
+    }
+
+    public SimEngine getSimEngine() {
+        return simEngine;
+    }
+
+    public DefaultTableModel getModel() {
+        return model;
+    }
+
+    public JSlider getVisibility_slider() {
+        return visibility_slider;
+    }
+
+    public JSlider getSlippery_slider() {
+        return slippery_slider;
+    }
+
+    public RangeSlider getTrafficDensityRangeSlider() {
+        return trafficDensityRangeSlider;
+    }
+
+    public RangeSlider getDriverBehaviourRangeSlider() {
+        return driverBehaviourRangeSlider;
+    }
+
+    public JSlider getVehicleProductionRateSlider() {
+        return vehicleProductionRateSlider;
+    }
+
+    public JTextField getDestinationTxtBoxField() {
+        return destinationTxtBoxField;
+    }
+
+    public JSlider getDestinationDensitySlider() {
+        return destinationDensitySlider;
     }
 
     @SuppressWarnings("serial")
