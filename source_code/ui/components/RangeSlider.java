@@ -1,15 +1,13 @@
 package ui.components;
 
-import ui.components.RangeSliderUI;
-
-import javax.swing.JSlider;
+import javax.swing.*;
 
 /**
  * An extension of JSlider to select a range of values using two thumb controls.
  * The thumb controls are used to select the lower and upper value of a range
  * with predetermined minimum and maximum values.
- * 
- * <p>Note that RangeSlider makes use of the default BoundedRangeModel, which 
+ * <p/>
+ * <p>Note that RangeSlider makes use of the default BoundedRangeModel, which
  * supports an inner range defined by a value and an extent.  The upper value
  * returned by RangeSlider is simply the lower value plus the extent.</p>
  */
@@ -20,15 +18,6 @@ public class RangeSlider extends JSlider {
      * and 100.
      */
     public RangeSlider() {
-        initSlider();
-    }
-
-    /**
-     * Constructs a RangeSlider with the specified default minimum and maximum 
-     * values.
-     */
-    public RangeSlider(int min, int max) {
-        super(min, max);
         initSlider();
     }
 
@@ -75,8 +64,8 @@ public class RangeSlider extends JSlider {
         int newExtent = oldExtent + oldValue - newValue;
 
         // Set new value and extent, and fire a single change event.
-        getModel().setRangeProperties(newValue, newExtent, getMinimum(), 
-            getMaximum(), getValueIsAdjusting());
+        getModel().setRangeProperties(newValue, newExtent, getMinimum(),
+                getMaximum(), getValueIsAdjusting());
     }
 
     /**
@@ -93,7 +82,7 @@ public class RangeSlider extends JSlider {
         // Compute new extent.
         int lowerValue = getValue();
         int newExtent = Math.min(Math.max(0, value - lowerValue), getMaximum() - lowerValue);
-        
+
         // Set extent to set upper value.
         setExtent(newExtent);
     }

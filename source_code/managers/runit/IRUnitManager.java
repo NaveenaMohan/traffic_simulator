@@ -8,47 +8,39 @@ import java.util.List;
  */
 public interface IRUnitManager extends Serializable {
 
-    void addTrafficLight(TrafficLight trafficLight);
+    public void addTrafficLight(TrafficLight trafficLight);
 
-    void addZebraCrossing();
+    public ZebraCrossing getZebraCrossing();
 
-    void addBlockage();
+    public void setZebraCrossing(ZebraCrossing zebraCrossing);
 
-    void addSpeedLimit();
+    public TrafficLight getTrafficLight();
 
-    void addStopSign();
+    public Blockage getBlockage();
 
-    void addWelcomeSign();
+    public void setBlockage(Blockage blockage);
 
-    void addDirectionSign();
+    public TrafficSign getTrafficSign();
 
-    ZebraCrossing getZebraCrossing();
+    public void setTrafficSign(TrafficSign trafficSign);
 
-    TrafficLight getTrafficLight();
+    public int getX();
 
-    Blockage getBlockage();
+    public int getY();
 
-    TrafficSign getTrafficSign();
+    public int getZ();
 
-     int getX();
+    public String getId();
 
-     int getY();
+    public List<IRUnitManager> getNextRUnitList();
 
-     int getZ();
+    public List<IRUnitManager> getPrevsRUnitList();
 
-    String getId();
+    public boolean isLeft();
 
-    List<RUnit> getNextRUnitList();
+    public void setLeft(boolean isLeft);
 
-    List<RUnit> getPrevsRUnitList();
+    public IRUnitManager getChangeAbleRUnit();
 
-    boolean isLeft();
-
-    void setLeft(boolean isLeft);
-
-    public void ChangeLight(boolean color, String trafficLightID, int index);
-
-    RUnit getChangeAbleRUnit();
-    public boolean go();
-
+    public void setChangeAbleRUnit(IRUnitManager currentChangeableRUnit);
 }

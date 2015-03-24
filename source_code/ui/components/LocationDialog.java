@@ -18,6 +18,8 @@ public class LocationDialog extends JDialog {
 
     public final void initUI() {
 
+        /*Initializes the Location DialogBox UI which pops up when the direction sign boards are added to the drawing board.
+          The location name can be inputted via the dialog box*/
         ImageIcon icon = new ImageIcon(Traffic_Simulator.class.getResource("/resources/Location.png"));
         getContentPane().setLayout(null);
         JLabel label = new JLabel(icon);
@@ -46,8 +48,8 @@ public class LocationDialog extends JDialog {
                 dispose();
             }
         });
-        
-     
+
+
         close.setAlignmentX(0.5f);
         getContentPane().add(close);
 
@@ -59,4 +61,3 @@ public class LocationDialog extends JDialog {
         setSize(300, 250);
     }
 }
-	

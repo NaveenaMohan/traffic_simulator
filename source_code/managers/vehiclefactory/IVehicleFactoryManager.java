@@ -1,23 +1,20 @@
 package managers.vehiclefactory;
 
 import dataAndStructures.IDataAndStructures;
-import managers.globalconfig.ClimaticCondition;
-import managers.globalconfig.GlobalConfigManager;
-import managers.globalconfig.IGlobalConfigManager;
-import managers.globalconfig.VehicleDensity;
-import managers.runit.RUnit;
-import managers.space.ISpaceManager;
-import managers.space.SpaceManager;
-import managers.vehicle.Vehicle;
+import managers.runit.IRUnitManager;
+import managers.vehicle.IVehicleManager;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by naveena on 08/02/15.
  */
 public interface IVehicleFactoryManager extends Serializable {
 
-    void addVehicleFactory(RUnit rUnit);
+    public void addVehicleFactory(IRUnitManager rUnit);
 
-    Vehicle createVehicle(IDataAndStructures dataAndStructures);
+    public IVehicleManager createVehicle(IDataAndStructures dataAndStructures);
+
+    public List<VehicleFactory> getVehicleFactoryList();
 }

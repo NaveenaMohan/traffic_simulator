@@ -3,7 +3,6 @@ package managers.vehicle;
 import dataAndStructures.IDataAndStructures;
 import managers.globalconfig.VehicleType;
 import managers.runit.IRUnitManager;
-import managers.runit.RUnit;
 import managers.space.ISpaceManager;
 import managers.space.ObjectInSpace;
 import managers.space.VehicleDirection;
@@ -19,25 +18,24 @@ public class Vehicle implements IVehicleManager {
     private VehicleMotor vehicleMotor;
     private VehicleState vehicleState;
     private VehiclePerception vehiclePerception;
-    private VehicleType vehicleType;
 
     private double timeCreated;
 
 
     private double previousTime;
 
-    public Vehicle(int vehID, RUnit rUnit, Driver driver, int initialSpeed, String destination
+    public Vehicle(int vehID, IRUnitManager rUnit, Driver driver, int initialSpeed, String destination
             , ObjectInSpace objectInSpace, double maxAcceleration, double maxDeceleration, double timeCreated, double maximumVelocity) {
         this.vehID = vehID;
         this.rUnit = rUnit;
         this.driver = driver;
         this.timeCreated = timeCreated;
-        previousTime=timeCreated;
+        previousTime = timeCreated;
 
         this.vehicleMotor = new VehicleMotor(maxAcceleration, maxDeceleration, initialSpeed, destination, objectInSpace, maximumVelocity,
-                (objectInSpace.getVehicleType()==VehicleType.emergency ? true : false));
-        this. vehicleState = new VehicleState();
-        this.vehiclePerception=new VehiclePerception();
+                (objectInSpace.getVehicleType() == VehicleType.emergency));
+        this.vehicleState = new VehicleState();
+        this.vehiclePerception = new VehiclePerception();
     }
 
     public double getTimeCreated() {
@@ -52,7 +50,7 @@ public class Vehicle implements IVehicleManager {
         return rUnit;
     }
 
-    public void setrUnit(RUnit rUnit) {
+    public void setrUnit(IRUnitManager rUnit) {
         this.rUnit = rUnit;
     }
 
@@ -92,30 +90,30 @@ public class Vehicle implements IVehicleManager {
         );
 
         //move
-        rUnit = vehicleMotor.performAction(time-previousTime,dataAndStructures,rUnit, vehicleState);
+        rUnit = vehicleMotor.performAction(time - previousTime, dataAndStructures, rUnit, vehicleState);
 
         //clear state objects
         vehicleState.cleanObjectsAhead();
 
-       previousTime= time;
+        previousTime = time;
 
     }
 
-    public String getCurrentStrategy(){return vehicleMotor.currentStrategy;}
     @Override
     public boolean isVisible(int minX, int maxX, int minY, int maxY) {
         return false;
     }
 
-    public boolean getMadeDestination(){
+    public boolean getMadeDestination() {
         return vehicleMotor.isMadeDestination();
     }
-    public double getArrivalDestTime(){
+
+    public double getArrivalDestTime() {
         return vehicleMotor.getArrivalDestTime();
     }
 
     @Override
-    public Vehicle getVehicle() {
+    public IVehicleManager getVehicle() {
         return this;
     }
 

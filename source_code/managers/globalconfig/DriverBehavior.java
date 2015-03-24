@@ -1,7 +1,6 @@
 package managers.globalconfig;
 
 import common.Common;
-import managers.vehicle.Driver;
 
 import java.io.Serializable;
 
@@ -35,7 +34,7 @@ public class DriverBehavior implements Serializable {
     private double cautiousMinVisibilityOffset;
     private double cautiousMaxVisibilityOffset;
 
-    public DriverBehavior(){
+    public DriverBehavior() {
         //Range taken:
         //0.3 - 0.7
         //0.8 - 1.2
@@ -66,34 +65,32 @@ public class DriverBehavior implements Serializable {
         this.cautiousMaxVisibilityOffset = 1;
     }
 
-    public void setPercentageReckless(double percentageReckless) {
-        this.percentageReckless = percentageReckless;
-    }
-
-    public void setPercentageNormal(double percentageNormal) {
-        this.percentageNormal = percentageNormal;
-    }
-
-    public void setPercentageCautious(double percentageCautious) {
-        this.percentageCautious = percentageCautious;
-    }
-
     public double getPercentageReckless() {
         return percentageReckless;
+    }
+
+    public void setPercentageReckless(double percentageReckless) {
+        this.percentageReckless = percentageReckless;
     }
 
     public double getPercentageNormal() {
         return percentageNormal;
     }
 
+    public void setPercentageNormal(double percentageNormal) {
+        this.percentageNormal = percentageNormal;
+    }
+
     public double getPercentageCautious() {
         return percentageCautious;
     }
 
-    public double getRandomSpeedOffsetForDriverType(DriverBehaviorType driverBehaviorType)
-    {
-        switch(driverBehaviorType)
-        {
+    public void setPercentageCautious(double percentageCautious) {
+        this.percentageCautious = percentageCautious;
+    }
+
+    public double getRandomSpeedOffsetForDriverType(DriverBehaviorType driverBehaviorType) {
+        switch (driverBehaviorType) {
             case normal:
                 return Common.randDoubleBetween(normalMinSpeedOffset, normalMaxSpeedOffset);
             case cautious:
@@ -105,10 +102,8 @@ public class DriverBehavior implements Serializable {
         }
     }
 
-    public double getRandomVisibilityOffsetForDriverType(DriverBehaviorType driverBehaviorType)
-    {
-        switch(driverBehaviorType)
-        {
+    public double getRandomVisibilityOffsetForDriverType(DriverBehaviorType driverBehaviorType) {
+        switch (driverBehaviorType) {
             case normal:
                 return Common.randDoubleBetween(normalMinVisibilityOffset, normalMaxVisibilityOffset);
             case cautious:
@@ -120,10 +115,8 @@ public class DriverBehavior implements Serializable {
         }
     }
 
-    public double getRandomReactionTimeOffsetForDriverType(DriverBehaviorType driverBehaviorType)
-    {
-        switch(driverBehaviorType)
-        {
+    public double getRandomReactionTimeOffsetForDriverType(DriverBehaviorType driverBehaviorType) {
+        switch (driverBehaviorType) {
             case normal:
                 return Common.randDoubleBetween(normalMinReactionTimeOffset, normalMaxReactionTimeOffset);
             case cautious:

@@ -1,21 +1,19 @@
 package managers.runit;
 
-import managers.vehiclefactory.VehicleFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by naveena on 08/02/15.
  */
-public class RUnit implements IRUnitManager{
+public class RUnit implements IRUnitManager {
 
     private int x;
     private int y;
     private int z;
-    private List<RUnit> nextRUnitList = new ArrayList<RUnit>();
-    private List<RUnit> prevsRUnitList = new ArrayList<RUnit>();
-    private RUnit changeAbleRUnit;
+    private List<IRUnitManager> nextRUnitList = new ArrayList<IRUnitManager>();
+    private List<IRUnitManager> prevsRUnitList = new ArrayList<IRUnitManager>();
+    private IRUnitManager changeAbleRUnit;
     private String id;
     private boolean isLeft = true;
     private TrafficSign trafficSign;
@@ -27,17 +25,6 @@ public class RUnit implements IRUnitManager{
         this.id = id;
         this.x = x;
         this.y = y;
-    }
-
-    public RUnit(String id, List<RUnit> prevsRUnitList, List<RUnit> nextRUnitList) {
-        this.id = id;
-        this.prevsRUnitList = prevsRUnitList;
-        this.nextRUnitList = nextRUnitList;
-    }
-
-    @Override
-    public void ChangeLight(boolean color, String trafficLightID, int index) {
-        //TODO change cycle element for traffic light
     }
 
     public int getX() {
@@ -64,16 +51,20 @@ public class RUnit implements IRUnitManager{
         this.z = z;
     }
 
-    public List<RUnit> getNextRUnitList() {
+    public List<IRUnitManager> getNextRUnitList() {
         return nextRUnitList;
     }
 
-    public void setNextRUnitList(List<RUnit> nextRUnitList) {
+    public void setNextRUnitList(List<IRUnitManager> nextRUnitList) {
         this.nextRUnitList = nextRUnitList;
     }
 
-    public List<RUnit> getPrevsRUnitList() {
+    public List<IRUnitManager> getPrevsRUnitList() {
         return prevsRUnitList;
+    }
+
+    public void setPrevsRUnitList(List<IRUnitManager> prevsRUnitList) {
+        this.prevsRUnitList = prevsRUnitList;
     }
 
     @Override
@@ -86,15 +77,11 @@ public class RUnit implements IRUnitManager{
         this.isLeft = isLeft;
     }
 
-    public void setPrevsRUnitList(List<RUnit> prevsRUnitList) {
-        this.prevsRUnitList = prevsRUnitList;
-    }
-
-    public RUnit getChangeAbleRUnit() {
+    public IRUnitManager getChangeAbleRUnit() {
         return changeAbleRUnit;
     }
 
-    public void setChangeAbleRUnit(RUnit changeAbleRUnit) {
+    public void setChangeAbleRUnit(IRUnitManager changeAbleRUnit) {
         this.changeAbleRUnit = changeAbleRUnit;
     }
 
@@ -130,10 +117,6 @@ public class RUnit implements IRUnitManager{
         this.blockage = blockage;
     }
 
-    public VehicleFactory addVehicleFactory() {
-        return null;
-    }
-
     public TrafficLight getTrafficLight() {
         return trafficLight;
     }
@@ -141,48 +124,5 @@ public class RUnit implements IRUnitManager{
     @Override
     public void addTrafficLight(TrafficLight trafficLight) {
         this.trafficLight = trafficLight;
-    }
-
-    @Override
-    public boolean go(){
-        if (this.getTrafficLight()!=null) {
-            if (this.getTrafficLight().isGreen()) {
-                return true; //if traffic Light is green
-            }
-            else return false; //if traffic Light is red
-        }
-        else
-            return true; //if no traffic Light then vehicles can continue, treated as if it would be green.
-    }
-
-
-    @Override
-    public void addZebraCrossing() {
-
-    }
-
-    @Override
-    public void addBlockage() {
-
-    }
-
-    @Override
-    public void addSpeedLimit() {
-
-    }
-
-    @Override
-    public void addStopSign() {
-
-    }
-
-    @Override
-    public void addWelcomeSign() {
-
-    }
-
-    @Override
-    public void addDirectionSign() {
-
     }
 }

@@ -1,9 +1,6 @@
 package managers.globalconfig;
 
 
-
-import java.util.Map;
-
 /**
  * Created by Fabians on 13/02/2015.
  */
@@ -17,13 +14,13 @@ public class GlobalConfigManager implements IGlobalConfigManager {
     private Route route;
 
     public GlobalConfigManager(int tickRatio, double metresPerRUnit, ClimaticCondition climaticCondition, DriverBehavior driverBehavior
-    ,VehicleDensity vehicleDensity, Route route) {
-        this.tickTime=new TickTime(tickRatio);
+            , VehicleDensity vehicleDensity, Route route) {
+        this.tickTime = new TickTime(tickRatio);
         this.distancesScale = new DistancesScale(metresPerRUnit);
-        this.climaticCondition=climaticCondition;
-        this.driverBehavior=driverBehavior;
-        this.vehicleDensity=vehicleDensity;
-        this.route= route;
+        this.climaticCondition = climaticCondition;
+        this.driverBehavior = driverBehavior;
+        this.vehicleDensity = vehicleDensity;
+        this.route = route;
     }
 
     @Override
@@ -47,26 +44,6 @@ public class GlobalConfigManager implements IGlobalConfigManager {
     }
 
     @Override
-    public void addOrUpdateVehicleDensity(Map<VehicleType, Double> vehicleDensityMap, int VehicleCount) {
-
-    }
-
-    @Override
-    public void addOrUpdateWeather(ClimaticCondition climaticCondition) {
-        this.climaticCondition = climaticCondition;
-    }
-
-    @Override
-    public void addOrUpdateDriverBehavior(Map<DriverBehaviorType, Double> driverBehaviorTypeMap) {
-
-    }
-
-    @Override
-    public void addOrUpdateDestinationDensity(String destination, double density) {
-
-    }
-
-    @Override
     public double getCurrentSecond() {
         return tickTime.getCurrentSecond();
     }
@@ -77,16 +54,6 @@ public class GlobalConfigManager implements IGlobalConfigManager {
     }
 
     @Override
-    public double getLengthMetres(int rUnits) {
-        return distancesScale.getLengthMetres(rUnits);
-    }
-
-    @Override
-    public double getLengthRUnits(double metres) {
-        return distancesScale.getLengthRUnits(metres);
-    }
-
-    @Override
     public int getTicksPerSecond() {
         return tickTime.getRatio();
     }
@@ -94,11 +61,6 @@ public class GlobalConfigManager implements IGlobalConfigManager {
     @Override
     public void setTicksPerSecond(int ticksPerSecond) {
         tickTime.setRatio(ticksPerSecond);
-    }
-
-    @Override
-    public Long getCurrentTick() {
-        return tickTime.getCurrentTick();
     }
 
     @Override

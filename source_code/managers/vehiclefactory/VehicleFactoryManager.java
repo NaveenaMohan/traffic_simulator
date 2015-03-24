@@ -4,9 +4,9 @@ import common.Common;
 import dataAndStructures.IDataAndStructures;
 import managers.globalconfig.DriverBehaviorType;
 import managers.globalconfig.VehicleType;
-import managers.runit.RUnit;
+import managers.runit.IRUnitManager;
 import managers.vehicle.Driver;
-import managers.vehicle.Vehicle;
+import managers.vehicle.IVehicleManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,15 +16,15 @@ import java.util.List;
  */
 public class VehicleFactoryManager implements IVehicleFactoryManager {
 
-    public List<VehicleFactory> vehicleFactoryList = new ArrayList<VehicleFactory>();
+    private List<VehicleFactory> vehicleFactoryList = new ArrayList<VehicleFactory>();
 
     @Override
-    public void addVehicleFactory(RUnit rUnit) {
+    public void addVehicleFactory(IRUnitManager rUnit) {
         vehicleFactoryList.add(new VehicleFactory(rUnit));
     }
 
     @Override
-    public Vehicle createVehicle(IDataAndStructures dataAndStructures) {
+    public IVehicleManager createVehicle(IDataAndStructures dataAndStructures) {
         //create vehicle is consulting globalConfig to look at destinations, driver behaviour, climatic conditions, etc...
 
 
@@ -84,4 +84,7 @@ public class VehicleFactoryManager implements IVehicleFactoryManager {
             return VehicleType.emergency;
     }
 
+    public List<VehicleFactory> getVehicleFactoryList() {
+        return vehicleFactoryList;
+    }
 }

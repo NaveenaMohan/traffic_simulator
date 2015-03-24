@@ -16,6 +16,15 @@ public class VehicleMemoryObject<T> implements Serializable {
     private boolean passable;
     private boolean isInLeft;
 
+    public VehicleMemoryObject(IRUnitManager rUnit, T object, double distance, double velocity, boolean passable, boolean isInLeft) {
+        this.rUnit = rUnit;
+        this.object = object;
+        this.distance = distance;
+        this.velocity = velocity;
+        this.passable = passable;
+        this.isInLeft = isInLeft;
+    }
+
     public boolean isInLeft() {
         return isInLeft;
     }
@@ -28,15 +37,6 @@ public class VehicleMemoryObject<T> implements Serializable {
         return velocity;
     }
 
-    public VehicleMemoryObject(IRUnitManager rUnit, T object, double distance, double velocity, boolean passable, boolean isInLeft) {
-        this.rUnit = rUnit;
-        this.object = object;
-        this.distance=distance;
-        this.velocity=velocity;
-        this.passable=passable;
-        this.isInLeft=isInLeft;
-    }
-
     public IRUnitManager getrUnit() {
         return rUnit;
     }
@@ -45,8 +45,7 @@ public class VehicleMemoryObject<T> implements Serializable {
         return object;
     }
 
-    public double getDistance()
-    {
+    public double getDistance() {
         return distance;
     }
 }

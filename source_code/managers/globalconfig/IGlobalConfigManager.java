@@ -1,18 +1,12 @@
 package managers.globalconfig;
 
 
-
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * Created by naveena on 08/02/15.
  */
 public interface IGlobalConfigManager extends Serializable {
-
-    void addOrUpdateVehicleDensity(Map<VehicleType, Double> vehicleDensityMap, int VehicleCount);
-
-    void addOrUpdateWeather(ClimaticCondition climaticCondition);
 
     public ClimaticCondition getClimaticCondition();
 
@@ -22,25 +16,15 @@ public interface IGlobalConfigManager extends Serializable {
 
     public Route getRoute();
 
-    void addOrUpdateDriverBehavior(Map<DriverBehaviorType, Double> driverBehaviorTypeMap);
+    public double getCurrentSecond();
 
-    void addOrUpdateDestinationDensity(String destination, double density);
+    public void incrementTick();
 
-    double getCurrentSecond();
+    public int getTicksPerSecond();
 
-    void incrementTick();
+    public void setTicksPerSecond(int ticksPerSecond);
 
-    double getLengthMetres(int rUnits);
-
-    double getLengthRUnits(double metres);
-
-    int getTicksPerSecond();
-
-    void setTicksPerSecond(int ticksPerSecond);
-
-    Long getCurrentTick();
-
-    double getMetresPerRUnit();
+    public double getMetresPerRUnit();
 
 
 }

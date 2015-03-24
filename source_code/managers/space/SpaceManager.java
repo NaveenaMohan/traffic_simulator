@@ -52,7 +52,7 @@ public class SpaceManager implements ISpaceManager {
     }
 
     @Override
-    public void setObjects(List<ObjectInSpace> objectInSpaces){
+    public void setObjects(List<ObjectInSpace> objectInSpaces) {
         space.setObjects(objectInSpaces);
     }
 

@@ -14,6 +14,89 @@ import java.io.Serializable;
 public class VehiclePerception implements Serializable {
 
 
+    public static boolean isChangeableClear(IRUnitManager temp, ISpaceManager spaceManager, ObjectInSpace myObject, int backAmount,
+                                            int frontAmount) {
+        if (temp.getChangeAbleRUnit() != null) {
+            if (checkChangeableClear(spaceManager, myObject,
+                    temp, backAmount, frontAmount))
+                return true;
+        }
+        return false;
+    }
+
+    public static Object getObjectForDoubleLane(IRUnitManager rUnit) {
+        if (rUnit.getChangeAbleRUnit() != null & !rUnit.isLeft())
+            rUnit = rUnit.getChangeAbleRUnit();
+
+        //check for zebra crossings
+        if (rUnit.getZebraCrossing() != null)
+            return rUnit.getZebraCrossing();
+
+        //check for traffic lights
+        if (rUnit.getTrafficLight() != null)
+            return rUnit.getTrafficLight();
+
+        //check for traffic signs
+        if (rUnit.getTrafficSign() != null)
+            return rUnit.getTrafficSign();
+
+        //check for traffic signs
+        if (rUnit.getBlockage() != null)
+            return rUnit.getBlockage();
+
+        return rUnit;
+    }
+
+    private static boolean checkChangeableClear(ISpaceManager spaceManager, ObjectInSpace myObject
+            , IRUnitManager rUnit, int backwardsSpaceCheck, int forwardSpaceCheck) {
+        if (rUnit.getChangeAbleRUnit() != null) {
+            IRUnitManager temp = rUnit.getChangeAbleRUnit();
+            //look backwards
+            for (int i = 0; i < backwardsSpaceCheck; i++) {
+                if (temp.getPrevsRUnitList().size() > 0) {
+                    if (!spaceManager.checkFit(myObject.getId(), temp.getX(), temp.getY(), 10, 10))
+                        return false;
+                    temp = temp.getPrevsRUnitList().get(0);
+                }
+            }
+            temp = rUnit.getChangeAbleRUnit();
+            //look forward
+            for (int i = 0; i < forwardSpaceCheck; i++) {
+                if (temp.getNextRUnitList().size() > 0) {
+                    if (!spaceManager.checkFit(myObject.getId(), temp.getX(), temp.getY(), 10, 10))
+                        return false;
+                    temp = temp.getNextRUnitList().get(0);
+                }
+            }
+        } else
+            return false;
+
+        return true;
+    }
+
+    private static double getObjectVelocity(Object obj) {//return the speed of the object
+        if (obj instanceof Blockage)//check for blockage
+            return 0;
+        else if (obj instanceof IVehicleManager)//check for vehicle
+            return ((IVehicleManager) obj).getCurrentVelocity();
+        else if (obj instanceof TrafficLight)//check for traffic light
+            return 0;
+        else if (obj instanceof ZebraCrossing)//check for zebra crossing
+            return 0;
+        else if (obj instanceof StopSign)//check for stop sign
+            return 1;
+        else if (obj instanceof SpeedLimitSign)//check for speed sign and do the conversion from km/h to m/s
+            return (((SpeedLimitSign) obj).getSpeedLimit() * 1000) / 3600;
+        else if (obj instanceof DirectionSign)//check for Direction Sign
+            return 100;
+        else if (obj instanceof RoadDecisionPoint)//check for Decision Point
+            return 100;
+        else if (obj instanceof WelcomeSign)//check for Decision Point
+            return 100;
+        else
+            throw new IllegalArgumentException("object passed (" + obj + ") is not defined");
+    }
+
     public void see(int vehID, IRUnitManager rUnit, double maxVision, VehicleState vehicleState,
                     ISpaceManager spaceManager, IDataAndStructures dataAndStructures, ObjectInSpace myObject) {
         IRUnitManager temp = rUnit;
@@ -27,7 +110,6 @@ public class VehiclePerception implements Serializable {
 
             //distance from the object
             double distance = Math.max(0, (i) * dataAndStructures.getGlobalConfigManager().getMetresPerRUnit());
-
 
 
             //check for decision points
@@ -99,88 +181,5 @@ public class VehiclePerception implements Serializable {
 
         }
 
-    }
-
-    public static boolean isChangeableClear(IRUnitManager temp, ISpaceManager spaceManager, ObjectInSpace myObject, int backAmount,
-                                            int frontAmount) {
-        if (temp.getChangeAbleRUnit() != null) {
-            if (checkChangeableClear(spaceManager, myObject,
-                    temp, backAmount, frontAmount))
-                return true;
-        }
-        return false;
-    }
-
-    public static Object getObjectForDoubleLane(IRUnitManager rUnit) {
-        if (rUnit.getChangeAbleRUnit() != null & !rUnit.isLeft())
-            rUnit = rUnit.getChangeAbleRUnit();
-
-        //check for zebra crossings
-        if (rUnit.getZebraCrossing() != null)
-            return rUnit.getZebraCrossing();
-
-        //check for traffic lights
-        if (rUnit.getTrafficLight() != null)
-            return rUnit.getTrafficLight();
-
-        //check for traffic signs
-        if (rUnit.getTrafficSign() != null)
-            return rUnit.getTrafficSign();
-
-        //check for traffic signs
-        if (rUnit.getBlockage() != null)
-            return rUnit.getBlockage();
-
-        return rUnit;
-    }
-
-    private static boolean checkChangeableClear(ISpaceManager spaceManager, ObjectInSpace myObject
-            , IRUnitManager rUnit, int backwardsSpaceCheck, int forwardSpaceCheck) {
-        if (rUnit.getChangeAbleRUnit() != null) {
-            IRUnitManager temp = rUnit.getChangeAbleRUnit();
-            //look backwards
-            for (int i = 0; i < backwardsSpaceCheck; i++) {
-                if (temp.getPrevsRUnitList().size() > 0) {
-                    if (!spaceManager.checkFit(myObject.getId(), temp.getX(), temp.getY(), 10,10))
-                        return false;
-                    temp = temp.getPrevsRUnitList().get(0);
-                }
-            }
-            temp = rUnit.getChangeAbleRUnit();
-            //look forward
-            for (int i = 0; i < forwardSpaceCheck; i++) {
-                if (temp.getNextRUnitList().size() > 0) {
-                    if (!spaceManager.checkFit(myObject.getId(), temp.getX(), temp.getY(), 10,10))
-                        return false;
-                    temp = temp.getNextRUnitList().get(0);
-                }
-            }
-        } else
-            return false;
-
-        return true;
-    }
-
-    private static double getObjectVelocity(Object obj) {//return the speed of the object
-        if (obj instanceof Blockage)//check for blockage
-            return 0;
-        else if (obj instanceof Vehicle)//check for vehicle
-            return ((Vehicle) obj).getCurrentVelocity();
-        else if (obj instanceof TrafficLight)//check for traffic light
-            return 0;
-        else if (obj instanceof ZebraCrossing)//check for zebra crossing
-            return 0;
-        else if (obj instanceof StopSign)//check for stop sign
-            return 1;
-        else if (obj instanceof SpeedLimitSign)//check for speed sign and do the conversion from km/h to m/s
-            return (((SpeedLimitSign) obj).getSpeedLimit() * 1000) / 3600;
-        else if (obj instanceof DirectionSign)//check for Direction Sign
-            return 100;
-        else if (obj instanceof RoadDecisionPoint)//check for Decision Point
-            return 100;
-        else if (obj instanceof WelcomeSign)//check for Decision Point
-            return 100;
-        else
-            throw new IllegalArgumentException("object passed (" + obj + ") is not defined");
     }
 }

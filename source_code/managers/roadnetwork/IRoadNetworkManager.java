@@ -1,7 +1,7 @@
 package managers.roadnetwork;
 
 import managers.runit.DirectionSignType;
-import managers.runit.RUnit;
+import managers.runit.IRUnitManager;
 import managers.runit.TrafficLight;
 
 import java.io.Serializable;
@@ -13,33 +13,27 @@ import java.util.Map;
  */
 public interface IRoadNetworkManager extends Serializable {
 
-    RUnit addSingleLane(int x, int y, RUnit prevRUnit);
+    public IRUnitManager addSingleLane(int x, int y, IRUnitManager prevIRUnitManager);
 
-    Map<String, RUnit> addDoubleLane(int x, int y, int changeableX, int changeableY, RUnit prevRUnit, RUnit changeablePrevRunit);
+    public Map<String, IRUnitManager> addDoubleLane(int x, int y, int changeableX, int changeableY, IRUnitManager prevIRUnitManager, IRUnitManager changeablePrevRunit);
 
-    void addTrafficLight(RUnit rUnit, TrafficLight trafficLight);
+    public void addTrafficLight(IRUnitManager rUnit, TrafficLight trafficLight);
 
-    void addZebraCrossing(RUnit rUnit, TrafficLight trafficLight);
+    public void addZebraCrossing(IRUnitManager rUnit, TrafficLight trafficLight);
 
-    void addBlockage(RUnit rUnit);
+    public void addBlockage(IRUnitManager rUnit);
 
-    void addSpeedLimit(RUnit rUnit, int speedLimit);
+    public void addSpeedLimit(IRUnitManager rUnit, int speedLimit);
 
-    void addStopSign(RUnit rUnit);
+    public void addStopSign(IRUnitManager rUnit);
 
-    void addWelcomeSign(RUnit rUnit, String location);
+    public void addWelcomeSign(IRUnitManager rUnit, String location);
 
-    void addDirectionSign(RUnit rUnit, String location, DirectionSignType directionSignType);
+    public void addDirectionSign(IRUnitManager rUnit, String location, DirectionSignType directionSignType);
 
-    void addVehicleFactory(RUnit rUnit);
-
-    void addTrafficLightBehavior(String trafficLightId, List<Boolean> trafficLightPattern);
+    public void addTrafficLightBehavior(String trafficLightId, List<Boolean> trafficLightPattern);
 
     public void changeLight(double currentSecond);
-    
-    RUnit getRUnitByID(String ID);
 
-    TrafficLight getTrafficLightByID(String ID);
-
-    RoadNetwork getRoadNetwork();
+    public RoadNetwork getRoadNetwork();
 }
