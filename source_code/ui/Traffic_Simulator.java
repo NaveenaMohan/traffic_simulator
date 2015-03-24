@@ -1008,11 +1008,9 @@ public class Traffic_Simulator {
                         file = fileChooser.getSelectedFile();
                         originalimage = ImageIO.read(file);
                         Image scaledImage = originalimage.getScaledInstance(drawingBoardPanel.getWidth(), drawingBoardPanel.getHeight(), Image.SCALE_SMOOTH);
-                        ImageIcon icon = new ImageIcon(scaledImage);
-                        JLabel picLabel = new JLabel(icon);
-                        drawingBoardPanel.setLayout(new GridLayout());
-                        drawingBoardPanel.add(picLabel);
-                        drawingBoardPanel.revalidate();
+                        drawingBoardPanel.getGraphics().drawImage(scaledImage, 0, 0, drawingBoardPanel);
+                        drawingBoard.setLoadImage(true);
+                        drawingBoard.setPanelImage(scaledImage);
                         drawingBoardPanel.repaint();
                     } catch (IOException e1) {
                         e1.printStackTrace();

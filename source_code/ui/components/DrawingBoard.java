@@ -79,6 +79,8 @@ public class DrawingBoard implements ActionListener {
     private boolean isSimulationStarted;
     private JLabel currentSecondValue;
     private JPanel drawingBoardPanel;
+    private boolean loadImage;
+    private Image panelImage;
 
     public DrawingBoard(DefaultTableModel model, IRoadNetworkManager roadNetworkManager, SimEngine simEngine, JLabel currentSecondValue) {
         this.model = model;
@@ -553,7 +555,9 @@ public class DrawingBoard implements ActionListener {
     //This function paints/draws all the added components
     public void paint(Graphics g) {
         Graphics2D g2D = (Graphics2D) g;
-
+        if (loadImage && panelImage != null) {
+            g2D.drawImage(panelImage, 0, 0, drawingBoardPanel);
+        }
         drawRoads(g2D);
         drawTrafficLights(g2D);
         drawVehicleFactories(g2D);
@@ -1170,5 +1174,21 @@ public class DrawingBoard implements ActionListener {
 
     public JLabel getCurrentSecondValue() {
         return currentSecondValue;
+    }
+
+    public boolean isLoadImage() {
+        return loadImage;
+    }
+
+    public void setLoadImage(boolean loadImage) {
+        this.loadImage = loadImage;
+    }
+
+    public Image getPanelImage() {
+        return panelImage;
+    }
+
+    public void setPanelImage(Image panelImage) {
+        this.panelImage = panelImage;
     }
 }
