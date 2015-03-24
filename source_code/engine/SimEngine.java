@@ -44,7 +44,7 @@ public class SimEngine implements Serializable {
     }
 
     public void SpeedUp() {
-        dataAndStructures.getGlobalConfigManager().setTicksPerSecond(Math.max(5,
+        dataAndStructures.getGlobalConfigManager().setTicksPerSecond(Math.max(10,
                 dataAndStructures.getGlobalConfigManager().getTicksPerSecond() / 2));
     }
 
