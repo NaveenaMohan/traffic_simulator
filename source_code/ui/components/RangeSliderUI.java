@@ -8,9 +8,19 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 
+/***************************************************************************************
+ *    Title: Integrative Genomics Viewer
+ *    Author: Ernest Yu, Jim Robinson
+ *    Date: 19/12/2011
+ *    Availability: https://github.com/broadinstitute/IGV/blob/master/src/slider/RangeSlider.java
+ *    License : https://github.com/broadinstitute/IGV/blob/master/src/slider/LICENSE.txt
+ ***************************************************************************************/
+
 /**
  * UI delegate for the RangeSlider component.  RangeSliderUI paints two thumbs,
  * one for the lower value and one for the upper value.
+ * @author Ernest Yu
+ * @modified Jim Robinson
  */
 class RangeSliderUI extends BasicSliderUI {
 

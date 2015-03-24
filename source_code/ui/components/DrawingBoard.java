@@ -89,6 +89,10 @@ public class DrawingBoard implements ActionListener {
         this.currentSecondValue = currentSecondValue;
     }
 
+    public static int getZebraCrossingTrafficLightIdIndex() {
+        return zebraCrossingTrafficLightIdIndex;
+    }
+
     public void initializeAndLoadImages() {
         //Loading all images for various UI components
         rUnitImage = drawingBoardPanel.getToolkit().getImage(DrawingBoard.class.getResource("/resources/leftLane.png"));
@@ -537,7 +541,7 @@ public class DrawingBoard implements ActionListener {
     }
 
     //Fetches and adds the coordinates of the best match RUnit while installing any configuration on the roads
-    private IRUnitManager fetchAndAddBestMatchRUnit(List<Coordinates> coordinates) {
+    public IRUnitManager fetchAndAddBestMatchRUnit(List<Coordinates> coordinates) {
         for (IRUnitManager rUnit : simEngine.getDataAndStructures().getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()) {
             Rectangle rectangle = new Rectangle(rUnit.getX(), rUnit.getY(), rUnitImage.getWidth(drawingBoardPanel) + 5, rUnitImage.getHeight(drawingBoardPanel) + 5);
             if (rectangle.contains(currentX, currentY)) {
@@ -551,7 +555,7 @@ public class DrawingBoard implements ActionListener {
     }
 
     //Fetches the best match RUnit while installing any configuration on the roads
-    private IRUnitManager fetchBestMatchRUnit() {
+    public IRUnitManager fetchBestMatchRUnit() {
         for (IRUnitManager rUnit : simEngine.getDataAndStructures().getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()) {
             Rectangle rectangle = new Rectangle(rUnit.getX(), rUnit.getY(), rUnitImage.getWidth(drawingBoardPanel) + 5, rUnitImage.getHeight(drawingBoardPanel) + 5);
             if (rectangle.contains(currentX, currentY)) {
@@ -727,7 +731,7 @@ public class DrawingBoard implements ActionListener {
         }
     }
 
-    private Coordinates getRepositionedImageCoordinates(Image image, int x, int y) {
+    public Coordinates getRepositionedImageCoordinates(Image image, int x, int y) {
         /*The image is drawn with its top-left corner at x,y . This function fetches the repositioned coordinates of the image to draw it adjust the X and Y coordinates
          to the centre*/
         x = x - image.getWidth(drawingBoardPanel) / 2;
@@ -739,14 +743,6 @@ public class DrawingBoard implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         simEngine.performAction();
         drawingBoardPanel.repaint();
-    }
-
-    public void setCurrentX(int currentX) {
-        this.currentX = currentX;
-    }
-
-    public void setCurrentY(int currentY) {
-        this.currentY = currentY;
     }
 
     public int getX() {
@@ -864,6 +860,7 @@ public class DrawingBoard implements ActionListener {
         model.setRowCount(0);
         singleLaneRUnits.clear();
         doubleLaneRUnits.clear();
+        changeAbleLaneRUnits.clear();
         trafficLightCoordinates.clear();
         zebraCrossingCoordinates.clear();
         blockageCoordinates.clear();
@@ -921,6 +918,10 @@ public class DrawingBoard implements ActionListener {
 
     public void setDoubleLaneRUnits(Set<IRUnitManager> doubleLaneRUnits) {
         this.doubleLaneRUnits = doubleLaneRUnits;
+    }
+
+    public void setChangeAbleLaneRUnitsRUnits(Set<IRUnitManager> changeAbleLaneRUnits) {
+        this.changeAbleLaneRUnits = changeAbleLaneRUnits;
     }
 
     public List<Coordinates> getVehicleFactoryCoordinates() {
@@ -1065,5 +1066,133 @@ public class DrawingBoard implements ActionListener {
 
     public void setSimEngine(SimEngine simEngine) {
         this.simEngine = simEngine;
+    }
+
+    public BufferedImage getBufferedRoadImage() {
+        return bufferedRoadImage;
+    }
+
+    public BufferedImage getBufferedChangeableRoadImage() {
+        return bufferedChangeableRoadImage;
+    }
+
+    public int getCurrentX() {
+        return currentX;
+    }
+
+    public void setCurrentX(int currentX) {
+        this.currentX = currentX;
+    }
+
+    public int getCurrentY() {
+        return currentY;
+    }
+
+    public void setCurrentY(int currentY) {
+        this.currentY = currentY;
+    }
+
+    public Set<IRUnitManager> getChangeAbleLaneRUnits() {
+        return changeAbleLaneRUnits;
+    }
+
+    public Image getrUnitImage() {
+        return rUnitImage;
+    }
+
+    public Image getrUnitImage2() {
+        return rUnitImage2;
+    }
+
+    public Image getTrafficLightImage() {
+        return trafficLightImage;
+    }
+
+    public Image getCarImage() {
+        return carImage;
+    }
+
+    public Image getTruckImage() {
+        return truckImage;
+    }
+
+    public Image getEmergencyVehicleImage() {
+        return emergencyVehicleImage;
+    }
+
+    public Image getZebraCrossingImage() {
+        return zebraCrossingImage;
+    }
+
+    public Image getGreenLightZebraImage() {
+        return greenLightZebraImage;
+    }
+
+    public Image getRedLightZebraImage() {
+        return redLightZebraImage;
+    }
+
+    public Image getBlockageImage() {
+        return blockageImage;
+    }
+
+    public Image getStopImage() {
+        return stopImage;
+    }
+
+    public Image getLeftSignImage() {
+        return leftSignImage;
+    }
+
+    public Image getRightSignImage() {
+        return rightSignImage;
+    }
+
+    public Image getStraightSignImage() {
+        return straightSignImage;
+    }
+
+    public Image getSpeed20Image() {
+        return speed20Image;
+    }
+
+    public Image getSpeed30Image() {
+        return speed30Image;
+    }
+
+    public Image getSpeed50Image() {
+        return speed50Image;
+    }
+
+    public Image getSpeed60Image() {
+        return speed60Image;
+    }
+
+    public Image getSpeed70Image() {
+        return speed70Image;
+    }
+
+    public Image getSpeed90Image() {
+        return speed90Image;
+    }
+
+    public Image getWelcomeImage() {
+        return welcomeImage;
+    }
+
+    public Image getRedLightImage() {
+        return redLightImage;
+    }
+
+    public Image getGreenLightImage() {
+        return greenLightImage;
+    }
+
+    public Image getVehicleFactoryImage() {
+        return vehicleFactoryImage;
+    }
+
+    public JLabel getCurrentSecondValue() {
+        return currentSecondValue;
     }
 }
