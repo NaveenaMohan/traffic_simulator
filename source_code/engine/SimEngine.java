@@ -65,7 +65,7 @@ public class SimEngine implements Serializable {
             //increment tick
             dataAndStructures.getGlobalConfigManager().incrementTick();
             //update Report data
-            dcp.updateReportingInfo();
+            dcp.updateReportingInfo(dataAndStructures);
 
             if (dataAndStructures.getVehicles().size() < 1000) {
                 //create a new vehicle

@@ -7,7 +7,7 @@ import managers.globalconfig.*;
 import managers.roadnetwork.IRoadNetworkManager;
 import managers.roadnetwork.RoadNetwork;
 import managers.roadnetwork.RoadNetworkManager;
-import managers.runit.RUnit;
+import managers.runit.IRUnitManager;
 import managers.space.ObjectInSpace;
 import managers.space.SpaceManager;
 import managers.space.VehicleDirection;
@@ -37,8 +37,7 @@ public class VehicleMotorTest {
                 new VehicleDirection(1,1,2,2), VehicleType.car), 1,false);
 
 
-
-        RUnit prev = null;
+        IRUnitManager prev = null;
 
         //build a road of rUnits
         for (int i = 0; i < 30; i++) {
@@ -109,7 +108,7 @@ public class VehicleMotorTest {
     @Test
     public void testPrepareAction() throws Exception {
         String startingID="4";
-        RUnit startingRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(startingID);
+        IRUnitManager startingRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(startingID);
         Assert.assertEquals(vehicleMotor.prepareAction(startingRUnit, driver, vehicleState, 0, spaceManager, 1),
                 roadNetwork.getRoadNetwork().getrUnitHashtable().get(startingID));
     }
@@ -117,7 +116,7 @@ public class VehicleMotorTest {
     @Test(expected=NullPointerException.class)
     public void test2PrepareAction() throws Exception {
         String startingID="411";
-        RUnit startingRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(startingID);
+        IRUnitManager startingRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(startingID);
         Assert.assertEquals(vehicleMotor.prepareAction(startingRUnit, driver, vehicleState, 0, spaceManager, 1),
                 roadNetwork.getRoadNetwork().getrUnitHashtable().get(startingID));
     }
@@ -127,7 +126,7 @@ public class VehicleMotorTest {
         int CurrentSpeed = 1;
         String startingID="10";
         String projectedID="11";
-        RUnit startingRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(startingID);
+        IRUnitManager startingRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(startingID);
         vehicleMotor= new VehicleMotor(1, 1, CurrentSpeed, "", new ObjectInSpace(1, 1, 1, 1, 1, 1, 1,
                 new VehicleDirection(1,1,2,2), VehicleType.car), 1,false);
 
@@ -142,7 +141,7 @@ public class VehicleMotorTest {
         int CurrentSpeed = 3;
         String startingID="10";
         String projectedID="13";
-        RUnit startingRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(startingID);
+        IRUnitManager startingRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(startingID);
         vehicleMotor= new VehicleMotor(1, 1, CurrentSpeed, "", new ObjectInSpace(1, 1, 1, 1, 1, 1, 1,
                 new VehicleDirection(1,1,2,2), VehicleType.car), 1,false);
 
@@ -157,7 +156,7 @@ public class VehicleMotorTest {
         int CurrentSpeed = 0;
         String startingID="10";
         String projectedID="10";
-        RUnit startingRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(startingID);
+        IRUnitManager startingRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(startingID);
         vehicleMotor= new VehicleMotor(1, 1, CurrentSpeed, "", new ObjectInSpace(1, 1, 1, 1, 1, 1, 1,
                 new VehicleDirection(1,1,2,2), VehicleType.car), 1,false);
 
@@ -173,7 +172,7 @@ public class VehicleMotorTest {
         String startingID="3";
         String projectedID="34";
         vehicleState.setNextRUnitAfterDecisionPoint(roadNetwork.getRoadNetwork().getrUnitHashtable().get(projectedID));
-        RUnit startingRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(startingID);
+        IRUnitManager startingRUnit = roadNetwork.getRoadNetwork().getrUnitHashtable().get(startingID);
         vehicleMotor= new VehicleMotor(1, 1, CurrentSpeed, "", new ObjectInSpace(1, 1, 1, 1, 1, 1, 1,
                 new VehicleDirection(1,1,2,2), VehicleType.car), 1,false);
 
