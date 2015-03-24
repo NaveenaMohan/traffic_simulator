@@ -58,16 +58,18 @@ public class RoadNetworkManagerTest {
         roadNetworkManager = new RoadNetworkManager(roadNetwork);
     }
 
-    @Test //testing when currentSecond is 73 and then 4537
-    public void testChangeLight() throws Exception {
+    @Test //testing when currentSecond is 73 4537
+    public void test1ChangeLight() throws Exception {
         roadNetworkManager.changeLight(73);
         Assert.assertEquals(true, trafficLight.getTrafficLightCurrentColor());
         Assert.assertEquals(true, trafficLight2.getTrafficLightCurrentColor());
+    }
 
+    @Test//testing when currentSecond is 4537
+    public void test2ChangeLight() throws Exception {
         roadNetworkManager.changeLight(4537);
         Assert.assertEquals(true, trafficLight.getTrafficLightCurrentColor());
         Assert.assertEquals(false, trafficLight2.getTrafficLightCurrentColor());
-
     }
 
 }

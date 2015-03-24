@@ -45,7 +45,7 @@ public class DriverBehavior implements Serializable {
 
         this.recklessMinSpeedOffset = 1.01;
         this.recklessMaxSpeedOffset = 1.02;
-        this.recklessMinReactionTimeOffset = 0.95;//reckless decreases RUnits to look ahead when stopping
+        this.recklessMinReactionTimeOffset = 0.95;
         this.recklessMaxReactionTimeOffset = 0.99;
         this.recklessMinVisibilityOffset = 0.95;
         this.recklessMaxVisibilityOffset = 0.99;
