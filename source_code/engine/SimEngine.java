@@ -67,7 +67,6 @@ public class SimEngine implements Serializable {
             //update Report data
             dcp.updateReportingInfo(dataAndStructures);
 
-            if (dataAndStructures.getVehicles().size() < 1000) {
                 //create a new vehicle
                 IVehicleManager newVehicle =
                         dataAndStructures.getVehicleFactoryManager().createVehicle(dataAndStructures);
@@ -75,7 +74,7 @@ public class SimEngine implements Serializable {
                 if (newVehicle != null) {
                     dataAndStructures.getVehicles().add(newVehicle);
                 }
-            }
+
             //move the vehicles
             for (IVehicleManager vehicle : dataAndStructures.getVehicles()) {
                 if (vehicle.isVisible())

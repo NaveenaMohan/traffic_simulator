@@ -101,9 +101,6 @@ public class VehiclePerception implements Serializable {
                     ISpaceManager spaceManager, IDataAndStructures dataAndStructures, ObjectInSpace myObject) {
         IRUnitManager temp = rUnit;
 
-//        if (temp.getNextRUnitList().size() > 0)
-//            temp = temp.getNextRUnitList().get(0);
-
         int rUnitsVision = (int) (maxVision / dataAndStructures.getGlobalConfigManager().getMetresPerRUnit());
 
         for (int i = 0; i < rUnitsVision; i++) {

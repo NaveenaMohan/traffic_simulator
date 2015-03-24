@@ -13,11 +13,6 @@ public class Route implements Serializable {
     public Route() {
     }
 
-    public Route(String destination, double trafficPercent) {
-        this.destination = destination;
-        setTrafficPercent(trafficPercent);
-    }
-
     public String getDestination() {
         return destination;
     }
