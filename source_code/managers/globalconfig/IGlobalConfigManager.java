@@ -1,9 +1,7 @@
 package managers.globalconfig;
 
 
-
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * Created by naveena on 08/02/15.
@@ -18,13 +16,15 @@ public interface IGlobalConfigManager extends Serializable {
 
     public Route getRoute();
 
-    double getCurrentSecond();
+    public double getCurrentSecond();
 
-    void incrementTick();
+    public void incrementTick();
 
-    int getTicksPerSecond();
+    public int getTicksPerSecond();
 
-    void setTicksPerSecond(int ticksPerSecond);
+    public void setTicksPerSecond(int ticksPerSecond);
 
-    double getMetresPerRUnit();
+    public double getMetresPerRUnit();
+
+
 }

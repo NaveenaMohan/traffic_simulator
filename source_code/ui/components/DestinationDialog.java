@@ -18,6 +18,8 @@ public class DestinationDialog extends JDialog {
 
     public final void initUI() {
 
+        /*Initializes the Destination DialogBox UI which pops up when the "welcome to destination" board is added to the drawing board.
+          The destination name can be inputted via the dialog box*/
         ImageIcon icon = new ImageIcon(Traffic_Simulator.class.getResource("/resources/Destination.png"));
         getContentPane().setLayout(null);
         JLabel label = new JLabel(icon);
@@ -46,8 +48,8 @@ public class DestinationDialog extends JDialog {
                 dispose();
             }
         });
-        
-     
+
+
         close.setAlignmentX(0.5f);
         getContentPane().add(close);
 
@@ -59,4 +61,4 @@ public class DestinationDialog extends JDialog {
         setSize(300, 250);
     }
 }
-	
+

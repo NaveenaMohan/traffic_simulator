@@ -7,10 +7,8 @@ import java.io.Serializable;
  */
 public class VehicleTypeStats implements Serializable {
     //this class contains all the standard types for all vehicle types
-    public static int getWidth(VehicleType vehicleType)
-    {
-        switch(vehicleType)
-        {
+    public static int getWidth(VehicleType vehicleType) {
+        switch (vehicleType) {
             case car:
                 return 2;
             case emergency:
@@ -21,10 +19,9 @@ public class VehicleTypeStats implements Serializable {
                 return 2;
         }
     }
-    public static int getLength(VehicleType vehicleType)
-    {
-        switch(vehicleType)
-        {
+
+    public static int getLength(VehicleType vehicleType) {
+        switch (vehicleType) {
             case car:
                 return 3;
             case emergency:
@@ -35,10 +32,9 @@ public class VehicleTypeStats implements Serializable {
                 return 3;
         }
     }
-    public static int getHeight(VehicleType vehicleType)
-    {
-        switch(vehicleType)
-        {
+
+    public static int getHeight(VehicleType vehicleType) {
+        switch (vehicleType) {
             case car:
                 return 2;
             case emergency:
@@ -49,24 +45,22 @@ public class VehicleTypeStats implements Serializable {
                 return 2;
         }
     }
-    public static int getMaxVelocity(VehicleType vehicleType)
-    {
-        switch(vehicleType)
-        {
+
+    public static int getMaxVelocity(VehicleType vehicleType) {
+        switch (vehicleType) {
             case car:
-                return (120*1000)/3600;
+                return (120 * 1000) / 3600;
             case emergency:
-                return (150*1000)/3600;
+                return (150 * 1000) / 3600;
             case heavyLoad:
-                return (70*1000)/3600;
+                return (70 * 1000) / 3600;
             default:
-                return (120*1000)/3600;
+                return (120 * 1000) / 3600;
         }
     }
-    public static double getMaxAcceleration(VehicleType vehicleType)
-    {
-        switch(vehicleType)
-        {
+
+    public static double getMaxAcceleration(VehicleType vehicleType) {
+        switch (vehicleType) {
             case car:
                 return 2.7;
             case emergency:
@@ -78,10 +72,8 @@ public class VehicleTypeStats implements Serializable {
         }
     }
 
-    public static double getMaxDeceleration(VehicleType vehicleType)
-    {
-        switch(vehicleType)
-        {
+    public static double getMaxDeceleration(VehicleType vehicleType) {
+        switch (vehicleType) {
             case car:
                 return -500;
             case emergency:

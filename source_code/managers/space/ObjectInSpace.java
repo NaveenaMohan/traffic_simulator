@@ -21,6 +21,19 @@ public class ObjectInSpace implements Serializable {
     private VehicleDirection direction;
     private VehicleType vehicleType;
 
+    public ObjectInSpace(int id, int x, int y, int z, int width, int length, int height, VehicleDirection direction, VehicleType vehicleType) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.width = width;
+        this.height = height;
+        this.length = length;
+        this.direction = direction;
+        this.vehicleType = vehicleType;
+        isVisible = true;
+    }
+
     public boolean isVisible() {
         return isVisible;
     }
@@ -43,19 +56,6 @@ public class ObjectInSpace implements Serializable {
 
     public void setVehicleType(VehicleType vehicleType) {
         this.vehicleType = vehicleType;
-    }
-
-    public ObjectInSpace(int id, int x, int y, int z, int width, int length, int height, VehicleDirection direction,  VehicleType vehicleType) {
-        this.id=id;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.width = width;
-        this.height = height;
-        this.length = length;
-        this.direction = direction;
-        this.vehicleType=vehicleType;
-        isVisible = true;
     }
 
     public int getX() {
@@ -117,7 +117,7 @@ public class ObjectInSpace implements Serializable {
 
     public Rectangle getBounds() {
         //this must be changed in the future if we implement direction as well
-        return new Rectangle(x, y, width*2, length*2);
+        return new Rectangle(x, y, width * 2, length * 2);
     }
 
 }

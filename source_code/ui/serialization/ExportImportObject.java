@@ -1,6 +1,6 @@
-package ui.fileops;
+package ui.serialization;
 
-import dataAndStructures.DataAndStructures;
+import dataAndStructures.IDataAndStructures;
 import managers.space.ObjectInSpace;
 import managers.vehicle.IVehicleManager;
 import ui.components.DrawingBoard;
@@ -12,15 +12,17 @@ import java.util.ArrayList;
  * Created by naveena on 15/03/15.
  */
 public class ExportImportObject implements Serializable {
-    private DataAndStructures engineDataStructures ;
+    private IDataAndStructures engineDataStructures;
     private UIDataStructures uiDataStructures = new UIDataStructures();
 
-    public ExportImportObject(DataAndStructures dataAndStructures, DrawingBoard drawingBoard) {
+    //Populates the UI and Engine objects that have to be serialized and deserialized for the export-import configurations
+    public ExportImportObject(IDataAndStructures dataAndStructures, DrawingBoard drawingBoard) {
+        //Sets the engine data structures and clears the vehicle and space details before serialization
         engineDataStructures = dataAndStructures;
         engineDataStructures.setVehicleManagerList((new ArrayList<IVehicleManager>()));
         engineDataStructures.getSpaceManager().setObjects(new ArrayList<ObjectInSpace>());
 
-
+        //Sets the UI data structures
         uiDataStructures.setSingleLaneRUnits(drawingBoard.getSingleLaneRUnits());
         uiDataStructures.setDoubleLaneRUnits(drawingBoard.getDoubleLaneRUnits());
         uiDataStructures.setTrafficLightCoordinates(drawingBoard.getTrafficLightCoordinates());
@@ -40,20 +42,12 @@ public class ExportImportObject implements Serializable {
         uiDataStructures.setWelcomeCoordinates(drawingBoard.getWelcomeCoordinates());
     }
 
-    public DataAndStructures getEngineDataStructures() {
+    public IDataAndStructures getEngineDataStructures() {
         return engineDataStructures;
-    }
-
-    public void setEngineDataStructures(DataAndStructures engineDataStructures) {
-        this.engineDataStructures = engineDataStructures;
     }
 
     public UIDataStructures getUiDataStructures() {
         return uiDataStructures;
-    }
-
-    public void setUiDataStructures(UIDataStructures uiDataStructures) {
-        this.uiDataStructures = uiDataStructures;
     }
 
     @Override

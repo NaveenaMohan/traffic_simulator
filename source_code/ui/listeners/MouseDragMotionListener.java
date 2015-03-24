@@ -17,7 +17,7 @@ public class MouseDragMotionListener extends MouseMotionAdapter {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if(drawingBoard.isDraw()){
+        if (drawingBoard.isDraw()) {
             //Sets the current coordinates for paint function
             drawingBoard.setCurrentX(e.getX());
             drawingBoard.setCurrentY(e.getY());

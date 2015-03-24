@@ -7,7 +7,6 @@ import java.io.Serializable;
  */
 public class ZebraCrossing implements Serializable {
 
-
     private TrafficLight trafficLight;
 
     public ZebraCrossing(TrafficLight trafficLight) {

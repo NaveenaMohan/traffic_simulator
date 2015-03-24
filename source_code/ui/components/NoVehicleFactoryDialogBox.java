@@ -12,6 +12,9 @@ public class NoVehicleFactoryDialogBox extends JDialog {
 
     public final void vehicleFactoryDialog() {
 
+        /*Initializes the NoVehicleFactory DialogBox UI which pops up when the simulation is played without
+          adding any vehicle factory */
+
         ImageIcon icon = new ImageIcon(NoVehicleFactoryDialogBox.class.getResource("/resources/RUnitError.png"));
         getContentPane().setLayout(null);
         JLabel label = new JLabel(icon);

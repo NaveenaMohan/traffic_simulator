@@ -1,6 +1,6 @@
-package ui.fileops;
+package ui.serialization;
 
-import managers.runit.RUnit;
+import managers.runit.IRUnitManager;
 import ui.Coordinates;
 
 import java.io.Serializable;
@@ -11,8 +11,8 @@ import java.util.*;
  */
 public class UIDataStructures implements Serializable {
 
-    private Set<RUnit> singleLaneRUnits = new LinkedHashSet<RUnit>();
-    private Set<RUnit> doubleLaneRUnits = new LinkedHashSet<RUnit>();
+    private Set<IRUnitManager> singleLaneRUnits = new LinkedHashSet<IRUnitManager>();
+    private Set<IRUnitManager> doubleLaneRUnits = new LinkedHashSet<IRUnitManager>();
     private List<Coordinates> vehicleFactoryCoordinates = new ArrayList<Coordinates>();
     private Map<String, Coordinates> trafficLightCoordinates = new HashMap<String, Coordinates>();
     private Map<String, Coordinates> zebraCrossingCoordinates = new HashMap<String, Coordinates>();
@@ -29,19 +29,19 @@ public class UIDataStructures implements Serializable {
     private List<Coordinates> speed90Coordinates = new ArrayList<Coordinates>();
     private Map<Coordinates, String> welcomeCoordinates = new HashMap<Coordinates, String>();
 
-    public Set<RUnit> getSingleLaneRUnits() {
+    public Set<IRUnitManager> getSingleLaneRUnits() {
         return singleLaneRUnits;
     }
 
-    public void setSingleLaneRUnits(Set<RUnit> singleLaneRUnits) {
+    public void setSingleLaneRUnits(Set<IRUnitManager> singleLaneRUnits) {
         this.singleLaneRUnits = singleLaneRUnits;
     }
 
-    public Set<RUnit> getDoubleLaneRUnits() {
+    public Set<IRUnitManager> getDoubleLaneRUnits() {
         return doubleLaneRUnits;
     }
 
-    public void setDoubleLaneRUnits(Set<RUnit> doubleLaneRUnits) {
+    public void setDoubleLaneRUnits(Set<IRUnitManager> doubleLaneRUnits) {
         this.doubleLaneRUnits = doubleLaneRUnits;
     }
 

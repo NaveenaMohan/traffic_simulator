@@ -11,8 +11,8 @@ public class TrafficLight implements Serializable {
 
     private List<Boolean> cycle = new ArrayList<Boolean>();
     private String trafficLightID; // Should be string as its prefixed with TL or ZTL
-    private boolean trafficLightCurrentColor=false;
-    private boolean isGreen=false;
+    private boolean trafficLightCurrentColor = false;
+    private boolean isGreen = false;
 
     public boolean getTrafficLightCurrentColor() {
         return trafficLightCurrentColor;

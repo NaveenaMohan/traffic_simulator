@@ -1,6 +1,6 @@
 package engine;
 
-import dataAndStructures.DataAndStructures;
+import dataAndStructures.IDataAndStructures;
 import managers.space.ObjectInSpace;
 import managers.vehicle.IVehicleManager;
 import reports.DCP;
@@ -16,32 +16,20 @@ import java.util.ArrayList;
  */
 public class SimEngine implements Serializable {
 
-
     private Timer timer;
-    private DataAndStructures dataAndStructures;
+    private IDataAndStructures dataAndStructures;
     private boolean pause;
     private DCP dcp;
 
 
-    public SimEngine(DataAndStructures dataAndStructures, DCP dcp) {
+    public SimEngine(IDataAndStructures dataAndStructures, DCP dcp) {
         this.dataAndStructures = dataAndStructures;
         this.dcp = dcp;
     }
 
     public void Play(ActionListener actionListener) {
-
-//
-//        for (IRUnitManager rUnit : dataAndStructures.getRoadNetworkManager().getRoadNetwork().getrUnitHashtable().values()) {
-//            String ns = "";
-//            for (IRUnitManager nexts : rUnit.getNextRUnitList())
-//                ns += nexts.getId() + " ";
-//            String ps = "";
-//            for (IRUnitManager prevs : rUnit.getNextRUnitList())
-//                ps = prevs.getId() + " ";
-//            System.out.println("id: " + rUnit.getId() + " x: " + rUnit.getX() + " y: " + rUnit.getY() + " N(" + ns + ") P(" + ps + ")");
-//        }
         //initialise timer
-        if(timer==null || !timer.isRunning()) {
+        if (timer == null || !timer.isRunning()) {
             timer = new Timer(5, actionListener);
             timer.start();
         }
@@ -64,21 +52,13 @@ public class SimEngine implements Serializable {
         dataAndStructures.getGlobalConfigManager().setTicksPerSecond(dataAndStructures.getGlobalConfigManager().getTicksPerSecond() * 2);
     }
 
-    public void CleanAll() {
-        if(timer !=null){
-            timer.stop();
-        }
-    }
-
     public void CleanVehicles() {
         dataAndStructures.setVehicleManagerList((new ArrayList<IVehicleManager>()));
         dataAndStructures.getSpaceManager().setObjects(new ArrayList<ObjectInSpace>());
-        if(timer != null){
+        if (timer != null) {
             timer.stop();
         }
     }
-
-    //TODO do clear vehicles
 
     public void performAction() {
         if (!pause) {
@@ -87,7 +67,7 @@ public class SimEngine implements Serializable {
             //update Report data
             dcp.updateReportingInfo();
 
-            if(dataAndStructures.getVehicles().size()<1000) {
+            if (dataAndStructures.getVehicles().size() < 1000) {
                 //create a new vehicle
                 IVehicleManager newVehicle =
                         dataAndStructures.getVehicleFactoryManager().createVehicle(dataAndStructures);
@@ -111,7 +91,7 @@ public class SimEngine implements Serializable {
     }
 
 
-    public DataAndStructures getDataAndStructures() {
+    public IDataAndStructures getDataAndStructures() {
         return dataAndStructures;
     }
 }

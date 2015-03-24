@@ -7,11 +7,12 @@ import org.junit.Test;
 
 public class TickTimeTest {
 
-    TickTime tickTime;
+    private TickTime tickTime;
+
     @Before
     public void setUp() throws Exception {
 
-        tickTime=new TickTime(1);
+        tickTime = new TickTime(1);
     }
 
     /*
@@ -24,6 +25,7 @@ public class TickTimeTest {
         tickTime.incrementTick();
         Assert.assertEquals(tickTime.getCurrentSecond(), 1.0);
     }
+
     @Test
     public void test2IncrementTick() throws Exception {
         int ratio = 2;
@@ -31,6 +33,7 @@ public class TickTimeTest {
         tickTime.incrementTick();
         Assert.assertEquals(tickTime.getCurrentSecond(), 0.5);
     }
+
     @Test
     public void test3IncrementTick() throws Exception {
         int ratio = 2;
@@ -39,6 +42,7 @@ public class TickTimeTest {
         tickTime.incrementTick();
         Assert.assertEquals(tickTime.getCurrentSecond(), 1.0);
     }
+
     /*
     IncrementTick test boundary cases
      */

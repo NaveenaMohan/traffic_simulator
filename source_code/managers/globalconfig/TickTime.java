@@ -9,17 +9,22 @@ public class TickTime implements Serializable {
     private int ratio;
     private long currentTick;
     private double currentSecond;
-    public void incrementTick(){
-        currentTick+=1;
-        currentSecond+=(double)1/ratio;
-    }
+
     public TickTime(int ratio) {
         this.ratio = ratio;
-        currentTick=0L;
-        currentSecond=0;
+        currentTick = 0L;
+        currentSecond = 0;
     }
 
-    public double getCurrentSecond() {return currentSecond;}
+    public void incrementTick() {
+        currentTick += 1;
+        currentSecond += (double) 1 / ratio;
+    }
+
+    public double getCurrentSecond() {
+        return currentSecond;
+    }
+
     public Long getCurrentTick() {
         return currentTick;
     }

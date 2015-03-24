@@ -12,7 +12,11 @@ public class Space implements Serializable {
         objects.add(objectInSpace);
     }
 
-    public  List<ObjectInSpace> getObjects(){
+    public void removeObject(ObjectInSpace objectInSpace) {
+        objects.remove(objectInSpace);
+    }
+
+    public List<ObjectInSpace> getObjects() {
         return objects;
     }
 
