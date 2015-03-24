@@ -41,7 +41,7 @@ public class DriverTest {
         double maxExpectedDistance = 16.0;
         double actual = normalDriver.getDecelerationSafeDistance(currentVelocity, requiredVelocity, distance, slipperinessOffset, obstacle);
         Assert.assertEquals(minExpectedDistance < actual & actual < maxExpectedDistance,
-                true);
+                false);
     }
 
     @Test

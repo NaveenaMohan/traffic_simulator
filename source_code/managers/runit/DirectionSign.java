@@ -17,10 +17,6 @@ public class DirectionSign extends TrafficSign {
         return directionSignType;
     }
 
-    public void setDirectionSignType(DirectionSignType directionSignType) {
-        this.directionSignType = directionSignType;
-    }
-
     public String getLocation() {
         return location;
     }

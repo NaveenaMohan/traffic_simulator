@@ -27,6 +27,12 @@ public class RUnit implements IRUnitManager {
         this.y = y;
     }
 
+    public RUnit(String id, List<IRUnitManager> prevsRUnitList, List<IRUnitManager> nextRUnitList) {
+        this.id = id;
+        this.prevsRUnitList = prevsRUnitList;
+        this.nextRUnitList = nextRUnitList;
+    }
+
     public int getX() {
         return x;
     }

@@ -25,6 +25,7 @@ public class ExportImportObject implements Serializable {
         //Sets the UI data structures
         uiDataStructures.setSingleLaneRUnits(drawingBoard.getSingleLaneRUnits());
         uiDataStructures.setDoubleLaneRUnits(drawingBoard.getDoubleLaneRUnits());
+        uiDataStructures.setChangeableLaneRUnits(drawingBoard.getChangeAbleLaneRUnits());
         uiDataStructures.setTrafficLightCoordinates(drawingBoard.getTrafficLightCoordinates());
         uiDataStructures.setZebraCrossingCoordinates(drawingBoard.getZebraCrossingCoordinates());
         uiDataStructures.setBlockageCoordinates(drawingBoard.getBlockageCoordinates());

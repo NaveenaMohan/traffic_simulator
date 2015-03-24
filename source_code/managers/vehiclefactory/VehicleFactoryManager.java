@@ -84,6 +84,7 @@ public class VehicleFactoryManager implements IVehicleFactoryManager {
             return VehicleType.emergency;
     }
 
+    @Override
     public List<VehicleFactory> getVehicleFactoryList() {
         return vehicleFactoryList;
     }
