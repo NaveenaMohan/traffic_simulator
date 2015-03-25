@@ -1,0 +1,1116 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{latexsym}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{floatrow}
+\usepackage{hyperref}
+\usepackage{datetime}
+\usepackage[UKenglish]{babel}
+\usepackage{enumitem}
+\setlist{nolistsep}
+\usepackage[]{caption}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{pdfpages}
+
+
+\titleformat{\section}[block]{\sffamily\Large\bfseries\filcenter}{\thesection}{1em}{}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\newcommand{\mydate}{\formatdate{26}{3}{2015}}
+
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+\setlength{\belowcaptionskip}{-20pt}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\begin{document}
+
+\begin{titlepage}
+	\begin{center}
+		\includegraphics[width = 0.20\textwidth]{images/KCLCrest}\\[0.5cm]
+		 \textsc{\LARGE King's College London}\\	[0.8cm]
+		 \textsc{\Large 7CCSMGPR Group Project Module}\\[0.3cm]
+		 
+		 \HRule \\[0.1cm]
+		 	{\huge \bfseries TRAFFIC SIMULATION ENGINE\\[0.1cm]}
+		 \HRule \\[0.8cm]
+
+ \begin{figure}[h]
+			\includegraphics[scale=0.50,width=9cm, height=5cm]{images/frontPagePic}
+			\centering
+		\end{figure}
+		 
+		 \noindent
+		 \begin{minipage}{0.4\textwidth}
+		 	\begin{center} \large
+		 		\emph{Group Name:}\\
+			 	\LARGE traffic\textunderscore simulator\\[0.3cm]
+			 	
+			 	\emph{Authors:}\\
+		 		\large Saumya \textsc{Awasthi}\\
+		 		\large Fabian Sebastian \textsc{Czapski}\\
+		 		\large Dhiraj \textsc{Gangwani}\\
+		 		\large Naveena \textsc{Mohan}\\
+				\large Lorena Serna \textsc{Silva}\\
+				\large \date{March 26, 2015}
+		 	\end{center}	
+		 \end{minipage}
+		
+	
+
+		 \mydate
+	\end{center}
+\end{titlepage}
+
+\tableofcontents
+
+\newpage
+\section{\textbf{INTRODUCTION}}
+	\subsection{OVERVIEW} 
+
+	The Module: 7CCSMGPR aims to give students a hands on experience in 
+	producing complex software to comprehend the
+	difficulties involved in it’s development and face the challenges of
+	working in a team. The problem statement for the module is to build a
+	Traffic Simulation Engine. 
+	
+	\setlength{\parindent}{0cm}
+	Our approach to tackle this problem statement began with
+	requirements elicitation followed by designing high-level software
+	architecture and identifying two main components of the project
+	namely User Interface (UI) and Simulation Engine. 
+	
+	\setlength{\parindent}{0cm}
+	After evaluating various approaches we narrowed down on Object
+	Oriented approach of programming. Having defined the building
+	blocks of the software development, we adopted Agile Development
+	Methodology. This facilitated collaboration between the two teams 
+	UI Team and Engine Team at each sprint as the software development
+	life cycle advanced. Final stages of the project involved testing
+	the software, fixing bugs and final documentation.
+
+	\subsection{PROJECT AIM}	
+
+	The aim of this project is to build a traffic simulation engine for
+	testing different traffic management policies. 
+	
+	\setlength{\parindent}{0cm}
+	The software is required to simulate different types of vehicles such
+	as Cars, Heavy Load and Emergency Vehicles on complicated road
+	networks comprising of single lane and double lane roads, road
+	intersections and roundabouts. It should also account for different
+	driver behaviours - “Cautious”, “Normal” and “Reckless” and weather
+	conditions - “Sunny”, “Rainy” and “Snowy”. 
+	With each timer tick, the entire simulation would update itself. Report
+	can be generated at any time during the simulation, summarising the
+	outcome of the same.
+
+	\subsection{PROJECT OUTCOME}	
+
+	Our software accomplishes the above objective by providing the User
+	i.e. a Traffic Engineer with the flexibility to configure the
+	following input configurations:
+		\begin{itemize}
+		\setlength\itemsep{0.2em}
+			\item Building any kind of road network with customised parameters that includes different road lanes, traffic lights, traffic signs, etc. 
+			\item Configurable traffic pattern options contributed by different vehicle types such as cars, trucks, emergency vehicles, traffic density for various vehicle types, traffic lights synchronisation, driver behaviour, climatic conditions etc. 
+		\end{itemize}
+	With the above, the user can demonstrate and generate
+	reports for different traffic behaviours.	
+
+	\setlength{\parindent}{0cm}\bigskip
+	The software provides the following user configurable features:
+		\begin{itemize}
+		\setlength\itemsep{0.2em}
+			\item Allows the user to draw \textbf{customised road network}  using Mouse Drag and Mouse Click. They have an option to choose from \textbf{Single Lane Road and Double Lane Road}. 
+			\item Gives the users the freedom to \textbf{place traffic elements such as Traffic Lights, Pedestrian Crossing, Road Blockages, Speed Limit Sign Boards, Direction Sign Boards, Location Board, Destination Board and Vehicle Factory}  (starting point of the road).
+			\item Flexibility to \textbf{adjust Climatic Conditions, Driver Behaviour}  and set the density of different types of vehicles.
+			\item Ability to \textbf{Play, Pause, Speed Up and Slow Down}  the simulation at any time.
+			\item Allows user to configure the \textbf{Traffic Lights Synchronisation}  with simple one-click feature.
+			\item Users can \textbf{clear} the drawing board and re-draw the road network.
+			\item \textbf{Generate Report} at any point of the simulation giving details of the individual driver behaviour, number of vehicles, status of traffic, climatic condition, etc.
+		\end{itemize}
+		Additional features of the software include:
+		\begin{itemize}
+		\setlength\itemsep{0.2em}
+			\item \textbf{Import}  saved configurations to allow further editing and \textbf{Export} the existing configuration.
+			\item \textbf{Upload} a background image on the drawing panel (e.g. Google Maps Snapshot) to help model real time traffic simulation.
+		\end{itemize}
+
+\section{\textbf{LITERATURE REVIEW}}
+	There are a number of methodologies used for traffic simulation software, below we give a brief summary of some of them that are more relevant to our approach.
+	
+	\subsection{TRAFFIC SIMULATION USING AGENT BASED MODELS}
+	Agent Based Model is a very effective Technique of building Simulation for Real life project. This model consist of entities called agents which have their own individual behaviour and decision-making heuristics of the environment. Agent based models cannot be predicted in differential equations which is why agents should have the ability to adapt to the environment and interact with it.\cite{Ljubović09}
+	
+	It is used in following situations:-
+	\begin{itemize}
+		\setlength\itemsep{0.1em}
+		\item When the granularity of the object is not defined.
+		\item When it is important that agents have a dynamic relationships with other agents, and agent relationships form and dissolve.\cite{Macal06}
+		\item When a complex interaction topology can cause a problem to the entire system.
+		\item And when some defined mathematical equations eliminates important aspect of individual behaviour which can affect the whole system.\cite{Ljubović09}
+	\end{itemize}
+	Agent based traffic models also includes more realistic behaviour
+	of drivers for instance, every agent will have their own
+	behaviour which can affect vision, speed and distance to keep
+	between other vehicles to avoid collisions.
+			
+	\subsection{CELLULAR AUTOMATA MODEL}
+	Cellular automata model has been proposed as another approach to microscopic simulation model on continuous values. In cellular automata model, the time, the position and status of a vehicle are discrete. It is widely used in Simulations of traffic flow on basis of its efficiency and flexibility of the model. In cellular automata, a road is represented as grid of cells with each cell occupied by one vehicle. The movement of the vehicle takes place on moving from one cell to another and this way it goes on. \cite{Ljubović09}
+	
+	Advantages:-
+	\begin{itemize}
+		\setlength\itemsep{0.1em}
+		\item It is easier to implement even for the complex road networks because of the simplicity of this model.
+		\item Simple Cellular automata model has the advantage of speed over continuous model but as the model gets more complicated with increasing number of rules, it slows down the speed.
+	\end{itemize}
+	
+	Disadvantage:-
+	\begin{itemize}
+		\setlength\itemsep{0.1em}
+		\item As CA is based on real life experience, Most of the parameters of other models are not realistic which makes it unsuitable for those applications. \cite{treiber13}
+	\end{itemize}
+
+
+	\subsection{OBJECT ORIENTED MODELLING}
+	 Object oriented programming is a technique to develop software application using UML diagrams and object oriented languages which is easily understood by software engineers. As mentioned before agent is self-governed entity which is used in agent based modelling. Agents and agents behaviour is represented in object oriented principle using classes and functions. Object Oriented Model is mostly used for heterogeneous traffic that means a traffic consisting of various types of vehicles such as car, jeeps, two-wheeler vehicles, trucks, buses etc. Every vehicles takes different dimension and also each vehicles have variation in their speed. Due to this reason it’s very difficult to follow lane discipline and hence object oriented modelling can play its role and each component can be assigned with their individual characteristics which can be implemented using Object oriented programming language and (UML) Unified Modelling Language.\cite{gowri09} While object oriented and agent based methods may seem similar, these technologies are fundamentally different. Software objects are encapsulated pieces of code, which do not have control over how and when they are invoked. Software agents, on the other hand, are self-governed and independent. Since objects are controlled by external entities their behaviour is more predictable than that of agents. \cite{mcburney07}
+	 		
+	\subsection{CONCLUSION}
+	While borrowing some of the techniques from agent based methodologies, such as behaviour control loop, our approach is strictly object oriented. Objects are created within the main classes, which hold control over their execution. These objects interact with each other by invocation of their methods, which means that no object is ever independent or self-governed.
+	Our approach is also fundamentally different from the cellular model. In the cellular model the environment is essentially a grid of cells with various elements in them, while in our model, the environment is simply a collection of objects that link to one another. The vehicles are not moving from cell to cell, but rather from object to object. In the cellular approach the vehicles perceive their environment by looking at other cells around them, while we let the vehicle follow the network of references between the objects in order to scan the road ahead. 
+
+\section{\textbf{REQUIREMENTS AND DESIGN}}
+	\subsection{INTIAL REQUIREMENTS, GOALS AND PLAN}
+		\subsubsection{STRATEGY}
+			Various approaches which could be adopted for the development of
+			the simulation engine in Java were considered and evaluated:
+			\begin{itemize}
+			\setlength\itemsep{0.2em}
+				\item An agent driven approach with 3rd party extension and libraries such as Repast and JADE
+				\item An object-oriented approach, which involves identifying all elements and interactions as objects as well as their behaviours, programming everything from scratch, was adopted.
+			\end{itemize}
+
+	Since the given requirements were generic, the team revisited 
+	and redefined them to create the formal specification document.
+
+	\setlength{\parindent}{0cm}\bigskip
+	For software design and architecture, the problem was approached using
+	the following architectural methodologies and patterns in software
+	design and development:
+	\begin{itemize}
+	\setlength\itemsep{0.2em}
+		\item Decomposition of the problem and definition of the use case.
+		\item Identification of various components in the ecosystem, their 	interactions and dependencies with UML 2.		\item Identification of the attributes and methods of each sub component using ArgoUML.
+		\item Grouping related components into controllers and developing Interface Contracts with method signatures for the interactions between User Interface and Simulation Engine.
+		\item No external dependencies on third party libraries.
+	\end{itemize}
+
+	\subsubsection{REQUIREMENTS SPECIFICATIONS}
+	A blank designing area would be available to sketch the required road
+	networks with components contributing to traffic variations. A tool
+	panel with buttons and sliders would be in aid to construct the above.
+	Once the required road network with traffic components and
+	configurations is setup, the global actions can be used to start/stop
+	the simulations and also generate reports for the simulated time.
+
+	\subsubsection{PROJECT PLAN}
+	As shown in the following Gantt Chart, we carefully divided the time allotted to complete the project. We gave ample time of 2 weeks to the planning phase. Longest phase was that of Development. Each sub-team divided their tasks in sprints of roughly 7 days which involved development, unit, functional testing and integration of units. This was followed by the testing phase where we carried out performance and user acceptance testing. Documentation was carried out along side development.
+	
+		\graphicspath{{Images/}}
+		\begin{figure}[h]
+			\includegraphics[scale=0.50,width=16cm, height=9cm]{images/FinalGanttChart.jpg}
+			\caption{Gantt Chart - Project Plan}
+			\centering
+		\end{figure}
+	
+	Our primary goals were:
+
+	\begin{itemize}
+	\setlength\itemsep{0.2em}
+		\item Uploading of a road network background image (e.g. a Google Map snapshot) or white-board on which the user can draw, configure the road network and infrastructure.
+		\item User configurable road networks with traffic elements, traffic light cycles, driver characteristics, weather conditions, and emergency vehicle routing.
+		\item Implementation of basic driver and vehicle behaviour.
+		\item Generation of reports for various traffic management policies.
+	\end{itemize}
+
+	Our secondary goals were:
+
+	\begin{itemize}
+	\setlength\itemsep{0.2em}
+	\item User configurable destination based routing.
+		\item Importing/exporting of road network and infrastructure configuration using a file.
+		\item Advanced driver behaviour such as congestion avoidance.
+	\end{itemize}
+
+	We were able to achieve all of the primary and secondary aims by the end of the project.
+
+ \subsection{PROJECT APPROACH}	
+  \subsubsection{CORE IDEA}
+  	Since the beginning of the project, our group conferred that we
+  	need to give the user the flexibility to draw any road
+  	configuration he/she likes, where roads can interesct in any way
+  	and go off in any direction. 
+	
+  	\setlength{\parindent}{0cm}
+  	We defined roads as a chain of nodes (RUnits); where each RUnit has
+  	a reference to its previous and next node. A vehicle moving from
+  	node to node follows the path of the ‘nexts'. Intersections are simply branches in the chain where a RUnit has a
+  	list of ‘nexts’ or a list of previous nodes. This way, a vehicle is
+  	not concerned with the angle of the road or its position on the x,
+  	y plane – it simply knows the reference to its current RUnit, which
+  	contains a list of its ‘nexts’ and previous (Figure 2). At an
+  	intersection the vehicle chooses from one of the nexts (Figure 3).
+  	Road signs, traffic lights and other road elements are referenced
+  	in each RUnit that contains them. The vehicle reads the road ahead
+  	of itself and interacts with what it sees in each RUnit.The vehicles are not concerned with the coordinates of the RUnits
+	however the traffic elements that the user places on the road
+	network are. In order to enable the user to draw a road on the map,
+	each RUnit has x and y coordinates.
+  	
+  		\begin{figure}[!h]
+           \begin{floatrow}
+             \ffigbox{\includegraphics[scale=1.0,width=6cm, height=3cm]{images/RUnit}}{\caption{RUnit Chain}\label{fig:2figsA}}
+             \ffigbox{\includegraphics[scale=1.0,width=7cm, height=3cm]{images/NextRUnit} }{\caption{Intersection RUnits}\label{fig:2figsB}}
+           \end{floatrow}
+        \end{figure}
+          	 
+    \setlength{\parindent}{0cm}\bigskip
+	 
+	
+	\subsubsection{VEHICLE LOGIC}
+  	We have adopted an agent-based approach for the vehicle logic. Each
+  	vehicle class is an autonomous object capable of interacting with
+  	the road network and other vehicles. At the heart of each vehicle
+  	is the standard agent control loop (Figure 4) \cite{agentControl}.
+	
+		\begin{figure}[h]
+			\includegraphics[scale=1.0,width=8cm, height=3cm]{images/VehicleLogic}
+			\caption{Agent-based Vehicle Logic}
+			\centering
+		\end{figure}
+  	At every tick, a vehicle scans its environment. It updates its
+  	internal state and makes a decision based on the information in the
+  	state. 
+  	For example, a car can look 50 RUnits ahead and see whether there
+  	is a red traffic light at that point or another vehicle. Accordingly, it registers that object and updates its state. Inside performAction() method, agent checks the state and finds the
+  	most immediate/suitable object it needs to react to and adjusts its
+  	speed and lane position accordingly. 
+	
+  	\subsubsection{SPACE AND COLLISION DETECTION}
+  
+  	In order to make the simulation realistic, vehicles need to have
+  	dimensions and some sense of other objects around them. The RUnit
+  	chain idea does not account for proper collision checking since a
+  	vehicle can occupy space that can span multiple RUnits.
+  	Consequently, for a vehicle to be detectable by other vehicles,
+  	each RUnit that it occupies would need to have a flag to show it is
+  	unavailable.	
+	
+	\setlength{\parindent}{0cm}
+	This approach, while preserving the semantics of our original idea,
+	is not very scalable. For instance, when in order to account for
+	vehicle width, if multiple RUnits are close to each other, a
+	vehicle would need to occupy adjacent RUnits as well. Therefore we
+	have devised a concept of space. Space is a collection of ‘Objects
+	in Space’ (vehicles) that have their x and y coordinates and
+	dimensions. This way, a vehicle can easily check if advancing to a
+	particular RUnit will make it collide with another object in space.
+	It simply checks with space whether it would fit in a particular
+	location. 
+	In a nutshell, our idea is to advance the vehicles on chains of
+	RUnits. Each vehicle is capable of deciding it’s speed and choosing
+	the lane it will move on.Additionally, every vehicle has a
+	corresponding object in space that moves in the x and y plane while
+	the vehicle is advancing on the references to RUnits.
+  
+  \subsection{SYSTEM DESIGN AND ARCHITECTURE}
+  	\subsubsection{PROBLEM DECOMPOSITION}
+  	We have adopted a simplified single repository pattern where different parts of the applications share the same data pool (Figure 5). DataAndStructures (center part) is where the data is persisted in an
+  object-oriented fashion. UserInterface is used to create various road elements and later
+  display the simulation and/or show reports. Engine is responsible for the back end logic of the vehicles and road
+  elements. UserInterface and Engine are shielded from each other; they
+  each have their own responsibilities that largely include updating
+  and reading from DataAndStructures. This allowed for greater
+  separation of concerns, making the code less dependent and more self
+  contained, which simplified the implementation, testing and teamwork.
+
+  	
+		\begin{figure}[h]
+			\includegraphics[scale=1.0,width=15cm, height=4.5cm]{images/HighLevel}
+			\caption{High-Level Design}
+			\centering
+		\end{figure}
+  
+  \subsubsection{INTERFACE SEGREGATION}
+  Following \textbf{S.O.L.I.D} (Single responsibility, Open-closed,
+  Liskov substitution, Interface segregation and Dependency inversion)\cite{wikiOOD}
+  design principles, we have grouped related classes together and
+  created interfaces via which larger components of the system would
+  communicate (Figure 6). S.O.L.I.D stands for five basic principles of object-oriented
+  programming and design, which, when applied together, intend to make
+  it more likely that a programmer will create a system that is easy to
+  maintain and extend over time. These principles are guidelines
+  that can be applied while working on software to remove code smells
+  by causing the programmer to refactor the software's source code
+  until it is both legible and extensible. It is part of an overall
+  strategy of agile and adaptive programming.\cite{robert03}
+  
+  \setlength{\parindent}{0cm}\bigskip
+  The main interfaces are outlined below:
+	\begin{itemize}
+		\item IDataAndStructures --- provides read and write access to all the application data.
+		\item IRoadNetworkManager --- Provides functionality for creating/reading the roads and road elements.
+		\item IRUnitManager --- Provides functionality for creating/reading RUnits and their elements.
+		\item IVehicleFactoryManager --- provides a functionality for creating the vehicles.
+		\item IVehicleManager --- provides a functionality for moving the vehicles.
+		\item ISpaceManager --- used for collision checking. Holds the x and y position of the vehicles and their dimensions.
+		\item IGlobalConfigManager --- provides read/write functionality for climatic conditions, global driver behaviour, routes, and vehicle density and simulation time.
+	\end{itemize}
+	
+		\begin{figure}[h]
+			\includegraphics[scale=1.0,width=15cm, height=6cm]{images/NewClassDiagram}
+			\caption{Component Identification and Interactions}
+			\centering
+		\end{figure}
+		
+  \subsection{IMPACT OF TEAM WORKING ON PROJECT DESIGN}
+  	Teams were initially split between Front End and Back End teams. 
+  	This affected our requirements and design in the following manner:
+	\begin{itemize}
+		\item Higher Design Level Point of View --- User Interface was responsible for the visual aspect and Engine for the back end logic. DataAndStructures being the common data pool that both teams would access.
+		\item Software Development Methodology Point of view --- Waterfall Methodology wasn’t suitable as our development process required revisiting previous stages and hence we adopted Agile Methodology.
+		\item Code Level Point of View – DataAndStructures shielded UI and Engine from each other, allowing independent functioning of the teams.  
+	\end{itemize}
+	The decisions made initially to split the group in different teams
+	proved to be beneficial and ensured smooth execution of the
+	project.
+
+\section{IMPLEMENTATION}
+  \subsection{FRONT END (USER INTERFACE) IMPLEMENTATION}
+	\subsubsection{USER MANUAL}
+	The user interface of the Traffic Simulator is very user friendly
+	and self-explanatory, to a great extent. The Application Window is divided into several panels, each serving
+	a different purpose.
+		\begin{figure}[h]
+			\includegraphics[scale=1.0,width=15cm, height=8cm]{images/ApplicationWindow}
+			\caption{Traffic Simulator Application Window}
+			\centering
+		\end{figure}
+	The Panels within the application window are (as shown in Figure 7):
+	\begin{itemize}
+	\setlength\itemsep{0.3em}
+		\item Road Infrastructure Panel: To design the road network with different traffic elements.
+		\item Traffic Pattern Configuration Panel: To adjust different values responsible for effect of weather, driver behaviours and destination routing on the simulation.
+		\item Simulation Panel: To control the simulation.
+		\item Traffic Light Configuration Panel: To configure the traffic lights, deciding which light would its change colour at which tick.
+		\item Drawing Board Panel: To draw the actual road network.
+	\end{itemize}
+	In figures that follow (namely Figure 8,9,10,11,12,13) the buttons and their functionalities of each panel are explained.
+	
+	\begin{figure}[bp!]
+		\includegraphics[scale=1.0,width=16cm, height=13cm]{images/RoadInfrastructure}
+		\caption{Road Infrastructure Panel Buttons and their functions}
+		\centering
+	\end{figure}
+	
+	\begin{figure}[bp!]
+		\includegraphics[scale=1.0,width=16cm, height=6cm]{images/TrafficPattern}
+		\caption{Traffic Pattern Configuration Panel Buttons and their functions}
+		\centering
+	\end{figure}
+	
+	\begin{figure}[bp!]
+		\includegraphics[scale=1.0,width=16cm, height=12.5cm]{images/Slider}
+		\caption{Traffic Pattern Configuration Panel Sliders and their functions}
+		\centering
+	\end{figure}
+	
+	\begin{figure}[bp!]
+		\includegraphics[scale=1.0,width=16cm, height=6.6cm]{images/Sim1}
+		\caption{Simulation Panel Buttons and their functions}
+		\centering
+	\end{figure}
+		
+	\begin{figure}[h!]
+		\includegraphics[scale=1.0,width=16cm, height=4cm]{images/Sim2}
+		\caption{Simulation Panel Buttons and their functions (contd.)}
+		\centering
+	\end{figure}
+	
+	\begin{figure}[h!]
+		\setlength\fboxsep{0pt}
+		\setlength\fboxrule{0.5pt}
+		\fbox{\includegraphics[scale=1.0,width=16cm, height=5cm]{images/TrafficLight}}
+		\caption{Traffic Light Configuration Panel}
+		\centering
+	\end{figure}
+ 	
+ \subsubsection{CODE IMPLEMENTATION DETAILS}	
+ 	\paragraph{TRAFFIC \textunderscore SIMULATOR CLASS}
+	Traffic \textunderscore Simulator Class is the software’s entry
+	point, which starts by instantiating the DataAndStructures (as
+	shown in Figure 14). It is, in fact, responsible for updating it
+	each time. The UI populates the relevant DataAndStructures, which in turn is
+	accessed by the Sim Engine to carry out their functionalities. Sim
+	Engine then updates the DataAndStructures, which is consumed by UI
+	for visualisation. The Application Window contains a Frame, which is divided into 5
+	Panels (as shown in Figure 7).
+		
+	\begin{figure}[h!]
+		\includegraphics[scale=1.0,width=8cm, height=4cm]{images/VehiclePos}
+		\caption{Interaction between UI and SimEngine}
+		\centering
+	\end{figure}
+	
+	
+	Each Panel has the following Java Swing Components:
+	\begin{itemize}
+		\item \textbf{Buttons}: Each button in every panel has ‘Action Listener’ event-handlers, which are employed to perform specified actions. Every button has a flag, which restricts other buttons functionalities, while one is selected.
+		\item \textbf{Sliders}: We have used two kinds of sliders namely JSlider and Range Slider. With JSlider, the user can select a value by sliding the knob across the ruler. 
+			
+			Range Slider on the other hand, is a double slider with two
+			knobs with which we can specify two ranges. Each range has
+			its lower and upper bounds wherein the upper bound of first range serves as the lower bound for the second range.\cite{ernie10}
+			 
+			 \begin{figure}[h!]
+				\includegraphics[scale=1.0,width=4.45cm, height=2.37cm]{images/DriverSlider}
+				\caption{Driver Behaviour Range Slider}
+				\centering
+			\end{figure}
+		
+			For e.g. in Figure 15, the blue knob specifies the value
+			for Cautious Behaviour. Normal Behaviour is specified by
+			the value between blue and red knob. The remaining value is
+			set as the value for Reckless Behaviour.
+		\item \textbf{Labels}: JLabels were used to name the Panels, Sliders and Buttons. In addition, it was used to display the Current Second of simulation.
+		\item \textbf{Tables}: On the Traffic Light Configuration Panel, we used JTable to tabulate the traffic lights and zebra crossing traffic lights dynamically. Subsequently, as and when the user adds one of these components to the road network, the rows get added. 
+			Additionally, each cell can either be red or green
+			(representing red light and green light) and upon mouse
+			click, the colour changes accordingly. This can be changed
+			even while the simulation is running.
+			The dynamicity of the table and ability of the cell to
+			change colour were achieved by using	\textbf{paintTrafficLightComponent()}.
+		\item \textbf{Dialog Box}: The dialog box is an independent window that pops up on clicking certain buttons such as Location and Destination buttons. The Location and Destination dialog box takes a text input and adds to the DataAndStructures, which Sim Engine uses to determine the direction of vehicles.
+			
+			Another dialog box pops up when play button is pressed
+			without adding a Vehicle Factory.
+
+			\begin{figure}[h!]
+				\setlength\fboxsep{0pt}
+				\setlength\fboxrule{0.5pt}
+				\fbox{\includegraphics[scale=1.0,width=15cm, height=4.5cm]{images/DialogBoxes}}
+				\caption{Various Dialog Boxes}
+				\centering
+			\end{figure}
+	\end{itemize}
+  \paragraph{DRAWING BOARD CLASS}
+  This class is responsible for feature that enables users to draw the
+  road network. Whatever a user draws on the drawing board panel
+  immediately reflects on the screen visually and simultaneously
+  populates the DataAndStructures with the respective RUnits.
+	
+  The Drawing Board Class has two important methods namely
+  paintComponent() and paint().
+  
+  \textbf{paintComponent()}:
+  This method paints every component such as roads, traffic elements on
+  the panel at every call. The implementation of some significant components is as follows:
+  
+  \begin{itemize}
+  	\item \textbf{Roads}: The most important and unique feature of our
+  	software is the flexibility provided to the users to draw
+  	customised roads. This, particularly, was one of the most
+  	challenging parts of the project. 
+	
+  	Drawing both, the Single Lane and the Double Lane Roads, had
+  	distinctive implementations. However, the main logic behind
+  	populating the DataAndStructures was identical. Both types of roads
+  	are basically LinkedLists that are incrementally populating the
+  	RUnits with each co-ordinate. 
+  	
+  	For double lane, a new variable ‘changeable’ of type Coordinates
+  	was introduced. changeable serves the purpose of allowing vehicles
+  	to change lanes on a double lane road. The changeable co-ordinates
+  	were obtained using
+  	getAdjacentPointToB() and getNextPointFromTo() functions, which
+  	used Trigonometry to obtain the X and Y coordinates of the adjacent
+  	points.
+
+  	\item \textbf{Intersections}: Intersections: Getting the logic of the intersections correct was a challenging task as well. In the RoadNetworkManager Class, the \textit{addSingleLane()} function holds the logic of adding intersection within the if statement. The following code snippet is responsible to return the intersected Runit:  	
+  		
+  		\begin{figure}[h!]
+			\includegraphics[scale=1.0,width=12cm, height=4.5cm]{images/CheckIntersection}
+			\caption{Code snippet of the function checking Intersection}
+			\centering
+		\end{figure}
+  		This function gets the CurrentRUnit and checks if its x and y coordinates match with any other RUnit’s x and y coordinates. If not, then it returns null and nothing happens. However, if it does match, the function then returns the intesected RUnits called \textit{Intersected}. 
+  		Once the intersected RUnit is found, we checks if it would be lawful for the traffic going from the intersecting road to turn to the existing road. If so, the intersected RUnit becomes one of the nexts for that road, we do the same check for the traffic going from the existing road, as shown below.  
+  		
+  		\begin{figure}[h!]
+			\includegraphics[scale=1.0,width=7cm, height=3cm]{images/Intersection}
+			\caption{Illustrating the Intersection Logic}
+			\centering
+		\end{figure} 		
+  		
+  		In this example it is lawful to turn from the intersecting road to the right lane of the existing road, but not to its left lane. It is also lawful to turn from the existing road’s left lane to the intersecting road.
+  		
+  		CheckIntersectionIsLawful(RUnit A, RUnit B) is used to check whether it is lawful for two lanes to intersect. It checks the angular direction of both lanes and applies the following rule:
+  		
+  		Lanes A and B can intersect if:
+  		
+  		\begin{itemize}
+  			\item Lane B is going to the right relatively to lane A
+  					\begin{itemize}
+  					  \item AND Lane B is a single lane or a right lane
+  					  \item AND lane A is a single lane or a right lane
+  					 \end{itemize}
+  			\item OR Lane B is going to the left relatively to lane A
+  				\begin{itemize}
+  					  \item AND Lane B is a single lane or a left lane
+  					  \item AND lane A is a single lane or a left lane
+  				\end{itemize}
+  		\end{itemize}
+  		
+  		This rule is shown in the code snippet below:
+  		
+  		\begin{figure}[h!]
+			\includegraphics[scale=1.0,width=14cm, height=4cm]{images/CanIntersect}
+			\caption{Code Snippet checking if intersection is lawful}
+			\centering
+		\end{figure} 	
+		
+  	\item \textbf{BestMatchRUnit}: The idea behind using this function is to precisely find the RUnit of any component placed on the road network and also ensuring that it is placed at the correct location. This component is added to that particular RUnit. 
+		For example, if the user places a traffic light on an area slightly
+  		outside the road, this function finds the RUnit on the road, closest to the point user places it on to ensure it is put correctly. It uses the rectangle area function to locate the ideal position. This function calculates the area around that point where user puts the traffic element and finds the nearest coordinate that hosts an RUnit.
+  	
+  	 \item \textbf{SmartDraw Feature}: Steady hand is needed to draw roads using mouse. To avoid shaky lines, we worked on the SmartDraw feature to give perfection to the roads by creating straight lines between the points the user clicks on the drawing board. The key idea here is to remember the last point where the user left
+  		off while drawing the road. The function then looks at the x and y
+  		coordinates of the previous point and the x and y coordinates of
+  		the current point. It goes into a while loop and incrementally
+  		creates RUnits at next coordinate between the previous and the
+  		current RUnits. Once the loop reaches the current point, it ends (see Fig. 20).
+  		
+  		\begin{figure}[h!]
+			\includegraphics[scale=1.0,width=8cm, height=2cm]{images/while}
+			\caption{Illustrating the SmartDraw Feature}
+			\centering
+		\end{figure} 
+
+  \end{itemize}
+  
+  \textbf{paint()}:
+
+  		This function repaints the whole drawing board panel with every tick
+  i.e each time a component requires to be rendered.
+  All the components except the following take in coordinates and
+  populates Data Structures:
+  
+  \setlength{\parindent}{0cm}\bigskip
+  Stationary components- 
+	
+  1. \textbf{ Traffic Lights and Zebra Crossing}: Each time user adds one of these,rows of the Traffic Light Synchronisation Table get added dynamically. Once the simulation is playing, each time the traffic lights change from red to green and vice versa, it is visually represented on the roads as well.
+    
+  2. \textbf{ Roads}: In the paint() method, we used angle function to rotate each road image to get smooth curves and straight lines while drawing roads.
+ 
+  \setlength{\parindent}{0cm}\bigskip
+  Moving Components-
+  
+  1. \textbf{Object in Space}: This component is responsible for moving vehicles on the road network, considering the space it occupies. An object in space can be of a type car, heavy load and emergency vehicle. This function tells exactly how much space each vehicle takes by considering the respective coordinates it occupies and the angle it makes with respect to the road.
+
+ \subsection{BACK END (SIMULATION ENGINE) IMPLEMENTATION}
+  
+  \subsubsection{simEngine - ENGINE} 
+  This class is responsible for running the simulation. It contains public functions like Start, Stop, SpeedUp and SlowDown which refer to the simulation timer, and are self-explanatory. It also contains performAction function which gets called on every tick, to create vehicles, move the vehicles, and change the traffic lights.
+    	\begin{figure}[h!]
+			\includegraphics[scale=1.0,width=14cm, height=5cm]{images/performAction}
+			\caption{performAction()}
+			\centering
+		\end{figure} 
+
+ 
+  \subsubsection{VehicleFactoryManager – CREATING VEHICLES}
+  
+  VehicleFactoryManager contains all vehicle factories, which is responsible for creating a vehicle. Since there can be multiple vehicle factories, VehicleFactoryManager decides which vehicle factory to use to create a vehicle on every tick. 
+  
+  		\begin{figure}[h!]
+			\includegraphics[scale=1.0,width=14cm, height=5cm]{images/CreateVehicle}
+			\caption{createVehicle}
+			\centering
+		\end{figure} 
+		
+	The key point here is the initial “if” function which is responsible for regulating the flow of vehicles based on the vehicle creation rate defined in DataAndStructures. It returns true based on a probability that a vehicle should be created in the current tick. 
+The function returns a vehicle from a random vehicle factory back to the simEngine, which has the same initial RUnit as the vehicle factory. 
+The vehicle factory that is chosen will need, amongst other things, the vehicle type, driver and destination. These parameters are chosen with random probability based on global configuration parameters. For example, vehicleDensity object inside DataAndStructures contains the probability of creating a particular vehicle type which is stored as a double from 0 to 1. NextVehicleType() returns a particular vehicleType based on probabilities defined in vehicleDensity.
+Having this probability-based approach for choosing vehicle defining parameters, ensures that each vehicle is slightly different. This makes the simulation a little more realistic. The variances in these parameters affect the vehicle speed, the safe distance it keeps between other vehicles and its reaction time.
+  
+  \subsubsection{VehicleManager}
+  
+  IVehicleManager encapsulates all vehicle related classes and provides a “move” function that SimEngine uses to advance the vehicle.
+As described in the previous sections we have adopted an agent based control loop for the vehicle logic. The classes that play a major role in the vehicle decision making process are shown in the Figure 23. 
+  \begin{figure}[h!]
+			\includegraphics[scale=1.0,width=14cm, height=3.5cm]{images/VehicleManager}
+			\caption{Road Network and Space Manager}
+			\centering
+		\end{figure} 
+  Each vehicle is invoking these objects on every tick, inside the move function as shown in Figure 24:
+  
+   \begin{figure}[h!]
+			\includegraphics[scale=1.0,width=14cm, height=2.5cm]{images/move}
+			\caption{move() function}
+			\centering
+		\end{figure} 
+	See() method checks the environment around the vehicle and updates the vehicleState object. PrepareAction() represents agent deliberation function, where the car chooses the lane it wants to use and if applicable chooses the next turn if the vehicle has a destination. PerformAction() is used for advancing the vehicle on the chain of RUnits.
+  
+  \subsubsection{VEHICLE PERCEPTION}
+  
+  Vehicle perception’s main function is see() as shown in Figure 25.
+   \begin{figure}[h!]
+			\includegraphics[scale=1.0,width=14cm, height=3.5cm]{images/see}
+			\caption{see() function}
+			\centering
+		\end{figure} 
+See() takes maxVision as one of its parameters, which tells the distance it can view. MaxVision is in metres so see() has to transform it into rUnitsVision, as every RUnit has a predefined length in metres. This way the loop will iterate through the appropriate number of RUnits.
+It then goes into a for loop where it checks for various objects that can be found ahead and also sets the next RUnit it has to iterate to, to ensure the movement over the chain of RUnits.
+
+Whenever see() spots an object it registers it with vehicleState. The objects that see() can register and hence vehicle can interact with are:
+	
+	\begin{itemize}
+		\item Decision points --- Runit with multiple next (Intersections).
+		\item Blockages --- blockage object on the road to halt the traffic.
+		\item Traffic signs; stop signs, speed limit signs, direction signs, welcome signs.
+		\item Traffic lights and zebra crossings.
+		\item Other Vehicles.
+	\end{itemize}
+	
+	An important method of vehiclePerception is isChangeableClear(). This method returns true if the adjacent lane is clear. Vehicle uses this for overtaking and getting back into the left lane. This method will be used in vehicleMotor, which will be discussed later.
+  
+  \subsubsection{VEHICLE STATE}
+  
+  This class holds all the objects that a vehicle can see ahead of itself. Vehicle motor uses this class to make decisions on speed and chosen lane.
+The objects that vehicle state stores are of type VehicleMemoryObject, which contains the following attributes:
+
+  		\begin{figure}[h!]
+			\includegraphics[scale=1.0,width=14cm, height=3cm]{images/VehicleMemoryObject}
+			\caption{VehicleManagerObject class}
+			\centering
+		\end{figure} 
+		
+		This class contains all the information that vehicleMotor needs to know in order to make a decision. This way if the object ahead is a speed limit sign or another vehicle, our vehicle would only need to look at the velocity and distance attributes of this class in order to make speed adjustments. Speed limit would have a velocity of the actual limit it is advertising but a stop sign and a red light would both have a velocity of zero. As you will see, vehicleMotor will treat all these objects the same – this accounts for greater scalability and maintainability in the future without a lot of code rewrite like adding more road elements without changing the code of Vehicle Motor.
+			Vehicle state contains methods for retrieving objects ahead. Two of its most used methods are:
+		
+		 \setlength{\parindent}{0cm}\bigskip
+		 \textit{public VehicleMemoryObject nextObjectWithin(double metres, boolean isEmergency, boolean inLeft)}
+		 
+		 \textit{public VehicleMemoryObject getNextVehicleObject(double metres, boolean inLeft)}
+  
+  \subsubsection{VEHICLE MOTOR}
+  
+	As mentioned above, vehicleMotor is a function that uses vehicleState information in order to advance on the chain of RUnits. 
+  
+ 
+  	\paragraph{Controlling Speed}
+  		To make the simulation as realistic as possible we have used the kinematic equations to model vehicle speed. Somethings are within the control of the vehicle while others are not. The vehicle can control the lane it chooses or the turn it takes and also adjust its acceleration or deceleration. But it cannot directly control its speed and how many rUnits it will actually travel. The main function that returns the vehicle acceleration is aimForSpeed, shown below.
+  			
+  			\setlength{\parindent}{0cm}\bigskip
+  			\textit{private double aimForSpeed(double requiredVelocity, double safeStopDistance, double distance)}
+  			
+   			Being aware of the vehicle’s current velocity, it takes the required velocity and the distance by which this velocity is to be achieved. We have used the following kinematic equation to obtain the acceleration which is then returned:
+   				\begin{align}
+   				{finalVelocity}^2={initialVelocity}^2 +2*acceleration*distance \nonumber
+   			 	\end{align}
+  
+ 	
+  	Figuring out the difficult part which is the required velocity. Note how we mentioned that the vehicle considers the environment ahead in order to find out the velocity at which it should travel. A vehicle also contains a Driver object which is responsible for emulating human behaviours. Driver class contains the following method:
+  	\begin{figure}[h!]
+			\includegraphics[scale=1.0,width=14cm, height=3.5cm]{images/decelerate}
+			\caption{getDecelerationSafeDistance() function}
+			\centering
+		\end{figure} 
+		
+		This method considers the current and required velocities and the type of object ahead and returns the distance by which the vehicle should start decelerating. This means that a vehicle going at 100mph will start decelerating sooner than one going at 50mph if there is an obstacle ahead.
+This function helps us compute the safe deceleration distance for the next object and the slowest object ahead from vehicleState. This brings us to our next question - Why do we need to consider the two? At first we only considered the next object, but this meant that if the next object was a speed limit sign, say, 60 Km/H with congestion right after the sign, the vehicle would continue at speed just below 60 Km/H until it reaches the sign. After the sign the next object to register would be a stationary or slow moving vehicle at which point it realises that it is about to crash and hits the breaks!. This behaviour would be unrealistic, that is why the vehicle considers the two objects and chooses the one that it should respond to sooner. In the figure 28, the vehicle will start reacting to the Slowest Object because it is already within the safe deceleration distance of that object.
+		
+		\begin{figure}[h!]
+			\includegraphics[scale=1.0,width=8cm, height=3.5cm]{images/objectToMatch}
+			\caption{Illustrating Safe Stop distance}
+			\centering
+		\end{figure} 
+	After having obtained the objectToMatch it feeds its speed to aimForSpeed function which returns the required acceleration or deceleration of the vehicle. It is worth noting that our vehicle will try to match the speed of the chosen object by the time it gets to that object, no matter if the chosen object is travelling faster or slower than the vehicle. 
+		
+
+  	\paragraph{Choosing Lanes}
+  	ChooseLane() returns a changeable RUnit if it decides that it’s time to change the lane. It does so by considering the vehicle in the right lane and left lane within 20 metres of our vehicle and its maximum achievable speed in the current situation. The maximum speed is defined by any speed limit sign or traffic light that the vehicle will need to adhere to.
+  	
+  	\begin{figure}[h!]
+			\includegraphics[scale=1.0,width=14cm, height=3.5cm]{images/memobject}
+			\caption{Illustrating Safe Stop distance}
+			\centering
+		\end{figure} 
+
+  	
+  	\paragraph{Destinations}
+  	
+  	If user assigns a destination it is given to the vehicle on creation. The vehicle will try to get to that destination by taking appropriate turns at the intersections. The requirement is that there should be a direction sign for the destination the vehicle wants to travel to before the intersection. If there is no sign or if no destination is specified at the beginning, the vehicle will take a random route.
+Replan() method is the heart of vehicle destination decision making. This function looks at the next object ahead. If it’s a direction sign whose name matches the name of the destination, the vehicle remembers that sign in vehicleState. If the next object passed to replan is a decision point (intersection), the vehicle will look at the intersection and decide which one of its branches is going in the direction of the sign it remembered. 
+How does a vehicle pick the correct RUnit at the decision point? It looks at the bearing of each branch and decides if it is going straight left or right from the point it separates from the decision point. After picking the correct turn it stores it in its memory until that intersection is reached.
+
+  	\paragraph{Driver Behaviour Effect}
+  
+  Different types of drivers will behave differently on the roads. Different driver types will affect the following:
+  
+  \begin{itemize}
+  	\item Vision
+  	\item Speed
+  	\item Safe distance it keeps between other vehicles
+  \end{itemize}
+  
+  An example of affecting vision is shown below.  
+  
+  \begin{figure}[h!]
+			\includegraphics[scale=1.0,width=14cm, height=2.0cm]{images/Vision}
+			\caption{vehiclePercepetion.see()}
+			\centering
+		\end{figure} 
+
+Driver.getVision takes the standard vision distance (100 metres) and transforms that based on the driver characteristics. Cautious drivers will look further ahead while reckless ones will return a value below 100.
+Speed and safe distance are affected when the vehicle is aiming to match the speed of another object.
+	
+	\begin{figure}[h!]
+			\includegraphics[scale=1.0,width=14cm, height=2.0cm]{images/currentAcceleration}
+			\caption{aimForSpeed() function}
+			\centering
+		\end{figure} 
+  
+  These variations in the variables are microscopic but they allow for the simulation to look realistic.
+  
+  	\paragraph{Emergency Vehicles}
+  	
+  	In our simulation emergency vehicles will ignore the speed limit signs and traffic lights. They will also travel at higher speeds than normal vehicles and be able to accelerate and decelerate more rapidly. 
+Due to lack of time the implementation of emergency vehicles on other vehicles was not covered. In other words, other vehicles treat emergency vehicles the same way as any other object. 
+  
+  \subsection{GENERATING REPORT}
+  Reporting valuable information to the end user is considered
+  important since the analysis of it helps to develop an optimal and
+  efficient road network to prevent congestion problems.
+  
+  At every tick of the simulation, information is updated and the data
+  is stored in a Data Collection Point (DCP) class. The information in
+  this class is being handled with Hash tables based on the
+  implementation of the Map interface. Such implementation provides
+  constant time performance when inserting data or searching it.
+  The information is reported in a clear, simple and professional
+  manner.Initially a JTextArea component was considered for implementing this.
+  However, since it does not support the display of different styles,
+  JTextPane component was implemented to display the information as it
+  models paragraphs in different styles attached to them.
+  The report can be generated at anytime during simulation. The report structured with the following details:
+  \begin{itemize}
+  	\item \textbf{Vehicles Information}: Provides the total number of vehicles that were placed on the road network from the beginning of the simulation till the time the report was generated. The report also displays the total number of vehicles (visible and invisible) and further displays the number of cars, heavy load and emergency vehicles among them. This information includes the vehicles circulating on the roads while the report was requested.
+  	\item \textbf{Effect of Weather Conditions}	Each weather condition – Sunny, Rainy and Snowy – has attributes namely visibility and slipperiness, which are assigned fixed values internally. The user can customise the values of the attributes externally as well. Based on these values, the report displays if the visibility is poor, moderate or good and if the roads are slippery or not. These values, essentially determine the driver behaviour, which is displayed in the report as well. Weather conditions affect the traffic on the road, varying from slightly congested to congested or even a traffic jam.
+  	\item \textbf{Traffic Information}:	Produces the average velocity of the total vehicles still circulating on the roads from their origin. The vehicles that have reached their destinations don’t contribute to the value. Traffic intensity and Average Congestion Rate are also reported. Traffic intensity varies from uncongested to slightly congested to congested to traffic jam. 
+		
+  		It is measured using the average congestion rate, which is
+  		calculated by the difference between the maximum allowable
+  		speed and the current velocity of the vehicles. The range in
+  		which the velocity of the vehicle falls determines traffic
+  		Intensity:
+  		
+		0 -- 15 Km/Hour below the maximum permitted: Uncongested
+  		 
+		16 -- 25 Km/Hour below the maximum permitted: Slightly Congested
+  		 
+		26 -- 35 Km/Hour below the maximum permitted: Congested
+  		
+  		Greater than 35 Km/Hour : Traffic Jam  
+  	
+	\item \textbf{Destination}:•	The report displays the destination name, total of vehicles going to that destination, vehicles that made it to their destination, avg. time for vehicles to get their destination, vehicles still en-route and vehicles that did not make it. The actual values and percentages of the information displayed are important as it helps the civil engineer to observe if the designed road network is in fact optimal and efficient by analysing the statistics for a certain destination.
+  \end{itemize}
+  
+\subsection{SOFTWARE TESTING}
+	Testing accomplishes a variety of things, but most importantly it
+	measures the quality of the software one is developing. This view
+	presupposes there are defects in the software waiting to be
+	discovered and this view is rarely disproved or even disputed. \cite{testingPurp}
+	
+	\subsubsection{UNIT TESTING}
+	The primary goal of unit testing is to take the smallest piece of
+	testable software in the application, isolate it from the remainder
+	of the code, and determine whether it behaves exactly as it is
+	expected. Each unit is tested separately before integrating them
+	into modules to test the interfaces between modules. \cite{mdsn03}
+	JUnit is a unit testing framework for the Java programming
+	language.\cite{junitwiki} It is a simple framework to write
+	repeatable tests. It is an instance of the xUnit architecture for
+	unit testing frameworks.	\cite{junit}
+	The teams ensured that the units work manually. However, we didn’t have
+	a good unit test case coverage contributed by automated testing. Hence,
+	it was carried out for only the important methods of the important
+	classes by the respective developers.
+	
+	\subsubsection{FUNCTIONAL TESTING}
+	
+	Functional testing is a software testing process used within software development in which software is tested to ensure that it conforms with all requirements. Functional testing is a way of checking software to ensure that it has all the required functionality that's specified within its functional requirements. \cite{func} It was each team’s responsibility to ensure that the features to be released for the sprint were validated and verified before integration. It was also necessary to ensure that the feature did not regress the existing functionalities.
+	
+	\subsubsection{INTEGRATION TESTING}
+	Integration testing is essentially a logical extension of unit
+	testing. It identifies problems that occur when units are combined.\cite{int03} Sub-team’s features to be released for each sprint were tested manually to ensure smooth integration of code and expected behaviour of the functionalities at the end of every sprint.
+	Any bugs or errors encountered were either fixed before integration to the the Git Master branch, else were added to the priority bug list to be fixed in the next sprint.
+
+	Validation and Verification of features released by a team for a sprint were tested by the other team. This testing was carried out mutually by both teams.
+	
+	\subsubsection{PERFORMANCE TESTING}
+	Performance testing is defined as the technical investigation done to determine or validate the speed, scalability, and/or stability characteristics of the product under test. Performance-related activities, such as testing and tuning, are concerned with achieving response times, throughput, and resource-utilisation levels that meet the performance objectives for the application under test. It is performed to determine how a system performs in terms of responsiveness and stability under a particular workload. In this case, we are using java VisualVM tool to monitor the CPU usage with respect to the parameters of our application.
+		
+	\setlength{\parindent}{0cm}\bigskip
+	\textit{Properties of the testing environment:}
+	
+	\setlength{\parindent}{1cm}
+	OS: Windows 8.1 (6.3)
+	
+	Architecture: amd64 64bit
+	
+	Java Version: 1.8.0\_31
+	
+	JVM: Java HotSpot(TM) 64-Bit Server VM (25.31-b07, mixed mode)
+	
+	Tools: Intellij IDEA
+	
+	\begin{itemize}
+		\item Monitoring CPU Performance with respect to Runits –
+		\begin{figure}[h!]
+			\includegraphics[scale=1.0,width=12cm, height=4cm]{images/CPU1}
+			\caption{CPU Performance w.r.t. RUnits}
+			\centering
+		\end{figure} 
+		
+		\item Monitoring CPU Performance with respect to Vehicles
+		
+		\begin{figure}[h!]
+			\includegraphics[scale=1.0,width=12cm, height=4cm]{images/numVehicles}
+			\caption{CPU Performance w.r.t. Vehicles}
+			\centering
+		\end{figure}
+		
+		\item Evaluation - Our results tell us that there is a direct corelation between the CPU usage and number of vechicles or RUnits. Also, once the CPU reaches certain level (50%) the execution environment stabilises by slowing down the simulation to mantain consistency of the process.
+	\end{itemize}
+	
+	\subsubsection{USER ACCEPTANCE TEST}
+	The software was tested thoroughly to conform to the initial specifications to ensure that it is good enough to release its Beta Version.
+
+\section{TEAM WORK}
+  \subsection{DIVISION OF TEAMS}
+  As mentioned previously, we adopted “Agile Development Methodology”
+  for the software development. The team was divided into two sub teams
+  namely the UI Team (Front End) and Engine Team (Back End), each of
+  them focusing on one of the two major components at the high level
+  architecture. Each team then identified their major tasks and
+  subtasks to ensure cross team and parallel implementation. A Sprint model was followed with regular status updates in Scrum
+  meetings for tasks identification, allocation, development, testing,
+  bug fixes and documentation of each Sprint.
+  
+  \subsection{DIVISION OF WORK}
+  Using Agile Methodology of software development, it facilitated
+  collaboration between sub teams within the group namely the User
+  Interface (UI Team) and Engine Team. During the group meetings, the
+  sub teams narrowed down on their main tasks and accordingly divided
+  them amongst the members, assigning roles to every member.
+		
+  		\begin{figure}[h!]
+			\includegraphics[scale=1.0,width=14cm, height=3cm]{images/Teams}
+			\caption{Roles Played by Members}
+			\centering
+		\end{figure}
+		
+		\begin{figure}[h!]
+			\includegraphics[scale=1.0,width=14cm, height=3cm]{images/Tools}
+			\caption{Tools used for Collaboration}
+			\centering
+		\end{figure}
+	\setlength{\parindent}{0cm}
+  Upon the feedback received after the submission of the initial
+  report, we collectively decided to discontinue the use of
+  ‘FreedCamp’, a project management tool. We also reduced the number of
+  UI Developers and instead introduced an ad-hoc developer.
+  
+\section{CRITICAL EVALUATION OF PROJECT}
+	\subsection{STRENGTHS}
+		\subsubsection{STRENGTHS IN CONCEPT}
+		Software allows the user to model the road network with very close proximity to the real life traffic scenarios and make advanced infrastructure decisions. For example:
+		
+		\begin{itemize}
+			\item Roads can intersect at any point and angle.
+			\item User can model the diversity of vehicles driver behaviours and road/weather conditions.
+			\item Allowing a traffic engineer to test the efficient placement of direction signs which aids in designing routes with clear routing.
+			\item Allowing a traffic engineer to test any traffic light configuration and their synchronisation at any point in the simulation. This helps him engineer efficient traffic flow while ensuring safety.
+		\end{itemize}
+		
+		The motion of the vehicles is very realistic because of the kinematic equations used to control vehicle speed. Moreover, the vehicle cannot directory change its speed but control its acceleration. This means that the vehicle needs to carefully consider its environment and apply just enough acceleration or deceleration to interact with the road and its elements
+		
+		The realistic behaviour of vehicles has been accomplished by maintaining small variations in the behaviours of different drivers, which affect the following:
+		\begin{itemize}
+			\item The desired speed of the vehicle
+			\item The distance it looks ahead
+			\item The safe distance it keeps between other objects in front
+		\end{itemize}
+		
+		\subsubsection{STRENGTHS IN CODE}
+		Separation of concerns is achieved by splitting the functionality to Engine and UI. These two parts communicate only via the dataAndStructures which made the code easier to test and allowed for both teams to work independently of each other.
+		The code itself is very modular, where each class is responsible for a very specific set of tasks. For example vehicle is split into classes that are responsible for various parts of its decision making process. This “single responsibility” approach makes each class more robust.
+		
+		The system is easily changeable and extendable. The following examples illustrate this:
+		
+		\begin{itemize}
+			\item Adding a third dimension to the roads, could be done by introducing a z coordinate to the RUnit and ObjectInSpace.
+			\item More road elements can be added without affecting the decision making process of the vehicle. This is achieved by the use of vehicleMemoryObject class which envelopes all objects that the vehicle considers.
+			\item The graphical user interface can be improved without the need to change the back end logic. 
+		\end{itemize}
+		
+		\subsubsection{STRENGTHS IN APPROACH}
+		Once the approach was chosen, our team spent a great deal of time considering various scenarios, drawing up UML diagrams and refining our concept before a single line of code was written. After decomposing the system into independent components and classes we distributed the work among ourselves in a non conflicting manner. This way, we avoided clashes among the team members. It also prevented repetition of code which would otherwise lead to waste of efforts.
+		
+			This, coupled with clear understanding of our skill and matching responsibilities to our strengths allowed us to successfully carry out this project.
+		
+	\subsection{WEAKNESSES}
+	Any software piece of design and code is inevitable with out flaws and bugs due to constraints like time which is highly relevant in the current group project. We have addressed most of them during various phases of the software development life cycle. But the following issues were identified but unable to address due to lack of time and resources :
+	
+	\textbf{Design and Implementation Perspective -}
+	
+	\begin{itemize}
+		\item \textbf{Scope of improvement for road network modelling and visualisation}: The current UI facilitates to sketch and configure road network and elements with a high degree of configurability but lacks good visualisation and appeal during drawing and simulation. However using features like upload of an existing road image and Smart Draw, it can be minimised to some extent. The software doesn’t support features like undoing a particular design or configuration added to the network created. In such occasions, the application has to be restarted. Also adding roads after the start of simulation is currently not supported but the other configuration can still be added. Currently, configuration of the traffic light cycle is completely the user’s responsibility which can be annoying for some set of users. 
+		\item \textbf{Scope of improvement for export and import configurations}: Higher degree of complexity in the road network hampers the export and import of configuration due to a known Serialisation Stack Overflow Error. This is due to an inefficient way of referencing deep copy of recursive objects (RUnits connected to form a chain) during serialisation which can avoided by overriding the existing implementation by serialising only the required objects and marking the remaining as transient.
+		\item \textbf{Scope of improvement for UI performance optimisation}: The UI currently loads both the static and dynamic components in the simulation for every tick. The performance can be improved by identifying the static elements and loading them only during configuration when compared to the dynamic elements like traffic lights and vehicles that are loaded/changed on every simulation tick.
+		\item \textbf{Scope of improvement for Exception Handling}: The exception handling in the software is not very upto the mark. Currently the exceptions are caught and displayed in a dialog box followed by the exit of the application.
+	\end{itemize}
+	
+	
+	\textbf{Strategy Perspective -}
+	
+	\begin{itemize}
+		\item \textbf{Scope of improvement for automated unit testing}: The whole source code was intensively tested manually during all phases of developement and integration via functional, integration and performance testing but failed to attain a good level automated unit testing coverage. This was done manually during the development phases where automated unit testing is only added for some classes.The whole source code was intensively tested manually during all phases of developement and integration via functional, integration and performance testing but failed to attain a good level automated unit testing coverage. This was done manually during the development phases where automated unit testing is only added for some classes.
+		\item \textbf{Scope of better allocation of resources and time for identified improvements}: Initially the leading of the testing effort was allocated to a team member exclusively but during the course of the project it was distributed among the team due to lack of the associated member's involvement. A better job could have been done in identifying the potential of the team and allocating time and resources to improve the areas we were lacking in.
+	\end{itemize}
+
+	
+	\subsection{FUTURE SCOPE}
+		\begin{itemize}
+		\setlength\itemsep{0.2em}
+			\item UI enhancements with visually appealing road network design and simulation.
+			\item Support for roads with more than two lanes.			\item Undo and Redo functionality for road network design and configuration.
+			\item 3-D Road networks with bridges.
+			\item Destination based routing for more than one destination.
+			\item Improved export and import configuration supporting saving and loading of complex road network configurations.
+		\end{itemize}
+
+\section{PEER ASSESSMENT}
+
+\begin{figure}[h!]
+			\includegraphics[scale=1.0,width=15cm, height=4cm]{images/PeerReview}
+			\caption{Peer Assessment}
+			\centering
+		\end{figure}
+
+\renewcommand{\refname}{REFERENCES}
+
+\begin{thebibliography}{9}	
+	
+	
+	\bibitem{Ljubović09}	
+	Vedran Ljubović(2009),	
+	\emph{Traffic Simulation Using Agent Based Model}.	
+	\url{http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=5348417}
+	
+	\bibitem{Macal06}	
+	Charles M. Macal , Michael J. North,(2006) ,	
+	\emph{Tutorial On Agent-Based Modeling And Simulation Part 2: How To Model With Agents}.	
+	\url{http://www.informs-sim.org/wsc06papers/008.pdf}
+
+
+	\bibitem{treiber13}	
+	M. Treiber, A.Kesting,2013,(2013) ,	
+	\emph{Traffic Flow Dynamics- Data, Models, Simulation}.	
+	
+	\bibitem{gowri09}	
+	saithambi Gowri, Kanagaraj Venkatesan , Ramaswamy Sivanandan,(2009),	
+	\emph{bject-oriented methodology for intersection simulation model under heterogeneous traffic conditions}.		
+	
+	\bibitem{mcburney07}
+	Peter Mcburney (2007),
+	\emph{Agent-Based Modelling}.
+	\url{http://bactra.org/notebooks/agent-based-modeling.html}
+	
+
+	
+	\bibitem{ernie10}
+	Ernest Yu(2011),
+	\emph{Integrative Genomics Viewer}.
+	\url{https://github.com/broadinstitute/IGV/blob/master/src/slider/RangeSlider.java}
+	
+	\bibitem{wikiOOD}	
+	\emph{SOLID 	(object-oriented design)}.	
+	\url{http://en.wikipedia.org/wiki/SOLID_(object-oriented_design)}
+
+		
+	\bibitem{wikiOOD}	
+	\emph{SOLID 	(object-oriented design)}.	
+	\url{http://en.wikipedia.org/wiki/SOLID_(object-oriented_design)}	
+	
+	\bibitem{robert03}	
+	Robert C. Martin,	
+	\emph{Principles of OOD}.	
+	\url{http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod}
+	
+	\bibitem{testingPurp}
+	Microsoft MSDN Visual Studio .NET 2003,
+	\emph{Testing Overview}.
+	\url{https://msdn.microsoft.com/en-us/library/aa292191(v=vs.71).aspx}
+	
+	\bibitem{mdsn03}
+	Microsoft MSDN Visual Studio .NET 2003,
+	\emph{Unit Testing}.
+	\url{https://msdn.microsoft.com/en-us/library/aa292197(v=vs.71).aspx}
+	
+	\bibitem{junitwiki}
+	Wikipedia,
+	\emph{JUnit}.
+	\url{http://en.wikipedia.org/wiki/JUnit}
+	
+	\bibitem{junit}
+	JUnit.org,
+	\emph{About JUnit}.
+	\url{http://junit.org}
+	
+	\bibitem{func}
+	Cory Janssen,
+	\emph{Functional Testing}.
+	\url{http://www.techopedia.com/definition/19509/functional-testing}
+	
+	\bibitem{int03}
+	Microsoft MSDN Visual Studio .NET 2003,
+	\emph{Integration Testing}.
+	\url{https://msdn.microsoft.com/en-us/library/aa292128(v=vs.71).aspx}
+	
+	\bibitem{perf07}
+	J.D. Meier, Carlos Farre, Prashant Bansode, Scott Barber, and Dennis Rea(2007),
+	\emph{Chapter 2 - Types of Performance Testing}.
+	\url{https://msdn.microsoft.com/en-gb/library/bb924357.aspx}
+	
+	\bibitem{agentControl}
+	Wooldridge, Michael,  2009,
+	\emph{An Introduction to Multiagent Systems}.
+	
+\end{thebibliography}
+
+\section{APPENDICES}
+
+\includepdf[pages={1-148}]{SourceCode.pdf}
+
+\end{document}
